@@ -1,0 +1,434 @@
+import 'package:easy_invoice/bloc/post/sign_up_cubit.dart';
+import 'package:easy_invoice/common/HeaderWidget.dart';
+import 'package:easy_invoice/dataModel/RegisterRequestModel.dart';
+import 'package:easy_invoice/module/module.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:hexcolor/hexcolor.dart';
+
+import '../common/theme_helper.dart';
+
+class Register extends StatefulWidget {
+  const Register({Key? key}) : super(key: key);
+
+  @override
+  State<Register> createState() => _RegisterState();
+}
+
+class _RegisterState extends State<Register> {
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => SignUpCubit(getIt.call()),
+      child: Scaffold(
+          body: BlocBuilder<SignUpCubit, SignUpState>(
+            builder: (context, state) {
+              if (state is SignUpLoading) {
+                return Center(child: CircularProgressIndicator());
+              } else if (state is SignUpSuccess) {
+                return Text('Register Success for easy invoice');
+              } else if (state is SignUpFail) {
+                return Text(state.error);
+              }
+              return RegisterForm();
+            },
+          )),
+    );
+  }
+}
+
+class RegisterForm extends StatefulWidget {
+  const RegisterForm({Key? key}) : super(key: key);
+
+  @override
+  State<RegisterForm> createState() => _RegisterFormState();
+}
+
+class _RegisterFormState extends State<RegisterForm> {
+  final formKey = GlobalKey<FormState>();
+  var username = TextEditingController();
+  var email = TextEditingController();
+  var password = TextEditingController();
+  bool _obscureText = true;
+  bool checkboxValue = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: Stack(
+        children: [
+          SizedBox(
+              height: 150,
+              child: HeaderWidget(150, false, Icons.person_add_alt_1_rounded)),
+          Container(
+            margin: EdgeInsets.fromLTRB(25, 50, 25, 10),
+            padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+            alignment: Alignment.center,
+            child: Column(
+              children: [
+                Form(key:formKey,
+                    child: Column(
+                  children: [
+                    GestureDetector(
+                      child: Stack(
+                        children: [
+                          Container(
+                            padding: EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              borderRadius:
+                              BorderRadius.circular(100),
+                              border: Border.all(
+                                  width: 5, color: Colors.white),
+                              color: Colors.white,
+                              boxShadow: const [
+                                BoxShadow(
+                                  color: Colors.black12,
+                                  blurRadius: 20,
+                                  offset: Offset(5, 5),
+                                ),
+                              ],
+                            ),
+                            child: Icon(
+                              Icons.person,
+                              color: Colors.grey.shade300,
+                              size: 80.0,
+                            ),
+                          ),
+                          Container(
+                            padding:
+                            const EdgeInsets.fromLTRB(80, 80, 0, 0),
+                            child: Icon(
+                              Icons.add_circle,
+                              color: Colors.grey.shade700,
+                              size: 25.0,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 30,
+                    ),
+                    Container(
+                      decoration:
+                      ThemeHelper().inputBoxDecorationShaddow(),
+                      child: TextFormField(
+                        decoration: ThemeHelper().textInputDecoration(
+                            'Name', 'Enter your name'),
+                        controller: username,
+                        validator: (value){
+                          if(value == null || value.isEmpty){
+                            return 'Enter your name';
+                          }
+                          return null;
+                        },
+
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+
+                    Container(
+                      decoration:
+                      ThemeHelper().inputBoxDecorationShaddow(),
+                      child: TextFormField(
+                        controller: email,
+                        decoration: ThemeHelper().textInputDecoration(
+                            "E-mail address", "Enter your email"),
+                        keyboardType: TextInputType.emailAddress,
+                        validator: FormValidator.validateEmail,
+                      ),
+                    ),
+                    const SizedBox(height: 20.0),
+                    Container(
+                      decoration:
+                      ThemeHelper().inputBoxDecorationShaddow(),
+                      child: TextFormField(
+                        obscureText: !_obscureText,
+                        decoration: ThemeHelper().textInputDecoration(
+                            "Password*", "Enter your password",),
+                        validator: FormValidator.validatePassword,
+                      ),
+                    ),
+                    const SizedBox(height: 15.0),
+                    FormField<bool>(
+                        builder: (state){
+                          return Column(
+                            children: [
+                              Row(
+                                children: [
+                                  Checkbox(value: checkboxValue, onChanged: (value){
+                                    setState(() {
+                                      checkboxValue=value!;
+                                      state.didChange(value);
+                                    });
+                                  }),
+                                  const Text(
+                                    "I accept all terms and conditions.",
+                                    style:
+                                    TextStyle(color: Colors.grey),
+                                  ),
+                                ],
+                              ),
+                              Container(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  state.errorText ?? '',
+                                  textAlign: TextAlign.left,
+                                    style: TextStyle(
+                                      color: Theme.of(context)
+                                          .colorScheme.error,
+                                      fontSize: 12
+                                    ),
+                                ),
+                              )
+                            ],
+                          );
+                        },
+                    validator: (value){
+                          if(!checkboxValue){
+                            return 'You need to accept terms and conditions';
+                          }
+                          else {
+                            return null;
+                          }
+                    },),
+                    const SizedBox(height: 25.0),
+                    Container(
+                      decoration:
+                      ThemeHelper().buttonBoxDecoration(context),
+                      child: ElevatedButton(
+                        style: ThemeHelper().buttonStyle(),
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(
+                              40, 10, 40, 10),
+                          child: Text(
+                            "Register".toUpperCase(),
+                            style: const TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                        onPressed: () {
+                          if (formKey.currentState!.validate()) {
+                            RegisterRequestModel registerModel =
+                            RegisterRequestModel(username.text,
+                                email.text, password.text);
+                            context
+                                .read<SignUpCubit>()
+                                .signUp(registerModel);
+                          }
+
+                        },
+                      ),
+                    ),
+                    const SizedBox(height: 25.0),
+                    const Text(
+                      "Or create account using social media",
+                      style: TextStyle(color: Colors.grey),
+                    ),
+                    const SizedBox(height: 25.0),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        GestureDetector(
+                          child: FaIcon(
+                            FontAwesomeIcons.googlePlus,
+                            size: 35,
+                            color: HexColor("#EC2D2F"),
+                          ),
+                          onTap: () {
+                            setState(() {
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return ThemeHelper().alartDialog(
+                                      "Google Plus",
+                                      "You tap on GooglePlus social icon.",
+                                      context);
+                                },
+                              );
+                            });
+                          },
+                        ),
+                        const SizedBox(
+                          width: 30.0,
+                        ),
+                        GestureDetector(
+                          child: Container(
+                            padding: const EdgeInsets.all(0),
+                            decoration: BoxDecoration(
+                              borderRadius:
+                              BorderRadius.circular(100),
+                              border: Border.all(
+                                  width: 5,
+                                  color: HexColor("#40ABF0")),
+                              color: HexColor("#40ABF0"),
+                            ),
+                            child: FaIcon(
+                              FontAwesomeIcons.twitter,
+                              size: 23,
+                              color: HexColor("#FFFFFF"),
+                            ),
+                          ),
+                          onTap: () {
+                            setState(() {
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return ThemeHelper().alartDialog(
+                                      "Twitter",
+                                      "You tap on Twitter social icon.",
+                                      context);
+                                },
+                              );
+                            });
+                          },
+                        ),
+                        const SizedBox(
+                          width: 30.0,
+                        ),
+                        GestureDetector(
+                          child: FaIcon(
+                            FontAwesomeIcons.facebook,
+                            size: 35,
+                            color: HexColor("#3E529C"),
+                          ),
+                          onTap: () {
+                            setState(() {
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return ThemeHelper().alartDialog(
+                                      "Facebook",
+                                      "You tap on Facebook social icon.",
+                                      context);
+                                },
+                              );
+                            });
+                          },
+                        ),
+                      ],
+                    )
+                  ],
+                ))
+              ],
+            ),
+          )
+        ],
+      ),
+    );
+
+    //   Form(
+    //   key: formKey, // Assign the formKey to the key property of the Form widget
+    //   child: ListView(
+    //     padding: EdgeInsets.all(10.0),
+    //     children: [
+    //       TextFormField(
+    //         controller: username,
+    //         decoration: InputDecoration(
+    //             border:
+    //             OutlineInputBorder(borderRadius: BorderRadius.circular(50)),
+    //             hintText: 'Enter Name',
+    //             labelText: 'Name'),
+    //         validator: (value) {
+    //           if (value == null || value.isEmpty) {
+    //             return 'Please Enter name';
+    //           }
+    //           return null;
+    //         },
+    //
+    //       ),
+    //       const SizedBox(
+    //         height: 20,
+    //       ),
+    //       TextFormField(
+    //         controller: email,
+    //         decoration: InputDecoration(
+    //             border:
+    //             OutlineInputBorder(borderRadius: BorderRadius.circular(50)),
+    //             hintText: 'Enter Email',
+    //             labelText: 'Email'),
+    //         validator: (value) {
+    //           if (value == null || value.isEmpty) {
+    //             return 'Please Enter email';
+    //           }
+    //           return null;
+    //         },
+    //
+    //       ),
+    //       SizedBox(
+    //         height: 20,
+    //       ),
+    //       TextFormField(
+    //         controller: password,
+    //         decoration: InputDecoration(
+    //             border:
+    //             OutlineInputBorder(borderRadius: BorderRadius.circular(50)),
+    //             hintText: 'Enter password',
+    //             labelText: 'Password'),
+    //         validator: (value) {
+    //           if (value == null || value.isEmpty) {
+    //             return 'Please Enter password'; // return error message
+    //           }
+    //           return null;
+    //         },
+    //
+    //       ),
+    //       SizedBox(
+    //         height: 20,
+    //       ),
+    //       ElevatedButton(
+    //         onPressed: () {
+    //           if (formKey.currentState!.validate()) {
+    //             formKey.currentState?.save();
+    //             context.read<SignUpCubit>().signUp(
+    //                 RegisterRequestModel(
+    //                     username.text, email.text, password.text));
+    //
+    //             // ScaffoldMessenger.of(context).showSnackBar(
+    //             //   const SnackBar(content: Text('Processing Data for Register')),
+    //             // );
+    //           }
+    //         },
+    //         child: Text("Register"),
+    //       )
+    //     ],
+    //   ),
+    // );
+  }
+}
+
+class FormValidator{
+  static String? validateEmail(String? value){
+    if(value == null || value.isEmpty){
+      return 'Please enter your email!';
+    }
+    final RegExp emailRegex=RegExp(
+        r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$");
+
+    if(!emailRegex.hasMatch(value)){
+      return 'Please enter a valid email address!';
+    }
+    final List<String> parts=value.split('@');
+    if (parts.length != 2 || parts[1].isEmpty) {
+      return 'Please enter a valid email address!';
+    }
+    return null;
+  }
+  static String? validatePassword(String? value){
+    if(value == null || value.isEmpty){
+      return 'Enter your password!';
+    }
+    final RegExp passwordRegx =  RegExp(r'^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[@#$%^&+=])(?=.{8,})');
+
+    if(!passwordRegx.hasMatch(value)){
+      return 'Password must contain at one number,spicial character and text, and have a length of 8 characters!';
+    }
+    return null;
+  }
+}
