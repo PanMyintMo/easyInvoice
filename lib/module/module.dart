@@ -11,18 +11,16 @@ void locator() {
   Dio dio = Dio();
   getIt.registerLazySingleton(() => dio);
 
-  ApiService apiService = ApiService(getIt.call());
+  ApiService apiService = ApiService();
   getIt.registerLazySingleton(() => apiService);
 
   UserRepository userRepository = UserRepository();
   getIt.registerLazySingleton<UserRepository>(() => userRepository);
 
-  SignInCubit signInCubit = SignInCubit(getIt.call());
+  SignInCubit signInCubit = SignInCubit(getIt.get<UserRepository>());
   getIt.registerLazySingleton(() => signInCubit);
 
-  SignUpCubit signupCubit = SignUpCubit(getIt.call());
+  SignUpCubit signupCubit = SignUpCubit(getIt.get<UserRepository>());
   getIt.registerLazySingleton(() => signupCubit);
-
-
-
 }
+

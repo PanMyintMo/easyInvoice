@@ -1,10 +1,12 @@
-import 'package:get/get.dart';
-import '../bloc/post/sign_in_cubit.dart';
+import 'package:easy_invoice/bloc/post/sign_up_cubit.dart';
+import 'package:easy_invoice/screen/register.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:easy_invoice/screen/splash_screen.dart';
-import '../module/module.dart';
+import 'package:get/get.dart';
 import 'package:flutter/material.dart';
-
+import 'package:easy_invoice/module/module.dart';
+import 'package:easy_invoice/screen/splash_screen.dart';
+import 'package:easy_invoice/screen/mainscreen.dart';
+import 'package:easy_invoice/screen/login.dart';
 
 void main() {
   locator();
@@ -16,14 +18,18 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: BlocProvider<SignInCubit>(
-        create: (context) => getIt.call(),
-        child:  const SplashScreen(),
+    return BlocProvider<SignUpCubit>(
+      create: (BuildContext context) => getIt.get<SignUpCubit>(),
+      child: GetMaterialApp(
+        debugShowCheckedModeBanner: false,
+        initialRoute: "/", // Set the initial route to "/"
+        getPages: [
+          GetPage(name: "/", page: () => const SplashScreen()), // Define SplashScreen route
+          GetPage(name: "/Login", page: () => const Login()), // Define Login route
+          GetPage(name: '/register', page: () => const Register()),
+          GetPage(name: "/MainScreen", page: () => const MainPageScreen()), // Define MainPageScreen route
+        ],
       ),
     );
   }
 }
-
-

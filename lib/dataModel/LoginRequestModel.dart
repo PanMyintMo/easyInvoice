@@ -1,13 +1,13 @@
 class LoginRequestModel {
-  String loginemail;
-  String loginpassword;
+  String email;
+  String password;
 
-  LoginRequestModel(this.loginemail, this.loginpassword);
+  LoginRequestModel(this.email, this.password);
 
   Map<String, dynamic> toJson() {
     return {
-      'loginemail': loginemail,
-     'loginpassword': loginpassword
+      'email': email,
+     'password': password
     };
    }
 }

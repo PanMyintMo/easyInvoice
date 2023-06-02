@@ -18,20 +18,19 @@ class SignUpLoading extends SignUpState{
 class SignUpSuccess extends SignUpState{
   final RegisterResponse registerResponse;
 
-  SignUpSuccess(this.registerResponse);
+  const SignUpSuccess(this.registerResponse);
   @override
   // TODO: implement props
   List<Object?> get props => [registerResponse];
 
 }
 
-class SignUpFail extends SignUpState{
+class SignUpFail extends SignUpState {
   final String error;
 
   SignUpFail(this.error);
 
   @override
-  // TODO: implement props
   List<Object?> get props => [error];
-
 }
+
