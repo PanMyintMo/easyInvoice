@@ -14,10 +14,11 @@ class Login extends StatefulWidget {
 
   @override
   State<Login> createState() => _LoginState();
-
 }
 
 class _LoginState extends State<Login> {
+  bool _isLoading = false;
+  String errorMessage = '';
 
   @override
   Widget build(BuildContext context) {
@@ -27,42 +28,40 @@ class _LoginState extends State<Login> {
         backgroundColor: Colors.white,
         body: BlocBuilder<SignInCubit, SignInState>(
           builder: (context, state) {
-        if (state is SignInLoading) {
-          return buildLoadingScreen();
+            if (state is SignInLoading) {
+              _isLoading = true; // Set _isLoading to true when loading
+              return LoginInForm(
+                isLoading: _isLoading,
+                message: '',
+              );
+            } else if (state is SignInSuccess) {
+              final token = state.loginResponse.token;
+              final username = state.loginResponse.token;
+              final email = state.loginResponse.message;
 
-        }
-        else if (state is SignInSuccess) {
-          final token = state.loginResponse.token;
-          final username = state.loginResponse.username;
-          final email = state.loginResponse.email;
+              // Set the token using the SessionManager class
+              SessionManager().setAuthToken(token).then((_) {
+                // print("My tokne is $token");
+                // Token is set successfully, do something if needed
+              });
+              SessionManager().setUserName(username);
+              SessionManager().setEmail(email);
+              // Navigate to the user profile page after the current frame is completed
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const MainPageScreen(),
+                  ),
+                );
+              });
+            } else if (state is SignInFail) {
+              return LoginInForm(isLoading: false, message: state.error);
+            }
 
-          // Set the token using the SessionManager class
-          SessionManager().setAuthToken(token).then((_) {
-            // print("My tokne is $token");
-            // Token is set successfully, do something if needed
-          });
-          SessionManager().setUserName(username);
-          SessionManager().setEmail(email);
-          // Navigate to the user profile page after the current frame is completed
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const MainPageScreen(),
-              ),
-            );
-          });
+            _isLoading = false; // Set _isLoading to false when not loading
 
-
-        } else if (state is SignInFail) {
-          return Text(state.error);
-        }
-
-        return  Visibility(
-          child:  LoginInForm(
-
-          ),
-        );
+            return LoginInForm(isLoading: _isLoading, message: '');
           },
         ),
       ),
@@ -70,29 +69,12 @@ class _LoginState extends State<Login> {
   }
 }
 
-Widget buildLoadingScreen() {
-  return const Scaffold(
-    body: Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          CircularProgressIndicator(),
-          SizedBox(height: 16),
-          Text(
-            'Logging in...',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ],
-      ),
-    ),
-  );
-}
-
 class LoginInForm extends StatefulWidget {
-  const LoginInForm({Key? key}) : super(key: key);
+  final bool isLoading; // Add the isLoading property
+  final String message;
+
+  const LoginInForm({Key? key, required this.isLoading, required this.message})
+      : super(key: key);
 
   @override
   State<LoginInForm> createState() => _LoginInFormState();
@@ -101,8 +83,8 @@ class LoginInForm extends StatefulWidget {
 class _LoginInFormState extends State<LoginInForm> {
   final formKey = GlobalKey<FormState>();
   bool _obscureText = true;
-  var loginemail = TextEditingController();
-  var loginpassword = TextEditingController();
+  var email = TextEditingController();
+  var password = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -136,39 +118,23 @@ class _LoginInFormState extends State<LoginInForm> {
               shrinkWrap: true,
               children: [
                 Container(
-                  decoration:
-                  ThemeHelper().inputBoxDecorationShaddow(),
+                  decoration: ThemeHelper().inputBoxDecorationShaddow(),
                   child: TextFormField(
-                    controller: loginemail,
+                    controller: email,
                     keyboardType: TextInputType.emailAddress,
-                     decoration:ThemeHelper().textInputDecoration(
-                         'Email', 'Enter your email'
-                     ),
+                    decoration: ThemeHelper().textInputDecoration(
+                      'Email',
+                      'Enter your email',
+                    ),
                     validator: FormValidator.validateEmail,
-
-                    // InputDecoration(
-                    //   iconColor: Colors.redAccent,
-                    //   border: OutlineInputBorder(
-                    //     borderRadius: BorderRadius.circular(50),
-                    //   ),
-
-                    //   focusedBorder: OutlineInputBorder(
-                    //     borderRadius: BorderRadius.circular(50),
-                    //     borderSide: const BorderSide(
-                    //         color:
-                    //             Colors.blueGrey), // Set the focused border color
-                    //   ),
-                    // ),
-
                   ),
                 ),
                 const SizedBox(height: 20),
                 TextFormField(
-
-                  controller: loginpassword,
+                  controller: password,
                   obscureText: _obscureText,
                   decoration: InputDecoration(
-                    contentPadding:  EdgeInsets.fromLTRB(20, 10, 20, 10),
+                    contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
                     iconColor: Colors.redAccent,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(50),
@@ -178,8 +144,8 @@ class _LoginInFormState extends State<LoginInForm> {
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(50),
                       borderSide: const BorderSide(
-                          color:
-                              Colors.blueGrey), // Set the focused border color
+                        color: Colors.blueGrey,
+                      ), // Set the focused border color
                     ),
                     suffixIcon: GestureDetector(
                       onTap: () {
@@ -208,30 +174,55 @@ class _LoginInFormState extends State<LoginInForm> {
                 const SizedBox(height: 20),
                 FractionallySizedBox(
                   widthFactor: 0.6,
-                  child: Container(
-                    decoration: ThemeHelper().buttonBoxDecoration(context),
-                    child: ElevatedButton(
-                      onPressed: () {
-                        if (formKey.currentState!.validate()) {
-                          formKey.currentState!.save();
-                          context.read<SignInCubit>().signIn(LoginRequestModel(
-                                loginemail.text,
-                                loginpassword.text,
-                              ));
-                        }
-                      },
-                      style: ThemeHelper().buttonStyle(),
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(40, 10, 40, 10),
-                        child: Text(
-                          'Login'.toUpperCase(),
-                          style: const TextStyle(
-                            fontSize: 20,
-                            color: Colors.white,
+                  child: Stack(
+                    children: [
+                      Center(
+                        child: ElevatedButton(
+                          onPressed: () {
+                            if (formKey.currentState!.validate()) {
+                              formKey.currentState!.save();
+                              context.read<SignInCubit>().signIn(
+                                    LoginRequestModel(
+                                      email.text,
+                                      password.text,
+                                    ),
+                                  );
+                            }
+                          },
+                          style: ThemeHelper().buttonStyle(),
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(40, 10, 40, 10),
+                            child: Text(
+                              'Login'.toUpperCase(),
+                              style: const TextStyle(
+                                fontSize: 20,
+                                color: Colors.white,
+                              ),
+                            ),
                           ),
                         ),
                       ),
-                    ),
+                      if (widget.isLoading)
+                        Container(
+                          child: Center(
+                            child: CircularProgressIndicator(),
+                          ),
+                        ),
+
+                      //show success or failure message base on the message
+                      if (widget.message.isNotEmpty)
+                        Positioned(
+
+                          child: Text(
+                            widget.message,
+                            style: TextStyle(
+                                fontSize: 18,
+                                color: widget.message.startsWith('Success')
+                                    ? Colors.green
+                                    : Colors.red),
+                          ),
+                        )
+                    ],
                   ),
                 ),
                 const SizedBox(height: 140),
@@ -242,8 +233,9 @@ class _LoginInFormState extends State<LoginInForm> {
                       TextSpan(
                         children: [
                           const TextSpan(
-                              text: "Don't have an account?",
-                              style: TextStyle(fontSize: 18)),
+                            text: "Don't have an account?",
+                            style: TextStyle(fontSize: 18),
+                          ),
                           TextSpan(
                             text: ' Sign up!',
                             recognizer: TapGestureRecognizer()
@@ -251,7 +243,8 @@ class _LoginInFormState extends State<LoginInForm> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => const Register()),
+                                    builder: (context) => const Register(),
+                                  ),
                                 );
                               },
                             style: const TextStyle(
@@ -273,8 +266,6 @@ class _LoginInFormState extends State<LoginInForm> {
     );
   }
 }
-
-
 
 class FormValidator {
   static String? validateEmail(String? value) {
@@ -304,9 +295,8 @@ class FormValidator {
     );
 
     if (!passwordRegx.hasMatch(value)) {
-      return 'Password must contain at one number,spicial character and text, and have a length of 8 characters!';
+      return 'Password must contain at one number, special character and text, and have a length of 8 characters!';
     }
-
     return null;
   }
 }
