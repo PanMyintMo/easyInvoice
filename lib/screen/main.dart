@@ -9,7 +9,8 @@ import 'package:easy_invoice/screen/mainscreen.dart';
 import 'package:easy_invoice/screen/login.dart';
 
 void main() {
-  locator();
+  const String token = ''; // Provide the actual token value
+  locator(token: token);
   runApp(const MyApp());
 }
 

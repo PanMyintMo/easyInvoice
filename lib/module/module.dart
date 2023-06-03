@@ -7,14 +7,14 @@ import 'package:dio/dio.dart';
 
 var getIt = GetIt.instance;
 
-void locator() {
+void locator({required String token}) {
   Dio dio = Dio();
   getIt.registerLazySingleton(() => dio);
 
-  ApiService apiService = ApiService();
+  ApiService apiService = ApiService(token);
   getIt.registerLazySingleton(() => apiService);
 
-  UserRepository userRepository = UserRepository();
+  UserRepository userRepository = UserRepository(token: token);
   getIt.registerLazySingleton<UserRepository>(() => userRepository);
 
   SignInCubit signInCubit = SignInCubit(getIt.get<UserRepository>());
