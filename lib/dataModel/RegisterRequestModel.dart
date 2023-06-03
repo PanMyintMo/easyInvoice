@@ -11,14 +11,6 @@ class RegisterRequestModel {
     required this.password_confirmation,
   });
 
-  factory RegisterRequestModel.fromJson(Map<String, dynamic> data) {
-    return RegisterRequestModel(
-      name: data['name'],
-      email: data['email'],
-      password: data['password'],
-      password_confirmation: data['password_confirmation'],
-    );
-  }
 
   Map<String, dynamic> toJson() {
     return {

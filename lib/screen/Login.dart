@@ -36,15 +36,16 @@ class _LoginState extends State<Login> {
               );
             } else if (state is SignInSuccess) {
               final token = state.loginResponse.token;
-              final username = state.loginResponse.token;
-              final email = state.loginResponse.message;
+              print("Login Success Status Code is ${state.loginResponse.status}");
+              final name = state.loginResponse.name;
+              final email = state.loginResponse.email;
 
               // Set the token using the SessionManager class
               SessionManager().setAuthToken(token).then((_) {
                 // print("My tokne is $token");
                 // Token is set successfully, do something if needed
               });
-              SessionManager().setUserName(username);
+              SessionManager().setUserName(name);
               SessionManager().setEmail(email);
               // Navigate to the user profile page after the current frame is completed
               WidgetsBinding.instance.addPostFrameCallback((_) {

@@ -11,9 +11,6 @@ class RegisterResponse {
 
   factory RegisterResponse.fromJson(Map<String, dynamic> data) {
     return RegisterResponse(
-      status: data['status'] as int,
-      message: data['message'] as String,
-      token: data['token'] as String,
-    );
+        status: data['status'], message: data['message'], token: data['token']);
   }
 }
