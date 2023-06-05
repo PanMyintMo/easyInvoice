@@ -6,6 +6,7 @@ import 'package:easy_invoice/network/SharedPreferenceHelper.dart';
 import 'package:easy_invoice/screen/mainscreen.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import '../common/HeaderWidget.dart';
 import '../common/theme_helper.dart';
 import 'Register.dart';
 
@@ -93,15 +94,9 @@ class _LoginInFormState extends State<LoginInForm> {
     return SingleChildScrollView(
       child: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 120),
-            child: Center(
-              child: Image(
-                image: const AssetImage('assets/invoice.png'),
-                width: size.width * 0.3,
-              ),
-            ),
-          ),
+          SizedBox(
+              height: 150,
+              child: HeaderWidget(150, false, Icons.person_add_alt_1_rounded)),
           const SizedBox(height: 20),
           const Text(
             'DNI Easy Invoice',

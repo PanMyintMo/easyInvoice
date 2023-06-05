@@ -8,6 +8,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hexcolor/hexcolor.dart';
 
 import '../common/theme_helper.dart';
+import '../network/SharedPreferenceHelper.dart';
 import 'mainscreen.dart';
 
 class Register extends StatefulWidget {
@@ -29,7 +30,21 @@ class _RegisterState extends State<Register> {
         builder: (context, state) {
           if (state is SignUpLoading) {
             _isLoading = true;
-            WidgetsBinding.instance.addPostFrameCallback((_) {
+            return RegisterForm(isLoading: _isLoading, message: '');
+          } else if (state is SignUpSuccess) {
+          //  print("Token key is ${state.registerResponse.token}");
+            final token= state.registerResponse.token;
+            final email=state.registerResponse.email;
+            final name= state.registerResponse.name;
+
+            // Set the token using the SessionManager class
+            SessionManager().setAuthToken(token).then((_) {
+              // print("My tokne is $token");
+              // Token is set successfully, do something if needed
+            });
+            SessionManager().setUserName(name);
+            SessionManager().setEmail(email);
+              WidgetsBinding.instance.addPostFrameCallback((_) {
               Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -37,12 +52,6 @@ class _RegisterState extends State<Register> {
                 ),
               );
             });
-
-            return RegisterForm(isLoading: _isLoading, message: '');
-          } else if (state is SignUpSuccess) {
-            print("Token key is ${state.registerResponse.token}");
-            return const Center(
-                child: Text('Register Success for easy invoice'));
           } else if (state is SignUpFail) {
             return Center(child: Text(state.error));
           }
