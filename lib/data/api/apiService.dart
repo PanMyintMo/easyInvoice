@@ -20,7 +20,6 @@ class ApiService {
     _dio.interceptors.add(InterceptorsWrapper(
       onRequest: (RequestOptions options, RequestInterceptorHandler handler) {
         options.headers['Authorization'] = 'Bearer $token';
-        options.headers['Custom-Header'] = 'Your Custom Header Value';
         return handler.next(options);
       },
     ));
@@ -38,23 +37,8 @@ class ApiService {
       if (response.statusCode == 200) {
         final RegisterResponse data = RegisterResponse.fromJson(response.data);
         return data;
-      } else if (response.statusCode == 302) {
-        if (response.data is String) {
-          final String responseData = response.data;
-          // Handle the response data as a string
-          final registerResponse = RegisterResponse(
-            status: response.statusCode ?? 0,
-            message: responseData,
-            token: '',
-          );
-          return registerResponse;
-        } else {
-          // Handle other cases when the response data is not a string
-          throw DioError(
-              requestOptions: RequestOptions(path: '/api/register'),
-              response: response);
-        }
-      } else {
+      }
+       else {
         print("My response status code is ${response.statusCode}");
         throw DioError(
             requestOptions: RequestOptions(path: '/api/register'),

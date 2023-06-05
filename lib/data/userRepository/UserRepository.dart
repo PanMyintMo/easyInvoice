@@ -11,10 +11,10 @@ class UserRepository {
   UserRepository({required String token}) : _apiService = ApiService(token);
 
   //For Register
-  Future<RegisterResponse> signUp(
-      RegisterRequestModel registerRequestModel) async {
+  Future<RegisterResponse> signUp(RegisterRequestModel registerRequestModel) async {
     try {
       final response = await _apiService.signUp(registerRequestModel);
+
       return response;
     } catch (error) {
       throw error;
