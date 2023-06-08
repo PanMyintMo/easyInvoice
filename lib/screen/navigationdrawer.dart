@@ -2,10 +2,14 @@ import 'package:easy_invoice/network/SharedPreferenceHelper.dart';
 import 'package:easy_invoice/screen/user_profile.dart';
 import 'package:flutter/material.dart';
 
+import 'AllCategoryScreen.dart';
+import 'CategoryScreen.dart';
+
 class NavigationDrawerWidget extends StatelessWidget {
+
   final padding = const EdgeInsets.symmetric(horizontal: 20);
 
-  const NavigationDrawerWidget({super.key});
+  const NavigationDrawerWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +20,7 @@ class NavigationDrawerWidget extends StatelessWidget {
 
     return Drawer(
       child: Material(
-        color: const Color.fromRGBO(35, 25, 20, 5),
+        color: const Color.fromRGBO(38, 10, 10, 5),
         child: ListView(
           children: <Widget>[
             FutureBuilder<String?>(
@@ -52,7 +56,9 @@ class NavigationDrawerWidget extends StatelessWidget {
                   buildMenuItem(
                     text: 'Category',
                     icon: Icons.category,
-                    onClicked: () => selectedItem(context, 0),
+                    onClicked: () =>Navigator.push(context,    MaterialPageRoute(
+                      builder: (context) =>   const CategoryScreen(),
+                    )),
                   ),
                   const SizedBox(height: 16),
                   buildMenuItem(
@@ -64,7 +70,7 @@ class NavigationDrawerWidget extends StatelessWidget {
                   buildMenuItem(
                     text: 'Product',
                     icon: Icons.workspaces_outline,
-                    onClicked: () => selectedItem(context, 2),
+                    onClicked: () => Navigator.push(context, MaterialPageRoute(builder: (context) => AllCategoryDetailPage())),
                   ),
                   const SizedBox(height: 16),
                   buildMenuItem(

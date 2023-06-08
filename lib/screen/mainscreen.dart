@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'navigationdrawer.dart';
 
 class MainPageScreen extends StatefulWidget {
-  const MainPageScreen({Key? key}) : super(key: key);
+
+   MainPageScreen({Key? key}) : super(key: key);
 
   @override
   State<MainPageScreen> createState() => _MainPageState();
@@ -14,7 +15,7 @@ class _MainPageState extends State<MainPageScreen> {
     return Scaffold(
       // Extend the body behind the app bar
         backgroundColor: Colors.white,
-        drawer: const NavigationDrawerWidget(),
+        drawer:  NavigationDrawerWidget(),
         appBar: AppBar(
           elevation: 0.0,
           backgroundColor: Colors.white70,
@@ -44,17 +45,17 @@ class _MainPageState extends State<MainPageScreen> {
               scrollDirection: Axis.horizontal,
               children: [
                 _buildCardView(
-                    'assets/revenue.png', 'Total Revenue', 'second text'),
+                    'assets/revenue.png', 'Total Revenue', 'second ','\$'),
                 _buildCardView(
-                    'assets/sale.jpg', 'Total Sale', 'second text'),
+                    'assets/sale.jpg', 'Total Sale', 'second','\$'),
                 _buildCardView(
-                    'assets/profits.png', 'Total Profit', 'second text'),
+                    'assets/profits.png', 'Total Profit', 'second','\$'),
                 _buildCardView(
-                    'assets/faulty.png', ' Faulty Item', 'second text'),
+                    'assets/faulty.png', ' Faulty Item', 'second','\$'),
                 _buildCardView(
-                    'assets/warehouse.png', 'Ware House', 'second text'),
+                    'assets/warehouse.png', 'Ware House', 'second','\$'),
                 _buildCardView(
-                    'assets/shopkeeper.jpg', 'Shop Keeper', 'second text'),
+                    'assets/shopkeeper.jpg', 'Shop Keeper', 'second','\$'),
               ],
             ),
           ),
@@ -62,15 +63,13 @@ class _MainPageState extends State<MainPageScreen> {
   }
 }
 
-_buildCardView(String image, String cardText, String profileText) {
+_buildCardView(String image, String cardText, String profileText, String sign) {
   return Container(
     width: 200,
-    margin: const EdgeInsets.only(left: 5,top: 5,right: 5,bottom: 0),
-    child:  Card(
+    margin: const EdgeInsets.only(left: 5, top: 5, right: 5, bottom: 0),
+    child: Card(
       elevation: 5,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(14)
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
       color: Colors.white,
       child: Expanded(
         child: Column(
@@ -82,28 +81,34 @@ _buildCardView(String image, String cardText, String profileText) {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     Column(
-                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         Text(
                           cardText,
                           style: const TextStyle(fontSize: 16),
                         ),
-                        Text(
-                          profileText,
-                          style: const TextStyle(fontSize: 14, color: Colors.grey),
+                        Row(
+                          children: [
+                            Text(
+                              profileText,
+                              style: const TextStyle(fontSize: 14, color: Colors.grey),
+                            ),
+                            Text('\$', style: TextStyle(color: Colors.red)),
+                          ],
                         ),
+                      ],
+                    ),
+                    Image(
+                      image: AssetImage(image),
+                      width: 50,
+                    ),
                   ],
                 ),
-             Image(
-                image: AssetImage(
-                  image,),
-                width: 50,
+              ),
             ),
           ],
         ),
-              ),
       ),
-      ],
     ),
-  )),);
+  );
 }

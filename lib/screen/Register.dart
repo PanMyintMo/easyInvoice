@@ -48,7 +48,7 @@ class _RegisterState extends State<Register> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const MainPageScreen(),
+                  builder: (context) =>  MainPageScreen(),
                 ),
               );
             });
@@ -286,7 +286,7 @@ class _RegisterFormState extends State<RegisterForm> {
                     child: Text(
                       'Register'.toUpperCase(),
                       style: const TextStyle(
-                        fontSize: 20,
+                        fontSize: 16,
                         color: Colors.white,
                       ),
                     ),

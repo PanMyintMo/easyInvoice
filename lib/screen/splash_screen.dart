@@ -24,7 +24,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
       if (token != null) {
         // Token exists, navigate to the profile page
-        Get.offAll(() => const MainPageScreen());
+        Get.offAll(() =>  MainPageScreen());
       } else {
         Get.offAll(() => const Login());
       }
@@ -38,7 +38,7 @@ class _SplashScreenState extends State<SplashScreen> {
         color: Colors.redAccent,
         child: const Center(
           child: Text(
-            'DNI Invoice',
+            'Myanmar Easy Invoice',
             style: TextStyle(
                 fontSize: 34, fontWeight: FontWeight.w700, color: Colors.white),
           ),
