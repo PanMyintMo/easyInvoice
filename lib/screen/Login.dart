@@ -37,23 +37,22 @@ class _LoginState extends State<Login> {
               );
             } else if (state is SignInSuccess) {
               final token = state.loginResponse.token;
-              print("Login Success Status Code is ${state.loginResponse.status}");
+              //  print("Login Success Status Code is ${state.loginResponse.status}");
               final name = state.loginResponse.name;
               final email = state.loginResponse.email;
 
               // Set the token using the SessionManager class
-              SessionManager().setAuthToken(token).then((_) {
-                // print("My tokne is $token");
-                // Token is set successfully, do something if needed
-              });
-              SessionManager().setUserName(name);
-              SessionManager().setEmail(email);
+              SessionManager sessingManager = SessionManager();
+              sessingManager.setAuthToken(token);
+              sessingManager.setUserName(name);
+              sessingManager.setEmail(email);
+
               // Navigate to the user profile page after the current frame is completed
               WidgetsBinding.instance.addPostFrameCallback((_) {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const MainPageScreen(),
+                    builder: (context) => MainPageScreen(),
                   ),
                 );
               });
@@ -90,16 +89,16 @@ class _LoginInFormState extends State<LoginInForm> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
+    //  Size size = MediaQuery.of(context).size;
     return SingleChildScrollView(
       child: Column(
         children: [
-          SizedBox(
+          const SizedBox(
               height: 150,
               child: HeaderWidget(150, false, Icons.person_add_alt_1_rounded)),
           const SizedBox(height: 20),
           const Text(
-            'DNI Easy Invoice',
+            'Myanmar Easy Invoice',
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.w800,
@@ -130,7 +129,7 @@ class _LoginInFormState extends State<LoginInForm> {
                   controller: password,
                   obscureText: _obscureText,
                   decoration: InputDecoration(
-                    contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+                    contentPadding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
                     iconColor: Colors.redAccent,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(50),
@@ -199,16 +198,13 @@ class _LoginInFormState extends State<LoginInForm> {
                         ),
                       ),
                       if (widget.isLoading)
-                        Container(
-                          child: Center(
-                            child: CircularProgressIndicator(),
-                          ),
+                        const Center(
+                          child: CircularProgressIndicator(),
                         ),
 
                       //show success or failure message base on the message
                       if (widget.message.isNotEmpty)
                         Positioned(
-
                           child: Text(
                             widget.message,
                             style: TextStyle(

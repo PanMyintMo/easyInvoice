@@ -9,8 +9,8 @@ import 'package:easy_invoice/screen/mainscreen.dart';
 import 'package:easy_invoice/screen/login.dart';
 
 void main() {
-  const String token = ''; // Provide the actual token value
-  locator(token: token);
+
+  locator();
   runApp(const MyApp());
 }
 
@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
           GetPage(name: "/", page: () => const SplashScreen()), // Define SplashScreen route
           GetPage(name: "/Login", page: () => const Login()), // Define Login route
           GetPage(name: '/register', page: () => const Register()),
-          GetPage(name: "/MainScreen", page: () => const MainPageScreen()), // Define MainPageScreen route
+          GetPage(name: "/MainScreen", page: () =>  MainPageScreen()), // Define MainPageScreen route
         ],
       ),
     );

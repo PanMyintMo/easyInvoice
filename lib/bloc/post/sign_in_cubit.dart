@@ -22,9 +22,4 @@ class SignInCubit extends Cubit<SignInState> {
       emit(SignInFail(error.toString()));
     }
   }
-
-
-
-
-
 }
