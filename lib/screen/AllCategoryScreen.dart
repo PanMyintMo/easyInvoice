@@ -22,16 +22,12 @@ class AllCategoryDetailPage extends StatelessWidget {
             } else if (state is GetCategoryDetailSuccess) {
               // Data fetching is successful, use the data here
               List<CategoryData> allCategory = state.getAllCategoryDetail;
-              return ListView.builder(
-                itemCount: allCategory.length,
-                itemBuilder: (context, position) {
-                  return Text(allCategory[position].data.first.slug);
-                },
-              );
+
+            return AllCategoryPageWidget(categories: allCategory);
             } else if (state is GetCategoryDetailFail) {
               return Center(child: Text('Error: ${state.error}'));
             }
-            return const AllCategoryPageWidget();
+            return  const AllCategoryPageWidget(categories: [],);
           },
         ),
       ),
