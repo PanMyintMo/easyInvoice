@@ -93,7 +93,7 @@ class ApiService {
     }
   }
 
-  //get all category
+  //get all category from db
   Future<List<CategoryData>> getAllCategories() async {
     try {
       final response = await _dio.get('https://mmeasyinvoice.com/api/categories');
