@@ -1,3 +1,4 @@
+import 'package:easy_invoice/bloc/delete/delete_category_cubit.dart';
 import 'package:easy_invoice/bloc/get/get_category_detail_cubit.dart';
 import 'package:easy_invoice/bloc/post/add_category_cubit.dart';
 import 'package:easy_invoice/bloc/post/sign_in_cubit.dart';
@@ -32,4 +33,8 @@ void locator() {
   GetCategoryDetailCubit getCategoryDetailCubit =
       GetCategoryDetailCubit(getIt.get<UserRepository>());
   getIt.registerLazySingleton(() => getCategoryDetailCubit);
+
+  //to delete category
+  DeleteCategoryCubit categoryDeleteCubit= DeleteCategoryCubit(getIt.call());
+  getIt.registerLazySingleton(() => categoryDeleteCubit);
 }

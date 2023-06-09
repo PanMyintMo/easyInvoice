@@ -4,6 +4,7 @@ import 'package:easy_invoice/dataModel/AddCategoryRequestModel.dart';
 import 'package:easy_invoice/dataModel/LoginRequestModel.dart';
 import 'package:easy_invoice/dataModel/RegisterRequestModel.dart';
 import '../responsemodel/AddCategoryResponseModel.dart';
+import '../responsemodel/CategoryDeleteRespose.dart';
 import '../responsemodel/GetAllCategoryDetail.dart';
 import '../responsemodel/LoginResponse.dart';
 
@@ -51,6 +52,18 @@ class UserRepository {
 Future<List<CategoryData>> getCategory() async {
     try{
       final response= await _apiService.getAllCategories();
+      return response;
+    }
+    catch(error){
+      rethrow;
+    }
+}
+
+//to delete category by id
+
+Future<DeleteCategory> deleteCategory(int id) async{
+    try{
+      final response = await _apiService.deleteCategory(id);
       return response;
     }
     catch(error){

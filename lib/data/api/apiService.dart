@@ -5,6 +5,7 @@ import 'package:easy_invoice/dataModel/LoginRequestModel.dart';
 import 'package:easy_invoice/network/interceptor.dart';
 import '../../dataModel/RegisterRequestModel.dart';
 import '../responsemodel/AddCategoryResponseModel.dart';
+import '../responsemodel/CategoryDeleteRespose.dart';
 import '../responsemodel/LoginResponse.dart';
 import '../responsemodel/RegisterResponse.dart';
 
@@ -96,7 +97,8 @@ class ApiService {
   //get all category from db
   Future<List<CategoryData>> getAllCategories() async {
     try {
-      final response = await _dio.get('https://mmeasyinvoice.com/api/categories');
+      final response =
+          await _dio.get('https://mmeasyinvoice.com/api/categories');
       print('Categories are ${response.data}.');
 
       if (response.statusCode == 200) {
@@ -104,11 +106,13 @@ class ApiService {
 
         if (responseData['data'] is List) {
           final List<CategoryData> categories = List<CategoryData>.from(
-            responseData['data'].map((categoryJson) => CategoryData.fromJson(categoryJson)),
+            responseData['data']
+                .map((categoryJson) => CategoryData.fromJson(categoryJson)),
           );
           return categories;
         } else if (responseData['data'] is Map<String, dynamic>) {
-          final CategoryData categoryDetail = CategoryData.fromJson(responseData['data']);
+          final CategoryData categoryDetail =
+              CategoryData.fromJson(responseData['data']);
           return [categoryDetail];
         } else {
           throw Exception('Invalid data format for "data" field');
@@ -119,7 +123,24 @@ class ApiService {
     } catch (e) {
       throw Exception('Failed to fetch categories: $e');
     }
-  }}
+  }
 
+//Delete category by id
 
+  Future<DeleteCategory> deleteCategory(int id) async {
+    try {
+      final response =
+          await _dio.post('https://mmeasyinvoice.com/api/delete-category/$id');
 
+      print("Delete category status response is ${response.statusCode}");
+      if (response.statusCode == 200) {
+        DeleteCategory deleteCategory = DeleteCategory.fromJson(response.data);
+        return deleteCategory;
+      } else {
+        throw Exception('Something wrong!');
+      }
+    } catch (error) {
+      throw Exception(error);
+    }
+  }
+}
