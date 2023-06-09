@@ -13,7 +13,6 @@ class SignInCubit extends Cubit<SignInState> {
 
   Future<void> signIn(LoginRequestModel loginRequestModel) async {
     emit(SignInLoading());
-
     try {
       final response = await _userRepository.signIn(loginRequestModel);
       emit(SignInSuccess(response));
