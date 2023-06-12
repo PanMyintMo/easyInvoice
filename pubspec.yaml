@@ -38,9 +38,11 @@ dependencies:
   json_annotation: any
   equatable:
   flutter_bloc: ^8.0.0
-  flutter_slidable:
   get_it:
   get:
+  fluttertoast: ^8.2.2
+
+
 
 
   # The following adds the Cupertino Icons font to your application.

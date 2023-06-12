@@ -5,6 +5,8 @@ import 'package:easy_invoice/module/module.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../screen/UpdateCategoryScreen.dart';
+
 class AllCategoryPageWidget extends StatelessWidget {
   final List<CategoryData> categories;
 
@@ -39,7 +41,7 @@ class AllCategoryPageWidget extends StatelessWidget {
                 DataCell(
                     GestureDetector(
                       onTap: () {
-                        print('U click edit button');
+                       Navigator.push(context, MaterialPageRoute(builder: (context) =>   UpdateCategoryScreen(id : item.id,name :item.name,slug :item.slug)));
                       },
                         child: const Icon(Icons.edit,color: Colors.yellow,))),
                 DataCell(

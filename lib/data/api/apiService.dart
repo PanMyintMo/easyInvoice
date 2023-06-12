@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:easy_invoice/data/responsemodel/GetAllCategoryDetail.dart';
+import 'package:easy_invoice/data/responsemodel/UpdateCateResponse.dart';
 import 'package:easy_invoice/dataModel/AddCategoryRequestModel.dart';
+import 'package:easy_invoice/dataModel/EditCategoryModel.dart';
 import 'package:easy_invoice/dataModel/LoginRequestModel.dart';
 import 'package:easy_invoice/network/interceptor.dart';
 import '../../dataModel/RegisterRequestModel.dart';
@@ -99,7 +101,7 @@ class ApiService {
     try {
       final response =
           await _dio.get('https://mmeasyinvoice.com/api/categories');
-      print('Categories are ${response.data}.');
+    //  print('Categories are ${response.data}.');
 
       if (response.statusCode == 200) {
         final dynamic responseData = response.data;
@@ -131,12 +133,32 @@ class ApiService {
     try {
       final response =
           await _dio.post('https://mmeasyinvoice.com/api/delete-category/$id');
-
-      print("Delete category status response is ${response.statusCode}");
+      // print("Delete category status response is ${response.statusCode}");
       if (response.statusCode == 200) {
         DeleteCategory deleteCategory = DeleteCategory.fromJson(response.data);
         return deleteCategory;
       } else {
+        throw Exception('Something wrong!');
+      }
+    } catch (error) {
+      throw Exception(error);
+    }
+  }
+
+  //to update category by id
+  Future<CategoryUpdateResponse> updateCategory(
+      EditCategory editCategory, int id) async {
+    try {
+      final response =
+          await _dio.post('https://mmeasyinvoice.com/api/edit-category/$id',data: editCategory.toJson());
+      print('Update response is ${response.data}');
+      if (response.statusCode == 200) {
+        CategoryUpdateResponse categoryUpdateResponse =
+            CategoryUpdateResponse.fromJson(response.data);
+
+        return categoryUpdateResponse;
+      }
+      else{
         throw Exception('Something wrong!');
       }
     } catch (error) {

@@ -1,4 +1,5 @@
 import 'package:easy_invoice/bloc/delete/delete_category_cubit.dart';
+import 'package:easy_invoice/bloc/edit/edit_category_cubit.dart';
 import 'package:easy_invoice/bloc/get/get_category_detail_cubit.dart';
 import 'package:easy_invoice/bloc/post/add_category_cubit.dart';
 import 'package:easy_invoice/bloc/post/sign_in_cubit.dart';
@@ -19,17 +20,17 @@ void locator() {
 
   UserRepository userRepository = UserRepository();
   getIt.registerLazySingleton<UserRepository>(() => userRepository);
-//for login
+  //for login
   SignInCubit signInCubit = SignInCubit(getIt.get<UserRepository>());
   getIt.registerLazySingleton(() => signInCubit);
-//for register
+  //for register
   SignUpCubit signupCubit = SignUpCubit(getIt.get<UserRepository>());
   getIt.registerLazySingleton(() => signupCubit);
-//to add category to db
+  //to add category to db
   AddCategoryCubit addCategoryCubit =
       AddCategoryCubit(getIt.get<UserRepository>());
   getIt.registerLazySingleton(() => addCategoryCubit);
-//get all category
+  //get all category
   GetCategoryDetailCubit getCategoryDetailCubit =
       GetCategoryDetailCubit(getIt.get<UserRepository>());
   getIt.registerLazySingleton(() => getCategoryDetailCubit);
@@ -37,4 +38,8 @@ void locator() {
   //to delete category
   DeleteCategoryCubit categoryDeleteCubit= DeleteCategoryCubit(getIt.call());
   getIt.registerLazySingleton(() => categoryDeleteCubit);
+
+  //to update category
+  EditCategoryCubit editCategoryCubit= EditCategoryCubit(getIt.call());
+  getIt.registerLazySingleton(() => editCategoryCubit);
 }
