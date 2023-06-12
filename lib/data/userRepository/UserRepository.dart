@@ -1,16 +1,17 @@
 import 'package:easy_invoice/data/api/apiService.dart';
 import 'package:easy_invoice/data/responsemodel/RegisterResponse.dart';
 import 'package:easy_invoice/dataModel/AddCategoryRequestModel.dart';
+import 'package:easy_invoice/dataModel/EditCategoryModel.dart';
 import 'package:easy_invoice/dataModel/LoginRequestModel.dart';
 import 'package:easy_invoice/dataModel/RegisterRequestModel.dart';
 import '../responsemodel/AddCategoryResponseModel.dart';
 import '../responsemodel/CategoryDeleteRespose.dart';
 import '../responsemodel/GetAllCategoryDetail.dart';
 import '../responsemodel/LoginResponse.dart';
+import '../responsemodel/UpdateCateResponse.dart';
 
 class UserRepository {
   final ApiService _apiService;
-
 
   UserRepository() : _apiService = ApiService();
 
@@ -37,38 +38,45 @@ class UserRepository {
 
   //for add category
   Future<AddCategoryResponse> addCategory(
-      AddCategoryRequestModel addCategoryRequestModel) async
-  {
+      AddCategoryRequestModel addCategoryRequestModel) async {
     try {
       final response = await _apiService.addCategory(addCategoryRequestModel);
       return response;
-    }
-    catch (error) {
+    } catch (error) {
       rethrow;
     }
   }
 
 //to get all category
-Future<List<CategoryData>> getCategory() async {
-    try{
-      final response= await _apiService.getAllCategories();
+  Future<List<CategoryData>> getCategory() async {
+    try {
+      final response = await _apiService.getAllCategories();
       return response;
-    }
-    catch(error){
+    } catch (error) {
       rethrow;
     }
-}
+  }
 
 //to delete category by id
 
-Future<DeleteCategory> deleteCategory(int id) async{
-    try{
+  Future<DeleteCategory> deleteCategory(int id) async {
+    try {
       final response = await _apiService.deleteCategory(id);
+      return response;
+    } catch (error) {
+      rethrow;
+    }
+  }
+
+// update category by id
+
+Future<CategoryUpdateResponse> updateCategory(EditCategory editCategory,int id) async{
+    try{
+      final response = await _apiService.updateCategory(editCategory, id);
       return response;
     }
     catch(error){
       rethrow;
     }
 }
-
 }
