@@ -9,10 +9,16 @@ class EditCateWidget extends StatefulWidget {
   final String slug;
   final int id;
 
+  final bool isLoading;
+  final String message = '';
+
   const EditCateWidget({
     required this.name,
     required this.slug,
-    Key? key, required this.id,
+    Key? key,
+    required this.id,
+    required this.isLoading,
+    required String message,
   }) : super(key: key);
 
   @override
@@ -20,8 +26,6 @@ class EditCateWidget extends StatefulWidget {
 }
 
 class _EditCateWidgetState extends State<EditCateWidget> {
-
-
   late TextEditingController name;
   late TextEditingController slug;
 
@@ -39,7 +43,6 @@ class _EditCateWidgetState extends State<EditCateWidget> {
     slug.dispose();
     super.dispose();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -80,13 +83,26 @@ class _EditCateWidgetState extends State<EditCateWidget> {
             height: 20,
           ),
           Stack(children: [
+            if (widget.message.isNotEmpty)
+              Positioned(
+                child: Text(
+                  widget.message,
+                  style: TextStyle(
+                      fontSize: 18,
+                      color: widget.message.startsWith('Success')
+                          ? Colors.green
+                          : Colors.red),
+                ),
+              ),
+
             Positioned(
               child: Center(
                 child: TextButton(
                     onPressed: () {
-                      final editCateCubit =
-                      context.read<EditCategoryCubit>();
-                      editCateCubit.editCategory(EditCategory(name: name.text,slug: slug.text),widget.id);
+                      final editCateCubit = context.read<EditCategoryCubit>();
+                      editCateCubit.editCategory(
+                          EditCategory(name: name.text, slug: slug.text),
+                          widget.id);
                     },
                     child: const Text(
                       'Update Category',
@@ -94,24 +110,10 @@ class _EditCateWidgetState extends State<EditCateWidget> {
                     )),
               ),
             ),
-            // if (widget.isLoading)
-            //   const Center(
-            //     child: CircularProgressIndicator(),
-            //   ),
-
-            //show success or failure message base on the message
-            /* if (widget.message.isNotEmpty)
-            Positioned(
-              left: MediaQuery.of(context).size.height * 0.5 + 60,
-              child: Text(
-                widget.message,
-                style: TextStyle(
-                    fontSize: 18,
-                    color: widget.message.startsWith('Success')
-                        ? Colors.green
-                        : Colors.red),
+            if (widget.isLoading)
+              const Center(
+                child: CircularProgressIndicator(),
               ),
-            )*/
           ])
         ],
       ),
