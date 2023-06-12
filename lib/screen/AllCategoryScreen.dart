@@ -4,8 +4,8 @@ import 'package:easy_invoice/bloc/get/get_category_detail_cubit.dart';
 import 'package:easy_invoice/module/module.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../widget/AllCategoryPageWidget.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import '../widget/AllCategoryPageWidget.dart';
 
 class AllCategoryDetailPage extends StatelessWidget {
   const AllCategoryDetailPage({Key? key}) : super(key: key);
@@ -25,79 +25,81 @@ class AllCategoryDetailPage extends StatelessWidget {
           create: (context) => DeleteCategoryCubit(getIt.call()),
         ),
         BlocProvider<EditCategoryCubit>(
-            create: (context) => EditCategoryCubit(getIt.call()))
+          create: (context) => EditCategoryCubit(getIt.call()),
+        ),
       ],
       child: Scaffold(
-        body: BlocBuilder<GetCategoryDetailCubit, GetCategoryDetailState>(
+        body: BlocConsumer<GetCategoryDetailCubit, GetCategoryDetailState>(
+          listener: (context, state) {
+            if (state is GetCategoryDetailFail) {
+              showErrorToast('Error: ${state.error}');
+            }
+          },
           builder: (context, state) {
             if (state is GetCategoryDetailLoading) {
-              return const Center(child: Text('Loading'));
+              return const Center(child: CircularProgressIndicator());
             } else if (state is GetCategoryDetailSuccess) {
               return BlocConsumer<DeleteCategoryCubit, DeleteCategoryState>(
                 listener: (context, deleteState) {
                   if (deleteState is DeleteCategoryLoading) {
-                    // Show loading indicator while deleting
-                    const Center(child: CircularProgressIndicator());
+                    // Handle delete category loading state
                   } else if (deleteState is DeleteCategorySuccess) {
-                    // Show success toast message after successful deletion
                     showSuccessToast('Category deleted successfully');
-                    // Reload category details to update the UI
-                    BlocProvider.of<GetCategoryDetailCubit>(context)
-                        .getCategoryDetail();
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      context
+                          .read<GetCategoryDetailCubit>()
+                          .getCategoryDetail();
+                    });
                   } else if (deleteState is DeleteCategoryFail) {
-                    // Show error toast message after deletion failure
                     showErrorToast(
-                        'Failed to delete category ${deleteState.error}');
+                        'Failed to delete category: ${deleteState.error}');
                   }
                 },
                 builder: (context, deleteState) {
-                  if (deleteState is DeleteCategoryLoading) {
-                    // Show loading indicator while deleting
-                    return const Center(child: CircularProgressIndicator());
-                  } else if (deleteState is DeleteCategorySuccess) {
-                    return AllCategoryPageWidget(
-                        categories: state.getAllCategoryDetail);
-                  } else if (deleteState is DeleteCategoryFail) {
-                    return AllCategoryPageWidget(
-                        categories: state.getAllCategoryDetail);
-                  }
+                  final bool loading = deleteState is DeleteCategoryLoading;
+                  final String message = deleteState is DeleteCategoryFail
+                      ? deleteState.error
+                      : '';
+
                   return AllCategoryPageWidget(
-                      categories: state.getAllCategoryDetail);
+                    categories: state.getAllCategoryDetail,
+                    isLoading: loading,
+                    message: message,
+                  );
                 },
               );
             } else if (state is GetCategoryDetailFail) {
               return Center(child: Text('Error: ${state.error}'));
             }
-            return const AllCategoryPageWidget(categories: []);
+
+            return const AllCategoryPageWidget(
+              categories: [],
+              isLoading: false,
+              message: '',
+            );
           },
         ),
       ),
     );
   }
-}
 
-void showErrorToast(String error) {
-  Fluttertoast.showToast(
-    msg: "Category delete failed !",
-    toastLength: Toast.LENGTH_SHORT,
-    // Duration for which the toast should be visible
-    gravity: ToastGravity.BOTTOM,
-    // Position where the toast should appear on the screen
-    backgroundColor: Colors.black54,
-    // Background color of the toast
-    textColor: Colors.white, // Text color of the toast message
-  );
-}
+  void showErrorToast(String error) {
+    Fluttertoast.showToast(
+      msg: error,
+      toastLength: Toast.LENGTH_LONG,
+      gravity: ToastGravity.BOTTOM,
+      backgroundColor: Colors.black54,
+      textColor: Colors.white,
+    );
+  }
 
-void showSuccessToast(String success) {
-  Fluttertoast.showToast(
-    msg: "Category delete successfully message!",
-    toastLength: Toast.LENGTH_SHORT,
-    // Duration for which the toast should be visible
-    gravity: ToastGravity.BOTTOM,
-    // Position where the toast should appear on the screen
-    backgroundColor: Colors.black54,
-    // Background color of the toast
-    textColor: Colors.white, // Text color of the toast message
-  );
+  void showSuccessToast(String success) {
+    Fluttertoast.showToast(
+      msg: success,
+      toastLength: Toast.LENGTH_LONG,
+      gravity: ToastGravity.BOTTOM,
+      backgroundColor: Colors.black54,
+      textColor: Colors.white,
+    );
+  }
 }

@@ -21,10 +21,4 @@ class GetCategoryDetailCubit extends Cubit<GetCategoryDetailState> {
       emit(GetCategoryDetailFail(error.toString()));
     }
   }
-
-  // void deleteCategory(int id) {
-  //   _userRepository.deleteCategory(id)
-  //       .then((value) => emit (GetCategoryDetailSuccess(value as List<CategoryData>)))
-  //       .catchError((e) =>emit (GetCategoryDetailFail("Can not delete")));
-  // }
 }
