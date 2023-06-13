@@ -40,53 +40,46 @@ class AllCategoryPageWidget extends StatelessWidget {
                   DataColumn(label: Text('Update')),
                   DataColumn(label: Text('Delete')),
                 ],
-                rows: categories
-                    .map((category) {
-                      return category.data.map((item) {
-                        return DataRow(cells: [
-                          DataCell(Text(item.id.toString())),
-                          DataCell(Text(item.name)),
-                          DataCell(Text(item.slug)),
-                          DataCell(GestureDetector(
-                              onTap: () async {
-                                var result = await Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            UpdateCategoryScreen(
-                                                id: item.id,
-                                                name: item.name,
-                                                slug: item.slug)));
-                                if (result != null) {
-                                  BlocProvider.of<GetCategoryDetailCubit>(
-                                          context)
-                                      .getCategoryDetail();
-
-                                  showToastMessage(
-                                      'Category Updated Successful');
-                                } else if (result != null && result is String) {
-                                  showErrorToast(
-                                      'Failed to update category: $result');
-                                }
-                              },
-                              child: const Icon(
-                                Icons.edit,
-                                color: Colors.yellow,
-                              ))),
-                          DataCell(GestureDetector(
-                              onTap: () {
-                                showDeleteConfirmationDialog(context, item,
-                                    context.read<DeleteCategoryCubit>());
-                              },
-                              child: const Icon(
-                                Icons.delete_forever,
-                                color: Colors.red,
-                              ))),
-                        ]);
-                      }).toList();
-                    })
-                    .expand((row) => row)
-                    .toList(),
+                rows: categories.map((category) {
+                  return DataRow(cells: [
+                    DataCell(Text(category.id.toString())),
+                    DataCell(Text(category.name)),
+                    DataCell(Text(category.slug)),
+                    DataCell(GestureDetector(
+                      onTap: () async {
+                        var result = await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => UpdateCategoryScreen(
+                              id: category.id,
+                              name: category.name,
+                              slug: category.slug,
+                            ),
+                          ),
+                        );
+                        if (result != null) {
+                          BlocProvider.of<GetCategoryDetailCubit>(context).getCategoryDetail();
+                          showToastMessage('Category Updated Successfully');
+                        } else if (result != null && result is String) {
+                          showErrorToast('Failed to update category: $result');
+                        }
+                      },
+                      child: const Icon(
+                        Icons.edit,
+                        color: Colors.yellow,
+                      ),
+                    )),
+                    DataCell(GestureDetector(
+                      onTap: () {
+                        showDeleteConfirmationDialog(context, category, context.read<DeleteCategoryCubit>());
+                      },
+                      child: const Icon(
+                        Icons.delete_forever,
+                        color: Colors.red,
+                      ),
+                    )),
+                  ]);
+                }).toList(),
               ),
               if (isLoading)
                 Container(
@@ -94,9 +87,10 @@ class AllCategoryPageWidget extends StatelessWidget {
                   child: const Center(
                     child: SpinKitFadingCircle(color: Colors.white, size: 50.0),
                   ),
-                )
+                ),
             ],
           ),
+
         ));
   }
 
@@ -121,28 +115,35 @@ class AllCategoryPageWidget extends StatelessWidget {
   }
 }
 
-void showDeleteConfirmationDialog(BuildContext context, Category item,
-    DeleteCategoryCubit deleteCategoryCubit) {
+void showDeleteConfirmationDialog(
+    BuildContext context,
+    CategoryData item,
+    DeleteCategoryCubit deleteCategoryCubit,
+    ) {
   showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Confirmation'),
-          content: const Text('Are you sure you want to delete this item?'),
-          actions: [
-            TextButton(
-                onPressed: () {
-                  //Delete Action
-                  deleteCategoryCubit.deleteCategory(item.id);
-                  Navigator.pop(context);
-                },
-                child: const Text('Delete')),
-            TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: const Text('Cancel'))
-          ],
-        );
-      });
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text('Confirmation'),
+        content: const Text('Are you sure you want to delete this item?'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              // Delete Action
+              deleteCategoryCubit.deleteCategory(item.id);
+              Navigator.pop(context);
+            },
+            child: const Text('Delete'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Text('Cancel'),
+          ),
+        ],
+      );
+    },
+  );
 }
+

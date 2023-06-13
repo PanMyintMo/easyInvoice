@@ -99,22 +99,18 @@ class ApiService {
   //get all category from db
   Future<List<CategoryData>> getAllCategories() async {
     try {
-      final response =
-          await _dio.get('https://mmeasyinvoice.com/api/categories');
-    //  print('Categories are ${response.data}.');
+      final response = await _dio.get('https://mmeasyinvoice.com/api/categories');
 
       if (response.statusCode == 200) {
         final dynamic responseData = response.data;
 
         if (responseData['data'] is List) {
           final List<CategoryData> categories = List<CategoryData>.from(
-            responseData['data']
-                .map((categoryJson) => CategoryData.fromJson(categoryJson)),
+            responseData['data'].map((categoryJson) => CategoryData.fromJson(categoryJson)),
           );
           return categories;
         } else if (responseData['data'] is Map<String, dynamic>) {
-          final CategoryData categoryDetail =
-              CategoryData.fromJson(responseData['data']);
+          final CategoryData categoryDetail = CategoryData.fromJson(responseData['data']);
           return [categoryDetail];
         } else {
           throw Exception('Invalid data format for "data" field');

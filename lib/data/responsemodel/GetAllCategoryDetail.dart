@@ -1,40 +1,22 @@
 class CategoryData {
-  List<Category> data;
+  final int id;
+  final String name;
+  final String slug;
+  final DateTime createdAt;
+  final DateTime updatedAt;
+
   CategoryData({
-    required this.data,
+    required this.id, required this.name,
+    required this.slug, required this.createdAt,
+    required this.updatedAt
   });
 
-  factory CategoryData.fromJson(Map<String, dynamic> json) {
-    return CategoryData(
-      data: List<Category>.from(
-        json['data'].map((categoryJson) => Category.fromJson(categoryJson)),
-      ),
-    );
+
+  factory CategoryData.fromJson(Map<String,dynamic> json){
+    return CategoryData(id: json['id'] as int,
+        name: json['name'] as String, slug: json['slug'] as String,
+        createdAt: DateTime.parse(json['created_at']),
+        updatedAt: DateTime.parse(json['updated_at']));
   }
-}
 
-class Category {
-  int id;
-  String name;
-  String slug;
-  String createdAt;
-  String updatedAt;
-
-  Category({
-    required this.id,
-    required this.name,
-    required this.slug,
-    required this.createdAt,
-    required this.updatedAt,
-  });
-
-  factory Category.fromJson(Map<String, dynamic> json) {
-    return Category(
-      id: json['id'],
-      name: json['name'],
-      slug: json['slug'],
-      createdAt: json['created_at'],
-      updatedAt: json['updated_at'],
-    );
-  }
 }
