@@ -16,16 +16,16 @@ class AllCategoryDetailPage extends StatelessWidget {
       providers: [
         BlocProvider<GetCategoryDetailCubit>(
           create: (context) {
-            final cubit = GetCategoryDetailCubit(getIt.call());
+            final cubit = GetCategoryDetailCubit(getIt.call()); // Use getIt<ApiService>() to get the ApiService instance
             cubit.getCategoryDetail(); // call category detail
             return cubit;
           },
         ),
         BlocProvider<DeleteCategoryCubit>(
-          create: (context) => DeleteCategoryCubit(getIt.call()),
+          create: (context) => DeleteCategoryCubit(getIt.call()), // Use getIt<ApiService>() to get the ApiService instance
         ),
         BlocProvider<EditCategoryCubit>(
-          create: (context) => EditCategoryCubit(getIt.call()),
+          create: (context) => EditCategoryCubit(getIt.call()), // Use getIt<ApiService>() to get the ApiService instance
         ),
       ],
       child: Scaffold(

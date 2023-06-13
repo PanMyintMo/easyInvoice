@@ -180,6 +180,7 @@ class NavigationDrawerWidget extends StatelessWidget {
     required String text,
     required IconData icon,
     VoidCallback? onClicked,
+
   }) {
     const color = Colors.white;
     const hoverColor = Colors.white70;
@@ -191,6 +192,8 @@ class NavigationDrawerWidget extends StatelessWidget {
       onTap: onClicked,
     );
   }
+
+
 
   void selectedItem(BuildContext context, int index) {
     Navigator.of(context).pop();
