@@ -1,15 +1,21 @@
 import 'package:dio/dio.dart';
+import 'package:easy_invoice/data/responsemodel/AddSizeResponse.dart';
 import 'package:easy_invoice/data/responsemodel/GetAllCategoryDetail.dart';
+import 'package:easy_invoice/data/responsemodel/GetAllSizeResponse.dart';
 import 'package:easy_invoice/data/responsemodel/UpdateCateResponse.dart';
 import 'package:easy_invoice/dataModel/AddCategoryRequestModel.dart';
 import 'package:easy_invoice/dataModel/EditCategoryModel.dart';
 import 'package:easy_invoice/dataModel/LoginRequestModel.dart';
 import 'package:easy_invoice/network/interceptor.dart';
+import '../../dataModel/AddSizeRequestModel.dart';
+import '../../dataModel/EditSizeModel.dart';
 import '../../dataModel/RegisterRequestModel.dart';
 import '../responsemodel/AddCategoryResponseModel.dart';
 import '../responsemodel/CategoryDeleteRespose.dart';
 import '../responsemodel/LoginResponse.dart';
 import '../responsemodel/RegisterResponse.dart';
+import '../responsemodel/SizeDeleteResponse.dart';
+import '../responsemodel/UpdateSizeResponse.dart';
 
 class ApiService {
   final Dio _dio = Dio();
@@ -141,6 +147,25 @@ class ApiService {
     }
   }
 
+
+//to delete size
+  Future<SizeDeleteResponse> deleteSize(int id) async {
+    try {
+      final response =
+      await _dio.post('https://mmeasyinvoice.com/api/delete-size/$id');
+       print("Delete Size status response is ${response.statusCode}");
+      if (response.statusCode == 200) {
+        SizeDeleteResponse deleteSize = SizeDeleteResponse.fromJson(response.data);
+        return deleteSize;
+      } else {
+        throw Exception('Something wrong!');
+      }
+    } catch (error) {
+      throw Exception(error);
+    }
+  }
+
+
   //to update category by id
   Future<CategoryUpdateResponse> updateCategory(
       EditCategory editCategory, int id) async {
@@ -159,6 +184,82 @@ class ApiService {
       }
     } catch (error) {
       throw Exception(error);
+    }
+  }
+
+  //to update size by id
+  Future<SizeUpdateResponse> updateSize(
+      EditSize editSize, int id) async {
+    try {
+      final response =
+      await _dio.post('https://mmeasyinvoice.com/api/edit-size/$id',data: editSize.toJson());
+      print('Update response is ${response.data}');
+      if (response.statusCode == 200) {
+        SizeUpdateResponse sizeUpdateResponse =
+        SizeUpdateResponse.fromJson(response.data);
+
+        return sizeUpdateResponse;
+      }
+      else{
+        throw Exception('Something wrong!');
+      }
+    } catch (error) {
+      throw Exception(error);
+    }
+  }
+  //Add Size to db
+
+  Future<AddSizeResponse> addSize(
+      AddSizeRequestModel addSizeRequestModel) async {
+    try {
+      final Response response = await _dio.post(
+          'https://mmeasyinvoice.com/api/add-size',
+          data: addSizeRequestModel.toJson());
+      print("Add Size Response data is ${response.data}");
+
+      if (response.statusCode == 200) {
+        final AddSizeResponse addSizeResponse =
+        AddSizeResponse.fromJson(response.data);
+        return addSizeResponse;
+      } else {
+        throw DioError(
+          requestOptions: RequestOptions(path: '/api/add-size'),
+          response: response,
+        );
+      }
+    } catch (error) {
+      throw DioError(
+        requestOptions: RequestOptions(path: '/api/add-size'),
+        error: error,
+      );
+    }
+  }
+
+
+  //get all sizes from db
+  Future<List<GetAllSizeResponse>> getAllSize() async {
+    try {
+      final response = await _dio.get('https://mmeasyinvoice.com/api/sizes');
+
+      if (response.statusCode == 200) {
+        final dynamic responseData = response.data;
+
+        if (responseData['data'] is List) {
+          final List<GetAllSizeResponse> size = List<GetAllSizeResponse>.from(
+            responseData['data'].map((categoryJson) => GetAllSizeResponse.fromJson(categoryJson)),
+          );
+          return size;
+        } else if (responseData['data'] is Map<String, dynamic>) {
+          final GetAllSizeResponse sizes = GetAllSizeResponse.fromJson(responseData['data']);
+          return [sizes];
+        } else {
+          throw Exception('Invalid data format for "data" field');
+        }
+      } else {
+        throw Exception('Failed to fetch sizes');
+      }
+    } catch (e) {
+      throw Exception('Failed to fetch sizes: $e');
     }
   }
 }
