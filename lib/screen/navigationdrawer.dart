@@ -1,9 +1,11 @@
 import 'package:easy_invoice/network/SharedPreferenceHelper.dart';
+import 'package:easy_invoice/screen/AllSizesScreen.dart';
 import 'package:easy_invoice/screen/user_profile.dart';
 import 'package:flutter/material.dart';
 
+import 'AddCategoryScreen.dart';
 import 'AllCategoryScreen.dart';
-import 'CategoryScreen.dart';
+import 'SizeAddScreen.dart';
 
 class NavigationDrawerWidget extends StatelessWidget {
 
@@ -64,7 +66,7 @@ class NavigationDrawerWidget extends StatelessWidget {
                   buildMenuItem(
                     text: 'Size',
                     icon: Icons.format_size,
-                    onClicked: () => selectedItem(context, 1),
+                    onClicked: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => const SizeAddScreen())),
                   ),
                   const SizedBox(height: 16),
                   buildMenuItem(
@@ -76,7 +78,7 @@ class NavigationDrawerWidget extends StatelessWidget {
                   buildMenuItem(
                     text: 'Order',
                     icon: Icons.update,
-                    onClicked: () => selectedItem(context, 3),
+                    onClicked: () => Navigator.push(context,MaterialPageRoute(builder: (context) => AllSizesScreen())),
                   ),
                   const SizedBox(height: 24),
                   const Divider(color: Colors.white70),

@@ -1,14 +1,20 @@
 import 'package:easy_invoice/data/api/apiService.dart';
+import 'package:easy_invoice/data/responsemodel/AddSizeResponse.dart';
+import 'package:easy_invoice/data/responsemodel/GetAllSizeResponse.dart';
 import 'package:easy_invoice/data/responsemodel/RegisterResponse.dart';
 import 'package:easy_invoice/dataModel/AddCategoryRequestModel.dart';
+import 'package:easy_invoice/dataModel/AddSizeRequestModel.dart';
 import 'package:easy_invoice/dataModel/EditCategoryModel.dart';
 import 'package:easy_invoice/dataModel/LoginRequestModel.dart';
 import 'package:easy_invoice/dataModel/RegisterRequestModel.dart';
+import '../../dataModel/EditSizeModel.dart';
 import '../responsemodel/AddCategoryResponseModel.dart';
 import '../responsemodel/CategoryDeleteRespose.dart';
 import '../responsemodel/GetAllCategoryDetail.dart';
 import '../responsemodel/LoginResponse.dart';
+import '../responsemodel/SizeDeleteResponse.dart';
 import '../responsemodel/UpdateCateResponse.dart';
+import '../responsemodel/UpdateSizeResponse.dart';
 
 class UserRepository {
   final ApiService _apiService;
@@ -46,11 +52,34 @@ class UserRepository {
       rethrow;
     }
   }
+  //for size add to db
+
+  Future<AddSizeResponse> addSize(
+      AddSizeRequestModel addSizeRequestModel) async {
+    try {
+      final response = await _apiService.addSize(addSizeRequestModel);
+      return response;
+    } catch (error) {
+      rethrow;
+    }
+  }
+
+
 
 //to get all category
   Future<List<CategoryData>> getCategory() async {
     try {
       final response = await _apiService.getAllCategories();
+      return response;
+    } catch (error) {
+      rethrow;
+    }
+  }
+
+  //get all sizes
+  Future<List<GetAllSizeResponse>> getSizes() async {
+    try {
+      final response = await _apiService.getAllSize();
       return response;
     } catch (error) {
       rethrow;
@@ -68,6 +97,17 @@ class UserRepository {
     }
   }
 
+  //to delete size by id
+
+  Future<SizeDeleteResponse> deleteSize(int id) async {
+    try {
+      final response = await _apiService.deleteSize(id);
+      return response;
+    } catch (error) {
+      rethrow;
+    }
+  }
+
 // update category by id
 
 Future<CategoryUpdateResponse> updateCategory(EditCategory editCategory,int id) async{
@@ -79,4 +119,16 @@ Future<CategoryUpdateResponse> updateCategory(EditCategory editCategory,int id) 
       rethrow;
     }
 }
+
+// update size by id
+
+  Future<SizeUpdateResponse> updateSize(EditSize editSize,int id) async{
+    try{
+      final response = await _apiService.updateSize(editSize, id);
+      return response;
+    }
+    catch(error){
+      rethrow;
+    }
+  }
 }

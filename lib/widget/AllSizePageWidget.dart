@@ -1,22 +1,21 @@
-import 'package:easy_invoice/bloc/delete/delete_category_cubit.dart';
-import 'package:easy_invoice/bloc/get/get_category_detail_cubit.dart';
-import 'package:easy_invoice/data/responsemodel/GetAllCategoryDetail.dart';
+import 'package:easy_invoice/bloc/delete/delete_size_cubit.dart';
+import 'package:easy_invoice/bloc/get/get_all_size_cubit.dart';
+import 'package:easy_invoice/data/responsemodel/GetAllSizeResponse.dart';
 import 'package:easy_invoice/module/module.dart';
+import 'package:easy_invoice/screen/UpdateSizeScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-import '../screen/UpdateCategoryScreen.dart';
-
-class AllCategoryPageWidget extends StatelessWidget {
-  final List<CategoryData> categories;
+class AllSizePageWidget extends StatelessWidget {
+  final List<GetAllSizeResponse> sizes;
   final bool isLoading;
 
   final String message;
 
-  const AllCategoryPageWidget({Key? key,
-    required this.categories,
+  const AllSizePageWidget({Key? key,
+    required this.sizes,
     required this.isLoading,
     required this.message})
       : super(key: key);
@@ -24,10 +23,10 @@ class AllCategoryPageWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-        create: (context) => GetCategoryDetailCubit(getIt.call()),
+        create: (context) => GetAllSizeCubit(getIt.call()),
         child: Scaffold(
           appBar: AppBar(
-            title: const Text('All Category'),
+            title: const Text('All Size'),
             backgroundColor: Colors.redAccent.withOpacity(0.8), // Customize the background color here
 
           ),
@@ -39,7 +38,7 @@ class AllCategoryPageWidget extends StatelessWidget {
               const Padding(
                 padding: EdgeInsets.all(12.0),
                 child: Text(
-                  'Categories',
+                  'Sizes',
                   style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
                 ),
               ),
@@ -111,32 +110,32 @@ class AllCategoryPageWidget extends StatelessWidget {
                         ),
                       ],
 
-                      rows: categories.map((category) {
+                      rows: sizes.map((sizes) {
                         return DataRow(cells: [
-                          DataCell(Text(category.id.toString())),
-                          DataCell(Text(category.name)),
-                          DataCell(Text(category.slug)),
+                          DataCell(Text(sizes.id.toString())),
+                          DataCell(Text(sizes.name)),
+                          DataCell(Text(sizes.slug)),
                           DataCell(GestureDetector(
                             onTap: () async {
                               var result = await Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) =>
-                                      UpdateCategoryScreen(
-                                        id: category.id,
-                                        name: category.name,
-                                        slug: category.slug,
+                                      UpdateSizeScreen(
+                                        id: sizes.id,
+                                        name: sizes.name,
+                                        slug: sizes.slug,
                                       ),
                                 ),
                               );
                               if (result != null) {
-                                BlocProvider.of<GetCategoryDetailCubit>(context)
-                                    .getCategoryDetail();
+                                BlocProvider.of<GetAllSizeCubit>(context)
+                                    .getAllSizes();
                                 showToastMessage(
-                                    'Category Updated Successfully');
+                                    'Size Updated Successfully');
                               } else if (result != null && result is String) {
                                 showErrorToast(
-                                    'Failed to update category: $result');
+                                    'Failed to update sizes: $result');
                               }
                             },
                             child: const Icon(
@@ -146,8 +145,8 @@ class AllCategoryPageWidget extends StatelessWidget {
                           )),
                           DataCell(GestureDetector(
                             onTap: () {
-                              showDeleteConfirmationDialog(context, category,
-                                  context.read<DeleteCategoryCubit>());
+                              showDeleteConfirmationDialog(context, sizes,
+                                  context.read<DeleteSizeCubit>());
                             },
                             child: const Icon(
                               Icons.delete_forever,
@@ -196,8 +195,8 @@ class AllCategoryPageWidget extends StatelessWidget {
 }
 
 void showDeleteConfirmationDialog(BuildContext context,
-    CategoryData item,
-    DeleteCategoryCubit deleteCategoryCubit,) {
+    GetAllSizeResponse item,
+    DeleteSizeCubit deleteSizeCubit,) {
   showDialog(
     context: context,
     builder: (BuildContext context) {
@@ -208,7 +207,7 @@ void showDeleteConfirmationDialog(BuildContext context,
           TextButton(
             onPressed: () {
               // Delete Action
-              deleteCategoryCubit.deleteCategory(item.id);
+              deleteSizeCubit.deleteSize(item.id);
               Navigator.pop(context);
             },
             child: const Text('Delete'),
