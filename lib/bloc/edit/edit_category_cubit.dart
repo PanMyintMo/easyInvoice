@@ -1,8 +1,8 @@
 import 'package:bloc/bloc.dart';
-import 'package:easy_invoice/dataModel/EditCategoryModel.dart';
 import 'package:equatable/equatable.dart';
 import '../../data/responsemodel/UpdateCateResponse.dart';
 import '../../data/userRepository/UserRepository.dart';
+import '../../dataRequestModel/EditCategoryModel.dart';
 
 part 'edit_category_state.dart';
 

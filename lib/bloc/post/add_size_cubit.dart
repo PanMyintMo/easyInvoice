@@ -1,9 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:easy_invoice/data/responsemodel/AddSizeResponse.dart';
-import 'package:easy_invoice/dataModel/AddSizeRequestModel.dart';
 import 'package:equatable/equatable.dart';
-
 import '../../data/userRepository/UserRepository.dart';
+import '../../dataRequestModel/AddSizeRequestModel.dart';
 
 part 'add_size_state.dart';
 

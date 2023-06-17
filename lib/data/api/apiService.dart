@@ -3,19 +3,22 @@ import 'package:easy_invoice/data/responsemodel/AddSizeResponse.dart';
 import 'package:easy_invoice/data/responsemodel/GetAllCategoryDetail.dart';
 import 'package:easy_invoice/data/responsemodel/GetAllSizeResponse.dart';
 import 'package:easy_invoice/data/responsemodel/UpdateCateResponse.dart';
-import 'package:easy_invoice/dataModel/AddCategoryRequestModel.dart';
-import 'package:easy_invoice/dataModel/EditCategoryModel.dart';
-import 'package:easy_invoice/dataModel/LoginRequestModel.dart';
+import 'package:easy_invoice/data/responsemodel/UserResponse.dart';
+import 'package:easy_invoice/dataRequestModel/UserRequestModel.dart';
 import 'package:easy_invoice/network/interceptor.dart';
-import '../../dataModel/AddSizeRequestModel.dart';
-import '../../dataModel/EditSizeModel.dart';
-import '../../dataModel/RegisterRequestModel.dart';
+import '../../dataRequestModel/AddCategoryRequestModel.dart';
+import '../../dataRequestModel/AddSizeRequestModel.dart';
+import '../../dataRequestModel/EditCategoryModel.dart';
+import '../../dataRequestModel/EditSizeModel.dart';
+import '../../dataRequestModel/LoginRequestModel.dart';
+import '../../dataRequestModel/RegisterRequestModel.dart';
 import '../responsemodel/AddCategoryResponseModel.dart';
 import '../responsemodel/CategoryDeleteRespose.dart';
 import '../responsemodel/LoginResponse.dart';
 import '../responsemodel/RegisterResponse.dart';
 import '../responsemodel/SizeDeleteResponse.dart';
 import '../responsemodel/UpdateSizeResponse.dart';
+import '../responsemodel/UserRoleResponse.dart';
 
 class ApiService {
   final Dio _dio = Dio();
@@ -126,6 +129,23 @@ class ApiService {
       }
     } catch (e) {
       throw Exception('Failed to fetch categories: $e');
+    }
+  }
+
+  //get all user role from db
+  Future<UserRoleResponse> getAllUserRole() async {
+    try {
+      final response = await _dio.get('https://mmeasyinvoice.com/api/users');
+
+      if (response.statusCode == 200) {
+        final dynamic responseData = response.data;
+        return responseData;
+        } else {
+          throw Exception('Invalid data format for "data" field');
+        }
+      }
+     catch (e) {
+      throw Exception('Failed to fetch users role: $e');
     }
   }
 
@@ -262,4 +282,33 @@ class ApiService {
       throw Exception('Failed to fetch sizes: $e');
     }
   }
+  //divide for user
+
+  Future<UserResponse> user(UserRequestModel userRequestModel) async {
+    try {
+      final Response response = await _dio.post(
+        'https://mmeasyinvoice.com/api/add-user',
+        data: userRequestModel.toJson(),
+      );
+      //print('User response are $response');
+      // print('Response Status Code: ${response.statusCode}');
+      if (response.statusCode == 200) {
+        final UserResponse data = UserResponse.fromJson(response.data);
+        return data;
+      } else {
+        // print("My response status code is ${response.statusCode}");
+        throw DioError(
+          requestOptions: RequestOptions(path: '/api/add-user'),
+          response: response,
+        );
+      }
+    } catch (error) {
+      throw DioError(
+        requestOptions: RequestOptions(path: '/api/add-user'),
+        error: error,
+      );
+    }
+  }
 }
+
+

@@ -15,10 +15,11 @@ class AllCategoryPageWidget extends StatelessWidget {
 
   final String message;
 
-  const AllCategoryPageWidget({Key? key,
-    required this.categories,
-    required this.isLoading,
-    required this.message})
+  const AllCategoryPageWidget(
+      {Key? key,
+      required this.categories,
+      required this.isLoading,
+      required this.message})
       : super(key: key);
 
   @override
@@ -27,52 +28,59 @@ class AllCategoryPageWidget extends StatelessWidget {
         create: (context) => GetCategoryDetailCubit(getIt.call()),
         child: Scaffold(
           appBar: AppBar(
-            title: const Text('All Category'),
-            backgroundColor: Colors.redAccent.withOpacity(0.8), // Customize the background color here
-
+            title: const Center(child: Text('All Category')),
+            backgroundColor: Colors.redAccent
+                .withOpacity(0.8), // Customize the background color here
           ),
           body: Column(
             children: [
-            Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Padding(
-                padding: EdgeInsets.all(12.0),
-                child: Text(
-                  'Categories',
-                  style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-                ),
-              ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Align(
-                    alignment: Alignment.topRight,
-                    child: Container(
-                      padding:  const EdgeInsets.symmetric(horizontal: 50),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      child: const Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(Icons.search),
-                          SizedBox(width: 5),
-                          Text(
-                            'Search:',
-                            style: TextStyle(fontWeight: FontWeight.normal),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.all(12.0),
+                    child: Text(
+                      'Categories',
+                      style:
+                          TextStyle(fontSize: 25, fontWeight: FontWeight.normal),
+                    ),
+                  ),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: Align(
+                        alignment: Alignment.topRight,
+                        child: Container(
+                          width: 250,
+                          padding: const EdgeInsets.symmetric(horizontal: 40),
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey),
+                            borderRadius: BorderRadius.circular(5),
                           ),
-                        ],
+                          child: const Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Icon(Icons.search),
+                              SizedBox(width: 5),
+                              Expanded(
+                                child: TextField(
+                                  decoration: InputDecoration(
+                                    hintText: 'Enter your search',
+                                    border: InputBorder.none,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
                     ),
                   ),
-                ),
+                ],
               ),
-            ],
-          ),
-
-              const SizedBox(height: 10,),
+              const SizedBox(
+                height: 10,
+              ),
               Stack(
                 children: [
                   SingleChildScrollView(
@@ -82,35 +90,39 @@ class AllCategoryPageWidget extends StatelessWidget {
                         DataColumn(
                           label: Text(
                             'ID',
-                            style: TextStyle(fontSize: 24, color: Colors.black54),
+                            style:
+                                TextStyle(fontSize: 24, color: Colors.black54),
                           ),
                         ),
                         DataColumn(
                           label: Text(
                             'Name',
-                            style: TextStyle(fontSize: 24, color: Colors.black54),
+                            style:
+                                TextStyle(fontSize: 24, color: Colors.black54),
                           ),
                         ),
                         DataColumn(
                           label: Text(
                             'Slug',
-                            style: TextStyle(fontSize: 24, color: Colors.black54),
+                            style:
+                                TextStyle(fontSize: 24, color: Colors.black54),
                           ),
                         ),
                         DataColumn(
                           label: Text(
                             'Update',
-                            style: TextStyle(fontSize: 24, color: Colors.black54),
+                            style:
+                                TextStyle(fontSize: 24, color: Colors.black54),
                           ),
                         ),
                         DataColumn(
                           label: Text(
                             'Delete',
-                            style: TextStyle(fontSize: 24, color: Colors.black54),
+                            style:
+                                TextStyle(fontSize: 24, color: Colors.black54),
                           ),
                         ),
                       ],
-
                       rows: categories.map((category) {
                         return DataRow(cells: [
                           DataCell(Text(category.id.toString())),
@@ -121,12 +133,11 @@ class AllCategoryPageWidget extends StatelessWidget {
                               var result = await Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) =>
-                                      UpdateCategoryScreen(
-                                        id: category.id,
-                                        name: category.name,
-                                        slug: category.slug,
-                                      ),
+                                  builder: (context) => UpdateCategoryScreen(
+                                    id: category.id,
+                                    name: category.name,
+                                    slug: category.slug,
+                                  ),
                                 ),
                               );
                               if (result != null) {
@@ -170,7 +181,6 @@ class AllCategoryPageWidget extends StatelessWidget {
               ),
             ],
           ),
-
         ));
   }
 
@@ -195,9 +205,11 @@ class AllCategoryPageWidget extends StatelessWidget {
   }
 }
 
-void showDeleteConfirmationDialog(BuildContext context,
-    CategoryData item,
-    DeleteCategoryCubit deleteCategoryCubit,) {
+void showDeleteConfirmationDialog(
+  BuildContext context,
+  CategoryData item,
+  DeleteCategoryCubit deleteCategoryCubit,
+) {
   showDialog(
     context: context,
     builder: (BuildContext context) {
@@ -224,4 +236,3 @@ void showDeleteConfirmationDialog(BuildContext context,
     },
   );
 }
-

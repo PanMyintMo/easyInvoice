@@ -1,5 +1,5 @@
 import 'package:easy_invoice/bloc/edit/edit_size_cubit.dart';
-import 'package:easy_invoice/dataModel/EditSizeModel.dart';
+import 'package:easy_invoice/dataRequestModel/EditSizeModel.dart';
 import 'package:easy_invoice/module/module.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
