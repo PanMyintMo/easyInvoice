@@ -1,11 +1,12 @@
 import 'package:easy_invoice/bloc/post/sign_in_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:easy_invoice/dataModel/LoginRequestModel.dart';
 import 'package:easy_invoice/module/module.dart';
 import 'package:easy_invoice/network/SharedPreferenceHelper.dart';
 import 'package:easy_invoice/screen/mainscreen.dart';
 import 'package:flutter/gestures.dart';
+import 'package:easy_invoice/dataRequestModel/LoginRequestModel.dart';
 import 'package:flutter/material.dart';
+import '../common/FormValidator.dart';
 import '../common/HeaderWidget.dart';
 import '../common/theme_helper.dart';
 import 'Register.dart';
@@ -259,36 +260,3 @@ class _LoginInFormState extends State<LoginInForm> {
   }
 }
 
-class FormValidator {
-  static String? validateEmail(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Please enter your email!';
-    }
-    final RegExp emailRegex = RegExp(
-      r'^[\w+\-.]+@[a-zA-Z\d\-]+(\.[a-zA-Z\d\-]+)*(\.[a-zA-Z]{2,})$',
-    );
-
-    if (!emailRegex.hasMatch(value)) {
-      return 'Please enter a valid email address!';
-    }
-    final List<String> parts = value.split('@');
-    if (parts.length != 2 || parts[1].isEmpty) {
-      return 'Please enter a valid email address!';
-    }
-    return null;
-  }
-
-  static String? validatePassword(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Enter your password!';
-    }
-    final RegExp passwordRegx = RegExp(
-      r'^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[@#$%^&+=])(?=.{8,})',
-    );
-
-    if (!passwordRegx.hasMatch(value)) {
-      return 'Password must contain at one number, special character and text, and have a length of 8 characters!';
-    }
-    return null;
-  }
-}

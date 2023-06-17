@@ -1,8 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:easy_invoice/data/responsemodel/RegisterResponse.dart';
-import 'package:easy_invoice/dataModel/RegisterRequestModel.dart';
 import 'package:equatable/equatable.dart';
 import '../../data/userRepository/UserRepository.dart';
+import '../../dataRequestModel/RegisterRequestModel.dart';
 
 part 'sign_up_state.dart';
 

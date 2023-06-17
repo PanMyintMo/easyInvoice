@@ -11,6 +11,7 @@ import 'package:easy_invoice/screen/login.dart';
 void main() {
 
   locator();
+
   runApp(const MyApp());
 }
 
@@ -23,6 +24,17 @@ class MyApp extends StatelessWidget {
       create: (BuildContext context) => getIt.get<SignUpCubit>(),
       child: GetMaterialApp(
         debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+            primarySwatch: Colors.pink,
+            appBarTheme: const AppBarTheme(
+                backgroundColor: Colors.redAccent,
+                // This will be applied to the "back" icon
+                iconTheme: IconThemeData(color: Colors.white),
+                // This will be applied to the action icon buttons that locates on the right side
+                actionsIconTheme: IconThemeData(color: Colors.white),
+                centerTitle: false,
+                elevation: 0,
+                titleTextStyle: TextStyle(color: Colors.white,fontSize: 24))),
         initialRoute: "/", // Set the initial route to "/"
         getPages: [
           GetPage(name: "/", page: () => const SplashScreen()), // Define SplashScreen route

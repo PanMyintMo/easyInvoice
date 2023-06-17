@@ -2,12 +2,14 @@ import 'package:easy_invoice/data/api/apiService.dart';
 import 'package:easy_invoice/data/responsemodel/AddSizeResponse.dart';
 import 'package:easy_invoice/data/responsemodel/GetAllSizeResponse.dart';
 import 'package:easy_invoice/data/responsemodel/RegisterResponse.dart';
-import 'package:easy_invoice/dataModel/AddCategoryRequestModel.dart';
-import 'package:easy_invoice/dataModel/AddSizeRequestModel.dart';
-import 'package:easy_invoice/dataModel/EditCategoryModel.dart';
-import 'package:easy_invoice/dataModel/LoginRequestModel.dart';
-import 'package:easy_invoice/dataModel/RegisterRequestModel.dart';
-import '../../dataModel/EditSizeModel.dart';
+import 'package:easy_invoice/data/responsemodel/UserResponse.dart';
+import 'package:easy_invoice/dataRequestModel/UserRequestModel.dart';
+import '../../dataRequestModel/AddCategoryRequestModel.dart';
+import '../../dataRequestModel/AddSizeRequestModel.dart';
+import '../../dataRequestModel/EditCategoryModel.dart';
+import '../../dataRequestModel/EditSizeModel.dart';
+import '../../dataRequestModel/LoginRequestModel.dart';
+import '../../dataRequestModel/RegisterRequestModel.dart';
 import '../responsemodel/AddCategoryResponseModel.dart';
 import '../responsemodel/CategoryDeleteRespose.dart';
 import '../responsemodel/GetAllCategoryDetail.dart';
@@ -15,6 +17,7 @@ import '../responsemodel/LoginResponse.dart';
 import '../responsemodel/SizeDeleteResponse.dart';
 import '../responsemodel/UpdateCateResponse.dart';
 import '../responsemodel/UpdateSizeResponse.dart';
+import '../responsemodel/UserRoleResponse.dart';
 
 class UserRepository {
   final ApiService _apiService;
@@ -52,6 +55,17 @@ class UserRepository {
       rethrow;
     }
   }
+
+  //For get all user role
+  Future<UserRoleResponse> getAllUserRole() async {
+    try {
+      final response = await _apiService.getAllUserRole();
+      return response;
+    } catch (error) {
+      rethrow;
+    }
+  }
+
   //for size add to db
 
   Future<AddSizeResponse> addSize(
@@ -128,6 +142,16 @@ Future<CategoryUpdateResponse> updateCategory(EditCategory editCategory,int id) 
       return response;
     }
     catch(error){
+      rethrow;
+    }
+  }
+
+ // divide user
+  Future<UserResponse> user(UserRequestModel userRequestModel) async {
+    try {
+      final response = await _apiService.user(userRequestModel);
+      return response;
+    } catch (error) {
       rethrow;
     }
   }
