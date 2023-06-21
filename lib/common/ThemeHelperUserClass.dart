@@ -80,12 +80,15 @@ Widget buildProfileBox(String name,String realName) {
        children: [
          Text(name),
          Container(
+           padding: EdgeInsets.symmetric(horizontal: 10),
+           alignment: Alignment.centerLeft,
            width: 200,
+           height: 50,
            decoration: BoxDecoration(
              border: Border.all(color: Colors.black12, width: 0.5),
-             borderRadius: BorderRadius.all(Radius.circular(50.0)),
+             borderRadius: BorderRadius.all(Radius.circular(10.0)),
            ),
-           child: Center(child: Text(realName)),
+           child: Text(realName),
          )
        ],
      ),

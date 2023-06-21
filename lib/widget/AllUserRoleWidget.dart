@@ -8,6 +8,7 @@ import '../module/module.dart';
 class AllUserRoleWidget extends StatelessWidget {
   final List<UserData> userData;
 
+
   const AllUserRoleWidget({Key? key, required this.userData}) : super(key: key);
 
   @override
@@ -54,7 +55,7 @@ class AllUserRoleWidget extends StatelessWidget {
                   subtitle: Text(
                     'Role: ${user.utype}',
                     style: const TextStyle(
-                        fontSize: 16, fontWeight: FontWeight.bold, color: Colors.yellow),
+                        fontSize: 16, fontWeight: FontWeight.bold, color: Colors.green),
                   ),
                   trailing: CustomButton(
                     label: 'View Detail Profile',
@@ -70,6 +71,7 @@ class AllUserRoleWidget extends StatelessWidget {
                             updated_at: user.updatedAt,
                             utype: user.utype,
                             profileImageUrl: user.profilePhotoUrl,
+
                           ),
                         ),
                       );
