@@ -2,6 +2,7 @@ import 'package:easy_invoice/bloc/delete/delete_category_cubit.dart';
 import 'package:easy_invoice/bloc/delete/delete_size_cubit.dart';
 import 'package:easy_invoice/bloc/edit/edit_category_cubit.dart';
 import 'package:easy_invoice/bloc/edit/edit_size_cubit.dart';
+import 'package:easy_invoice/bloc/edit/edit_user_role_cubit.dart';
 import 'package:easy_invoice/bloc/get/get_all_size_cubit.dart';
 import 'package:easy_invoice/bloc/get/get_all_user_role_cubit.dart';
 import 'package:easy_invoice/bloc/get/get_category_detail_cubit.dart';
@@ -14,6 +15,7 @@ import 'package:easy_invoice/data/userRepository/UserRepository.dart';
 import 'package:get_it/get_it.dart';
 import 'package:dio/dio.dart';
 
+import '../bloc/delete/delete_user_role_cubit.dart';
 import '../bloc/post/add_size_cubit.dart';
 
 var getIt = GetIt.instance;
@@ -73,4 +75,15 @@ void locator() {
   //to get all user role
   GetAllUserRoleCubit getAllUserRoleCubit= GetAllUserRoleCubit(getIt.get<UserRepository>());
   getIt.registerLazySingleton(() => getAllUserRoleCubit);
+
+  //to edit  user role
+  EditUserRoleCubit editUserRoleCubit= EditUserRoleCubit(getIt.get<UserRepository>());
+  getIt.registerLazySingleton(() => editUserRoleCubit);
+
+  //to delete user role
+  DeleteUserRoleCubit deleteUserRoleCubit = DeleteUserRoleCubit(getIt.call());
+  getIt.registerLazySingleton(() => deleteUserRoleCubit);
+
+
+
 }

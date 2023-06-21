@@ -1,70 +1,106 @@
-class UserRoleResponse{
-  late int currentPage;
-  late List<UserData> data;
-  late String? firstPageUrl;
-  late int from;
-  late int lastPage;
-  late String? lastPageUrl;
-  late List<Link> links;
-  late String? nextPageUrl;
-  late String path;
-  late int perPage;
-  late String? prevPageUrl;
-  late int to;
-  late int total;
+class UserRoleResponse {
+  int currentPage;
+  List<UserData> data;
+  String? firstPageUrl;
+  int from;
+  int lastPage;
+  String? lastPageUrl;
+  List<Link> links;
+  String? nextPageUrl;
+  String path;
+  int perPage;
+  String? prevPageUrl;
+  int to;
+  int total;
+  int status;
+  String message;
 
-  UserRoleResponse.fromJson(Map<String, dynamic> json) {
-  currentPage = json['current_page'];
-  data = List<UserData>.from(json['data'].map((data) => UserData.fromJson(data)));
-  firstPageUrl = json['first_page_url'];
-  from = json['from'];
-  lastPage = json['last_page'];
-  lastPageUrl = json['last_page_url'];
-  links = List<Link>.from(json['links'].map((link) => Link.fromJson(link)));
-  nextPageUrl = json['next_page_url'];
-  path = json['path'];
-  perPage = json['per_page'];
-  prevPageUrl = json['prev_page_url'];
-  to = json['to'];
-  total = json['total'];
+  UserRoleResponse({
+    required this.currentPage, required this.data, required this.firstPageUrl, required this.from, required this.lastPage, required this.lastPageUrl,
+    required this.links, required this.nextPageUrl, required this.path, required this.perPage, required this.prevPageUrl, required this.to, required this.total,
+    required this.status, required this.message
+  });
+
+
+  factory UserRoleResponse.fromJson(Map<String, dynamic> json) {
+    final dataList = json['data']['data'] as List<dynamic>;
+    final data = dataList.map((userData) => UserData.fromJson(userData))
+        .toList();
+    return UserRoleResponse(
+        currentPage: json['data']['current_page'],
+        data: data,
+        firstPageUrl: json['data']['first_page_url'],
+        from: json['data']['from'],
+        lastPage: json['data']['last_page'],
+        lastPageUrl: json['data']['last_page_url'],
+        links: List<Link>.from(json['data']['links'].map((link) => Link.fromJson(link))),
+        nextPageUrl: json['data']['next_page_url'],
+        path: json['data']['path'],
+        perPage: json['data']['per_page'],
+        prevPageUrl: json['data']['prev_page_url'],
+        to: json['data']['to'],
+        total: json['data']['total'],
+        status: json['status'],
+        message: json['message']);
   }
+}
+
+class Link {
+  String? url;
+  String label;
+  bool active;
+
+  Link({
+    required this.url,
+    required this.label,
+    required this.active,
+  });
+
+  factory Link.fromJson(Map<String, dynamic> json) {
+    return Link(
+      url: json['url'],
+      label: json['label'],
+      active: json['active'],
+    );
+  }
+}
+
+class UserData {
+  int id;
+  String name;
+  String email;
+  DateTime? emailVerifiedAt;
+  DateTime createdAt;
+  DateTime updatedAt;
+  String utype;
+  String? image;
+  String? url;
+  String profilePhotoUrl;
+
+  UserData({
+    required this.id,
+    required this.name,
+    required this.email,
+    required this.emailVerifiedAt,
+    required this.createdAt,
+    required this.updatedAt,
+    required this.utype,
+    required this.image,
+    required this.url,
+    required this.profilePhotoUrl,
+  });
+
+  factory UserData.fromJson(Map<String,dynamic> json){
+    return UserData(id: json['id'], name: json['name'],
+        email: json['email'],
+        emailVerifiedAt: json['email_verified_at']!=null ? DateTime.parse(json['email_verified_at']) : null,
+        createdAt: DateTime.parse(json['created_at']),
+        updatedAt: DateTime.parse(json['updated_at']),
+        utype: json['utype'],
+        image: json['image'], url: json['url'],
+        profilePhotoUrl: json['profile_photo_url']);
   }
 
-  class UserData {
-  late int id;
-  late String name;
-  late String email;
-  late DateTime? emailVerifiedAt;
-  late DateTime createdAt;
-  late DateTime updatedAt;
-  late String utype;
-  late String? image;
-  late String? url;
-  late String profilePhotoUrl;
+}
 
-  UserData.fromJson(Map<String, dynamic> json) {
-  id = json['id'];
-  name = json['name'];
-  email = json['email'];
-  emailVerifiedAt = json['email_verified_at'] != null ? DateTime.parse(json['email_verified_at']) : null;
-  createdAt = DateTime.parse(json['created_at']);
-  updatedAt = DateTime.parse(json['updated_at']);
-  utype = json['utype'];
-  image = json['image'];
-  url = json['url'];
-  profilePhotoUrl = json['profile_photo_url'];
-  }
-  }
-
-  class Link {
-  late String? url;
-  late String label;
-  late bool active;
-
-  Link.fromJson(Map<String, dynamic> json) {
-  url = json['url'];
-  label = json['label'];
-  active = json['active'];
-  }
-  }
 
