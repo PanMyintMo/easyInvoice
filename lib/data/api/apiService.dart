@@ -10,10 +10,13 @@ import '../../dataRequestModel/AddCategoryRequestModel.dart';
 import '../../dataRequestModel/AddSizeRequestModel.dart';
 import '../../dataRequestModel/EditCategoryModel.dart';
 import '../../dataRequestModel/EditSizeModel.dart';
+import '../../dataRequestModel/EditUserRoleRequestModel.dart';
 import '../../dataRequestModel/LoginRequestModel.dart';
 import '../../dataRequestModel/RegisterRequestModel.dart';
 import '../responsemodel/AddCategoryResponseModel.dart';
 import '../responsemodel/CategoryDeleteRespose.dart';
+import '../responsemodel/DeleteUserRoleResponse.dart';
+import '../responsemodel/EditUserRoleResponse.dart';
 import '../responsemodel/LoginResponse.dart';
 import '../responsemodel/RegisterResponse.dart';
 import '../responsemodel/SizeDeleteResponse.dart';
@@ -108,18 +111,21 @@ class ApiService {
   //get all category from db
   Future<List<CategoryData>> getAllCategories() async {
     try {
-      final response = await _dio.get('https://mmeasyinvoice.com/api/categories');
+      final response =
+          await _dio.get('https://mmeasyinvoice.com/api/categories');
 
       if (response.statusCode == 200) {
         final dynamic responseData = response.data;
 
         if (responseData['data'] is List) {
           final List<CategoryData> categories = List<CategoryData>.from(
-            responseData['data'].map((categoryJson) => CategoryData.fromJson(categoryJson)),
+            responseData['data']
+                .map((categoryJson) => CategoryData.fromJson(categoryJson)),
           );
           return categories;
         } else if (responseData['data'] is Map<String, dynamic>) {
-          final CategoryData categoryDetail = CategoryData.fromJson(responseData['data']);
+          final CategoryData categoryDetail =
+              CategoryData.fromJson(responseData['data']);
           return [categoryDetail];
         } else {
           throw Exception('Invalid data format for "data" field');
@@ -136,15 +142,14 @@ class ApiService {
   Future<UserRoleResponse> getAllUserRole() async {
     try {
       final response = await _dio.get('https://mmeasyinvoice.com/api/users');
-
+      print('User Role Response are ${response.data}');
       if (response.statusCode == 200) {
-        final dynamic responseData = response.data;
-        return responseData;
-        } else {
-          throw Exception('Invalid data format for "data" field');
-        }
+        final responseData = response.data;
+        return UserRoleResponse.fromJson(responseData);
+      } else {
+        throw Exception('Invalid data format for "data" field');
       }
-     catch (e) {
+    } catch (e) {
       throw Exception('Failed to fetch users role: $e');
     }
   }
@@ -167,15 +172,15 @@ class ApiService {
     }
   }
 
-
 //to delete size
   Future<SizeDeleteResponse> deleteSize(int id) async {
     try {
       final response =
-      await _dio.post('https://mmeasyinvoice.com/api/delete-size/$id');
-       print("Delete Size status response is ${response.statusCode}");
+          await _dio.post('https://mmeasyinvoice.com/api/delete-size/$id');
+      print("Delete Size status response is ${response.statusCode}");
       if (response.statusCode == 200) {
-        SizeDeleteResponse deleteSize = SizeDeleteResponse.fromJson(response.data);
+        SizeDeleteResponse deleteSize =
+            SizeDeleteResponse.fromJson(response.data);
         return deleteSize;
       } else {
         throw Exception('Something wrong!');
@@ -185,21 +190,20 @@ class ApiService {
     }
   }
 
-
   //to update category by id
   Future<CategoryUpdateResponse> updateCategory(
       EditCategory editCategory, int id) async {
     try {
-      final response =
-          await _dio.post('https://mmeasyinvoice.com/api/edit-category/$id',data: editCategory.toJson());
+      final response = await _dio.post(
+          'https://mmeasyinvoice.com/api/edit-category/$id',
+          data: editCategory.toJson());
       print('Update response is ${response.data}');
       if (response.statusCode == 200) {
         CategoryUpdateResponse categoryUpdateResponse =
             CategoryUpdateResponse.fromJson(response.data);
 
         return categoryUpdateResponse;
-      }
-      else{
+      } else {
         throw Exception('Something wrong!');
       }
     } catch (error) {
@@ -208,25 +212,25 @@ class ApiService {
   }
 
   //to update size by id
-  Future<SizeUpdateResponse> updateSize(
-      EditSize editSize, int id) async {
+  Future<SizeUpdateResponse> updateSize(EditSize editSize, int id) async {
     try {
-      final response =
-      await _dio.post('https://mmeasyinvoice.com/api/edit-size/$id',data: editSize.toJson());
+      final response = await _dio.post(
+          'https://mmeasyinvoice.com/api/edit-size/$id',
+          data: editSize.toJson());
       print('Update response is ${response.data}');
       if (response.statusCode == 200) {
         SizeUpdateResponse sizeUpdateResponse =
-        SizeUpdateResponse.fromJson(response.data);
+            SizeUpdateResponse.fromJson(response.data);
 
         return sizeUpdateResponse;
-      }
-      else{
+      } else {
         throw Exception('Something wrong!');
       }
     } catch (error) {
       throw Exception(error);
     }
   }
+
   //Add Size to db
 
   Future<AddSizeResponse> addSize(
@@ -239,7 +243,7 @@ class ApiService {
 
       if (response.statusCode == 200) {
         final AddSizeResponse addSizeResponse =
-        AddSizeResponse.fromJson(response.data);
+            AddSizeResponse.fromJson(response.data);
         return addSizeResponse;
       } else {
         throw DioError(
@@ -255,7 +259,6 @@ class ApiService {
     }
   }
 
-
   //get all sizes from db
   Future<List<GetAllSizeResponse>> getAllSize() async {
     try {
@@ -266,11 +269,13 @@ class ApiService {
 
         if (responseData['data'] is List) {
           final List<GetAllSizeResponse> size = List<GetAllSizeResponse>.from(
-            responseData['data'].map((categoryJson) => GetAllSizeResponse.fromJson(categoryJson)),
+            responseData['data'].map(
+                (categoryJson) => GetAllSizeResponse.fromJson(categoryJson)),
           );
           return size;
         } else if (responseData['data'] is Map<String, dynamic>) {
-          final GetAllSizeResponse sizes = GetAllSizeResponse.fromJson(responseData['data']);
+          final GetAllSizeResponse sizes =
+              GetAllSizeResponse.fromJson(responseData['data']);
           return [sizes];
         } else {
           throw Exception('Invalid data format for "data" field');
@@ -282,6 +287,7 @@ class ApiService {
       throw Exception('Failed to fetch sizes: $e');
     }
   }
+
   //divide for user
 
   Future<UserResponse> user(UserRequestModel userRequestModel) async {
@@ -309,6 +315,51 @@ class ApiService {
       );
     }
   }
+
+  // Edit User Role
+  Future<EditUserRoleResponse> editUserRole(
+      EditUserRoleRequestModel editUserRoleRequestModel, int id) async {
+    try {
+      final Response response = await _dio.post(
+        'https://mmeasyinvoice.com/api/edit-user/$id',
+        data: editUserRoleRequestModel.toJson(),
+      );
+      if (response.statusCode == 200) {
+        final EditUserRoleResponse data =
+            EditUserRoleResponse.fromJson(response.data);
+        return data;
+      } else {
+        // print("My response status code is ${response.statusCode}");
+        throw DioError(
+          requestOptions: RequestOptions(path: '/api/edit-user'),
+          response: response,
+        );
+      }
+    } catch (error) {
+      throw DioError(
+        requestOptions: RequestOptions(path: '/api/edit-user'),
+        error: error,
+      );
+    }
+  }
+
+  //to delete user role
+  Future<DeleteUserRoleResponse> deleteUserRole(int id) async {
+    try {
+      final response =
+      await _dio.post('https://mmeasyinvoice.com/api/delete-user/$id');
+      print("Delete User role status response is ${response.statusCode}");
+      if (response.statusCode == 200) {
+        DeleteUserRoleResponse deleteUserRoleResponse =
+        DeleteUserRoleResponse.fromJson(response.data);
+        return deleteUserRoleResponse;
+      } else {
+        throw Exception('Something wrong!');
+      }
+    } catch (error) {
+      throw Exception(error);
+    }
+  }
+
+
 }
-
-

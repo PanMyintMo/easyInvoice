@@ -71,3 +71,28 @@ Widget buildInputContainer(String labelText, String hintText, IconData iconData,
   );
 }
 
+Widget buildProfileBox(String name,String realName) {
+  return Expanded(
+   child: Padding(
+     padding: const EdgeInsets.symmetric(horizontal: 30.0,vertical: 10.0),
+     child: Row(
+       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+       children: [
+         Text(name),
+         Container(
+           width: 200,
+           decoration: BoxDecoration(
+             border: Border.all(color: Colors.black12, width: 0.5),
+             borderRadius: BorderRadius.all(Radius.circular(50.0)),
+           ),
+           child: Center(child: Text(realName)),
+         )
+       ],
+     ),
+   ),
+  );
+}
+
+
+
+

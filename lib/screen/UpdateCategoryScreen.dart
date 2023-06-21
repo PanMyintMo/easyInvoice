@@ -8,8 +8,6 @@ class UpdateCategoryScreen extends StatefulWidget {
   final int id;
   final String name;
   final String slug;
-
-
   const UpdateCategoryScreen({
     required this.id,
     required this.name,

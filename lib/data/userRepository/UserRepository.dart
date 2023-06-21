@@ -3,6 +3,7 @@ import 'package:easy_invoice/data/responsemodel/AddSizeResponse.dart';
 import 'package:easy_invoice/data/responsemodel/GetAllSizeResponse.dart';
 import 'package:easy_invoice/data/responsemodel/RegisterResponse.dart';
 import 'package:easy_invoice/data/responsemodel/UserResponse.dart';
+import 'package:easy_invoice/dataRequestModel/EditUserRoleRequestModel.dart';
 import 'package:easy_invoice/dataRequestModel/UserRequestModel.dart';
 import '../../dataRequestModel/AddCategoryRequestModel.dart';
 import '../../dataRequestModel/AddSizeRequestModel.dart';
@@ -12,6 +13,8 @@ import '../../dataRequestModel/LoginRequestModel.dart';
 import '../../dataRequestModel/RegisterRequestModel.dart';
 import '../responsemodel/AddCategoryResponseModel.dart';
 import '../responsemodel/CategoryDeleteRespose.dart';
+import '../responsemodel/DeleteUserRoleResponse.dart';
+import '../responsemodel/EditUserRoleResponse.dart';
 import '../responsemodel/GetAllCategoryDetail.dart';
 import '../responsemodel/LoginResponse.dart';
 import '../responsemodel/SizeDeleteResponse.dart';
@@ -66,8 +69,19 @@ class UserRepository {
     }
   }
 
-  //for size add to db
+  // to edit all user role
+  Future<EditUserRoleResponse> editUserRole(
+      EditUserRoleRequestModel editUserRoleRequestModel, int id) async {
+    try {
+      final response =
+          await _apiService.editUserRole(editUserRoleRequestModel, id);
+      return response;
+    } catch (error) {
+      rethrow;
+    }
+  }
 
+  //for size add to db
   Future<AddSizeResponse> addSize(
       AddSizeRequestModel addSizeRequestModel) async {
     try {
@@ -77,8 +91,6 @@ class UserRepository {
       rethrow;
     }
   }
-
-
 
 //to get all category
   Future<List<CategoryData>> getCategory() async {
@@ -111,6 +123,17 @@ class UserRepository {
     }
   }
 
+  //to delete user role by id
+
+  Future<DeleteUserRoleResponse> deleteUserRole(int id) async {
+    try {
+      final response = await _apiService.deleteUserRole(id);
+      return response;
+    } catch (error) {
+      rethrow;
+    }
+  }
+
   //to delete size by id
 
   Future<SizeDeleteResponse> deleteSize(int id) async {
@@ -124,29 +147,28 @@ class UserRepository {
 
 // update category by id
 
-Future<CategoryUpdateResponse> updateCategory(EditCategory editCategory,int id) async{
-    try{
+  Future<CategoryUpdateResponse> updateCategory(
+      EditCategory editCategory, int id) async {
+    try {
       final response = await _apiService.updateCategory(editCategory, id);
       return response;
-    }
-    catch(error){
-      rethrow;
-    }
-}
-
-// update size by id
-
-  Future<SizeUpdateResponse> updateSize(EditSize editSize,int id) async{
-    try{
-      final response = await _apiService.updateSize(editSize, id);
-      return response;
-    }
-    catch(error){
+    } catch (error) {
       rethrow;
     }
   }
 
- // divide user
+// update size by id
+
+  Future<SizeUpdateResponse> updateSize(EditSize editSize, int id) async {
+    try {
+      final response = await _apiService.updateSize(editSize, id);
+      return response;
+    } catch (error) {
+      rethrow;
+    }
+  }
+
+  // divide user
   Future<UserResponse> user(UserRequestModel userRequestModel) async {
     try {
       final response = await _apiService.user(userRequestModel);

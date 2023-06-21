@@ -411,40 +411,6 @@ class _RegisterFormState extends State<RegisterForm> {
     ],
     ),
     );
-
   }
 }
 
-/*
-class FormValidator {
-  static String? validateEmail(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Please enter your email!';
-    }
-    final RegExp emailRegex = RegExp(
-        r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$");
-
-    if (!emailRegex.hasMatch(value)) {
-      return 'Please enter a valid email address!';
-    }
-    final List<String> parts = value.split('@');
-    if (parts.length != 2 || parts[1].isEmpty) {
-      return 'Please enter a valid email address!';
-    }
-    return null;
-  }
-
-  static String? validatePassword(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Enter your password!';
-    }
-    final RegExp passwordRegx =
-    RegExp(r'^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[@#$%^&+=])(?=.{8,})');
-
-    if (!passwordRegx.hasMatch(value)) {
-      return 'Password must contain at one number,spicial character and text, and have a length of 8 characters!';
-    }
-    return null;
-  }
-}
-*/
