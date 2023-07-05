@@ -1,4 +1,3 @@
-import 'package:easy_invoice/sizeconfig/appstyle.dart';
 import 'package:flutter/material.dart';
 
 class ProductWidget extends StatefulWidget {
@@ -38,7 +37,7 @@ class _ProductWidgetState extends State<ProductWidget> {
                       width: 49,
                       padding: EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(borderRadius),
+                        //  borderRadius: BorderRadius.circular(),
                           color: Colors.black
                       ),
                       // child: SvgPicture.asset(

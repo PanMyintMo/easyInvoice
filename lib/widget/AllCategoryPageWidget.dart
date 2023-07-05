@@ -5,12 +5,12 @@ import 'package:easy_invoice/module/module.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
+import '../common/ToastMessage.dart';
 import '../screen/UpdateCategoryScreen.dart';
 
 class AllCategoryPageWidget extends StatelessWidget {
-  final List<CategoryData> categories;
+  final List<CategoryItem> categories;
   final bool isLoading;
 
   final String message;
@@ -124,7 +124,9 @@ class AllCategoryPageWidget extends StatelessWidget {
                         ),
                       ],
                       rows: categories.map((category) {
-                        return DataRow(cells: [
+                        return
+                          DataRow(
+                              cells: [
                           DataCell(Text(category.id.toString())),
                           DataCell(Text(category.name)),
                           DataCell(Text(category.slug)),
@@ -146,7 +148,7 @@ class AllCategoryPageWidget extends StatelessWidget {
                                 showToastMessage(
                                     'Category Updated Successfully');
                               } else if (result != null && result is String) {
-                                showErrorToast(
+                                showToastMessage(
                                     'Failed to update category: $result');
                               }
                             },
@@ -183,31 +185,11 @@ class AllCategoryPageWidget extends StatelessWidget {
           ),
         ));
   }
-
-  void showToastMessage(String success) {
-    Fluttertoast.showToast(
-      msg: success,
-      toastLength: Toast.LENGTH_LONG,
-      gravity: ToastGravity.BOTTOM,
-      backgroundColor: Colors.black54,
-      textColor: Colors.white,
-    );
-  }
-
-  void showErrorToast(String error) {
-    Fluttertoast.showToast(
-      msg: error,
-      toastLength: Toast.LENGTH_LONG,
-      gravity: ToastGravity.BOTTOM,
-      backgroundColor: Colors.black54,
-      textColor: Colors.white,
-    );
-  }
 }
 
 void showDeleteConfirmationDialog(
   BuildContext context,
-  CategoryData item,
+  CategoryItem item,
   DeleteCategoryCubit deleteCategoryCubit,
 ) {
   showDialog(

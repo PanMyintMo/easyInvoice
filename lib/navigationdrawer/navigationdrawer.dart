@@ -6,7 +6,9 @@ import 'package:easy_invoice/screen/UserAddScreen.dart';
 import 'package:easy_invoice/screen/user_profile.dart';
 import 'package:flutter/material.dart';
 import '../screen/AddCategoryScreen.dart';
+import '../screen/AddProductScreen.dart';
 import '../screen/AllCategoryScreen.dart';
+import '../screen/AllProductScreen.dart';
 import '../screen/SizeAddScreen.dart';
 
 class NavigationDrawerWidget extends StatelessWidget {
@@ -99,7 +101,7 @@ class NavigationDrawerWidget extends StatelessWidget {
                     icon: Icons.workspaces_outline,
                     onClicked: () =>
                         Navigator.push(context, MaterialPageRoute(
-                            builder: (context) => ProductScreen())),
+                            builder: (context) => AddProductScreen())),
                   ),
                   const SizedBox(height: 16),
                   buildMenuItem(
@@ -107,7 +109,7 @@ class NavigationDrawerWidget extends StatelessWidget {
                     icon: Icons.update,
                     onClicked: () =>
                         Navigator.push(context, MaterialPageRoute(
-                            builder: (context) => AllSizesScreen())),
+                            builder: (context) => const AllProductScreen())),
                   ),
                   const SizedBox(height: 24),
                   const Divider(color: Colors.black12),

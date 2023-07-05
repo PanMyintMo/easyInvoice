@@ -50,6 +50,7 @@ dependencies:
   transparent_image: ^2.0.1
   cached_network_image: ^3.2.3
   dropdown_search: ^5.0.6
+  dotted_border: ^2.0.0+3
 
 
 

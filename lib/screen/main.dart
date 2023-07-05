@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
                 centerTitle: false,
                 elevation: 0,
                 titleTextStyle: TextStyle(color: Colors.white,fontSize: 24))),
-        initialRoute: "/", // Set the initial route to "/"
+
         getPages: [
           GetPage(name: "/", page: () => const SplashScreen()), // Define SplashScreen route
           GetPage(name: "/Login", page: () => const Login()), // Define Login route

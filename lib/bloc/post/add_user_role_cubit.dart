@@ -4,20 +4,20 @@ import 'package:easy_invoice/dataRequestModel/UserRequestModel.dart';
 import 'package:equatable/equatable.dart';
 import '../../data/userRepository/UserRepository.dart';
 
-part 'user_state.dart';
+part 'add_user_role_state.dart';
 
-class UserCubit extends Cubit<UserState> {
+class AddUserRoleCubit extends Cubit<AddUserRoleState> {
   final UserRepository _userRepository;
-  UserCubit(this._userRepository) : super(UserInitial());
+  AddUserRoleCubit(this._userRepository) : super(UserInitial());
 
   Future<void> addUser(UserRequestModel userRequestModel) async {
-    emit(UserLoading());
+    emit(AddUserRoleLoading());
     try {
       final response = await _userRepository.user(userRequestModel);
-      emit(UserSuccess(response));
+      emit(AddUserRoleSuccess(response));
       //  print(emit(SignUpSuccess(response)));
     } catch (error) {
-      emit(UserFailed(error.toString()));
+      emit(AddUserRoleFail(error.toString()));
     }
   }
 }

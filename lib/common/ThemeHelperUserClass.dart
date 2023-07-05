@@ -56,20 +56,66 @@ class ThemeHelperUserRole {
 
 
 Widget buildInputContainer(String labelText, String hintText, IconData iconData,dynamic controller,dynamic validator,dynamic keyboardType) {
-  return Container(
-    decoration: ThemeHelperUserRole().inputBoxDecorationShaddow(),
-    child: TextFormField(
-      keyboardType: keyboardType,
-      controller: controller,
-      decoration: ThemeHelperUserRole().textInputDecoration(
-        labelText,
-        hintText,
-        iconData,
-      ),
-      validator: validator,
-    ),
-  );
+  return
+    Container(
+        decoration: ThemeHelperUserRole().inputBoxDecorationShaddow(),
+        child: TextFormField(
+          keyboardType: keyboardType,
+          controller: controller,
+          decoration: ThemeHelperUserRole().textInputDecoration(
+            labelText,
+            hintText,
+            iconData,
+          ),
+          validator: validator,
+        ),
+      );
+
 }
+
+Widget buildProductContainerText(String name) {
+  return
+    Expanded(
+      child: Container(
+        margin: const EdgeInsets.fromLTRB(0, 0, 10, 0),
+        child: Text(
+          name,  style: const TextStyle(
+          fontSize: 14,
+          fontWeight: FontWeight.w700,
+          color: Color(0xff000000),
+        ),
+        )
+      ),
+    );
+}
+
+Widget buildProductContainerForm(String label,dynamic keyboardType,dynamic controller,dynamic validator) {
+  return
+    Expanded(
+      child: SizedBox(
+          width: 200,
+          height: 50,
+          child: TextFormField(
+            keyboardType: keyboardType,
+            controller: controller,
+            validator: validator,
+            decoration: InputDecoration(
+              label: Text(label),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: const BorderSide(
+                    color: Colors.blue, width: 1.0),
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              fillColor: Colors.grey,
+            ),
+          )
+      ),
+    );
+}
+
 
 Widget buildProfileBox(String name,String realName) {
   return Expanded(
@@ -85,7 +131,7 @@ Widget buildProfileBox(String name,String realName) {
            width: 200,
            height: 50,
            decoration: BoxDecoration(
-             border: Border.all(color: Colors.black12, width: 0.5),
+             border: Border.all(color: Colors.redAccent, width: 0.3),
              borderRadius: BorderRadius.all(Radius.circular(10.0)),
            ),
            child: Text(realName),
@@ -94,6 +140,25 @@ Widget buildProfileBox(String name,String realName) {
      ),
    ),
   );
+}
+
+
+
+Widget chooseItemIdForm(DropdownButton dropdownButton){
+  return  Expanded(
+    child: Container(
+      padding: EdgeInsets.only(left: 8,right: 10) ,
+      width: 200,
+      height: 50,
+      decoration: BoxDecoration(
+          border: Border.all(color: Colors.grey,width: 1),
+          borderRadius: BorderRadius.circular(10)
+      ),
+        child: dropdownButton,
+
+      ),
+    );
+
 }
 
 

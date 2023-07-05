@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:dropdown_search/dropdown_search.dart';
 import 'package:easy_invoice/bloc/edit/edit_user_role_cubit.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -175,45 +174,47 @@ class _EditUserRoleWidgetState extends State<EditUserRoleWidget> {
                       TextInputType.visiblePassword,
                     ),
                     const SizedBox(height: 10),
-                    Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(50),
-                        border: Border.all(color: Colors.grey),
-                      ),
-                      child: DropdownSearch(
-                        dropdownDecoratorProps: const DropDownDecoratorProps(
-                          dropdownSearchDecoration: InputDecoration(
-                            hintText: "Select User Role",
-                            border: OutlineInputBorder(
-                              borderSide: BorderSide.none,
-                            ),
-                            prefixIcon: Padding(
-                              padding: EdgeInsets.only(left: 20, right: 30),
-                              child: Icon(Icons.person),
-                            ),
-                          ),
+                    DropdownButtonFormField(
+                      decoration: InputDecoration(
+                        prefixIcon: const Padding(
+                          padding: EdgeInsets.only(left: 20,right: 30),
+                          child: Icon(Icons.accessibility),
                         ),
-                        validator: (String? selectedUserRole) {
-                          if (selectedUserRole == null ||
-                              selectedUserRole.isEmpty) {
-                            return 'Please select a user role!';
-                          }
-                          return null;
-                        },
-                        onChanged: (String? value) {
-                          setState(() {
-                            selectedUserRole = value;
-                          });
-                        },
-                        selectedItem: selectedUserRole,
-                        items: const [
-                          "User",
-                          "Admin (Disabled)",
-                          "Warehouse",
-                          'Shopkeeper',
-                          "Delivery"
-                        ],
+                        border: OutlineInputBorder(
+                          borderSide: const BorderSide(color: Colors.black12, width: 2),
+                          borderRadius: BorderRadius.circular(50), // Rounded corners
+                        ),
                       ),
+                      dropdownColor: Colors.grey,
+                      value: selectedUserRole,
+                      onChanged: (String? newValue) {
+                        selectedUserRole = newValue;
+                      },
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please select a user role'; // Validation error message
+                        }
+                        return null; // Validation passed
+                      },
+                      hint: const Text(
+                        'Select a user role',
+                        style: TextStyle(fontSize: 16),
+                      ),
+                      items: const [
+                        "User",
+                        "Admin (Disabled)",
+                        "Warehouse",
+                        'Shopkeeper',
+                        "Delivery"
+                      ].map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(
+                            value,
+                            style: TextStyle(fontSize: 16),
+                          ),
+                        );
+                      }).toList(),
                     ),
                     const SizedBox(height: 50),
                     Padding(
