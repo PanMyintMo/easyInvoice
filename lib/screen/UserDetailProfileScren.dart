@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import '../common/HeaderWidget.dart';
+import '../common/ToastMessage.dart';
 import '../common/theme_helper.dart';
 
 class UserDetailProfileScreen extends StatefulWidget {
@@ -15,7 +16,7 @@ class UserDetailProfileScreen extends StatefulWidget {
   final DateTime created_at;
   final DateTime updated_at;
   final String utype;
-  final String profileImageUrl;
+  final String url;
 
   const UserDetailProfileScreen(
       {Key? key,
@@ -25,7 +26,7 @@ class UserDetailProfileScreen extends StatefulWidget {
       required this.created_at,
       required this.updated_at,
       required this.utype,
-      required this.profileImageUrl})
+      required this.url})
       : super(key: key);
 
   @override
@@ -41,24 +42,24 @@ class _UserDetailProfileScreenState extends State<UserDetailProfileScreen> {
     return BlocProvider(
       create: (context) => DeleteUserRoleCubit(getIt.call()),
       child: Scaffold(
+        backgroundColor: Colors.white,
         appBar: AppBar(
           elevation: 0,
-           flexibleSpace: Container(
-           decoration: BoxDecoration(
-              gradient: LinearGradient(
-                   colors: [Colors.redAccent.withOpacity(0.3),Colors.pink.withOpacity(0.7)],
-                  begin: Alignment.topLeft,
-                 end: Alignment.topCenter
-             ),
-           ),
-         ),
+          flexibleSpace: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(colors: [
+                Colors.redAccent.withOpacity(0.3),
+                Colors.pink.withOpacity(0.7)
+              ], begin: Alignment.topLeft, end: Alignment.topCenter),
+            ),
+          ),
           leading: IconButton(
             icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
             onPressed: () {
               Navigator.pop(context); // Navigate back to the previous screen
             },
           ),
-          title: Center(
+          title: const Center(
             child: Text(
               'User Role Detail Profile',
               style: TextStyle(fontSize: 16, color: Colors.white),
@@ -76,7 +77,7 @@ class _UserDetailProfileScreenState extends State<UserDetailProfileScreen> {
                               password: '',
                               utype: widget.utype,
                               email: widget.email,
-                              newimage: widget.profileImageUrl)));
+                              newimage: widget.url)));
                 },
                 icon: const Icon(
                   Icons.edit,
@@ -84,10 +85,27 @@ class _UserDetailProfileScreenState extends State<UserDetailProfileScreen> {
                 ))
           ],
         ),
-        body: BlocBuilder<DeleteUserRoleCubit, DeleteUserRoleState>(
+        body: BlocConsumer<DeleteUserRoleCubit, DeleteUserRoleState>(
+          listener: (context, state) {
+            if (state is DeleteUserRoleLoading) {
+              setState(() {
+                isLoading = true;
+              });
+            } else if (state is DeleteUserRoleSuccess ||
+                state is DeleteUserRoleFail) {
+              setState(() {
+                isLoading = false;
+              });
+            }
+          },
           builder: (context, state) {
             if (state is DeleteUserRoleLoading) {
               isLoading = true;
+            } else if (state is DeleteUserRoleSuccess) {
+              showToastMessage('User account deleted successfully',duration: 3000);
+              Navigator.pop(context); // Navigate back to the previous screen
+            } else if (state is DeleteUserRoleFail) {
+              showToastMessage('Failed to delete user account',duration: 3000);
             }
             return Stack(
               children: [
@@ -117,9 +135,9 @@ class _UserDetailProfileScreenState extends State<UserDetailProfileScreen> {
                                 ),
                               ],
                             ),
-                            child: widget.profileImageUrl.isNotEmpty
+                            child: widget.url.isNotEmpty
                                 ? Image.network(
-                                    widget.profileImageUrl,
+                                    widget.url,
                                     width: 80,
                                     height: 80,
                                     fit: BoxFit.cover,
@@ -169,7 +187,7 @@ class _UserDetailProfileScreenState extends State<UserDetailProfileScreen> {
                               },
                               style: ThemeHelper().buttonStyle(),
                               child: const Text(
-                                'Delete User Account',
+                                'Delete Account',
                                 style: TextStyle(
                                   fontSize: 18,
                                   color: Colors.white,

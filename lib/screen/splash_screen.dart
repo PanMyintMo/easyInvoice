@@ -18,17 +18,20 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
 
-    Timer(const Duration(seconds: 3), () async {
-      //Check if token exists
-      final token = await SessionManager().getAuthToken();
 
-      if (token != null) {
+
+
+     Timer(const Duration(seconds: 3), () async {
+       //Check if token exists
+       final token = await SessionManager().getAuthToken();
+
+       if (token != null) {
         // Token exists, navigate to the profile page
-        Get.offAll(() =>  MainPageScreen());
-      } else {
-        Get.offAll(() => const Login());
-      }
-    });
+         Get.offAll(() =>  MainPageScreen());
+       } else {
+         Get.offAll(() => const Login());
+       }
+     });
   }
 
   @override

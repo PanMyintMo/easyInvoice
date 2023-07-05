@@ -6,7 +6,8 @@ import 'package:easy_invoice/screen/UpdateSizeScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+
+import '../common/ToastMessage.dart';
 
 class AllSizePageWidget extends StatelessWidget {
   final List<GetAllSizeResponse> sizes;
@@ -134,7 +135,7 @@ class AllSizePageWidget extends StatelessWidget {
                                 showToastMessage(
                                     'Size Updated Successfully');
                               } else if (result != null && result is String) {
-                                showErrorToast(
+                                showToastMessage(
                                     'Failed to update sizes: $result');
                               }
                             },
@@ -171,26 +172,6 @@ class AllSizePageWidget extends StatelessWidget {
           ),
 
         ));
-  }
-
-  void showToastMessage(String success) {
-    Fluttertoast.showToast(
-      msg: success,
-      toastLength: Toast.LENGTH_LONG,
-      gravity: ToastGravity.BOTTOM,
-      backgroundColor: Colors.black54,
-      textColor: Colors.white,
-    );
-  }
-
-  void showErrorToast(String error) {
-    Fluttertoast.showToast(
-      msg: error,
-      toastLength: Toast.LENGTH_LONG,
-      gravity: ToastGravity.BOTTOM,
-      backgroundColor: Colors.black54,
-      textColor: Colors.white,
-    );
   }
 }
 

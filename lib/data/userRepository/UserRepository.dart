@@ -6,6 +6,7 @@ import 'package:easy_invoice/data/responsemodel/UserResponse.dart';
 import 'package:easy_invoice/dataRequestModel/EditUserRoleRequestModel.dart';
 import 'package:easy_invoice/dataRequestModel/UserRequestModel.dart';
 import '../../dataRequestModel/AddCategoryRequestModel.dart';
+import '../../dataRequestModel/AddProductRequestModel.dart';
 import '../../dataRequestModel/AddSizeRequestModel.dart';
 import '../../dataRequestModel/EditCategoryModel.dart';
 import '../../dataRequestModel/EditSizeModel.dart';
@@ -17,6 +18,7 @@ import '../responsemodel/DeleteUserRoleResponse.dart';
 import '../responsemodel/EditUserRoleResponse.dart';
 import '../responsemodel/GetAllCategoryDetail.dart';
 import '../responsemodel/LoginResponse.dart';
+import '../responsemodel/ProductResponse.dart';
 import '../responsemodel/SizeDeleteResponse.dart';
 import '../responsemodel/UpdateCateResponse.dart';
 import '../responsemodel/UpdateSizeResponse.dart';
@@ -59,6 +61,18 @@ class UserRepository {
     }
   }
 
+  //for add product
+  Future<ProductResponse> addProduct(
+      AddProductRequestModel addProductRequestModel) async {
+    try {
+      final response = await _apiService.addProduct(addProductRequestModel);
+      return response;
+    } catch (error) {
+      rethrow;
+    }
+  }
+
+
   //For get all user role
   Future<UserRoleResponse> getAllUserRole() async {
     try {
@@ -92,15 +106,15 @@ class UserRepository {
     }
   }
 
-//to get all category
-  Future<List<CategoryData>> getCategory() async {
+  Future<List<CategoryItem>> getCategory() async {
     try {
       final response = await _apiService.getAllCategories();
-      return response;
+      return response.data.data;
     } catch (error) {
-      rethrow;
+      throw Exception('Failed to get categories: $error');
     }
   }
+
 
   //get all sizes
   Future<List<GetAllSizeResponse>> getSizes() async {

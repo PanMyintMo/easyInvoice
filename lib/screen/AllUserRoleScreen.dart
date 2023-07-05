@@ -2,8 +2,8 @@ import 'package:easy_invoice/bloc/edit/edit_user_role_cubit.dart';
 import 'package:easy_invoice/bloc/get/get_all_user_role_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import '../bloc/delete/delete_user_role_cubit.dart';
+import '../common/ToastMessage.dart';
 import '../module/module.dart';
 import '../widget/AllUserRoleWidget.dart';
 
@@ -37,27 +37,26 @@ class _AllUserRoleScreenState extends State<AllUserRoleScreen> {
         body: BlocConsumer<GetAllUserRoleCubit, GetAllUserRoleState>(
           listener: (context, state) {
             if (state is GetAllUserRoleFail) {
-              showErrorToast('Error: ${state.error}');
+              showToastMessage('Error: ${state.error}');
             }
           },
           builder: (context, state) {
             if (state is GetAllUserRoleLoading) {
               return const Center(child: CircularProgressIndicator());
             } else if (state is GetAllUserRoleSuccess) {
-
               return BlocConsumer<DeleteUserRoleCubit, DeleteUserRoleState>(
                 listener: (context, deleteState) {
                   if (deleteState is DeleteUserRoleLoading) {
                     // Handle delete user role loading state
                   } else if (deleteState is DeleteUserRoleSuccess) {
-                    showSuccessToast('User deleted successfully');
+                    showToastMessage('User deleted successfully');
                     WidgetsBinding.instance.addPostFrameCallback((_) {
                       context
                           .read<GetAllUserRoleCubit>()
                           .getAllUserRole();
                     });
                   } else if (deleteState is DeleteUserRoleFail) {
-                    showErrorToast(
+                    showToastMessage(
                         'Failed to delete user: ${deleteState.error}');
                   }
                 },
@@ -67,14 +66,15 @@ class _AllUserRoleScreenState extends State<AllUserRoleScreen> {
                       ? deleteState.error
                       : '';
 
-                  return AllUserRoleWidget(userData: state.getAllUserRole.data);
+                  return AllUserRoleWidget(userData: state.getAllUserRole.data, isLoading: loading, message: message,);
                 },
               );
             } else if (state is GetAllUserRoleFail) {
               return Center(child: Text('Error: ${state.error}'));
             }
 
-            return const AllUserRoleWidget(userData: []);
+            return  const AllUserRoleWidget(userData: [] ,isLoading: false,
+                message: '');
           },
         ),
       ),
@@ -82,22 +82,4 @@ class _AllUserRoleScreenState extends State<AllUserRoleScreen> {
   }
 }
 
-void showErrorToast(String error) {
-  Fluttertoast.showToast(
-    msg: error,
-    toastLength: Toast.LENGTH_LONG,
-    gravity: ToastGravity.BOTTOM,
-    backgroundColor: Colors.black54,
-    textColor: Colors.white,
-  );
-}
 
-void showSuccessToast(String success) {
-  Fluttertoast.showToast(
-    msg: success,
-    toastLength: Toast.LENGTH_LONG,
-    gravity: ToastGravity.BOTTOM,
-    backgroundColor: Colors.black54,
-    textColor: Colors.white,
-  );
-}

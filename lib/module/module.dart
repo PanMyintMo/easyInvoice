@@ -7,9 +7,10 @@ import 'package:easy_invoice/bloc/get/get_all_size_cubit.dart';
 import 'package:easy_invoice/bloc/get/get_all_user_role_cubit.dart';
 import 'package:easy_invoice/bloc/get/get_category_detail_cubit.dart';
 import 'package:easy_invoice/bloc/post/add_category_cubit.dart';
+import 'package:easy_invoice/bloc/post/add_product_cubit.dart';
 import 'package:easy_invoice/bloc/post/sign_in_cubit.dart';
 import 'package:easy_invoice/bloc/post/sign_up_cubit.dart';
-import 'package:easy_invoice/bloc/post/user_cubit.dart';
+import 'package:easy_invoice/bloc/post/add_user_role_cubit.dart';
 import 'package:easy_invoice/data/api/apiService.dart';
 import 'package:easy_invoice/data/userRepository/UserRepository.dart';
 import 'package:get_it/get_it.dart';
@@ -39,6 +40,16 @@ void locator() {
   AddCategoryCubit addCategoryCubit =
       AddCategoryCubit(getIt.get<UserRepository>());
   getIt.registerLazySingleton(() => addCategoryCubit);
+
+
+
+  //to add product to db
+  AddProductCubit addProductCubit =
+  AddProductCubit(getIt.get<UserRepository>());
+  getIt.registerLazySingleton(() => addProductCubit);
+
+
+
   //get all category
   GetCategoryDetailCubit getCategoryDetailCubit =
       GetCategoryDetailCubit(getIt.get<UserRepository>());
@@ -69,8 +80,8 @@ void locator() {
   AddSizeCubit addSizeCubit = AddSizeCubit(getIt.get<UserRepository>());
   getIt.registerLazySingleton(() => addSizeCubit);
   //for add user role
-  UserCubit userCubit = UserCubit(getIt.get<UserRepository>());
-  getIt.registerLazySingleton(() => userCubit);
+  AddUserRoleCubit addUserRoleCubit = AddUserRoleCubit(getIt.get<UserRepository>());
+  getIt.registerLazySingleton(() => addUserRoleCubit);
 
   //to get all user role
   GetAllUserRoleCubit getAllUserRoleCubit= GetAllUserRoleCubit(getIt.get<UserRepository>());
