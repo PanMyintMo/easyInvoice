@@ -33,15 +33,35 @@ class AllProductScreen extends StatelessWidget {
             }
           },
           builder: (context, state) {
-            if (state is GetAllProductInitial || (state is GetAllProductSuccess && state.products.isEmpty)) {
+            if (state is GetAllProductSuccess) {
+              if (state.products.isEmpty) {
+                return const Center(
+                  child: Text(
+                    'No more products',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                );
+              } else {
+                return AllProductWidget();
+              }
+            } else if (state is GetAllProductLoading) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            } else if (state is GetAllProductFail) {
+              return Scaffold(
+                body: Center(
+                  child: Text('Error: ${state.error}'),
+                ),
+              );
+            } else {
+              context.read<GetAllProductCubit>().getAllProduct(); // Fetch the initial product list
               return const Center(
                 child: Text(
                   'No more products',
                   style: TextStyle(fontSize: 16),
                 ),
               );
-            } else {
-              return AllProductWidget();
             }
           },
         ),
@@ -49,6 +69,10 @@ class AllProductScreen extends StatelessWidget {
     );
   }
 }
+
+
+
+
 
 
 

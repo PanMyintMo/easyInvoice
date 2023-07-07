@@ -1,16 +1,23 @@
 import 'package:flutter/material.dart';
 
 class ThemeHelperUserRole {
-  InputDecoration textInputDecoration([  String lableText = "",
-    String hintText = "",   IconData? iconData,]) {
+  InputDecoration textInputDecoration([
+    String lableText = "",
+    String hintText = "",
+    IconData? iconData,
+  ]) {
     return InputDecoration(
       labelText: lableText,
       hintText: hintText,
-        prefixIcon: iconData != null ? Padding(
-          padding: const EdgeInsets.only(left: 20, right: 30), // Adjust the left and right padding values
-          child: Icon(iconData),
-        ) : null,
-      prefixIconConstraints: BoxConstraints(minWidth: 50), // Set minimum width for the prefix icon
+      prefixIcon: iconData != null
+          ? Padding(
+              padding: const EdgeInsets.only(left: 20, right: 30),
+              // Adjust the left and right padding values
+              child: Icon(iconData),
+            )
+          : null,
+      prefixIconConstraints: BoxConstraints(minWidth: 50),
+      // Set minimum width for the prefix icon
       fillColor: Colors.white,
       filled: true,
       contentPadding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
@@ -54,43 +61,40 @@ class ThemeHelperUserRole {
   }
 }
 
-
-Widget buildInputContainer(String labelText, String hintText, IconData iconData,dynamic controller,dynamic validator,dynamic keyboardType) {
-  return
-    Container(
-        decoration: ThemeHelperUserRole().inputBoxDecorationShaddow(),
-        child: TextFormField(
-          keyboardType: keyboardType,
-          controller: controller,
-          decoration: ThemeHelperUserRole().textInputDecoration(
-            labelText,
-            hintText,
-            iconData,
-          ),
-          validator: validator,
-        ),
-      );
-
+Widget buildInputContainer(String labelText, String hintText, IconData iconData,
+    dynamic controller, dynamic validator, dynamic keyboardType) {
+  return Container(
+    decoration: ThemeHelperUserRole().inputBoxDecorationShaddow(),
+    child: TextFormField(
+      keyboardType: keyboardType,
+      controller: controller,
+      decoration: ThemeHelperUserRole().textInputDecoration(
+        labelText,
+        hintText,
+        iconData,
+      ),
+      validator: validator,
+    ),
+  );
 }
 
 Widget buildProductContainerText(String name) {
-  return
-    Expanded(
-      child: Container(
+  return Expanded(
+    child: Container(
         margin: const EdgeInsets.fromLTRB(0, 0, 10, 0),
         child: Text(
-          name,  style: const TextStyle(
-          fontSize: 14,
-          fontWeight: FontWeight.w700,
-          color: Color(0xff000000),
-        ),
-        )
-      ),
-    );
+          name,
+          style: const TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w700,
+            color: Color(0xff000000),
+          ),
+        )),
+  );
 }
 
-Widget buildProductContainerForm(
-    String label, TextInputType inputType, TextEditingController controller, String? Function(String?)? validator) {
+Widget buildProductContainerForm(String label, TextInputType inputType,
+    TextEditingController controller, String? Function(String?)? validator) {
   return Expanded(
     child: SizedBox(
       width: 200,
@@ -105,8 +109,7 @@ Widget buildProductContainerForm(
             borderRadius: BorderRadius.circular(10.0),
           ),
           focusedBorder: OutlineInputBorder(
-            borderSide: const BorderSide(
-                color: Colors.blue, width: 1.0),
+            borderSide: const BorderSide(color: Colors.blue, width: 1.0),
             borderRadius: BorderRadius.circular(10.0),
           ),
           fillColor: Colors.grey,
@@ -116,51 +119,51 @@ Widget buildProductContainerForm(
   );
 }
 
-
-Widget buildProfileBox(String name,String realName) {
+Widget buildProfileBox(String name, String realName) {
   return Expanded(
-   child: Padding(
-     padding: const EdgeInsets.symmetric(horizontal: 30.0,vertical: 10.0),
-     child: Row(
-       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-       children: [
-         Text(name),
-         Container(
-           padding: EdgeInsets.symmetric(horizontal: 10),
-           alignment: Alignment.centerLeft,
-           width: 200,
-           height: 50,
-           decoration: BoxDecoration(
-             border: Border.all(color: Colors.redAccent, width: 0.3),
-             borderRadius: BorderRadius.all(Radius.circular(10.0)),
-           ),
-           child: Text(realName),
-         )
-       ],
-     ),
-   ),
+    child: Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(name),
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 10),
+            alignment: Alignment.centerLeft,
+            width: 200,
+            height: 50,
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.redAccent, width: 0.3),
+              borderRadius: BorderRadius.all(Radius.circular(10.0)),
+            ),
+            child: Text(realName),
+          )
+        ],
+      ),
+    ),
   );
 }
 
-
-
-Widget chooseItemIdForm(DropdownButton dropdownButton){
-  return  Expanded(
+Widget chooseItemIdForm(DropdownButton dropdownButton) {
+  return Expanded(
     child: Container(
-      padding: EdgeInsets.only(left: 8,right: 10) ,
+      padding: EdgeInsets.only(left: 8, right: 10),
       width: 200,
       height: 50,
       decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey,width: 1),
-          borderRadius: BorderRadius.circular(10)
-      ),
-        child: dropdownButton,
-
-      ),
-    );
-
+          border: Border.all(color: Colors.grey, width: 1),
+          borderRadius: BorderRadius.circular(10)),
+      child: dropdownButton,
+    ),
+  );
 }
 
-
-
-
+Widget textFieldForm(dynamic controller, String label) {
+  return TextField(
+    controller: controller,
+    decoration: InputDecoration(
+      border: OutlineInputBorder(),
+      labelText: label,
+    ),
+  );
+}

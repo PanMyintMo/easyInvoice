@@ -1,9 +1,11 @@
 import 'package:easy_invoice/data/api/apiService.dart';
 import 'package:easy_invoice/data/responsemodel/AddSizeResponse.dart';
+import 'package:easy_invoice/data/responsemodel/EditProductResponse.dart';
 import 'package:easy_invoice/data/responsemodel/GetAllProductResponse.dart';
 import 'package:easy_invoice/data/responsemodel/GetAllSizeResponse.dart';
 import 'package:easy_invoice/data/responsemodel/RegisterResponse.dart';
 import 'package:easy_invoice/data/responsemodel/UserResponse.dart';
+import 'package:easy_invoice/dataRequestModel/EditProductRequestModel.dart';
 import 'package:easy_invoice/dataRequestModel/EditUserRoleRequestModel.dart';
 import 'package:easy_invoice/dataRequestModel/UserRequestModel.dart';
 import '../../dataRequestModel/AddCategoryRequestModel.dart';
@@ -186,6 +188,18 @@ class UserRepository {
       EditCategory editCategory, int id) async {
     try {
       final response = await _apiService.updateCategory(editCategory, id);
+      return response;
+    } catch (error) {
+      rethrow;
+    }
+  }
+
+  // update product by id
+
+  Future<EditProductResponse> updateProductItem(
+      EditProductRequestModel editProductRequestModel, int id) async {
+    try {
+      final response = await _apiService.updateProductItem(editProductRequestModel, id);
       return response;
     } catch (error) {
       rethrow;
