@@ -3,6 +3,7 @@ import 'package:easy_invoice/bloc/delete/delete_size_cubit.dart';
 import 'package:easy_invoice/bloc/edit/edit_category_cubit.dart';
 import 'package:easy_invoice/bloc/edit/edit_size_cubit.dart';
 import 'package:easy_invoice/bloc/edit/edit_user_role_cubit.dart';
+import 'package:easy_invoice/bloc/get/get_all_product_cubit.dart';
 import 'package:easy_invoice/bloc/get/get_all_size_cubit.dart';
 import 'package:easy_invoice/bloc/get/get_all_user_role_cubit.dart';
 import 'package:easy_invoice/bloc/get/get_category_detail_cubit.dart';
@@ -16,6 +17,7 @@ import 'package:easy_invoice/data/userRepository/UserRepository.dart';
 import 'package:get_it/get_it.dart';
 import 'package:dio/dio.dart';
 
+import '../bloc/delete/delete_product_item_cubit.dart';
 import '../bloc/delete/delete_user_role_cubit.dart';
 import '../bloc/post/add_size_cubit.dart';
 
@@ -41,20 +43,21 @@ void locator() {
       AddCategoryCubit(getIt.get<UserRepository>());
   getIt.registerLazySingleton(() => addCategoryCubit);
 
-
-
   //to add product to db
   AddProductCubit addProductCubit =
   AddProductCubit(getIt.get<UserRepository>());
   getIt.registerLazySingleton(() => addProductCubit);
-
-
 
   //get all category
   GetCategoryDetailCubit getCategoryDetailCubit =
       GetCategoryDetailCubit(getIt.get<UserRepository>());
   getIt.registerLazySingleton(() => getCategoryDetailCubit);
 
+  //get all product
+  GetAllProductCubit getAllProductCubit =
+  GetAllProductCubit(getIt.get<UserRepository>());
+  getIt.registerLazySingleton(() => getAllProductCubit);
+  
   //get all size
   GetAllSizeCubit getAllSizeCubit =
       GetAllSizeCubit(getIt.get<UserRepository>());
@@ -63,6 +66,10 @@ void locator() {
   //to delete category
   DeleteCategoryCubit categoryDeleteCubit = DeleteCategoryCubit(getIt.call());
   getIt.registerLazySingleton(() => categoryDeleteCubit);
+
+  //to delete product item
+  DeleteProductItemCubit productDeleteCubit = DeleteProductItemCubit(getIt.call());
+  getIt.registerLazySingleton(() => productDeleteCubit);
 
   //to delete size
   DeleteSizeCubit deleteSizeCubit = DeleteSizeCubit(getIt.call());

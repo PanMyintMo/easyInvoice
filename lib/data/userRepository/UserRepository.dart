@@ -1,5 +1,6 @@
 import 'package:easy_invoice/data/api/apiService.dart';
 import 'package:easy_invoice/data/responsemodel/AddSizeResponse.dart';
+import 'package:easy_invoice/data/responsemodel/GetAllProductResponse.dart';
 import 'package:easy_invoice/data/responsemodel/GetAllSizeResponse.dart';
 import 'package:easy_invoice/data/responsemodel/RegisterResponse.dart';
 import 'package:easy_invoice/data/responsemodel/UserResponse.dart';
@@ -14,6 +15,7 @@ import '../../dataRequestModel/LoginRequestModel.dart';
 import '../../dataRequestModel/RegisterRequestModel.dart';
 import '../responsemodel/AddCategoryResponseModel.dart';
 import '../responsemodel/CategoryDeleteRespose.dart';
+import '../responsemodel/DeleteProductResponse.dart';
 import '../responsemodel/DeleteUserRoleResponse.dart';
 import '../responsemodel/EditUserRoleResponse.dart';
 import '../responsemodel/GetAllCategoryDetail.dart';
@@ -106,6 +108,7 @@ class UserRepository {
     }
   }
 
+  //fetch all categories from db
   Future<List<CategoryItem>> getCategory() async {
     try {
       final response = await _apiService.getAllCategories();
@@ -114,13 +117,20 @@ class UserRepository {
       throw Exception('Failed to get categories: $error');
     }
   }
-
-
-  //get all sizes
-  Future<List<GetAllSizeResponse>> getSizes() async {
+  Future<List<ProductListItem>> fetchAllProduct() async {
     try {
-      final response = await _apiService.getAllSize();
-      return response;
+      final response = await _apiService.fetchAllProducts();
+      return response.data.data;
+    } catch (error) {
+      throw Exception('Failed to get products: $error');
+    }
+  }
+
+  //fetch all sizes
+  Future<List<SizeItems>> getSizes() async {
+    try {
+      final response = await _apiService.getAllSizes();
+      return response.data.data;
     } catch (error) {
       rethrow;
     }
@@ -131,6 +141,17 @@ class UserRepository {
   Future<DeleteCategory> deleteCategory(int id) async {
     try {
       final response = await _apiService.deleteCategory(id);
+      return response;
+    } catch (error) {
+      rethrow;
+    }
+  }
+
+  //to delete product item by id
+
+  Future<DeleteProductResponse> deleteProductItem(int id) async {
+    try {
+      final response = await _apiService.deleteProductItem(id);
       return response;
     } catch (error) {
       rethrow;

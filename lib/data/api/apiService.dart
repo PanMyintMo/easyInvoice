@@ -1,8 +1,9 @@
-import 'dart:convert';
+
 
 import 'package:dio/dio.dart';
 import 'package:easy_invoice/data/responsemodel/AddSizeResponse.dart';
 import 'package:easy_invoice/data/responsemodel/GetAllCategoryDetail.dart';
+import 'package:easy_invoice/data/responsemodel/GetAllProductResponse.dart';
 import 'package:easy_invoice/data/responsemodel/GetAllSizeResponse.dart';
 import 'package:easy_invoice/data/responsemodel/UpdateCateResponse.dart';
 import 'package:easy_invoice/data/responsemodel/UserResponse.dart';
@@ -18,6 +19,7 @@ import '../../dataRequestModel/LoginRequestModel.dart';
 import '../../dataRequestModel/RegisterRequestModel.dart';
 import '../responsemodel/AddCategoryResponseModel.dart';
 import '../responsemodel/CategoryDeleteRespose.dart';
+import '../responsemodel/DeleteProductResponse.dart';
 import '../responsemodel/DeleteUserRoleResponse.dart';
 import '../responsemodel/EditUserRoleResponse.dart';
 import '../responsemodel/LoginResponse.dart';
@@ -140,7 +142,7 @@ class ApiService {
     }
   }
 
-  //get all category from db
+  //fetch all category from db
 
   Future<CategoryDataResponse> getAllCategories() async {
     try {
@@ -192,8 +194,112 @@ class ApiService {
     }
   }
 
+  //fetch all product from db
+  Future<GetAllProductResponse> fetchAllProducts() async {
+    try {
+      int currentPage = 1;
+      ProductData? productData; // Make the productData variable nullable
+      List<ProductListItem> allProduct = [];
+      bool isLastPage = false;
 
-//get all user role from db
+      while (!isLastPage) {
+        final response = await _dio.get('https://mmeasyinvoice.com/api/products?page=$currentPage');
+        print('Product Response is ${response.data}');
+
+        if (response.statusCode == 200) {
+          final dynamic responseData = response.data;
+
+          final productDataResponse = GetAllProductResponse.fromJson(responseData);
+          productData = productDataResponse.data;
+          final List<ProductListItem> products = productData.data;
+          allProduct.addAll(products);
+
+          if (currentPage == productData.lastPage) {
+            isLastPage = true;
+          } else {
+            currentPage++;
+          }
+        }
+      }
+
+      return GetAllProductResponse(
+          data: ProductData(
+            currentPage: currentPage,
+            data: allProduct,
+            firstPageUrl: 'https://mmeasyinvoice.com/api/products?page=1',
+            from: 1,
+            lastPage: currentPage,
+            lastPageUrl: 'https://mmeasyinvoice.com/api/products?page=$currentPage',
+            links: [],
+            nextPageUrl: (currentPage < productData!.lastPage) ? 'https://mmeasyinvoice.com/api/products?page=${currentPage + 1}' : '',
+            path: 'https://mmeasyinvoice.com/api/products',
+            perPage: allProduct.length,
+            prevPageUrl: (currentPage > 1) ? 'https://mmeasyinvoice.com/api/products?page=${currentPage - 1}' : null,
+            to: allProduct.length,
+            total: 0,
+          ),
+        );
+
+    } catch (e) {
+      throw Exception('Failed to fetch products: $e');
+    }
+  }
+
+
+  //fetch all sizes from db
+  Future<GetAllSizeResponse> getAllSizes() async {
+    try {
+      int currentPage = 1;
+      SizeData sizeData;
+      List<SizeItems> allSizes = [];
+
+      while (true) {
+        final response = await _dio.get('https://mmeasyinvoice.com/api/sizes?page=$currentPage');
+        print('Size Response is ${response.data}');
+
+        if (response.statusCode == 200) {
+          final dynamic responseData = response.data;
+
+          final sizeDataResponse = GetAllSizeResponse.fromJson(responseData);
+
+          sizeData = sizeDataResponse.data;
+          final List<SizeItems> sizes = sizeData.data;
+          allSizes.addAll(sizes);
+
+          if (currentPage == sizeData.last_page) {
+            break;
+          } else {
+            currentPage++;
+          }
+        } else {
+          throw Exception('Failed to fetch all sizes');
+        }
+      }
+
+      return GetAllSizeResponse(
+        data: SizeData(
+          current_page: currentPage,
+          data: allSizes,
+          first_page_url: 'https://mmeasyinvoice.com/api/sizes?page=1',
+          from: 1,
+          last_page: currentPage,
+          last_page_url: 'https://mmeasyinvoice.com/api/sizes?page=$currentPage',
+          links: [],
+          next_page_url: (currentPage < sizeData.last_page) ? 'https://mmeasyinvoice.com/api/sizes?page=${currentPage + 1}' : '',
+          path: 'https://mmeasyinvoice.com/api/sizes',
+          per_page: allSizes.length,
+          prev_page_url: (currentPage > 1) ? 'https://mmeasyinvoice.com/api/sizes?page=${currentPage - 1}' : null,
+          to: allSizes.length,
+          total: 0,
+        ),
+      );
+    } catch (e) {
+      throw Exception('Failed to fetch sizes: $e');
+    }
+  }
+
+
+//fetch all user role from db
 Future<UserRoleResponse> getAllUserRole() async {
   try {
     final response = await _dio.get('https://mmeasyinvoice.com/api/users');
@@ -226,6 +332,25 @@ Future<DeleteCategory> deleteCategory(int id) async {
     throw Exception(error);
   }
 }
+
+//Delete product by id
+
+  Future<DeleteProductResponse> deleteProductItem(int id) async {
+    try {
+      final response =
+      await _dio.post('https://mmeasyinvoice.com/api/delete-product/$id');
+       print("Delete Product status response is ${response.statusCode}");
+      if (response.statusCode == 200) {
+        DeleteProductResponse deleteProductResponse = DeleteProductResponse.fromJson(response.data);
+        return deleteProductResponse;
+      } else {
+        throw Exception('Something wrong!');
+      }
+    } catch (error) {
+      throw Exception(error);
+    }
+  }
+
 
 //to delete size
 Future<SizeDeleteResponse> deleteSize(int id) async {
@@ -313,34 +438,7 @@ Future<AddSizeResponse> addSize(AddSizeRequestModel addSizeRequestModel) async {
   }
 }
 
-//get all sizes from db
-Future<List<GetAllSizeResponse>> getAllSize() async {
-  try {
-    final response = await _dio.get('https://mmeasyinvoice.com/api/sizes');
 
-    if (response.statusCode == 200) {
-      final dynamic responseData = response.data;
-
-      if (responseData['data'] is List) {
-        final List<GetAllSizeResponse> size = List<GetAllSizeResponse>.from(
-          responseData['data'].map(
-                  (categoryJson) => GetAllSizeResponse.fromJson(categoryJson)),
-        );
-        return size;
-      } else if (responseData['data'] is Map<String, dynamic>) {
-        final GetAllSizeResponse sizes =
-        GetAllSizeResponse.fromJson(responseData['data']);
-        return [sizes];
-      } else {
-        throw Exception('Invalid data format for "data" field');
-      }
-    } else {
-      throw Exception('Failed to fetch sizes');
-    }
-  } catch (e) {
-    throw Exception('Failed to fetch sizes: $e');
-  }
-}
 
 //divide for user
 

@@ -16,7 +16,7 @@ class GetAllSizeCubit extends Cubit<GetAllSizeState> {
     emit(GetAllSizeLoading());
 
     try {
-      final List<GetAllSizeResponse> response = await _userRepository.getSizes();
+      final List<SizeItems> response = await _userRepository.getSizes();
       emit(GetAllSizeSuccess(response));
     } catch (error) {
       emit(GetAllSizeFail(error.toString()));

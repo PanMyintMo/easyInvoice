@@ -16,7 +16,7 @@ class GetAllSizeLoading extends GetAllSizeState{
 }
 
 class GetAllSizeSuccess extends GetAllSizeState{
-  final List<GetAllSizeResponse> getAllSize;
+  final List<SizeItems> getAllSize;
   const GetAllSizeSuccess(this.getAllSize);
   @override
 

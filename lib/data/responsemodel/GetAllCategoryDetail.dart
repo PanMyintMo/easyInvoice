@@ -1,6 +1,6 @@
 class CategoryDataResponse {
-
   final CategoryData data;
+
 
   CategoryDataResponse({
     required this.data,
