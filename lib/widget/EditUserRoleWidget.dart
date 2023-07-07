@@ -82,8 +82,8 @@ class _EditUserRoleWidgetState extends State<EditUserRoleWidget> {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => EditUserRoleCubit(getIt.call()),
-      child: SingleChildScrollView(
-        child: Column(
+      child: ListView(
+        children: [Column(
           children: [
             Stack(
               children: [
@@ -256,7 +256,7 @@ class _EditUserRoleWidgetState extends State<EditUserRoleWidget> {
               ),
             ),
           ],
-        ),
+        )],
       ),
     );
   }

@@ -1,6 +1,7 @@
 import 'package:easy_invoice/bloc/delete/delete_category_cubit.dart';
 import 'package:easy_invoice/bloc/delete/delete_size_cubit.dart';
 import 'package:easy_invoice/bloc/edit/edit_category_cubit.dart';
+import 'package:easy_invoice/bloc/edit/edit_product_item_cubit.dart';
 import 'package:easy_invoice/bloc/edit/edit_size_cubit.dart';
 import 'package:easy_invoice/bloc/edit/edit_user_role_cubit.dart';
 import 'package:easy_invoice/bloc/get/get_all_product_cubit.dart';
@@ -78,6 +79,10 @@ void locator() {
   //to update category
   EditCategoryCubit editCategoryCubit = EditCategoryCubit(getIt.call());
   getIt.registerLazySingleton(() => editCategoryCubit);
+
+  //to update product item
+  EditProductItemCubit editProductItemCubit = EditProductItemCubit(getIt.call());
+  getIt.registerLazySingleton(() => editProductItemCubit);
 
   //to update size
   EditSizeCubit editSizeCubit = EditSizeCubit(getIt.call());
