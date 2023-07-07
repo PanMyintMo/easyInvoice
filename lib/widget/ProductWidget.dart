@@ -40,11 +40,7 @@ class _ProductWidgetState extends State<ProductWidget> {
                         //  borderRadius: BorderRadius.circular(),
                           color: Colors.black
                       ),
-                      // child: SvgPicture.asset(
-                      //   'assets/filter.svg',
-                      //   width: 49,
-                      //   height: 49,
-                      // ),
+
                   )
                 ],
               )

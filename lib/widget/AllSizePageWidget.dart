@@ -10,7 +10,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import '../common/ToastMessage.dart';
 
 class AllSizePageWidget extends StatelessWidget {
-  final List<GetAllSizeResponse> sizes;
+  final List<SizeItems> sizes;
   final bool isLoading;
 
   final String message;
@@ -176,7 +176,7 @@ class AllSizePageWidget extends StatelessWidget {
 }
 
 void showDeleteConfirmationDialog(BuildContext context,
-    GetAllSizeResponse item,
+    SizeItems item,
     DeleteSizeCubit deleteSizeCubit,) {
   showDialog(
     context: context,

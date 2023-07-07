@@ -5,7 +5,8 @@ import 'package:easy_invoice/module/module.dart';
 import 'package:easy_invoice/widget/AllSizePageWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+
+import '../common/ToastMessage.dart';
 
 class AllSizesScreen extends StatelessWidget {
   const AllSizesScreen({Key? key}) : super(key: key);
@@ -32,7 +33,7 @@ class AllSizesScreen extends StatelessWidget {
         body: BlocConsumer<GetAllSizeCubit, GetAllSizeState>(
           listener: (context, state) {
             if (state is GetAllSizeFail) {
-              showErrorToast('Error: ${state.error}');
+              showToastMessage('Error: ${state.error}');
             }
           },
           builder: (context, state) {
@@ -44,14 +45,14 @@ class AllSizesScreen extends StatelessWidget {
                   if (deleteState is DeleteSizeLoading) {
                     // Handle delete category loading state
                   } else if (deleteState is DeleteSizeSuccess) {
-                    showSuccessToast('Size deleted successfully');
+                    showToastMessage('Size deleted successfully');
                     WidgetsBinding.instance.addPostFrameCallback((_) {
                       context
                           .read<GetAllSizeCubit>()
                           .getAllSizes();
                     });
                   } else if (deleteState is DeleteSizeFail) {
-                    showErrorToast(
+                    showToastMessage(
                         'Failed to delete size: ${deleteState.error}');
                   }
                 },
@@ -83,23 +84,4 @@ class AllSizesScreen extends StatelessWidget {
     );
   }
 
-  void showErrorToast(String error) {
-    Fluttertoast.showToast(
-      msg: error,
-      toastLength: Toast.LENGTH_LONG,
-      gravity: ToastGravity.BOTTOM,
-      backgroundColor: Colors.black54,
-      textColor: Colors.white,
-    );
-  }
-
-  void showSuccessToast(String success) {
-    Fluttertoast.showToast(
-      msg: success,
-      toastLength: Toast.LENGTH_LONG,
-      gravity: ToastGravity.BOTTOM,
-      backgroundColor: Colors.black54,
-      textColor: Colors.white,
-    );
-  }
 }

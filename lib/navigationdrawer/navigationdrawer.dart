@@ -1,7 +1,6 @@
 import 'package:easy_invoice/network/SharedPreferenceHelper.dart';
 import 'package:easy_invoice/screen/AllSizesScreen.dart';
 import 'package:easy_invoice/screen/AllUserRoleScreen.dart';
-import 'package:easy_invoice/screen/ProductScreen.dart';
 import 'package:easy_invoice/screen/UserAddScreen.dart';
 import 'package:easy_invoice/screen/user_profile.dart';
 import 'package:flutter/material.dart';
@@ -37,7 +36,6 @@ class NavigationDrawerWidget extends StatelessWidget {
                       future: SessionManager().getEmail(),
                       builder: (context, snapshot) {
                         email = snapshot.data ?? '';
-
                         return buildHeader(
                             urlImage: urlImage,
                             username: username,
@@ -96,12 +94,18 @@ class NavigationDrawerWidget extends StatelessWidget {
                     },
                   ),
                   const SizedBox(height: 16),
-                  buildMenuItem(
+                  buildMenuItemExpansionProduct(
                     text: 'Product',
-                    icon: Icons.workspaces_outline,
-                    onClicked: () =>
-                        Navigator.push(context, MaterialPageRoute(
-                            builder: (context) => AddProductScreen())),
+                    icon: Icons.format_size,
+                    listData: [],
+                    onAllProductClicked: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => const AllProductScreen()));
+                    },
+                    onAddProductClicked: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => const AddProductScreen()));
+                    },
                   ),
                   const SizedBox(height: 16),
                   buildMenuItem(
@@ -287,7 +291,6 @@ class NavigationDrawerWidget extends StatelessWidget {
             ),
           ),
         ),
-
       ],
     );
   }
@@ -393,6 +396,63 @@ class NavigationDrawerWidget extends StatelessWidget {
               onTap: onAllSizeClicked,
               child: const Text(
                 'All Size',
+                style: TextStyle(color: color),
+              ),
+            ),
+          ),
+        ),
+
+      ],
+    );
+  }
+
+
+
+  Widget buildMenuItemExpansionProduct({
+    required String text,
+    required IconData icon,
+    required List<Widget> listData,
+    required VoidCallback onAddProductClicked,
+    required VoidCallback onAllProductClicked
+  }) {
+    const color = Colors.black;
+
+    return ExpansionTile(
+      title: Row(
+        children: [
+          Icon(
+            icon,
+            color: color,
+          ),
+          const SizedBox(width: 30),
+          Text(
+            text,
+            style: const TextStyle(color: color),
+          ),
+        ],
+      ),
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 50),
+          child: ListTile(
+            leading: const Icon(Icons.add),
+            title: GestureDetector(
+              onTap: onAddProductClicked,
+              child: const Text(
+                'Add Product',
+                style: TextStyle(color: color),
+              ),
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(left: 50),
+          child: ListTile(
+            leading: const Icon(Icons.format_size_rounded),
+            title: GestureDetector(
+              onTap: onAllProductClicked,
+              child: const Text(
+                'All Product',
                 style: TextStyle(color: color),
               ),
             ),

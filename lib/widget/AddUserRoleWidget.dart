@@ -109,44 +109,7 @@ class _UserWidgetState extends State<UserWidget> {
               ),
             ),
 
-            /*   GestureDetector(
-              onTap: _chooseProfilePicture,
-              child: Stack(
-                clipBehavior: Clip.none,
-                children: [
-                  Container(
-                    width: 100,
-                    height: 100,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(100),
-                      color: Colors.white,
-                      boxShadow: const [
-                        BoxShadow(
-                          color: Colors.black12,
-                          blurRadius: 20,
-                          offset: Offset(5, 5),
-                        ),
-                      ],
-                    ),
-                    child: getImageWidget(),
-                  ),
-                  Positioned.fill(
-                    child: Align(
-                      alignment: Alignment.bottomRight,
-                      child: Container(
-                        width: 40,
-                        height: 40,
-                        decoration: const BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Color(0xFFF5F6F9),
-                        ),
-                        child: Icon(Icons.camera_alt_outlined),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),*/
+
 
             Padding(
               padding: const EdgeInsets.fromLTRB(40, 10, 40, 0),
