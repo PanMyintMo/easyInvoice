@@ -9,14 +9,16 @@ class EditProductItemCubit extends Cubit<EditProductItemState> {
   final UserRepository _userRepository;
   EditProductItemCubit(this._userRepository) : super(EditProductItemInitial());
 
-  Future<void> editProductItem(EditProductRequestModel editProductRequestModel, int id) async {
+  Future<bool> editProductItem(EditProductRequestModel editProductRequestModel, int id) async {
     emit(EditProductItemLoading());
     try {
       final respone = await _userRepository.updateProductItem(editProductRequestModel, id);
       emit(EditProductItemSuccess(respone));
+      return true;
     }
     catch (error) {
       emit(EditProductItemFail(error.toString()));
+      return false;
     }
   }
 }

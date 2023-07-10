@@ -5,6 +5,7 @@ class EditProductRequestModel {
   final String description;
   final String regular_price;
   final String sale_price;
+  final String buying_price;
   final String SKU;
   final String quantity;
   final String category_id;
@@ -18,6 +19,7 @@ class EditProductRequestModel {
       required this.description,
       required this.regular_price,
       required this.sale_price,
+      required this.buying_price,
       required this.SKU,
       required this.quantity,
       required this.category_id,
@@ -32,6 +34,7 @@ class EditProductRequestModel {
       'description': description,
       'regular_price': regular_price,
       'sale_price': sale_price,
+      'buying_price' : buying_price,
       'SKU': SKU,
       'quantity': quantity,
       'category_id': category_id,

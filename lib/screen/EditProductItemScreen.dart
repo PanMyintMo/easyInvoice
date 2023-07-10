@@ -1,35 +1,43 @@
+import 'package:easy_invoice/dataRequestModel/EditProductRequestModel.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../bloc/edit/edit_product_item_cubit.dart';
 import '../common/ThemeHelperUserClass.dart';
+import '../common/ToastMessage.dart';
 import '../data/api/apiService.dart';
 import '../data/responsemodel/GetAllCategoryDetail.dart';
 import '../data/responsemodel/GetAllSizeResponse.dart';
 
 class EditProductItemScreen extends StatefulWidget {
+  final int id;
   final String name;
   final String slug;
-  final String shortDescription;
+  final String short_description;
   final String description;
-  final String regularPrice;
-  final String salePrice;
-  final String buyingPrice;
-  final String sku;
+  final String regular_price;
+  final String sale_price;
+  final String buying_price;
+  final String SKU;
   final int quantity;
-  final int categoryId;
-  final int sizeId;
+  final int category_id;
+  final int size_id;
+  final String newimage;
 
   const EditProductItemScreen({
     Key? key,
     required this.name,
     required this.slug,
-    required this.shortDescription,
+    required this.short_description,
     required this.description,
-    required this.regularPrice,
-    required this.salePrice,
-    required this.buyingPrice,
-    required this.sku,
+    required this.regular_price,
+    required this.sale_price,
+    required this.buying_price,
+    required this.SKU,
     required this.quantity,
-    required this.categoryId,
-    required this.sizeId,
+    required this.category_id,
+    required this.size_id,
+    required this.id,
+    required this.newimage,
   }) : super(key: key);
 
   @override
@@ -40,18 +48,19 @@ class _EditProductItemScreenState extends State<EditProductItemScreen> {
   final _formKey = GlobalKey<FormState>();
   late TextEditingController name;
   late TextEditingController slug;
-  late TextEditingController shortDescription;
+  late TextEditingController short_description;
   late TextEditingController quantity;
   late TextEditingController description;
-  late TextEditingController regularPrice;
-  late TextEditingController salePrice;
-  late TextEditingController buyingPrice;
+  late TextEditingController regular_price;
+  late TextEditingController sale_price;
+  late TextEditingController buying_price;
   late TextEditingController sku;
-  late TextEditingController categoryId;
-  late TextEditingController sizeId;
+  late TextEditingController category_id;
+  late TextEditingController size_id;
 
   List<CategoryItem> categories = [];
   List<SizeItems> sizes = [];
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -60,15 +69,16 @@ class _EditProductItemScreenState extends State<EditProductItemScreen> {
     name = TextEditingController(text: widget.name);
     slug = TextEditingController(text: widget.slug);
     quantity = TextEditingController(text: widget.quantity.toString());
-    shortDescription = TextEditingController(text: widget.shortDescription);
+    short_description = TextEditingController(text: widget.short_description);
     description = TextEditingController(text: widget.description);
-    regularPrice = TextEditingController(text: widget.regularPrice);
-    salePrice = TextEditingController(text: widget.salePrice);
-    buyingPrice = TextEditingController(text: widget.buyingPrice);
-    sku = TextEditingController(text: widget.sku);
-    categoryId = TextEditingController(text: widget.categoryId.toString());
-    sizeId = TextEditingController(text: widget.sizeId.toString());
+    regular_price = TextEditingController(text: widget.regular_price);
+    sale_price = TextEditingController(text: widget.sale_price);
+    buying_price = TextEditingController(text: widget.buying_price);
+    sku = TextEditingController(text: widget.SKU);
+    category_id = TextEditingController(text: widget.category_id.toString());
+    size_id = TextEditingController(text: widget.size_id.toString());
 
+    name.addListener(_updateSlugField);
     fetchCategoriesName();
     fetchSizeName();
   }
@@ -103,133 +113,216 @@ class _EditProductItemScreenState extends State<EditProductItemScreen> {
   void dispose() {
     name.dispose();
     slug.dispose();
-    shortDescription.dispose();
+    short_description.dispose();
     quantity.dispose();
     description.dispose();
-    regularPrice.dispose();
-    salePrice.dispose();
-    buyingPrice.dispose();
+    regular_price.dispose();
+    sale_price.dispose();
+    buying_price.dispose();
     sku.dispose();
-    categoryId.dispose();
-    sizeId.dispose();
+    category_id.dispose();
+    size_id.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Edit Product Screen'),
-      ),
-      body: Stack(
-        children: [
-          Form(
-            key: _formKey,
-            child: Padding(
-              padding: const EdgeInsets.all(10),
-              child: ListView(
-                children: [
-                  Row(
+    return BlocConsumer<EditProductItemCubit, EditProductItemState>(
+      listener: (context, state) {
+        if (state is EditProductItemLoading) {
+          setState(() {
+            isLoading = true;
+          });
+        } else if (state is EditProductItemFail) {
+          setState(() {
+            isLoading = false;
+          });
+          showToastMessage("Failed to update product item: ${state.error}");
+        } else if (state is EditProductItemSuccess) {
+          setState(() {
+            isLoading = false;
+          });
+          Navigator.pop(context, true); // Navigate back with success result
+          showToastMessage("Product Item has been updated successfully.");
+        }
+      },
+      builder: (context, state) {
+        return Scaffold(
+          appBar: AppBar(
+            title: const Text('Edit Product Screen'),
+          ),
+          body: Stack(
+            children: [
+              Form(
+                key: _formKey,
+                child: Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: ListView(
                     children: [
-                      Expanded(
-                        child: textFieldForm(name, 'Name'),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: textFieldForm(name, 'Name'),
+                          ),
+                          const SizedBox(width: 10),
+                          Expanded(child: textFieldForm(slug, 'Slug')),
+                        ],
                       ),
-                      const SizedBox(width: 10),
-                      Expanded(child: textFieldForm(slug, 'Slug')),
-                    ],
-                  ),
-                  const SizedBox(height: 10),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: textFieldForm(regularPrice, 'Regular Price'),
+                      const SizedBox(height: 10),
+                      Row(
+                        children: [
+                          Expanded(
+                            child:
+                                textFieldForm(regular_price, 'Regular Price'),
+                          ),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: textFieldForm(sale_price, 'Sale Price'),
+                          ),
+                        ],
                       ),
-                      const SizedBox(width: 10),
-                      Expanded(child: textFieldForm(salePrice, 'Sale Price')),
-                    ],
-                  ),
-                  const SizedBox(height: 10),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: textFieldForm(buyingPrice, 'Buying Price'),
+                      const SizedBox(height: 10),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: textFieldForm(buying_price, 'Buying Price'),
+                          ),
+                          const SizedBox(width: 10),
+                          Expanded(child: textFieldForm(quantity, 'Quantity')),
+                        ],
                       ),
-                      const SizedBox(width: 10),
-                      Expanded(child: textFieldForm(quantity, 'Quantity')),
-                    ],
-                  ),
-                  const SizedBox(height: 10),
-                  Row(
-                    children: [
-                      Expanded(child: textFieldForm(sku, 'SKU')),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: textFieldForm(shortDescription, 'Short Desc'),
+                      const SizedBox(height: 10),
+                      Row(
+                        children: [
+                          Expanded(child: textFieldForm(sku, 'SKU')),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child:
+                                textFieldForm(short_description, 'Short Desc'),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                  const SizedBox(height: 10),
-                  Row(
-                    children: [
-                      chooseItemIdForm(
-                        DropdownButton(
-                          items: categories.map((category) {
-                            return DropdownMenuItem<String>(
-                              value: category.id.toString(),
-                              child: Text(category.name.toString()),
-                            );
-                          }).toList(),
-                          onChanged: (value) {
-                            setState(() {
-                              categoryId.text = value;
-                            });
-                          },
-                          value: categoryId.text,
-                          hint: const Text('Choose One'),
-                          underline: const SizedBox(),
-                          borderRadius: BorderRadius.circular(10),
-                          icon: const Icon(Icons.arrow_drop_down),
-                          iconSize: 24,
-                          isExpanded: true,
-                          dropdownColor: Colors.white,
-                          style: const TextStyle(
-                              color: Colors.black, fontSize: 16),
+                      const SizedBox(height: 10),
+                      Row(
+                        children: [
+                          chooseItemIdForm(
+                            DropdownButton(
+                              items: categories.map((category) {
+                                return DropdownMenuItem<String>(
+                                  value: category.id.toString(),
+                                  child: Text(category.name.toString()),
+                                );
+                              }).toList(),
+                              onChanged: (value) {
+                                setState(() {
+                                  category_id.text = value;
+                                });
+                              },
+                              value: category_id.text,
+                              hint: const Text('Choose One'),
+                              underline: const SizedBox(),
+                              borderRadius: BorderRadius.circular(10),
+                              icon: const Icon(Icons.arrow_drop_down),
+                              iconSize: 24,
+                              isExpanded: true,
+                              dropdownColor: Colors.white,
+                              style: const TextStyle(
+                                color: Colors.black,
+                                fontSize: 16,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          chooseItemIdForm(
+                            DropdownButton(
+                              items: sizes.map((size) {
+                                return DropdownMenuItem<String>(
+                                  value: size.id.toString(),
+                                  child: Text(size.name.toString()),
+                                );
+                              }).toList(),
+                              onChanged: (value) {
+                                setState(() {
+                                  size_id.text = value;
+                                });
+                              },
+                              value: size_id.text,
+                              hint: const Text('Choose One'),
+                              underline: const SizedBox(),
+                              borderRadius: BorderRadius.circular(10),
+                              icon: const Icon(Icons.arrow_drop_down),
+                              iconSize: 24,
+                              isExpanded: true,
+                              dropdownColor: Colors.white,
+                              style: const TextStyle(
+                                color: Colors.black,
+                                fontSize: 16,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 10),
+                      SizedBox(
+                        height: 250,
+                        width: 200,
+                        child: Image.asset(
+                          'assets/profits.png',
+                          width: 200,
+                          height: 200,
                         ),
                       ),
-                     SizedBox(width: 10,),
-                     chooseItemIdForm(
-                       DropdownButton(
-                         items: sizes.map((size) {
-                           return DropdownMenuItem<String>(
-                             value: size.id.toString(),
-                             child: Text(size.name.toString()),
-                           );
-                         }).toList(),
-                         onChanged: (value) {
-                           setState(() {
-                             sizeId.text = value;
-                           });
-                         },
-                         value: sizeId.text,
-                         hint: const Text('Choose One'),
-                         underline: const SizedBox(),
-                         borderRadius: BorderRadius.circular(10),
-                         icon: const Icon(Icons.arrow_drop_down),
-                         iconSize: 24,
-                         isExpanded: true,
-                         dropdownColor: Colors.white,
-                         style: const TextStyle(
-                             color: Colors.black, fontSize: 16),
-                       ),
-                     )
+                      const SizedBox(height: 10),
+                      ElevatedButton(
+                        onPressed: () {
+                          context.read<EditProductItemCubit>().editProductItem(
+                                EditProductRequestModel(
+                                  name: name.text,
+                                  slug: slug.text,
+                                  short_description: short_description.text,
+                                  description: description.text,
+                                  regular_price: regular_price.text,
+                                  sale_price: sale_price.text,
+                                  buying_price: buying_price.text,
+                                  SKU: sku.text,
+                                  quantity: quantity.text,
+                                  category_id: category_id.text,
+                                  size_id: size_id.text,
+                                  newimage: '',
+                                ),
+                                widget.id,
+                              );
+                        },
+                        child: Text(state is EditProductItemLoading
+                            ? 'Submitting...'
+                            : 'Submit'),
+                      ),
                     ],
                   ),
-                ],
+                ),
               ),
-            ),
+              if (isLoading)
+                Container(
+                  color: Colors.black54,
+                  child: const Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                ),
+            ],
           ),
-        ],
-      ),
+        );
+      },
     );
+  }
+
+  void _updateSlugField() {
+    final updateCateName = name.text;
+    final updateSlugName = updateCateName.toLowerCase().replaceAll(' ', '-');
+
+    setState(() {
+      slug.text = updateSlugName;
+    });
   }
 }
