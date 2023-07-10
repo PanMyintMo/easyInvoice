@@ -96,7 +96,7 @@ class ApiService {
       final Response response = await _dio.post(
           'https://mmeasyinvoice.com/api/add-category',
           data: addCategoryRequestModel.toJson());
-      print("AddCategory data is ${response.data}");
+  //    print("AddCategory data is ${response.data}");
 
       if (response.statusCode == 200) {
         final AddCategoryResponse addCategoryResponseData =
@@ -124,7 +124,7 @@ class ApiService {
       final Response response = await _dio.post(
           'https://mmeasyinvoice.com/api/add-product',
           data: addProductRequestModel.toJson());
-      print("Add Product data is ${response.data}");
+//      print("Add Product data is ${response.data}");
 
       if (response.statusCode == 200) {
         final ProductResponse addProductResponseData =
@@ -143,9 +143,9 @@ class ApiService {
       );
     }
   }
-  //fetch all category from db
 
-  Future<CategoryDataResponse> getAllCategories() async {
+  //fetch all category from db
+Future<CategoryDataResponse> getAllCategories() async {
     try {
       int currentPage = 1;
       CategoryData categoryData;
@@ -153,7 +153,7 @@ class ApiService {
 
       while (true) {
         final response = await _dio.get('https://mmeasyinvoice.com/api/categories?page=$currentPage');
-        print('Category Response is ${response.data}');
+    //    print('Category Response is ${response.data}');
 
         if (response.statusCode == 200) {
           final dynamic responseData = response.data;
@@ -254,7 +254,7 @@ class ApiService {
 
       while (true) {
         final response = await _dio.get('https://mmeasyinvoice.com/api/sizes?page=$currentPage');
-        print('Size Response is ${response.data}');
+     //   print('Size Response is ${response.data}');
 
         if (response.statusCode == 200) {
           final dynamic responseData = response.data;
@@ -301,7 +301,7 @@ class ApiService {
 Future<UserRoleResponse> getAllUserRole() async {
   try {
     final response = await _dio.get('https://mmeasyinvoice.com/api/users');
-    print('User Role Response are ${response.data}');
+ //   print('User Role Response are ${response.data}');
     if (response.statusCode == 200) {
       final responseData = response.data;
       return UserRoleResponse.fromJson(responseData);
@@ -375,7 +375,7 @@ Future<CategoryUpdateResponse> updateCategory(EditCategory editCategory,
     final response = await _dio.post(
         'https://mmeasyinvoice.com/api/edit-category/$id',
         data: editCategory.toJson());
-    print('Update response is ${response.data}');
+ //   print('Update response is ${response.data}');
     if (response.statusCode == 200) {
       CategoryUpdateResponse categoryUpdateResponse =
       CategoryUpdateResponse.fromJson(response.data);
@@ -389,15 +389,13 @@ Future<CategoryUpdateResponse> updateCategory(EditCategory editCategory,
   }
 }
 
-
-
 //to update product item by id
   Future<EditProductResponse> updateProductItem(EditProductRequestModel editProductItem, int id) async {
     try {
       final response = await _dio.post(
           'https://mmeasyinvoice.com/api/edit-product/$id',
           data: editProductItem.toJson());
-      print('Update response is ${response.data}');
+      print('Update Product Item response is ${response.data}');
       if (response.statusCode == 200) {
         EditProductResponse updateProductItem =
         EditProductResponse.fromJson(response.data);
@@ -409,7 +407,6 @@ Future<CategoryUpdateResponse> updateCategory(EditCategory editCategory,
       throw Exception(error);
     }
   }
-
 
 //to update size by id
 Future<SizeUpdateResponse> updateSize(EditSize editSize, int id) async {

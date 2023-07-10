@@ -68,8 +68,8 @@ class AllProductWidget extends StatelessWidget {
                     child: Container(
                       color: Colors.white,
                       width: double.infinity,
-                      margin: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                      padding: EdgeInsets.all(10),
+                      margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                      padding: const EdgeInsets.all(10),
                       height: 150,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -91,7 +91,7 @@ class AllProductWidget extends StatelessWidget {
                                   ),
                                 ),
                                 Expanded(
-                                  child: Text('Category Id: ${product.categoryId}'),
+                                  child: Text('Category Id: ${product.category_id}'),
                                 ),
                                 Expanded(
                                   child: Text('Stock: ${product.stockStatus}'),

@@ -3,17 +3,23 @@ import 'package:easy_invoice/data/responsemodel/GetAllProductResponse.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:provider/provider.dart';
 
+import '../bloc/edit/edit_product_item_cubit.dart';
+import '../bloc/get/get_all_product_cubit.dart';
 import '../common/ToastMessage.dart';
+import '../module/module.dart';
 import '../screen/EditProductItemScreen.dart';
 
 class ProductDetailWidget extends StatefulWidget {
   final ProductListItem products;
   final bool isLoading;
 
-  const ProductDetailWidget(
-      {Key? key, required this.products, required this.isLoading})
-      : super(key: key);
+  const ProductDetailWidget({
+    Key? key,
+    required this.products,
+    required this.isLoading,
+  }) : super(key: key);
 
   @override
   State<ProductDetailWidget> createState() => _ProductDetailWidgetState();
@@ -21,6 +27,7 @@ class ProductDetailWidget extends StatefulWidget {
 
 class _ProductDetailWidgetState extends State<ProductDetailWidget> {
   bool isLoading = false;
+  bool isUpdated = false;
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +50,7 @@ class _ProductDetailWidgetState extends State<ProductDetailWidget> {
           ),
         ],
         title: const Text(
-          'Detail Product Screen',
+          'Product Detail Screen',
           style: TextStyle(
             color: Colors.redAccent,
             fontWeight: FontWeight.bold,
@@ -52,7 +59,9 @@ class _ProductDetailWidgetState extends State<ProductDetailWidget> {
         leading: IconButton(
           color: Colors.redAccent,
           icon: const Icon(Icons.arrow_back_ios),
-          onPressed: () {},
+          onPressed: () {
+            Navigator.pop(context);
+          },
         ),
         backgroundColor: Colors.white,
       ),
@@ -66,11 +75,7 @@ class _ProductDetailWidgetState extends State<ProductDetailWidget> {
           }
         },
         builder: (context, state) {
-          if (state is DeleteProductItemLoading) {
-            isLoading = true;
-          } else {
-            isLoading = false;
-          }
+          isLoading = state is DeleteProductItemLoading;
 
           return Stack(
             children: [
@@ -87,58 +92,57 @@ class _ProductDetailWidgetState extends State<ProductDetailWidget> {
                         size: 100,
                       ),
                     ),
-                    Expanded(child: Text('Product Id : ${widget.products.id}')),
+                    Expanded(child: Text('Product Id: ${widget.products.id}')),
                     Expanded(
-                        child: Text('Product Name : ${widget.products.name}')),
-                    Expanded(
-                        child: Text('Slug Name : ${widget.products.slug}')),
+                        child: Text('Product Name: ${widget.products.name}')),
+                    Expanded(child: Text('Slug Name: ${widget.products.slug}')),
                     Expanded(
                         child: Text(
                             'Stock Status: ${widget.products.stockStatus}')),
                     Expanded(
                         child: Text(
-                            'Regular Price : ${widget.products.regularPrice}')),
+                            'Regular Price: ${widget.products.regular_price}')),
                     Expanded(
                         child:
-                            Text('Sale Price : ${widget.products.salePrice}')),
+                            Text('Sale Price: ${widget.products.salePrice}')),
                     Expanded(
                         child: Text(
-                            'Buying price : ${widget.products.buyingPrice}')),
+                            'Buying Price: ${widget.products.buying_price}')),
                     Expanded(
                         child: Text(
-                            'Product Quantity : ${widget.products.quantity}')),
-                    Expanded(child: Text('SKU : ${widget.products.sku}')),
+                            'Product Quantity: ${widget.products.quantity}')),
+                    Expanded(child: Text('SKU: ${widget.products.SKU}')),
                     Expanded(
                         child: Text(
-                            'Category Id : ${widget.products.categoryId}')),
+                            'Category Id: ${widget.products.category_id}')),
                     Expanded(
-                        child: Text('Size Id : ${widget.products.sizeId}')),
+                        child: Text('Size Id: ${widget.products.size_id}')),
                     Expanded(
-                        child: Text('Feature : ${widget.products.feature}')),
+                        child: Text('Feature: ${widget.products.feature}')),
                     Expanded(
                       child: Text(
-                        'Updated At : ${widget.products.updatedAt.substring(0, 10)}',
+                        'Updated At: ${widget.products.updatedAt.substring(0, 10)}',
                       ),
                     ),
                     Expanded(
                       child: Text(
-                        'Created At : ${widget.products.createdAt.substring(0, 10)}',
+                        'Created At: ${widget.products.createdAt.substring(0, 10)}',
                       ),
                     ),
                     Expanded(
                         child: Text('Barcode ID: ${widget.products.barcode}')),
                     Expanded(
                       child: Text(
-                        'Short Description : ${widget.products.shortDescription}',
+                        'Short Description: ${widget.products.short_description}',
                       ),
                     ),
                     Expanded(
                         child: Text(
-                            'Description : ${widget.products.description}')),
+                            'Description: ${widget.products.description}')),
                   ],
                 ),
               ),
-              if (isLoading == true)
+              if (isLoading)
                 Container(
                   color: Colors.black54,
                   child: const Center(
@@ -155,7 +159,7 @@ class _ProductDetailWidgetState extends State<ProductDetailWidget> {
     );
   }
 
-  void onSelected(BuildContext context, item) {
+  void onSelected(BuildContext context, item) async {
     switch (item) {
       case 0:
         final deleteCubit = context.read<DeleteProductItemCubit>();
@@ -163,22 +167,36 @@ class _ProductDetailWidgetState extends State<ProductDetailWidget> {
         break;
 
       case 1:
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => EditProductItemScreen(
-                    name: widget.products.name,
-                    slug: widget.products.slug,
-                    shortDescription: widget.products.shortDescription,
-                    description: widget.products.description,
-                    regularPrice: widget.products.regularPrice,
-                    salePrice: widget.products.salePrice,
-                    buyingPrice: widget.products.buyingPrice,
-                    sku: widget.products.sku,
-                    quantity: widget.products.quantity,
-                    categoryId: widget.products.categoryId,
-                    sizeId: widget.products.sizeId)));
+        var result = await Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => Provider<EditProductItemCubit>(
+              create: (_) => EditProductItemCubit(getIt.call()),
+              child: EditProductItemScreen(
+                  id: widget.products.id,
+                  name: widget.products.name,
+                  slug: widget.products.slug,
+                  short_description: widget.products.short_description,
+                  description: widget.products.description,
+                  regular_price: widget.products.regular_price,
+                  sale_price: widget.products.salePrice,
+                  buying_price: widget.products.buying_price,
+                  SKU: widget.products.SKU,
+                  quantity: widget.products.quantity,
+                  category_id: widget.products.category_id,
+                  size_id: widget.products.size_id,
+                  newimage: ""),
+            ),
+          ),
+        );
 
+        if (result == true) {
+          // Fetch the updated product list
+          context.read<GetAllProductCubit>().getAllProduct();
+          setState(() {
+            isUpdated = true;
+          });
+        }
         break;
     }
   }

@@ -37,7 +37,7 @@ class _UpdateUserRoleScreenState extends State<UpdateUserRoleScreen> {
             } else if (state is EditUserRoleSuccess) {
 
               // Navigate back to the GetAllCategoryScreen and trigger a refresh
-              Navigator.pop(context,AllUserRoleScreen());
+              Navigator.pop(context,const AllUserRoleScreen());
 
             } else if (state is EditUserRoleFail) {
               return EditUserRoleWidget(id: widget.id, name : widget.name, email : widget.email,password : widget.password, utype : widget.utype, newimage : widget.newimage);
