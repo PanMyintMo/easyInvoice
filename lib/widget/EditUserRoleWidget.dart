@@ -41,7 +41,7 @@ class _EditUserRoleWidgetState extends State<EditUserRoleWidget> {
   final _formKey = GlobalKey<FormState>();
   File? image; // Assuming you have a variable to store the selected image path
   String? selectedUserRole;
-  late String imageUrl;
+
 
   @override
   void initState() {
@@ -50,13 +50,14 @@ class _EditUserRoleWidgetState extends State<EditUserRoleWidget> {
     email = TextEditingController(text: widget.email);
     password = TextEditingController(text: widget.password);
     utype = widget.utype;
-    selectedUserRole = widget.utype.isEmpty ? null : widget.utype;
+    selectedUserRole = utype.isNotEmpty ? getDropdownValueFromUtype(utype) : null;
     if (widget.newimage != null && widget.newimage!.isNotEmpty) {
-      imageUrl = widget.newimage!;
+      image = File(widget.newimage!);
     } else {
-      imageUrl = '';
+      image = null;
     }
   }
+
 
   @override
   void dispose() {
@@ -73,226 +74,263 @@ class _EditUserRoleWidgetState extends State<EditUserRoleWidget> {
       final file = File(pickedFile.path);
       setState(() {
         image = file;
-        imageUrl = file.path;
       });
     }
   }
 
+  String? getUtypeFromDropdownValue(String value) {
+    if (value == "User") {
+      return "USR";
+    } else if (value == "Admin") {
+      return "ADM";
+    } else if (value == "Warehouse") {
+      return "WH";
+    } else if (value == "Delivery") {
+      return "DLV";
+    } else if (value == "ShopKeeper") {
+      return "SK";
+    }
+    return null;
+  }
+
+  String? getDropdownValueFromUtype(String utype) {
+    if (utype == "USR") {
+      return "User";
+    } else if (utype == "ADM") {
+      return "Admin";
+    } else if (utype == "WH") {
+      return "Warehouse";
+    } else if (utype == "DLV") {
+      return "Delivery";
+    } else if (utype == "SK") {
+      return "ShopKeeper";
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final List<String> userTypes = [
+      "User",
+      "Admin",
+      "Warehouse",
+      "Delivery",
+      "ShopKeeper"
+    ];
+
     return BlocProvider(
       create: (context) => EditUserRoleCubit(getIt.call()),
       child: ListView(
-        children: [Column(
-          children: [
-            Stack(
-              children: [
-                ClipPath(
-                  clipper: MyCustomClipper(),
-                  child: Container(
-                    height: 200,
-                    color: Colors.redAccent,
+        children: [
+          Column(
+            children: [
+              Stack(
+                children: [
+                  ClipPath(
+                    clipper: MyCustomClipper(),
+                    child: Container(
+                      height: 200,
+                      color: Colors.redAccent,
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 90),
-                  child: Align(
-                    child: Column(
-                      children: [
-                        Stack(
-                          children: [
-                            Container(
-                              padding: const EdgeInsets.all(10),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(100),
-                                color: Colors.white,
-                                boxShadow: const [
-                                  BoxShadow(
-                                    color: Colors.black12,
-                                    blurRadius: 20,
-                                    offset: Offset(5, 5),
-                                  ),
-                                ],
+                  Padding(
+                    padding: const EdgeInsets.only(top: 90),
+                    child: Align(
+                      child: Column(
+                        children: [
+                          Stack(
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(100),
+                                  color: Colors.white,
+                                  boxShadow: const [
+                                    BoxShadow(
+                                      color: Colors.black12,
+                                      blurRadius: 20,
+                                      offset: Offset(5, 5),
+                                    ),
+                                  ],
+                                ),
+                                child: getImageWidget(),
                               ),
-                              child: getImageWidget(),
-                            ),
-                            Positioned(
-                              bottom: 0,
-                              right: -20,
-                              child: RawMaterialButton(
-                                onPressed: _chooseProfilePicture,
-                                elevation: 4.0,
-                                fillColor: const Color(0xFFF5F6F9),
-                                padding: const EdgeInsets.all(10.0),
-                                shape: const CircleBorder(),
-                                child: const Icon(
-                                  Icons.camera_alt_outlined,
+                              Positioned(
+                                bottom: 0,
+                                right: -20,
+                                child: RawMaterialButton(
+                                  onPressed: _chooseProfilePicture,
+                                  elevation: 4.0,
+                                  fillColor: const Color(0xFFF5F6F9),
+                                  padding: const EdgeInsets.all(10.0),
+                                  shape: const CircleBorder(),
+                                  child: const Icon(
+                                    Icons.camera_alt_outlined,
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                      ],
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 50,
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(40, 10, 40, 0),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  children: [
-                    buildInputContainer(
-                      'Name',
-                      'Enter your name',
-                      Icons.account_circle_rounded,
-                      name,
-                      FormValidator.validateName,
-                      TextInputType.name,
-                    ),
-                    const SizedBox(height: 10),
-                    buildInputContainer(
-                      'Email',
-                      'Enter your email',
-                      Icons.email,
-                      email,
-                      FormValidator.validateEmail,
-                      TextInputType.emailAddress,
-                    ),
-                    const SizedBox(height: 10),
-                    buildInputContainer(
-                      'Password',
-                      'Enter your password',
-                      Icons.remove_red_eye_outlined,
-                      password,
-                      FormValidator.validatePassword,
-                      TextInputType.visiblePassword,
-                    ),
-                    const SizedBox(height: 10),
-                    DropdownButtonFormField(
-                      decoration: InputDecoration(
-                        prefixIcon: const Padding(
-                          padding: EdgeInsets.only(left: 20,right: 30),
-                          child: Icon(Icons.accessibility),
-                        ),
-                        border: OutlineInputBorder(
-                          borderSide: const BorderSide(color: Colors.black12, width: 2),
-                          borderRadius: BorderRadius.circular(50), // Rounded corners
-                        ),
+                ],
+              ),
+              const SizedBox(
+                height: 50,
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(40, 10, 40, 0),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      buildInputContainer(
+                        'Name',
+                        'Enter your name',
+                        Icons.account_circle_rounded,
+                        name,
+                        FormValidator.validateName,
+                        TextInputType.name,
                       ),
-                      dropdownColor: Colors.grey,
-                      value: selectedUserRole,
-                      onChanged: (String? newValue) {
-                        selectedUserRole = newValue;
-                      },
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please select a user role'; // Validation error message
-                        }
-                        return null; // Validation passed
-                      },
-                      hint: const Text(
-                        'Select a user role',
-                        style: TextStyle(fontSize: 16),
+                      const SizedBox(height: 10),
+                      buildInputContainer(
+                        'Email',
+                        'Enter your email',
+                        Icons.email,
+                        email,
+                        FormValidator.validateEmail,
+                        TextInputType.emailAddress,
                       ),
-                      items: const [
-                        "User",
-                        "Admin (Disabled)",
-                        "Warehouse",
-                        'Shopkeeper',
-                        "Delivery"
-                      ].map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(
-                            value,
-                            style: TextStyle(fontSize: 16),
+                      const SizedBox(height: 10),
+                      buildInputContainer(
+                        'Password',
+                        'Enter your password',
+                        Icons.remove_red_eye_outlined,
+                        password,
+                        FormValidator.validatePassword,
+                        TextInputType.visiblePassword,
+                      ),
+                      const SizedBox(height: 10),
+
+                      DropdownButtonFormField<String>(
+                        decoration: InputDecoration(
+                          prefixIcon: const Padding(
+                            padding: EdgeInsets.only(left: 20, right: 30),
+                            child: Icon(Icons.accessibility),
                           ),
-                        );
-                      }).toList(),
-                    ),
-                    const SizedBox(height: 50),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: ElevatedButton(
-                        style: ThemeHelperUserRole().buttonStyle(),
-                        onPressed: () {
-                          if (_formKey.currentState!.validate()) {
-                            _formKey.currentState?.save();
-                            if (selectedUserRole == null ||
-                                selectedUserRole!.isEmpty) {
-                              return;
-                            }
-                            context.read<EditUserRoleCubit>().editUserRole(
-                              EditUserRoleRequestModel(
-                                name: name.text,
-                                email: email.text,
-                                password: password.text,
-                                utype: selectedUserRole!,
-                                newimage: image != null
-                                    ? image!.path
-                                    : 'assets/userprofile.png',
-                              ),
-                              widget.id,
-                            );
-                          }
+                          border: OutlineInputBorder(
+                            borderSide: const BorderSide(color: Colors.black12, width: 2),
+                            borderRadius: BorderRadius.circular(50),
+                          ),
+                        ),
+                        dropdownColor: Colors.grey,
+                        value: selectedUserRole,
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            selectedUserRole = newValue;
+                          });
                         },
-                        child: const Padding(
-                          padding: EdgeInsets.all(12.0),
-                          child: Text(
-                            'Edit User Role',
-                            style: TextStyle(fontSize: 20),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please select a user role'; // Validation error message
+                          }
+                          return null; // Validation passed
+                        },
+                        hint: const Text(
+                          'Select a user role',
+                          style: TextStyle(fontSize: 16),
+                        ),
+                        items: userTypes.map<DropdownMenuItem<String>>((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(
+                              value,
+                              style: const TextStyle(fontSize: 16),
+                            ),
+                          );
+                        }).toList(),
+                      ),
+
+                      const SizedBox(height: 50),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ElevatedButton(
+                          style: ThemeHelperUserRole().buttonStyle(),
+                          onPressed: () {
+                            if (_formKey.currentState!.validate()) {
+                              _formKey.currentState?.save();
+                              if (selectedUserRole == null || selectedUserRole!.isEmpty) {
+                                return;
+                              }
+                              final String? utypeValue = getUtypeFromDropdownValue(selectedUserRole!);
+                              if (utypeValue != null) {
+                                context.read<EditUserRoleCubit>().editUserRole(
+                                  EditUserRoleRequestModel(
+                                    name: name.text,
+                                    email: email.text,
+                                    password: password.text,
+                                    utype: utypeValue,
+                                    newimage: image != null ? image!.path : 'assets/userprofile.png',
+                                  ),
+                                  widget.id,
+                                );
+                              }
+                            }
+                          },
+                          child: const Padding(
+                            padding: EdgeInsets.all(12.0),
+                            child: Text(
+                              'Edit User Role',
+                              style: TextStyle(fontSize: 20),
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
-        )],
+            ],
+          ),
+        ],
       ),
     );
   }
 
   Widget getImageWidget() {
     if (kIsWeb || Platform.isAndroid || Platform.isIOS) {
-      // For Flutter Web and mobile platforms (Android, iOS)
-      return image != null
+      return image != null && image!.path.isNotEmpty
           ? Image(
         image: FileImage(image!),
         fit: BoxFit.cover,
       )
-          : imageUrl.isNotEmpty
+          : image != null
           ? CircleAvatar(
         radius: 40,
-        backgroundImage: NetworkImage(imageUrl),
+        backgroundImage: NetworkImage(image as String),
       )
-          : Icon(
+          : const Icon(
         Icons.person,
-        color: Colors.grey.shade300,
+        color: Colors.grey,
         size: 80.0,
       );
     } else {
-      // For other platforms (e.g., desktop)
+      // For other platforms like desktop
       return image != null
           ? Image.file(
         image!,
         fit: BoxFit.cover,
-      ) : imageUrl.isNotEmpty
+      )
+          : image != null
           ? CircleAvatar(
         radius: 40,
-        backgroundImage: NetworkImage(imageUrl),
+        backgroundImage: NetworkImage(image as String),
       )
-          : Icon(
+          : const Icon(
         Icons.person,
-        color: Colors.grey.shade300,
+        color: Colors.grey,
         size: 80.0,
       );
     }

@@ -15,11 +15,11 @@ class GetAllUserRoleLoading extends GetAllUserRoleState{
 }
 
 class GetAllUserRoleSuccess extends GetAllUserRoleState{
-  final UserRoleResponse getAllUserRole;
-  const GetAllUserRoleSuccess(this.getAllUserRole);
+  final List<UserData> userData;
+  const GetAllUserRoleSuccess(this.userData);
   @override
 
-  List<Object?> get props => [getAllUserRole];
+  List<Object?> get props => [userData];
 
 }
 

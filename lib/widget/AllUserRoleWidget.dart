@@ -35,8 +35,8 @@ class AllUserRoleWidget extends StatelessWidget {
               leading: SizedBox(
                 width: 60,
                 height: 60,
-                  child: user.url != null && user.url!.isNotEmpty
-               ? Image.network(
+                child: user.url != null && user.url!.isNotEmpty
+                    ? Image.network(
                   user.url!,
                   scale: 1.0,
                   width: 50,
@@ -83,12 +83,12 @@ class AllUserRoleWidget extends StatelessWidget {
                         email: user.email,
                         created_at: user.createdAt,
                         updated_at: user.updatedAt,
-                        utype: user.utype,url: user.url.toString(),
-
+                        utype: user.utype,
+                        url: user.url.toString(),
                       ),
                     ),
                   );
-                  if (result != null) {
+                  if (result != null && result == true) {
                     context.read<GetAllUserRoleCubit>().getAllUserRole();
                   }
                 },
@@ -100,6 +100,3 @@ class AllUserRoleWidget extends StatelessWidget {
     );
   }
 }
-
-
-

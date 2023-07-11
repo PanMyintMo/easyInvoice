@@ -10,11 +10,34 @@ import '../screen/AllCategoryScreen.dart';
 import '../screen/AllProductScreen.dart';
 import '../screen/SizeAddScreen.dart';
 
-class NavigationDrawerWidget extends StatelessWidget {
+class NavigationDrawerWidget extends StatefulWidget {
 
-  final padding = const EdgeInsets.symmetric(horizontal: 20);
 
   const NavigationDrawerWidget({Key? key}) : super(key: key);
+
+  @override
+  State<NavigationDrawerWidget> createState() => _NavigationDrawerWidgetState();
+}
+
+class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
+  final padding = const EdgeInsets.symmetric(horizontal: 20);
+  String utype = '';
+
+  @override
+  void initState() {
+    super.initState();
+    fetchUserType(); // Retrieve the user type from shared preferences
+  }
+
+  // Retrieve the user type from shared preferences
+  Future<void> fetchUserType() async {
+    final sessionManager = SessionManager();
+    final userType = await sessionManager.fetchUserType();
+    setState(() {
+      utype = userType ?? ''; // Assign the retrieved user type to the 'utype' variable
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -59,63 +82,117 @@ class NavigationDrawerWidget extends StatelessWidget {
                   const SizedBox(height: 12),
                   buildSearchField(),
                   const SizedBox(height: 24),
-                  buildMenuItemExpansion(
+                  if(utype == 'SK')
+                    const Row(
+                      children: [
+                        Icon(
+                          Icons.home,
+                          color: Colors.redAccent,
+                        ),
+                        SizedBox(width: 30),
+                        Text(
+                          'Dashboard',
+                          style: TextStyle(color: Colors.red),
+                        ),
+                      ],
+                    ),
+                  if(utype == 'SK')
+                    const Row(
+                      children: [
+                        Icon(
+                          Icons.shop,
+                          color: Colors.redAccent,
+                        ),
+                        SizedBox(width: 30),
+                        Text(
+                          'ShopKeeper',
+                          style: TextStyle(color: Colors.red),
+                        ),
+                      ],
+                    ),
+               if(utype == 'ADM')
+                  buildMenuExpansion(
                     text: 'Category',
                     icon: Icons.category,
-                    onAddCategoryClicked: () {
+                    onClicked: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) => const CategoryScreen()),
                       );
                     },
-                    onAllCategoryClicked: () {
+                    onClickedItem: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (
                             context) => const AllCategoryDetailPage()),
                       );
                     },
-                    listData: [],
+                    listData: [], txtTwo: 'All Category',
+                    txtOne: 'Add Category',
                   ),
 
                   const SizedBox(height: 16),
-                  buildMenuItemExpansionSize(
+                  if(utype == 'ADM')
+                  buildMenuExpansion(
                     text: 'Size',
                     icon: Icons.format_size,
                     listData: [],
-                    onAllSizeClicked: () {
+                    onClicked: () {
                       Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => AllSizesScreen()));
+                          builder: (context) => const AllSizesScreen()));
                     },
-                    onAddSizeClicked: () {
+                    onClickedItem: () {
                       Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => const SizeAddScreen()));
-                    },
+                    }, txtOne: 'All Size',txtTwo: 'Add Size'
                   ),
                   const SizedBox(height: 16),
-                  buildMenuItemExpansionProduct(
+                  buildMenuExpansion(
                     text: 'Product',
+                    txtTwo: 'All Product',
+                    txtOne: 'Add Product',
                     icon: Icons.format_size,
                     listData: [],
-                    onAllProductClicked: () {
+                    onClicked: () {
                       Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => const AllProductScreen()));
                     },
-                    onAddProductClicked: () {
+                    onClickedItem: () {
                       Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => const AddProductScreen()));
                     },
                   ),
                   const SizedBox(height: 16),
-                  buildMenuItem(
+                  buildMenuExpansion(
                     text: 'Order',
+                    txtTwo: 'Add Order',
+                    txtOne:  'All Order',
                     icon: Icons.update,
                     onClicked: () =>
                         Navigator.push(context, MaterialPageRoute(
                             builder: (context) => const AllProductScreen())),
+                    listData: [], onClickedItem: () {
+
+                  },
                   ),
                   const SizedBox(height: 24),
+                  if(utype == 'SK')
+               const Row(
+                      children: [
+                        Icon(
+                          Icons.delivery_dining,
+                          color: Colors.redAccent,
+                        ),
+                        SizedBox(width: 30),
+                        Text(
+                          'Delivery System',
+                          style: TextStyle(color: Colors.red),
+                        ),
+                      ],
+                    ),
+
+
                   const Divider(color: Colors.black12),
                   const SizedBox(height: 24),
                   buildMenuItem(
@@ -131,20 +208,49 @@ class NavigationDrawerWidget extends StatelessWidget {
                         )),
                   ),
                   const SizedBox(height: 16),
-                  buildMenuUserExpansion(
+                  buildMenuExpansion(
                     text: 'User',
+                    txtOne: 'Add User',
+                    txtTwo: 'All User',
                     icon: Icons.supervised_user_circle,
                     listData: [],
-                    onAddUserClicked: () {
+                    onClicked: () {
                       Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => const UserAddScreen()));
                     },
-                    onAllUserClicked: () {
+                    onClickedItem: () {
                       Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => AllUserRoleScreen()
+                          builder: (context) => const AllUserRoleScreen()
                       ));
                     },
                   ),
+
+                  if(utype == 'SK')
+                    const Row(
+                      children: [
+                        Icon(
+                          Icons.production_quantity_limits,
+                          color: Colors.redAccent,
+                        ),
+                        SizedBox(width: 30),
+                        Text(
+                          'Product Invoice',
+                          style: TextStyle(color: Colors.red),
+                        ),
+                      ],
+                    ),
+                  if(utype == 'SK')
+                   buildMenuExpansionLocation(text: 'Location',
+                       icon: Icons.supervised_user_circle, listData: [],
+                       viewCountries: (){
+
+                       },
+                       viewCities: (){
+
+                       },
+                       viewTownships: (){
+
+                       })
                 ],
               ),
             ),
@@ -241,12 +347,16 @@ class NavigationDrawerWidget extends StatelessWidget {
     );
   }
 
-  Widget buildMenuItemExpansion({
+
+
+  Widget buildMenuExpansion({
     required String text,
+    required String txtOne,
+    required String txtTwo,
     required IconData icon,
     required List<Widget> listData,
-    required VoidCallback onAddCategoryClicked,
-    required VoidCallback onAllCategoryClicked
+    required VoidCallback onClicked,
+    required VoidCallback onClickedItem
   }) {
     const color = Colors.black;
 
@@ -265,15 +375,17 @@ class NavigationDrawerWidget extends StatelessWidget {
         ],
       ),
       children: [
+
+        if(utype == 'ADM')
         Padding(
           padding: const EdgeInsets.only(left: 50),
           child: ListTile(
             leading: const Icon(Icons.add),
             title: GestureDetector(
-              onTap: onAddCategoryClicked,
-              child: const Text(
-                'Add Category',
-                style: TextStyle(color: color),
+              onTap: onClicked,
+              child:  Text(
+               txtOne,
+                style: const TextStyle(color: color),
               ),
             ),
           ),
@@ -281,27 +393,28 @@ class NavigationDrawerWidget extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(left: 50),
           child: ListTile(
-            leading: const Icon(Icons.category),
+            leading: const Icon(Icons.accessibility),
             title: GestureDetector(
-              onTap: onAllCategoryClicked,
-              child: const Text(
-                'All Category',
-                style: TextStyle(color: color),
+              onTap: onClickedItem,
+              child:  Text(
+               txtTwo,
+                style: const TextStyle(color: color),
               ),
             ),
           ),
         ),
+
       ],
     );
   }
 
-
-  Widget buildMenuUserExpansion({
+  Widget buildMenuExpansionLocation({
     required String text,
     required IconData icon,
     required List<Widget> listData,
-    required VoidCallback onAddUserClicked,
-    required VoidCallback onAllUserClicked
+    required VoidCallback viewCountries,
+    required VoidCallback viewCities,
+    required VoidCallback viewTownships
   }) {
     const color = Colors.black;
 
@@ -320,14 +433,28 @@ class NavigationDrawerWidget extends StatelessWidget {
         ],
       ),
       children: [
+
+          Padding(
+            padding: const EdgeInsets.only(left: 50),
+            child: ListTile(
+              leading: const Icon(Icons.add),
+              title: GestureDetector(
+                onTap: viewCountries,
+                child: const Text(
+                  'View Countries',
+                  style: TextStyle(color: color),
+                ),
+              ),
+            ),
+          ),
         Padding(
           padding: const EdgeInsets.only(left: 50),
           child: ListTile(
-            leading: const Icon(Icons.add),
+            leading: const Icon(Icons.accessibility),
             title: GestureDetector(
-              onTap: onAddUserClicked,
+              onTap: viewCities,
               child: const Text(
-                'Add User Role',
+                'View Cities',
                 style: TextStyle(color: color),
               ),
             ),
@@ -338,9 +465,9 @@ class NavigationDrawerWidget extends StatelessWidget {
           child: ListTile(
             leading: const Icon(Icons.accessibility),
             title: GestureDetector(
-              onTap: onAllUserClicked,
+              onTap: viewTownships,
               child: const Text(
-                'All User Role',
+                'View Townships',
                 style: TextStyle(color: color),
               ),
             ),
@@ -351,117 +478,6 @@ class NavigationDrawerWidget extends StatelessWidget {
     );
   }
 
-  Widget buildMenuItemExpansionSize({
-    required String text,
-    required IconData icon,
-    required List<Widget> listData,
-    required VoidCallback onAddSizeClicked,
-    required VoidCallback onAllSizeClicked
-  }) {
-    const color = Colors.black;
-
-    return ExpansionTile(
-      title: Row(
-        children: [
-          Icon(
-            icon,
-            color: color,
-          ),
-          const SizedBox(width: 30),
-          Text(
-            text,
-            style: const TextStyle(color: color),
-          ),
-        ],
-      ),
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(left: 50),
-          child: ListTile(
-            leading: const Icon(Icons.add),
-            title: GestureDetector(
-              onTap: onAddSizeClicked,
-              child: const Text(
-                'Add Size',
-                style: TextStyle(color: color),
-              ),
-            ),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(left: 50),
-          child: ListTile(
-            leading: const Icon(Icons.format_size_rounded),
-            title: GestureDetector(
-              onTap: onAllSizeClicked,
-              child: const Text(
-                'All Size',
-                style: TextStyle(color: color),
-              ),
-            ),
-          ),
-        ),
-
-      ],
-    );
-  }
-
-
-
-  Widget buildMenuItemExpansionProduct({
-    required String text,
-    required IconData icon,
-    required List<Widget> listData,
-    required VoidCallback onAddProductClicked,
-    required VoidCallback onAllProductClicked
-  }) {
-    const color = Colors.black;
-
-    return ExpansionTile(
-      title: Row(
-        children: [
-          Icon(
-            icon,
-            color: color,
-          ),
-          const SizedBox(width: 30),
-          Text(
-            text,
-            style: const TextStyle(color: color),
-          ),
-        ],
-      ),
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(left: 50),
-          child: ListTile(
-            leading: const Icon(Icons.add),
-            title: GestureDetector(
-              onTap: onAddProductClicked,
-              child: const Text(
-                'Add Product',
-                style: TextStyle(color: color),
-              ),
-            ),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(left: 50),
-          child: ListTile(
-            leading: const Icon(Icons.format_size_rounded),
-            title: GestureDetector(
-              onTap: onAllProductClicked,
-              child: const Text(
-                'All Product',
-                style: TextStyle(color: color),
-              ),
-            ),
-          ),
-        ),
-
-      ],
-    );
-  }
 
   void selectedItem(BuildContext context, int index) {
     Navigator.of(context).pop();

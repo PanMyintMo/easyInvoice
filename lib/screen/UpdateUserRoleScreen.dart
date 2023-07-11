@@ -40,10 +40,10 @@ class _UpdateUserRoleScreenState extends State<UpdateUserRoleScreen> {
               Navigator.pop(context,const AllUserRoleScreen());
 
             } else if (state is EditUserRoleFail) {
-              return EditUserRoleWidget(id: widget.id, name : widget.name, email : widget.email,password : widget.password, utype : widget.utype, newimage : widget.newimage);
+              return EditUserRoleWidget(id: widget.id, name : widget.name, email : widget.email,password : '', utype : widget.utype, newimage : widget.newimage);
             }
           //  _isLoading = false;
-            return EditUserRoleWidget(id:widget.id,name : widget.name, email : widget.email,password : widget.password, utype : widget.utype, newimage : widget.newimage);
+            return EditUserRoleWidget(id:widget.id,name : widget.name, email : widget.email,password : '', utype : widget.utype, newimage : widget.newimage);
           },
         ),
       ),

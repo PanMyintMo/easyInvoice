@@ -41,21 +41,24 @@ class _LoginState extends State<Login> {
               //  print("Login Success Status Code is ${state.loginResponse.status}");
               final name = state.loginResponse.name;
               final email = state.loginResponse.email;
+              final utype= state.loginResponse.utype;
 
               // Set the token using the SessionManager class
               SessionManager sessingManager = SessionManager();
               sessingManager.setAuthToken(token);
               sessingManager.setUserName(name);
               sessingManager.setEmail(email);
+              sessingManager.setUserType(utype);
 
               // Navigate to the user profile page after the current frame is completed
               WidgetsBinding.instance.addPostFrameCallback((_) {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => MainPageScreen(),
-                  ),
-                );
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => MainPageScreen(),
+                    ),
+                  );
+
               });
             } else if (state is SignInFail) {
               return LoginInForm(isLoading: false, message: state.error);
@@ -259,4 +262,3 @@ class _LoginInFormState extends State<LoginInForm> {
     );
   }
 }
-

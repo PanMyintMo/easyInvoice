@@ -530,5 +530,4 @@ Future<DeleteUserRoleResponse> deleteUserRole(int id) async {
   }
 }
 
-
 }
