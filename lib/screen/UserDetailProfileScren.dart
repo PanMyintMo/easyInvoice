@@ -1,13 +1,15 @@
 import 'package:easy_invoice/bloc/delete/delete_user_role_cubit.dart';
 import 'package:easy_invoice/common/ThemeHelperUserClass.dart';
-import 'package:easy_invoice/module/module.dart';
 import 'package:easy_invoice/screen/UpdateUserRoleScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import '../bloc/edit/edit_user_role_cubit.dart';
+import '../bloc/get/get_all_user_role_cubit.dart';
 import '../common/HeaderWidget.dart';
 import '../common/ToastMessage.dart';
 import '../common/theme_helper.dart';
+import '../module/module.dart';
 
 class UserDetailProfileScreen extends StatefulWidget {
   final int id;
@@ -18,16 +20,17 @@ class UserDetailProfileScreen extends StatefulWidget {
   final String utype;
   final String url;
 
-  const UserDetailProfileScreen(
-      {Key? key,
-      required this.id,
-      required this.name,
-      required this.email,
-      required this.created_at,
-      required this.updated_at,
-      required this.utype,
-      required this.url})
-      : super(key: key);
+  const UserDetailProfileScreen({
+    Key? key,
+    required this.id,
+    required this.name,
+    required this.email,
+    required this.created_at,
+    required this.updated_at,
+    required this.utype,
+    required this.url,
+
+  }) : super(key: key);
 
   @override
   State<UserDetailProfileScreen> createState() =>
@@ -39,18 +42,36 @@ class _UserDetailProfileScreenState extends State<UserDetailProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => DeleteUserRoleCubit(getIt.call()),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<GetAllUserRoleCubit>(
+          create: (context) {
+            final cubit = GetAllUserRoleCubit(getIt.call());
+            cubit.getAllUserRole();
+            return cubit;
+          },
+        ),
+        BlocProvider<DeleteUserRoleCubit>(
+          create: (context) => DeleteUserRoleCubit(getIt.call()),
+        ),
+        BlocProvider<EditUserRoleCubit>(
+          create: (context) => EditUserRoleCubit(getIt.call()),
+        ),
+      ],
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
           elevation: 0,
           flexibleSpace: Container(
             decoration: BoxDecoration(
-              gradient: LinearGradient(colors: [
-                Colors.redAccent.withOpacity(0.3),
-                Colors.pink.withOpacity(0.7)
-              ], begin: Alignment.topLeft, end: Alignment.topCenter),
+              gradient: LinearGradient(
+                colors: [
+                  Colors.redAccent.withOpacity(0.3),
+                  Colors.pink.withOpacity(0.7),
+                ],
+                begin: Alignment.topLeft,
+                end: Alignment.topCenter,
+              ),
             ),
           ),
           leading: IconButton(
@@ -67,22 +88,26 @@ class _UserDetailProfileScreenState extends State<UserDetailProfileScreen> {
           ),
           actions: [
             IconButton(
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => UpdateUserRoleScreen(
-                              id: widget.id,
-                              name: widget.name,
-                              password: '',
-                              utype: widget.utype,
-                              email: widget.email,
-                              newimage: widget.url)));
-                },
-                icon: const Icon(
-                  Icons.edit,
-                  color: Colors.white,
-                ))
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => UpdateUserRoleScreen(
+                      id: widget.id,
+                      name: widget.name,
+                      password: '',
+                      utype: widget.utype,
+                      email: widget.email,
+                      newimage: widget.url,
+                    ),
+                  ),
+                );
+              },
+              icon: const Icon(
+                Icons.edit,
+                color: Colors.white,
+              ),
+            ),
           ],
         ),
         body: BlocConsumer<DeleteUserRoleCubit, DeleteUserRoleState>(
@@ -91,22 +116,15 @@ class _UserDetailProfileScreenState extends State<UserDetailProfileScreen> {
               setState(() {
                 isLoading = true;
               });
-            } else if (state is DeleteUserRoleSuccess ||
-                state is DeleteUserRoleFail) {
-              setState(() {
-                isLoading = false;
-              });
+            } else if (state is DeleteUserRoleSuccess) {
+              showToastMessage('User account deleted successfully',
+                  duration: 3000);
+              Navigator.pop(context, true); // Return a result to previous page
+            } else if (state is DeleteUserRoleFail) {
+              showToastMessage('Failed to delete user account', duration: 3000);
             }
           },
           builder: (context, state) {
-            if (state is DeleteUserRoleLoading) {
-              isLoading = true;
-            } else if (state is DeleteUserRoleSuccess) {
-              showToastMessage('User account deleted successfully',duration: 3000);
-              Navigator.pop(context); // Navigate back to the previous screen
-            } else if (state is DeleteUserRoleFail) {
-              showToastMessage('Failed to delete user account',duration: 3000);
-            }
             return Stack(
               children: [
                 Column(
@@ -114,12 +132,16 @@ class _UserDetailProfileScreenState extends State<UserDetailProfileScreen> {
                     Stack(
                       children: [
                         const SizedBox(
-                            height: 150,
-                            child: HeaderWidget(
-                                150, false, Icons.person_add_alt_1_rounded)),
+                          height: 150,
+                          child: HeaderWidget(
+                            150,
+                            false,
+                            Icons.person_add_alt_1_rounded,
+                          ),
+                        ),
                         Container(
                           margin: const EdgeInsets.fromLTRB(25, 50, 25, 10),
-                          padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                          padding: const EdgeInsets.all(10),
                           alignment: Alignment.center,
                           child: Container(
                             padding: const EdgeInsets.all(10),
@@ -135,26 +157,30 @@ class _UserDetailProfileScreenState extends State<UserDetailProfileScreen> {
                                 ),
                               ],
                             ),
-                            child: widget.url.isNotEmpty
-                                ? Image.network(
-                                    widget.url,
-                                    width: 80,
-                                    height: 80,
-                                    fit: BoxFit.cover,
-                                    errorBuilder: (context, error, stackTrace) {
-                                      // Display a fallback icon if the image fails to load
-                                      return Icon(
-                                        Icons.person,
-                                        color: Colors.grey.shade300,
-                                        size: 80.0,
-                                      );
-                                    },
-                                  )
-                                : Icon(
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(100),
+                              child: widget.url.isNotEmpty
+                                  ? Image.network(
+                                widget.url,
+                                width: 80,
+                                height: 80,
+                                fit: BoxFit.cover,
+                                errorBuilder:
+                                    (context, error, stackTrace) {
+                                  // Display a fallback icon if the image fails to load
+                                  return Icon(
                                     Icons.person,
                                     color: Colors.grey.shade300,
                                     size: 80.0,
-                                  ),
+                                  );
+                                },
+                              )
+                                  : Icon(
+                                Icons.person,
+                                color: Colors.grey.shade300,
+                                size: 80.0,
+                              ),
+                            ),
                           ),
                         ),
                       ],
@@ -168,10 +194,14 @@ class _UserDetailProfileScreenState extends State<UserDetailProfileScreen> {
                           buildProfileBox('Id No :', widget.id.toString()),
                           buildProfileBox('Name :', widget.name),
                           buildProfileBox('Email :', widget.email),
-                          buildProfileBox('Created At :',
-                              widget.created_at.toString().substring(0, 10)),
-                          buildProfileBox('Updated At :',
-                              widget.updated_at.toString().substring(0, 10)),
+                          buildProfileBox(
+                            'Created At :',
+                            widget.created_at.toString().substring(0, 10),
+                          ),
+                          buildProfileBox(
+                            'Updated At :',
+                            widget.updated_at.toString().substring(0, 10),
+                          ),
                           buildProfileBox('Role :', widget.utype),
                           const SizedBox(
                             height: 10,
@@ -181,9 +211,10 @@ class _UserDetailProfileScreenState extends State<UserDetailProfileScreen> {
                             child: ElevatedButton(
                               onPressed: () {
                                 deleteConfirmationDialog(
-                                    context,
-                                    context.read<DeleteUserRoleCubit>(),
-                                    widget.id);
+                                  context,
+                                  context.read<DeleteUserRoleCubit>(),
+                                  widget.id,
+                                );
                               },
                               style: ThemeHelper().buttonStyle(),
                               child: const Text(
@@ -194,20 +225,22 @@ class _UserDetailProfileScreenState extends State<UserDetailProfileScreen> {
                                 ),
                               ),
                             ),
-                          )
+                          ),
                         ],
                       ),
-                    )
+                    ),
                   ],
                 ),
-                if (isLoading == true)
+                if (isLoading)
                   Container(
                     color: Colors.black54,
                     child: const Center(
-                      child:
-                          SpinKitFadingCircle(color: Colors.white, size: 50.0),
+                      child: SpinKitFadingCircle(
+                        color: Colors.white,
+                        size: 50.0,
+                      ),
                     ),
-                  )
+                  ),
               ],
             );
           },
@@ -223,16 +256,14 @@ class _UserDetailProfileScreenState extends State<UserDetailProfileScreen> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text('Confirmation!'),
-          content:
-              const Text('Are you sure you want to delete this user account?'),
+          content: const Text(
+              'Are you sure you want to delete this user account?'),
           actions: [
             TextButton(
               onPressed: () {
                 cubit.deleteUserRole(id);
-                setState(() {
-                  isLoading = true;
-                });
-                Navigator.pop(context,true); // Navigate back to the previous screen
+                Navigator.pop(context); // Close the dialog
+
               },
               child: const Text('Delete'),
             ),

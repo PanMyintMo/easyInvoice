@@ -49,12 +49,11 @@ class _AllUserRoleScreenState extends State<AllUserRoleScreen> {
                   if (deleteState is DeleteUserRoleLoading) {
                     // Handle delete user role loading state
                   } else if (deleteState is DeleteUserRoleSuccess) {
-                    showToastMessage('User deleted successfully');
-                    WidgetsBinding.instance.addPostFrameCallback((_) {
-                      context
-                          .read<GetAllUserRoleCubit>()
+
+
+                    context.read<GetAllUserRoleCubit>()
                           .getAllUserRole();
-                    });
+
                   } else if (deleteState is DeleteUserRoleFail) {
                     showToastMessage(
                         'Failed to delete user: ${deleteState.error}');
