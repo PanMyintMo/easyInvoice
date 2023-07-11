@@ -66,7 +66,7 @@ class _AllUserRoleScreenState extends State<AllUserRoleScreen> {
                       ? deleteState.error
                       : '';
 
-                  return AllUserRoleWidget(userData: state.getAllUserRole.data, isLoading: loading, message: message,);
+                  return AllUserRoleWidget(userData: state.userData, isLoading: loading, message: message,);
                 },
               );
             } else if (state is GetAllUserRoleFail) {

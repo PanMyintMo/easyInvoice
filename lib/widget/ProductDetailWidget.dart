@@ -190,13 +190,29 @@ class _ProductDetailWidgetState extends State<ProductDetailWidget> {
           ),
         );
 
-        if (result == true) {
-          // Fetch the updated product list
-          context.read<GetAllProductCubit>().getAllProduct();
-          setState(() {
-            isUpdated = true;
-          });
+        if (result != null && result == true) {
+          final getAllProductCubit = context.read<GetAllProductCubit>();
+          final state = getAllProductCubit.state;
+
+          if (state is GetAllProductSuccess) {
+            final products = List.of(state.products);
+
+            // Find the index of the updated product item
+            final index = products
+                .indexWhere((product) => product.id == widget.products.id);
+
+            if (index != -1) {
+              products[index] = result;
+
+            //  getAllProductCubit.updateProductsList(products); // Update the state with the updated list
+
+              setState(() {
+                isUpdated = true;
+              });
+            }
+          }
         }
+
         break;
     }
   }

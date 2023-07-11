@@ -14,11 +14,12 @@ class GetAllUserRoleCubit extends Cubit<GetAllUserRoleState> {
     emit(GetAllUserRoleLoading());
     try {
       final UserRoleResponse response = await _userRepository.getAllUserRole();
-      emit(GetAllUserRoleSuccess(response));
+
+      final List<UserData> userData= response.data;
+
+      emit(GetAllUserRoleSuccess(userData));
     } catch (error) {
       emit(GetAllUserRoleFail(error.toString()));
     }
   }
-
-
 }

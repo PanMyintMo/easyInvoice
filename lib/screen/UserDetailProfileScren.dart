@@ -232,7 +232,7 @@ class _UserDetailProfileScreenState extends State<UserDetailProfileScreen> {
                 setState(() {
                   isLoading = true;
                 });
-                Navigator.pop(context); // Navigate back to the previous screen
+                Navigator.pop(context,true); // Navigate back to the previous screen
               },
               child: const Text('Delete'),
             ),

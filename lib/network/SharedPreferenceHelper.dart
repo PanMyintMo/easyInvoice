@@ -7,6 +7,8 @@ class SessionManager {
       'username'; // New key for username in SharedPreferences
   static const String emailKey =
       'email'; // New key for email in SharedPreferences
+
+  static const String utypeKey= 'utype';
   // Set the authorization token in shared preferences
   Future<void> setAuthToken(String token) async {
     final SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -35,6 +37,19 @@ class SessionManager {
   Future<String?> getUsername() async {
     final SharedPreferences preferences = await SharedPreferences.getInstance();
     return preferences.getString(usernameKey);
+  }
+
+  //set user type in share preferences
+
+  Future<void> setUserType(String utype) async{
+    final SharedPreferences preferences= await SharedPreferences.getInstance();
+    await preferences.setString(utypeKey, utype);
+  }
+
+  //Get User type from share preference
+  Future<String?> fetchUserType() async {
+    final SharedPreferences preferences = await SharedPreferences.getInstance();
+    return preferences.getString(utypeKey);
   }
 
 //Set the email in share preferences
