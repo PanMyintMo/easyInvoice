@@ -50,7 +50,6 @@ class _AllUserRoleScreenState extends State<AllUserRoleScreen> {
                     // Handle delete user role loading state
                   } else if (deleteState is DeleteUserRoleSuccess) {
 
-
                     context.read<GetAllUserRoleCubit>()
                           .getAllUserRole();
 

@@ -21,7 +21,7 @@ class AllUserRoleWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Center(child: Text('All User Role')),
+        title: const Text('All User Role',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
         backgroundColor: Colors.redAccent.withOpacity(0.8),
       ),
       body: ListView.builder(
