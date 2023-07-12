@@ -10,10 +10,10 @@ class EditUserRoleCubit extends Cubit<EditUserRoleState> {
   final UserRepository _userRepository;
   EditUserRoleCubit(this._userRepository) : super(EditUserRoleInitial());
 
-  Future<void> editUserRole(EditUserRoleRequestModel editCategory, int id) async {
+  Future<void> editUserRole(EditUserRoleRequestModel editUserRoleRequestModel, int id) async {
     emit(EditUserRoleLoading());
     try {
-      final respone = await _userRepository.editUserRole(editCategory, id);
+      final respone = await _userRepository.editUserRole(editUserRoleRequestModel, id);
       emit(EditUserRoleSuccess(respone));
     }
     catch (error) {

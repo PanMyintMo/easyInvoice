@@ -6,6 +6,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import '../bloc/edit/edit_user_role_cubit.dart';
 import '../bloc/get/get_all_user_role_cubit.dart';
+import '../bloc/get/get_all_user_role_cubit.dart';
+import '../bloc/get/get_all_user_role_cubit.dart';
 import '../common/HeaderWidget.dart';
 import '../common/ToastMessage.dart';
 import '../common/theme_helper.dart';
@@ -88,8 +90,8 @@ class _UserDetailProfileScreenState extends State<UserDetailProfileScreen> {
           ),
           actions: [
             IconButton(
-              onPressed: () {
-                Navigator.push(
+              onPressed: ()  async{
+               var result = Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) => UpdateUserRoleScreen(
@@ -101,7 +103,10 @@ class _UserDetailProfileScreenState extends State<UserDetailProfileScreen> {
                       newimage: widget.url,
                     ),
                   ),
+
                 );
+             //  if(result == true)
+
               },
               icon: const Icon(
                 Icons.edit,
