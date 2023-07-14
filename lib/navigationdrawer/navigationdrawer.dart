@@ -1,6 +1,8 @@
 import 'package:easy_invoice/network/SharedPreferenceHelper.dart';
 import 'package:easy_invoice/screen/AllSizesScreen.dart';
 import 'package:easy_invoice/screen/AllUserRoleScreen.dart';
+import 'package:easy_invoice/screen/DeliveryPart/AddDeliveryScreen.dart';
+import 'package:easy_invoice/screen/OrderPart/AddOrderScreen.dart';
 import 'package:easy_invoice/screen/UserAddScreen.dart';
 import 'package:easy_invoice/screen/user_profile.dart';
 import 'package:flutter/material.dart';
@@ -8,11 +10,11 @@ import '../screen/AddCategoryScreen.dart';
 import '../screen/AddProductScreen.dart';
 import '../screen/AllCategoryScreen.dart';
 import '../screen/AllProductScreen.dart';
+import '../screen/ProductInvoicePart/ProductInvoiceScreen.dart';
 import '../screen/SizeAddScreen.dart';
+import '../screen/shopkeeperPart/ShopKeeperAddScreen.dart';
 
 class NavigationDrawerWidget extends StatefulWidget {
-
-
   const NavigationDrawerWidget({Key? key}) : super(key: key);
 
   @override
@@ -34,10 +36,10 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
     final sessionManager = SessionManager();
     final userType = await sessionManager.fetchUserType();
     setState(() {
-      utype = userType ?? ''; // Assign the retrieved user type to the 'utype' variable
+      utype = userType ??
+          ''; // Assign the retrieved user type to the 'utype' variable
     });
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -82,117 +84,145 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
                   const SizedBox(height: 12),
                   buildSearchField(),
                   const SizedBox(height: 24),
-                  if(utype == 'SK')
-                    const Row(
-                      children: [
-                        Icon(
-                          Icons.home,
-                          color: Colors.redAccent,
+                  if (utype == 'SK')
+                    ListTile(
+                      leading: const Icon(
+                        Icons.home,
+                        color: Colors.redAccent,
+                      ),
+                      title: GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => CategoryScreen()),
+                          );
+                        },
+                        child: const Text('Dashboard',
+                          style: TextStyle(color: Colors.black),
                         ),
-                        SizedBox(width: 30),
-                        Text(
-                          'Dashboard',
-                          style: TextStyle(color: Colors.red),
-                        ),
-                      ],
+                      ),
                     ),
-                  if(utype == 'SK')
-                    const Row(
-                      children: [
-                        Icon(
-                          Icons.shop,
-                          color: Colors.redAccent,
-                        ),
-                        SizedBox(width: 30),
-                        Text(
-                          'ShopKeeper',
-                          style: TextStyle(color: Colors.red),
-                        ),
-                      ],
-                    ),
-               if(utype == 'ADM')
-                  buildMenuExpansion(
-                    text: 'Category',
-                    icon: Icons.category,
-                    onClicked: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const CategoryScreen()),
-                      );
-                    },
-                    onClickedItem: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (
-                            context) => const AllCategoryDetailPage()),
-                      );
-                    },
-                    listData: [], txtTwo: 'All Category',
-                    txtOne: 'Add Category',
+                  const SizedBox(
+                    height: 16,
                   ),
-
+                  if (utype == 'SK')
+                    ListTile(
+                      leading: const Icon(
+                        Icons.shop,
+                        color: Colors.redAccent,
+                      ),
+                      title: GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => ShopKeeperScreen()),
+                          );
+                        },
+                        child: const Text('ShopKeeper',
+                          style: TextStyle(color: Colors.black),
+                        ),
+                      ),
+                    ),
+                  const Divider(color: Colors.black12),
+                  if (utype == 'ADM')
+                    buildMenuExpansion(
+                      text: 'Category',
+                      icon: Icons.category,
+                      onClicked: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const CategoryScreen()),
+                        );
+                      },
+                      onClickedItem: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                              const AllCategoryDetailPage()),
+                        );
+                      },
+                      listData: [],
+                      txtTwo: 'All Category',
+                      txtOne: 'Add Category',
+                    ),
                   const SizedBox(height: 16),
-                  if(utype == 'ADM')
-                  buildMenuExpansion(
-                    text: 'Size',
-                    icon: Icons.format_size,
-                    listData: [],
-                    onClicked: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => const AllSizesScreen()));
-                    },
-                    onClickedItem: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => const SizeAddScreen()));
-                    }, txtOne: 'All Size',txtTwo: 'Add Size'
-                  ),
+                  if (utype == 'ADM')
+                    buildMenuExpansion(
+                        text: 'Size',
+                        icon: Icons.format_size,
+                        listData: [],
+                        onClicked: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => const SizeAddScreen()));
+                        },
+                        onClickedItem: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => const AllSizesScreen()));
+                        },
+                        txtOne: 'All Size',
+                        txtTwo: 'Add Size'),
                   const SizedBox(height: 16),
                   buildMenuExpansion(
                     text: 'Product',
-                    txtTwo: 'All Product',
-                    txtOne: 'Add Product',
+                    txtOne: (utype == 'ADM') ? 'Add Product' : '',
+                    txtTwo: (utype == 'ADM') ? 'All Product' : 'View Products',
                     icon: Icons.format_size,
                     listData: [],
                     onClicked: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => const AllProductScreen()));
+                      if (utype == 'ADM') {
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => const AddProductScreen(),
+                        ));
+                      }
                     },
                     onClickedItem: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => const AddProductScreen()));
+                      if (utype == 'SK') {
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => const AllProductScreen(),
+                        ));
+                      }
                     },
                   ),
                   const SizedBox(height: 16),
                   buildMenuExpansion(
                     text: 'Order',
-                    txtTwo: 'Add Order',
-                    txtOne:  'All Order',
+                    txtOne: 'Add Order',
+                    txtTwo: (utype == 'ADM') ? 'All Order' : 'View Orders',
                     icon: Icons.update,
-                    onClicked: () =>
-                        Navigator.push(context, MaterialPageRoute(
-                            builder: (context) => const AllProductScreen())),
-                    listData: [], onClickedItem: () {
-
-                  },
+                    listData: [],
+                    onClicked: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => const AddOrderScreen()));
+                    },
+                    onClickedItem: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => const AllProductScreen()));
+                    },
                   ),
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 16),
+
                   if(utype == 'SK')
-               const Row(
-                      children: [
-                        Icon(
-                          Icons.delivery_dining,
-                          color: Colors.redAccent,
-                        ),
-                        SizedBox(width: 30),
-                        Text(
-                          'Delivery System',
-                          style: TextStyle(color: Colors.red),
-                        ),
-                      ],
-                    ),
+                  buildMenuExpansion(
+                    text: 'Delivery System',
+                    txtOne:  'Add Delivery' ,
+                    txtTwo: 'View Delivery',
+                    icon: Icons.format_size,
+                    listData: [],
+                    onClicked: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => const AddDeliveryScreen(),
+                        ));
 
+                    },
+                    onClickedItem: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => const AllProductScreen(),
+                        ));
 
+                    },
+                  ),
                   const Divider(color: Colors.black12),
                   const SizedBox(height: 24),
                   buildMenuItem(
@@ -210,7 +240,7 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
                   const SizedBox(height: 16),
                   buildMenuExpansion(
                     text: 'User',
-                    txtOne: 'Add User',
+                    txtOne: (utype == 'ADM') ? 'Add User' : '',
                     txtTwo: 'All User',
                     icon: Icons.supervised_user_circle,
                     listData: [],
@@ -220,37 +250,35 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
                     },
                     onClickedItem: () {
                       Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => const AllUserRoleScreen()
-                      ));
+                          builder: (context) => const AllUserRoleScreen()));
                     },
                   ),
-
-                  if(utype == 'SK')
-                    const Row(
-                      children: [
-                        Icon(
-                          Icons.production_quantity_limits,
-                          color: Colors.redAccent,
+                  if (utype == 'SK')
+                    ListTile(
+                      leading: const Icon(
+                        Icons.shop,
+                        color: Colors.redAccent,
+                      ),
+                      title: GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => const ProductInvoiceScreen()),
+                          );
+                        },
+                        child: const Text('Product Invoice',
+                          style: TextStyle(color: Colors.black),
                         ),
-                        SizedBox(width: 30),
-                        Text(
-                          'Product Invoice',
-                          style: TextStyle(color: Colors.red),
-                        ),
-                      ],
+                      ),
                     ),
-                  if(utype == 'SK')
-                   buildMenuExpansionLocation(text: 'Location',
-                       icon: Icons.supervised_user_circle, listData: [],
-                       viewCountries: (){
-
-                       },
-                       viewCities: (){
-
-                       },
-                       viewTownships: (){
-
-                       })
+                  if (utype == 'SK')
+                    buildMenuExpansionLocation(
+                        text: 'Location',
+                        icon: Icons.supervised_user_circle,
+                        listData: [],
+                        viewCountries: () {},
+                        viewCities: () {},
+                        viewTownships: () {})
                 ],
               ),
             ),
@@ -334,7 +362,6 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
     required String text,
     required IconData icon,
     VoidCallback? onClicked,
-
   }) {
     const color = Colors.black;
     const hoverColor = Colors.white70;
@@ -347,17 +374,66 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
     );
   }
 
-
-
-  Widget buildMenuExpansion({
-    required String text,
+  Widget buildMenuExpansion({required String text,
     required String txtOne,
     required String txtTwo,
     required IconData icon,
     required List<Widget> listData,
     required VoidCallback onClicked,
-    required VoidCallback onClickedItem
-  }) {
+    required VoidCallback onClickedItem}) {
+    const color = Colors.black;
+
+    return ExpansionTile(
+      title: Row(
+        children: [
+          Icon(
+            icon,
+            color: color,
+          ),
+          const SizedBox(width: 16),
+          Text(
+            text,
+            style: const TextStyle(color: color),
+          ),
+        ],
+      ),
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 50),
+          child: ListTile(
+            leading: (txtOne.isNotEmpty) ? Icon(Icons.add) : null,
+            title: GestureDetector(
+              onTap: onClicked,
+              child: Text(
+                txtOne,
+                style: const TextStyle(color: color),
+              ),
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(left: 50),
+          child: ListTile(
+            leading: (txtTwo.isNotEmpty) ? Icon(Icons.accessibility) : null,
+            title: GestureDetector(
+              onTap: onClickedItem,
+              child: Text(
+                txtTwo,
+                style: const TextStyle(color: color),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget buildMenuExpansionLocation({required String text,
+    required IconData icon,
+    required List<Widget> listData,
+    required VoidCallback viewCountries,
+    required VoidCallback viewCities,
+    required VoidCallback viewTownships}) {
     const color = Colors.black;
 
     return ExpansionTile(
@@ -375,78 +451,19 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
         ],
       ),
       children: [
-
-        if(utype == 'ADM')
         Padding(
           padding: const EdgeInsets.only(left: 50),
           child: ListTile(
             leading: const Icon(Icons.add),
             title: GestureDetector(
-              onTap: onClicked,
-              child:  Text(
-               txtOne,
-                style: const TextStyle(color: color),
+              onTap: viewCountries,
+              child: const Text(
+                'View Countries',
+                style: TextStyle(color: color),
               ),
             ),
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.only(left: 50),
-          child: ListTile(
-            leading: const Icon(Icons.accessibility),
-            title: GestureDetector(
-              onTap: onClickedItem,
-              child:  Text(
-               txtTwo,
-                style: const TextStyle(color: color),
-              ),
-            ),
-          ),
-        ),
-
-      ],
-    );
-  }
-
-  Widget buildMenuExpansionLocation({
-    required String text,
-    required IconData icon,
-    required List<Widget> listData,
-    required VoidCallback viewCountries,
-    required VoidCallback viewCities,
-    required VoidCallback viewTownships
-  }) {
-    const color = Colors.black;
-
-    return ExpansionTile(
-      title: Row(
-        children: [
-          Icon(
-            icon,
-            color: color,
-          ),
-          const SizedBox(width: 30),
-          Text(
-            text,
-            style: const TextStyle(color: color),
-          ),
-        ],
-      ),
-      children: [
-
-          Padding(
-            padding: const EdgeInsets.only(left: 50),
-            child: ListTile(
-              leading: const Icon(Icons.add),
-              title: GestureDetector(
-                onTap: viewCountries,
-                child: const Text(
-                  'View Countries',
-                  style: TextStyle(color: color),
-                ),
-              ),
-            ),
-          ),
         Padding(
           padding: const EdgeInsets.only(left: 50),
           child: ListTile(
@@ -473,11 +490,9 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
             ),
           ),
         ),
-
       ],
     );
   }
-
 
   void selectedItem(BuildContext context, int index) {
     Navigator.of(context).pop();

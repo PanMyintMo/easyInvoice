@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../common/CustomButtom.dart';
 import '../data/responsemodel/UserRoleResponse.dart';
+import '../network/SharedPreferenceHelper.dart';
 import '../screen/UserDetailProfileScren.dart';
 
-class AllUserRoleWidget extends StatelessWidget {
+class AllUserRoleWidget extends StatefulWidget {
   final List<UserData> userData;
   final bool isLoading;
   final String message;
@@ -18,6 +19,31 @@ class AllUserRoleWidget extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<AllUserRoleWidget> createState() => _AllUserRoleWidgetState();
+}
+
+class _AllUserRoleWidgetState extends State<AllUserRoleWidget> {
+
+  String utype= '';
+
+  @override
+  void initState() {
+    super.initState();
+    fetchUserType();
+
+  }
+  Future<void> fetchUserType() async {
+    final sessionManager = SessionManager();
+    final userType = await sessionManager.fetchUserType();
+    setState(() {
+      utype = userType ??
+          ''; // Assign the retrieved user type to the 'utype' variable
+    });
+  }
+
+
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -25,9 +51,9 @@ class AllUserRoleWidget extends StatelessWidget {
         backgroundColor: Colors.redAccent.withOpacity(0.8),
       ),
       body: ListView.builder(
-        itemCount: userData.length,
+        itemCount: widget.userData.length,
         itemBuilder: (BuildContext context, int index) {
-          UserData user = userData[index];
+          UserData user = widget.userData[index];
           return ListTile(
             leading: SizedBox(
               width: 60,
@@ -68,7 +94,8 @@ class AllUserRoleWidget extends StatelessWidget {
                 color: Colors.green,
               ),
             ),
-            trailing: CustomButton(
+            trailing: (utype == 'ADM') ?
+            CustomButton(
               label: 'View Detail Profile',
               onPressed: () async {
                 var result = await Navigator.push(
@@ -89,10 +116,12 @@ class AllUserRoleWidget extends StatelessWidget {
                   context.read<GetAllUserRoleCubit>().getAllUserRole();
                 }
               },
-            ),
+            ) : null,
           );
         },
       ),
     );
   }
+
+
 }

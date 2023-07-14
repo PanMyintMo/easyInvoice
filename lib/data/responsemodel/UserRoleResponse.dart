@@ -69,9 +69,9 @@ class UserData {
   int id;
   String name;
   String email;
-  DateTime? emailVerifiedAt;
-  DateTime createdAt;
-  DateTime updatedAt;
+  String? emailVerifiedAt;
+  String createdAt;
+  String updatedAt;
   String utype;
   String? image;
   String? url;
@@ -93,14 +93,13 @@ class UserData {
   factory UserData.fromJson(Map<String,dynamic> json){
     return UserData(id: json['id'], name: json['name'],
         email: json['email'],
-        emailVerifiedAt: json['email_verified_at']!=null ? DateTime.parse(json['email_verified_at']) : null,
-        createdAt: DateTime.parse(json['created_at']),
-        updatedAt: DateTime.parse(json['updated_at']),
+        emailVerifiedAt: json['email_verified_at']!=null ? json['email_verified_at'] : null,
+        createdAt: json['created_at'],
+        updatedAt: json['updated_at'],
         utype: json['utype'],
         image: json['image'], url: json['url'],
         profilePhotoUrl: json['profile_photo_url']);
   }
-
 }
 
 

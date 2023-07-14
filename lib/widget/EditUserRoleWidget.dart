@@ -16,6 +16,7 @@ class EditUserRoleWidget extends StatefulWidget {
   final String password;
   final String utype;
   final String? newimage;
+  final Function()? onSave;
 
   const EditUserRoleWidget({
     Key? key,
@@ -25,6 +26,7 @@ class EditUserRoleWidget extends StatefulWidget {
     required this.password,
     required this.utype,
     required this.newimage,
+     this.onSave,
   }) : super(key: key);
 
   @override
@@ -79,7 +81,7 @@ class _EditUserRoleWidgetState extends State<EditUserRoleWidget> {
     } else if (value == "Warehouse") {
       return "WH";
     } else if (value == "Delivery") {
-      return "DLV";
+      return "DELI";
     } else if (value == "ShopKeeper") {
       return "SK";
     }
@@ -93,7 +95,7 @@ class _EditUserRoleWidgetState extends State<EditUserRoleWidget> {
       return "Admin";
     } else if (utype == "WH") {
       return "Warehouse";
-    } else if (utype == "DLV") {
+    } else if (utype == "DELI") {
       return "Delivery";
     } else if (utype == "SK") {
       return "ShopKeeper";
@@ -281,6 +283,10 @@ class _EditUserRoleWidgetState extends State<EditUserRoleWidget> {
                                       isSaving = false;
                                     });
                                   });
+                                  // call onSave call back
+
+                                  widget.onSave?.call();
+
                                 }
                               }
                             },

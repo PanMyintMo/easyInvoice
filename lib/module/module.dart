@@ -8,6 +8,7 @@ import 'package:easy_invoice/bloc/get/get_all_product_cubit.dart';
 import 'package:easy_invoice/bloc/get/get_all_size_cubit.dart';
 import 'package:easy_invoice/bloc/get/get_all_user_role_cubit.dart';
 import 'package:easy_invoice/bloc/get/get_category_detail_cubit.dart';
+import 'package:easy_invoice/bloc/post/ShopKeeperPart/add_request_product_shop_keeper_cubit.dart';
 import 'package:easy_invoice/bloc/post/add_category_cubit.dart';
 import 'package:easy_invoice/bloc/post/add_product_cubit.dart';
 import 'package:easy_invoice/bloc/post/sign_in_cubit.dart';
@@ -48,6 +49,11 @@ void locator() {
   AddProductCubit addProductCubit =
   AddProductCubit(getIt.get<UserRepository>());
   getIt.registerLazySingleton(() => addProductCubit);
+
+  //to add product to shopkeeper request
+  AddRequestProductShopKeeperCubit addRequestProductShopKeeperCubit =
+  AddRequestProductShopKeeperCubit(getIt.get<UserRepository>());
+  getIt.registerLazySingleton(() => addRequestProductShopKeeperCubit);
 
   //get all category
   GetCategoryDetailCubit getCategoryDetailCubit =
