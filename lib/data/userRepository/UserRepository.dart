@@ -15,6 +15,7 @@ import '../../dataRequestModel/EditCategoryModel.dart';
 import '../../dataRequestModel/EditSizeModel.dart';
 import '../../dataRequestModel/LoginRequestModel.dart';
 import '../../dataRequestModel/RegisterRequestModel.dart';
+import '../../dataRequestModel/ShopKeeperPart/ShopKeeperRequestModel.dart';
 import '../responsemodel/AddCategoryResponseModel.dart';
 import '../responsemodel/CategoryDeleteRespose.dart';
 import '../responsemodel/DeleteProductResponse.dart';
@@ -23,6 +24,7 @@ import '../responsemodel/EditUserRoleResponse.dart';
 import '../responsemodel/GetAllCategoryDetail.dart';
 import '../responsemodel/LoginResponse.dart';
 import '../responsemodel/ProductResponse.dart';
+import '../responsemodel/ShopKeeperResponsePart/ShopKeeperResponse.dart';
 import '../responsemodel/SizeDeleteResponse.dart';
 import '../responsemodel/UpdateCateResponse.dart';
 import '../responsemodel/UpdateSizeResponse.dart';
@@ -59,6 +61,17 @@ class UserRepository {
       AddCategoryRequestModel addCategoryRequestModel) async {
     try {
       final response = await _apiService.addCategory(addCategoryRequestModel);
+      return response;
+    } catch (error) {
+      rethrow;
+    }
+  }
+
+  //for add shopkeeper request product
+  Future<AddShopKeeperResponse> addShopKeeperRequestProduct(
+      ShopKeeperRequestModel shopKeeperRequestModel) async {
+    try {
+      final response = await _apiService.addShopKeeperRequestProduct(shopKeeperRequestModel);
       return response;
     } catch (error) {
       rethrow;

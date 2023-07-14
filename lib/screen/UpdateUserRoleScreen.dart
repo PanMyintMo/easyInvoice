@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../common/ToastMessage.dart';
-
+import '../dataRequestModel/EditUserRoleRequestModel.dart';
 import '../module/module.dart';
 import '../widget/EditUserRoleWidget.dart';
 
@@ -30,8 +30,6 @@ class UpdateUserRoleScreen extends StatefulWidget {
 }
 
 class _UpdateUserRoleScreenState extends State<UpdateUserRoleScreen> {
-  bool isSaving = false; // Add a new variable to track saving state
-
   @override
   Widget build(BuildContext context) {
     return BlocProvider<EditUserRoleCubit>(
@@ -39,13 +37,11 @@ class _UpdateUserRoleScreenState extends State<UpdateUserRoleScreen> {
       child: BlocConsumer<EditUserRoleCubit, EditUserRoleState>(
         listener: (context, state) {
           if (state is EditUserRoleLoading) {
-            setState(() {
-              isSaving = true; // Update the saving state
-            });
+            // Show a loading indicator or disable the save button if necessary
           } else if (state is EditUserRoleSuccess) {
             showToastMessage('User account updated successfully.',
                 duration: 3000);
-            // Navigate back to the GetAllUserRoleScreen and trigger a refresh
+            // Return the updated data to the UserDetailProfileScreen
             Navigator.pop(context, true);
           } else if (state is EditUserRoleFail) {
             showToastMessage(state.error, duration: 3000);
@@ -61,6 +57,19 @@ class _UpdateUserRoleScreenState extends State<UpdateUserRoleScreen> {
               password: widget.password,
               utype: widget.utype,
               newimage: widget.newimage,
+              onSave: () {
+                // Trigger the edit user role functionality
+                context.read<EditUserRoleCubit>().editUserRole(
+                  EditUserRoleRequestModel(
+                    name: widget.name,
+                    email: widget.email,
+                    password: widget.password,
+                    utype: widget.utype,
+                    newimage: widget.newimage ?? '',
+                  ),
+                  widget.id,
+                );
+                },
             ),
           );
         },
