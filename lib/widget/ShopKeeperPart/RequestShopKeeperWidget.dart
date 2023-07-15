@@ -1,3 +1,5 @@
+import 'dart:core';
+
 import 'package:easy_invoice/data/responsemodel/GetAllProductResponse.dart';
 import 'package:flutter/material.dart';
 import '../../common/ThemeHelperUserClass.dart';
@@ -15,15 +17,14 @@ class RequestShopKeeperWidget extends StatefulWidget {
 class _RequestShopKeeperWidgetState extends State<RequestShopKeeperWidget> {
   List<CategoryItem> categories = [];
   List<ProductListItem> products = [];
+
   String selectedValue = 'Select Category';
   String selectProduct = 'Select Product';
-  String productName ='';
 
   @override
   void initState() {
     super.initState();
     fetchCategoriesName();
-    fetchProductName();
   }
 
   Future<void> fetchCategoriesName() async {
@@ -38,23 +39,21 @@ class _RequestShopKeeperWidgetState extends State<RequestShopKeeperWidget> {
       print('Error fetching categories: $error');
     }
   }
-  Future<void> fetchProductName() async {
+
+  Future<void> fetchProductsByCategory(String categoryId) async {
     try {
       final response = await ApiService().fetchAllProducts();
       if (response.data.data.isNotEmpty) {
         setState(() {
-          products = response.data.data;
-          productName= products.contains(categories.map((category) {
-            category.id.toString();
-          })) as String;
-
+          products = response.data.data
+              .where((product) => product.category_id.toString() == categoryId)
+              .toList();
         });
       }
     } catch (error) {
-      print('Error fetching categories: $error');
+      print('Error fetching products: $error');
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -94,10 +93,11 @@ class _RequestShopKeeperWidgetState extends State<RequestShopKeeperWidget> {
                   );
                 }).toList(),
               ],
-              onChanged: (value) async {
+              onChanged: (value) {
                 if (value == 'Select Category') {
                   setState(() {
                     selectedValue = value!;
+                    selectProduct = 'Select Product';
                   });
                   showDialog(
                     context: context,
@@ -119,8 +119,9 @@ class _RequestShopKeeperWidgetState extends State<RequestShopKeeperWidget> {
                 } else {
                   setState(() {
                     selectedValue = value!;
+                    selectProduct = 'Select Product';
                   });
-
+                  fetchProductsByCategory(value!);
                 }
               },
               underline: const SizedBox(),
@@ -156,16 +157,16 @@ class _RequestShopKeeperWidgetState extends State<RequestShopKeeperWidget> {
                 }).toList(),
               ],
               onChanged: (value) {
-                if(value == 'Select Product'){
+                if (value == 'Select Product') {
                   setState(() {
-                    productName = value!;
+                    selectProduct = value!;
                   });
                   showDialog(
                     context: context,
                     builder: (context) {
                       return AlertDialog(
                         title: const Text('Error'),
-                        content: const Text('You need to choose a category.'),
+                        content: const Text('You need to choose a product.'),
                         actions: [
                           ElevatedButton(
                             onPressed: () {
@@ -177,10 +178,9 @@ class _RequestShopKeeperWidgetState extends State<RequestShopKeeperWidget> {
                       );
                     },
                   );
-                }
-                else{
+                } else {
                   setState(() {
-                    productName = value!;
+                    selectProduct = value!;
                   });
                 }
               },
@@ -204,13 +204,9 @@ class _RequestShopKeeperWidgetState extends State<RequestShopKeeperWidget> {
           width: double.infinity,
           child: chooseItemIdForm(
             DropdownButton<String>(
-              items: [
-
-              ],
+              items: [],
               onChanged: (value) {
-                setState(() {
-
-                });
+                setState(() {});
               },
               hint: const Text('Choose One'),
               underline: const SizedBox(),
