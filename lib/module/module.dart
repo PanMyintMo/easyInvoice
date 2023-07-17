@@ -4,6 +4,7 @@ import 'package:easy_invoice/bloc/edit/edit_category_cubit.dart';
 import 'package:easy_invoice/bloc/edit/edit_product_item_cubit.dart';
 import 'package:easy_invoice/bloc/edit/edit_size_cubit.dart';
 import 'package:easy_invoice/bloc/edit/edit_user_role_cubit.dart';
+import 'package:easy_invoice/bloc/get/fetch_all_product_by_cate_id_cubit.dart';
 import 'package:easy_invoice/bloc/get/get_all_product_cubit.dart';
 import 'package:easy_invoice/bloc/get/get_all_size_cubit.dart';
 import 'package:easy_invoice/bloc/get/get_all_user_role_cubit.dart';
@@ -64,7 +65,12 @@ void locator() {
   GetAllProductCubit getAllProductCubit =
   GetAllProductCubit(getIt.get<UserRepository>());
   getIt.registerLazySingleton(() => getAllProductCubit);
-  
+
+ /* //get all product by cate id
+  FetchAllProductByCateIdCubit fetchAllProductByCateIdCubit =
+  FetchAllProductByCateIdCubit(getIt.get<UserRepository>());
+  getIt.registerLazySingleton(() => fetchAllProductByCateIdCubit);
+*/
   //get all size
   GetAllSizeCubit getAllSizeCubit =
       GetAllSizeCubit(getIt.get<UserRepository>());

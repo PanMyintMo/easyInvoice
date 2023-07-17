@@ -33,6 +33,11 @@ class _ProductDetailWidgetState extends State<ProductDetailWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        elevation: 0.0,
+        backgroundColor: Colors.white70,
+        iconTheme: const IconThemeData(
+          color: Colors.red, // Set the color of the navigation icon to black
+        ),
         actions: [
           PopupMenuButton(
             onSelected: (item) => onSelected(context, item),
@@ -63,7 +68,6 @@ class _ProductDetailWidgetState extends State<ProductDetailWidget> {
             Navigator.pop(context);
           },
         ),
-        backgroundColor: Colors.white,
       ),
       body: BlocConsumer<DeleteProductItemCubit, DeleteProductItemState>(
         listener: (context, state) {

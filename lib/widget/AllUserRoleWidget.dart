@@ -46,10 +46,7 @@ class _AllUserRoleWidgetState extends State<AllUserRoleWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('All User Role',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
-        backgroundColor: Colors.redAccent.withOpacity(0.8),
-      ),
+
       body: ListView.builder(
         itemCount: widget.userData.length,
         itemBuilder: (BuildContext context, int index) {
@@ -122,6 +119,4 @@ class _AllUserRoleWidgetState extends State<AllUserRoleWidget> {
       ),
     );
   }
-
-
 }

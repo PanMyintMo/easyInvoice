@@ -13,7 +13,12 @@ class _AddDeliveryScreenState extends State<AddDeliveryScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Add Delivery Screen'),),
+      appBar: AppBar(  elevation: 0.0,
+          backgroundColor: Colors.white70,
+          iconTheme: const IconThemeData(
+            color: Colors.red, // Set the color of the navigation icon to black
+          ),title: const Text('Add Delivery Screen', style: TextStyle(
+          color: Colors.black54, fontWeight: FontWeight.bold, fontSize: 16)),),
       body: const AddDeliveryWidget(),
     );
   }

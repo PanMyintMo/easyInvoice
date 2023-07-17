@@ -24,6 +24,7 @@ import '../responsemodel/DeleteProductResponse.dart';
 import '../responsemodel/DeleteUserRoleResponse.dart';
 import '../responsemodel/EditUserRoleResponse.dart';
 import '../responsemodel/LoginResponse.dart';
+import '../responsemodel/ProductByCategoryIdResponse.dart';
 import '../responsemodel/ProductResponse.dart';
 import '../responsemodel/RegisterResponse.dart';
 import '../responsemodel/ShopKeeperResponsePart/ShopKeeperResponse.dart';
@@ -227,6 +228,28 @@ class ApiService {
       );
     } catch (e) {
       throw Exception('Failed to fetch categories: $e');
+    }
+  }
+
+//fetch all product by category Id from db
+
+  Future<List<ProductItem>> fetchAllProductByCateId(int id) async {
+    try {
+      final response = await _dio.get(
+          'https://mmeasyinvoice.com/api/productByCategoryId/$id');
+      print('All Product by category id Response: ${response.data}');
+
+      if (response.statusCode == 200) {
+        final responseData = response.data;
+        print('Response data for cateid of product $responseData');
+        final productByCategoryIdResponse= ProductByCategoryIdResponse.fromJson(responseData);
+
+        return productByCategoryIdResponse.data;
+      } else {
+        throw Exception('Invalid data format for category by id field');
+      }
+    } catch (e) {
+      throw Exception('Failed to fetch product role: $e');
     }
   }
 

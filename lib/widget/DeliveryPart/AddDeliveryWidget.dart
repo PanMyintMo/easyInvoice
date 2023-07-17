@@ -61,7 +61,6 @@ class _AddDeliveryWidgetState extends State<AddDeliveryWidget> {
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: ListView(
-
         children: [
           Row(
             children: [

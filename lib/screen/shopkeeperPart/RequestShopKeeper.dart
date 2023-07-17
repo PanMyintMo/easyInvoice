@@ -19,7 +19,15 @@ class _RequestShopKeeperScreenState extends State<RequestShopKeeperScreen> {
     return BlocProvider(
       create: (context) => AddRequestProductShopKeeperCubit(getIt.call()),
       child: Scaffold(
-        appBar: AppBar(title: const Text('ShopKeeper Request Screen')),
+        appBar: AppBar(
+            elevation: 0.0,
+            backgroundColor: Colors.white70,
+            iconTheme: const IconThemeData(
+              color: Colors.red, // Set the color of the navigation icon to black
+            ),
+
+            title: const Text('ShopKeeper Request Screen',style: TextStyle(
+                color: Colors.black54, fontWeight: FontWeight.bold, fontSize: 16))),
         body: BlocBuilder<AddRequestProductShopKeeperCubit, AddRequestProductShopKeeperState>(
           builder: (context, state) {
             if(state is AddRequestProductShopKeeperLoading){}
@@ -28,7 +36,7 @@ class _RequestShopKeeperScreenState extends State<RequestShopKeeperScreen> {
 
             }
 
-            return  RequestShopKeeperWidget();
+            return  const RequestShopKeeperWidget();
           },
         ),
 
