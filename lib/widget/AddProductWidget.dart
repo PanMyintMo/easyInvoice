@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import '../common/CustomShapeForProduct.dart';
+import '../common/FormValidator.dart';
 import '../common/ThemeHelperUserClass.dart';
 import '../data/responsemodel/GetAllCategoryDetail.dart';
 import '../data/responsemodel/GetAllSizeResponse.dart';
@@ -455,12 +456,6 @@ class _AddProductWidgetState extends State<AddProductWidget> {
     }
   }
 
-  String? validateProductField(String? value) {
-    if (value!.isEmpty) {
-      return 'Please fill this field!';
-    }
-    return null;
-  }
 
   void _updateSlugField() {
     final productName = name.text;

@@ -155,35 +155,36 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
                         listData: [],
                         onClicked: () {
                           Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => const SizeAddScreen()));
+                              builder: (context) => const AllSizesScreen()));
                         },
                         onClickedItem: () {
                           Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => const AllSizesScreen()));
+                              builder: (context) => const SizeAddScreen()));
                         },
                         txtOne: 'All Size',
                         txtTwo: 'Add Size'),
                   const SizedBox(height: 16),
                   buildMenuExpansion(
                     text: 'Product',
-                    txtOne: (utype == 'ADM') ? 'Add Product' : '',
-                    txtTwo: (utype == 'ADM') ? 'All Product' : 'View Products',
+                    txtOne: (utype == 'ADM') ? 'All Product' : 'View products',
+                    txtTwo: (utype == 'ADM') ? 'Add Product' : '',
                     icon: Icons.format_size,
                     listData: [],
-                    onClicked: () {
-                      if (utype == 'ADM') {
+                    onClickedItem: () {
+                      if(utype == 'ADM'){
                         Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => const AddProductScreen(),
                         ));
                       }
-                    },
-                    onClickedItem: () {
-                      if (utype == 'SK') {
+                      },
+                    onClicked: () {
+                      if (utype == 'SK' || utype == 'ADM') {
                         Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => const AllProductScreen(),
                         ));
                       }
                     },
+
                   ),
                   const SizedBox(height: 16),
                   buildMenuExpansion(
@@ -240,17 +241,21 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
                   const SizedBox(height: 16),
                   buildMenuExpansion(
                     text: 'User',
-                    txtOne: (utype == 'ADM') ? 'Add User' : '',
-                    txtTwo: 'All User',
+                    txtOne: 'All User' ,
+                    txtTwo:  (utype =='ADM') ? 'Add User' : "",
                     icon: Icons.supervised_user_circle,
                     listData: [],
                     onClicked: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => const UserAddScreen()));
+                      if(utype == 'ADM' || utype == 'SK') {
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => const AllUserRoleScreen()));
+                      }
                     },
                     onClickedItem: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => const AllUserRoleScreen()));
+                      if(utype == 'ADM') {
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => const UserAddScreen()));
+                      }
                     },
                   ),
                   if (utype == 'SK')
@@ -401,7 +406,7 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
         Padding(
           padding: const EdgeInsets.only(left: 50),
           child: ListTile(
-            leading: (txtOne.isNotEmpty) ? Icon(Icons.add) : null,
+            leading: (txtOne.isNotEmpty) ? Icon(Icons.production_quantity_limits) : null,
             title: GestureDetector(
               onTap: onClicked,
               child: Text(
@@ -414,7 +419,7 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
         Padding(
           padding: const EdgeInsets.only(left: 50),
           child: ListTile(
-            leading: (txtTwo.isNotEmpty) ? Icon(Icons.accessibility) : null,
+            leading: (txtTwo.isNotEmpty) ? Icon(Icons.add) : null,
             title: GestureDetector(
               onTap: onClickedItem,
               child: Text(

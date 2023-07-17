@@ -3,9 +3,33 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../common/CustomButtom.dart';
+import '../network/SharedPreferenceHelper.dart';
 import '../screen/ProductDetailScreen.dart';
 
-class AllProductWidget extends StatelessWidget {
+class AllProductWidget extends StatefulWidget {
+  @override
+  State<AllProductWidget> createState() => _AllProductWidgetState();
+}
+
+class _AllProductWidgetState extends State<AllProductWidget> {
+  String utype = '';
+
+
+  @override
+  void initState() {
+    super.initState();
+    fetchUserType(); // Retrieve the user type from shared preferences
+
+  }
+
+  Future<void> fetchUserType() async {
+    final sessionManager = SessionManager();
+    final userType = await sessionManager.fetchUserType();
+    setState(() {
+      utype = userType ??
+          ''; // Assign the retrieved user type to the 'utype' variable
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<GetAllProductCubit, GetAllProductState>(
@@ -34,10 +58,7 @@ class AllProductWidget extends StatelessWidget {
                 title: const Text(
                   'All Product',
                   style: TextStyle(
-                    fontSize: 16,
-                    color: Color(0xff000000),
-                    fontWeight: FontWeight.w400,
-                  ),
+                      color: Colors.black54, fontWeight: FontWeight.bold, fontSize: 16),
                 ),
                 actions: [
                   IconButton(
@@ -109,7 +130,8 @@ class AllProductWidget extends StatelessWidget {
                               Text('Date: ${product.createdAt.substring(0, 10)}'),
                               Expanded(
                                 child: Center(
-                                  child: CustomButton(
+
+                                  child: (utype == 'ADM') ? CustomButton(
                                     label: 'View Detail Product',
                                     onPressed: () async {
                                       var result = await Navigator.push(
@@ -122,7 +144,7 @@ class AllProductWidget extends StatelessWidget {
                                         context.read<GetAllProductCubit>().getAllProduct();
                                       }
                                     },
-                                  ),
+                                  ) : null,
                                 ),
                               ),
                             ],

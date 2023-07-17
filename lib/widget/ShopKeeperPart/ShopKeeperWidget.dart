@@ -45,8 +45,6 @@ class _ShopKeeperWidgetState extends State<ShopKeeperWidget> {
         ),
 
       ],
-      
-      
     );
   }
 }

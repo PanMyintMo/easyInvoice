@@ -23,6 +23,7 @@ import '../responsemodel/DeleteUserRoleResponse.dart';
 import '../responsemodel/EditUserRoleResponse.dart';
 import '../responsemodel/GetAllCategoryDetail.dart';
 import '../responsemodel/LoginResponse.dart';
+import '../responsemodel/ProductByCategoryIdResponse.dart';
 import '../responsemodel/ProductResponse.dart';
 import '../responsemodel/ShopKeeperResponsePart/ShopKeeperResponse.dart';
 import '../responsemodel/SizeDeleteResponse.dart';
@@ -161,6 +162,17 @@ class UserRepository {
       rethrow;
     }
   }
+
+/*  //to fetch all product item by category id
+  Future<List<ProductItem>> fetchAllProductByCateId(int id) async {
+    try {
+      final response = await _apiService.fetchAllProductByCateId(id);
+      return response;
+    } catch (error) {
+      rethrow;
+    }
+  }*/
+
 
   //to delete product item by id
 

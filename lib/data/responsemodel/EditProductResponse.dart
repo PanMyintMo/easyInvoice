@@ -43,10 +43,13 @@ class EditProductResponse {
     final productResponse= data['data'] as Map<String,dynamic>;
     return EditProductResponse(id: productResponse['id'], name: productResponse['name'],
         slug: productResponse['slug'], short_description: productResponse['short_description'],
-        regular_price: productResponse['regular_price'], sale_price: productResponse['sale_price'],
+        regular_price: productResponse['regular_price'],
+        sale_price: productResponse['sale_price'],
         buying_price: productResponse['buying_price'],
         SKU: productResponse['SKU'], stock_status: productResponse['stock_status'],
-        feature: productResponse['feature'], quantity: productResponse['quantity'], image: productResponse['image'], category_id: productResponse['category_id'], size_id: productResponse['size_id'], barcode: productResponse['barcode'], updated_at: productResponse['updated_at'], created_at: productResponse['created_at'],
+        feature: productResponse['feature'], quantity: productResponse['quantity'], image: productResponse['image'],
+        category_id: productResponse['category_id'], size_id: productResponse['size_id'], barcode: productResponse['barcode'],
+        updated_at: productResponse['updated_at'], created_at: productResponse['created_at'],
         url: productResponse['url']);
   }
 }

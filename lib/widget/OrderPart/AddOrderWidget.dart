@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../common/FormValidator.dart';
 import '../../common/ThemeHelperUserClass.dart';
 
 class AddOrderWidget extends StatefulWidget {
@@ -182,10 +183,5 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
     );
   }
 
-  String? validateProductField(String? value) {
-    if (value!.isEmpty) {
-      return 'Please fill this field!';
-    }
-    return null;
-  }
+
 }

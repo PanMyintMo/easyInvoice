@@ -38,9 +38,6 @@ class _AddCategoryFromWidgetState extends State<AddCategoryFromWidget> {
     return BlocProvider(
       create: (context) => AddCategoryCubit(getIt.call()),
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Category'),
-        ),
         body: Center(
           child: SizedBox(
             width: double.infinity,
