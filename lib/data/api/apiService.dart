@@ -12,6 +12,7 @@ import 'package:easy_invoice/network/interceptor.dart';
 import '../../dataRequestModel/AddCategoryRequestModel.dart';
 import '../../dataRequestModel/AddProductRequestModel.dart';
 import '../../dataRequestModel/AddSizeRequestModel.dart';
+import '../../dataRequestModel/DeliveryPart/AddDeliveryCompanyNameRequestModel.dart';
 import '../../dataRequestModel/EditCategoryModel.dart';
 import '../../dataRequestModel/EditSizeModel.dart';
 import '../../dataRequestModel/EditUserRoleRequestModel.dart';
@@ -22,6 +23,7 @@ import '../responsemodel/AddCategoryResponseModel.dart';
 import '../responsemodel/CategoryDeleteRespose.dart';
 import '../responsemodel/DeleteProductResponse.dart';
 import '../responsemodel/DeleteUserRoleResponse.dart';
+import '../responsemodel/DeliveryPart/AddDeliveryResponse.dart';
 import '../responsemodel/EditUserRoleResponse.dart';
 import '../responsemodel/LoginResponse.dart';
 import '../responsemodel/ProductByCategoryIdResponse.dart';
@@ -88,6 +90,33 @@ class ApiService {
       );
     }
   }
+
+// add delivery company name
+  Future<AddDeliveryResponse> AddDelivery(AddDeliveryRequestModel addDeliveryRequestModel) async {
+    try {
+      final Response response = await _dio.post(
+        'https://mmeasyinvoice.com/api/add-delivery-companyname',
+        data: addDeliveryRequestModel.toJson(),
+      );
+      if (response.statusCode == 200) {
+        final AddDeliveryResponse data = AddDeliveryResponse.fromJson(response.data);
+        return data;
+      } else {
+        // print("My response status code is ${response.statusCode}");
+        throw DioError(
+          requestOptions: RequestOptions(path: '/api/add-delivery-companyname'),
+          response: response,
+        );
+      }
+    } catch (error) {
+      throw DioError(
+        requestOptions: RequestOptions(path: '/api/add-delivery-companyname'),
+        error: error,
+      );
+    }
+  }
+
+
 
   //Add category
 

@@ -20,12 +20,10 @@ class _ProductInvoiceWidgetState extends State<ProductInvoiceWidget> {
       child: ListView(
         
         children:  [
-          Row(
-            children: [
-              Expanded(child: Text('Product Invoice')),
-              Expanded(child: ElevatedButton(onPressed: () {  }, child: Text('Print'),))
-            ],
-          ),
+
+          Align(
+            alignment: Alignment.topRight,
+              child: ElevatedButton(onPressed: () {  }, child: const Text('Print'),)),
           SizedBox(height: 16,),
           Expanded(
             child: buildProductContainerForm(
@@ -36,7 +34,6 @@ class _ProductInvoiceWidgetState extends State<ProductInvoiceWidget> {
             ),
           ),
         ],
-
 
       ),
     );

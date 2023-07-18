@@ -4,11 +4,11 @@ import 'package:easy_invoice/bloc/edit/edit_category_cubit.dart';
 import 'package:easy_invoice/bloc/edit/edit_product_item_cubit.dart';
 import 'package:easy_invoice/bloc/edit/edit_size_cubit.dart';
 import 'package:easy_invoice/bloc/edit/edit_user_role_cubit.dart';
-import 'package:easy_invoice/bloc/get/fetch_all_product_by_cate_id_cubit.dart';
 import 'package:easy_invoice/bloc/get/get_all_product_cubit.dart';
 import 'package:easy_invoice/bloc/get/get_all_size_cubit.dart';
 import 'package:easy_invoice/bloc/get/get_all_user_role_cubit.dart';
 import 'package:easy_invoice/bloc/get/get_category_detail_cubit.dart';
+import 'package:easy_invoice/bloc/post/DeliveryPart/add_delivery_cubit.dart';
 import 'package:easy_invoice/bloc/post/ShopKeeperPart/add_request_product_shop_keeper_cubit.dart';
 import 'package:easy_invoice/bloc/post/add_category_cubit.dart';
 import 'package:easy_invoice/bloc/post/add_product_cubit.dart';
@@ -45,6 +45,11 @@ void locator() {
   AddCategoryCubit addCategoryCubit =
       AddCategoryCubit(getIt.get<UserRepository>());
   getIt.registerLazySingleton(() => addCategoryCubit);
+
+  //to add deliver company name
+  AddDeliveryCubit addDeliveryCubit =
+  AddDeliveryCubit(getIt.get<UserRepository>());
+  getIt.registerLazySingleton(() => addDeliveryCubit);
 
   //to add product to db
   AddProductCubit addProductCubit =

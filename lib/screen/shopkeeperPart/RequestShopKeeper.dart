@@ -35,7 +35,6 @@ class _RequestShopKeeperScreenState extends State<RequestShopKeeperScreen> {
             else {
 
             }
-
             return  const RequestShopKeeperWidget();
           },
         ),

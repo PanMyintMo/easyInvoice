@@ -11,6 +11,8 @@ class AddOrderWidget extends StatefulWidget {
 }
 
 class _AddOrderWidgetState extends State<AddOrderWidget> {
+  String? payment; // no radio button will be selected on initial
+
   final TextEditingController name = TextEditingController();
   final TextEditingController phone = TextEditingController();
   final TextEditingController email = TextEditingController();
@@ -30,27 +32,20 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
       padding: const EdgeInsets.all(16.0),
       child: ListView(
         children: [
-          Row(
-            children: [
-              const Expanded(child: Text('Add Order')),
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: () {},
-                  child: const Text('All Order'),
-                ),
-              ),
-            ],
+          Align(
+            alignment: Alignment.topRight,
+            child: ElevatedButton(
+              onPressed: () {},
+              child: const Text('All Order'),
+            ),
           ),
           const SizedBox(height: 16.0),
-          const Text('Billing Address'),
-          const SizedBox(height: 16.0),
-          Row(
-            children: [
-              buildProductContainerText('First Name'),
-              buildProductContainerText('Last Name'),
-            ],
+          const Text(
+            'Billing Address',
+            style: TextStyle(fontSize: 18),
           ),
           const SizedBox(height: 16.0),
+
           Row(
             children: [
               Expanded(
@@ -70,14 +65,6 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
                   validateProductField,
                 ),
               ),
-            ],
-          ),
-
-          const SizedBox(height: 16.0),
-          Row(
-            children: [
-              buildProductContainerText('Phone Number'),
-              buildProductContainerText('Email'),
             ],
           ),
           const SizedBox(height: 16.0),
@@ -100,12 +87,6 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
                   validateProductField,
                 ),
               ),
-            ],
-          ), const SizedBox(height: 16.0),
-          Row(
-            children: [
-              buildProductContainerText('Line 1'),
-              buildProductContainerText('Line 2'),
             ],
           ),
           const SizedBox(height: 16.0),
@@ -130,26 +111,31 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
               ),
             ],
           ),
-
-
           const SizedBox(height: 16.0),
-          Row(
-            children: [
-              buildProductContainerText('Country'),
-              buildProductContainerText('Postcode / Zip: (Optional)'),
-            ],
-          ),
-          const SizedBox(height: 16.0),
+
           Row(
             children: [
               Expanded(
-                child: buildProductContainerForm(
-                  'Country',
-                  TextInputType.text,
-                  phone,
-                  validateProductField,
+                  child: chooseItemIdForm(DropdownButton(
+                items: [],
+                onChanged: (value) {
+                  setState(() {
+                    // size_id.text = value;
+                  });
+                },
+                //  value: size_id.text,
+                hint: const Text('Select Company Name'),
+                underline: const SizedBox(),
+                borderRadius: BorderRadius.circular(10),
+                icon: const Icon(Icons.arrow_drop_down),
+                iconSize: 24,
+                isExpanded: true,
+                dropdownColor: Colors.white,
+                style: const TextStyle(
+                  color: Colors.black,
+                  fontSize: 16,
                 ),
-              ),
+              ))),
               const SizedBox(width: 10.0),
               Expanded(
                 child: buildProductContainerForm(
@@ -178,10 +164,119 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
               ),
             ],
           ),
+       const SizedBox(height: 16.0),
+          Row(
+            children: [
+              Expanded(
+                  child: chooseItemIdForm(DropdownButton(
+                items: [],
+                onChanged: (value) {
+                  setState(() {
+                    // size_id.text = value;
+                  });
+                },
+                //  value: size_id.text,
+                hint: const Text('Select Product'),
+                underline: const SizedBox(),
+                borderRadius: BorderRadius.circular(10),
+                icon: const Icon(Icons.arrow_drop_down),
+                iconSize: 24,
+                isExpanded: true,
+                dropdownColor: Colors.white,
+                style: const TextStyle(
+                  color: Colors.black,
+                  fontSize: 16,
+                ),
+              ))),
+              const SizedBox(width: 10.0),
+              Expanded(
+                child: buildProductContainerForm(
+                  'Sale Price',
+                  TextInputType.number,
+                  email,
+                  validateProductField,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16.0),
+
+          Row(
+            children: [
+              Expanded(
+                child: buildProductContainerForm(
+                  'Available Qty',
+                  TextInputType.number,
+                  email,
+                  validateProductField,
+                ),
+              ),
+              const SizedBox(width: 10.0),
+              Expanded(
+                child: buildProductContainerForm(
+                  'Qty',
+                  TextInputType.number,
+                  email,
+                  validateProductField,
+                ),
+              ),
+              const SizedBox(width: 10.0),
+              Expanded(
+                child: buildProductContainerForm(
+                  'Total',
+                  TextInputType.number,
+                  email,
+                  validateProductField,
+                ),
+              ),
+
+            ],
+          ),
+          const SizedBox(height: 16.0),
+          const Expanded(child: Text('Payment Method', style: TextStyle(fontSize: 18))),
+          const SizedBox(height: 16.0),
+          Row(
+            children: [
+              Expanded(
+                child: RadioListTile(
+                    title: const Text('Cash On Delivery'),
+                    value: "Cash On Delivery",
+                    groupValue: payment,
+                    onChanged: (value) {
+                      setState(() {
+                        payment = value;
+                      });
+                    }),
+              ),
+              Expanded(
+                child: RadioListTile(
+                    title: const Text('Kpay'),
+                    value: "Kpay",
+                    groupValue: payment,
+                    onChanged: (value) {
+                      setState(() {
+                        payment = value;
+                      });
+                    }),
+              ),
+              Expanded(
+                child: RadioListTile(
+                    title: const Text('Wave pay'),
+                    value: "Wave pay",
+                    groupValue: payment,
+                    onChanged: (value) {
+                      setState(() {
+                        payment = value;
+                      });
+                    }),
+              )
+            ],
+          ),
+          const SizedBox(height: 16.0),
+          Align(alignment: Alignment.bottomRight,
+              child: ElevatedButton(onPressed: (){}, child: const Text('Place Order Now')))
         ],
       ),
     );
   }
-
-
 }
