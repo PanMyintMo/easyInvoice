@@ -1,17 +1,18 @@
-import 'package:easy_invoice/bloc/post/sign_up_cubit.dart';
-import 'package:easy_invoice/screen/register.dart';
+import 'package:easy_invoice/screen/splash_screen.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
-import 'package:flutter/material.dart';
-import 'package:easy_invoice/module/module.dart';
-import 'package:easy_invoice/screen/splash_screen.dart';
-import 'package:easy_invoice/screen/mainscreen.dart';
-import 'package:easy_invoice/screen/login.dart';
+
+import '../bloc/post/sign_up_cubit.dart';
+import '../module/module.dart';
+import 'Login.dart';
+import 'Register.dart';
+import 'mainscreen.dart';
+
 
 void main() {
-
+  WidgetsFlutterBinding.ensureInitialized();
   locator();
-
   runApp(const MyApp());
 }
 
@@ -25,23 +26,23 @@ class MyApp extends StatelessWidget {
       child: GetMaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-            primarySwatch: Colors.pink,
-            appBarTheme: const AppBarTheme(
-                backgroundColor: Colors.redAccent,
-                // This will be applied to the "back" icon
-                iconTheme: IconThemeData(color: Colors.white),
-                // This will be applied to the action icon buttons that locates on the right side
-                actionsIconTheme: IconThemeData(color: Colors.white),
-                centerTitle: false,
-                elevation: 0,
-                titleTextStyle: TextStyle(color: Colors.white,fontSize: 24))),
-
+          primarySwatch: Colors.pink,
+          appBarTheme: const AppBarTheme(
+            backgroundColor: Colors.redAccent,
+            iconTheme: IconThemeData(color: Colors.white),
+            actionsIconTheme: IconThemeData(color: Colors.white),
+            centerTitle: false,
+            elevation: 0,
+            titleTextStyle: TextStyle(color: Colors.white, fontSize: 24),
+          ),
+        ),
         getPages: [
-          GetPage(name: "/", page: () => const SplashScreen()), // Define SplashScreen route
-          GetPage(name: "/Login", page: () => const Login()), // Define Login route
+          GetPage(name: "/", page: () => const SplashScreen()),
+          GetPage(name: "/login", page: () => const Login()),
           GetPage(name: '/register', page: () => const Register()),
-          GetPage(name: "/MainScreen", page: () =>  MainPageScreen()), // Define MainPageScreen route
+          GetPage(name: "/mainScreen", page: () => const MainPageScreen()),
         ],
+        initialRoute: "/",
       ),
     );
   }

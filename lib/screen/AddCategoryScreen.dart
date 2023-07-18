@@ -19,7 +19,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
       child: Scaffold(
         appBar: AppBar(
           elevation: 0.0,
-          backgroundColor: Colors.white70,
+          backgroundColor: Colors.white24,
           iconTheme: const IconThemeData(
             color: Colors.red, // Set the color of the navigation icon to black
           ),

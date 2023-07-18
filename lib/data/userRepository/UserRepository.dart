@@ -11,6 +11,7 @@ import 'package:easy_invoice/dataRequestModel/UserRequestModel.dart';
 import '../../dataRequestModel/AddCategoryRequestModel.dart';
 import '../../dataRequestModel/AddProductRequestModel.dart';
 import '../../dataRequestModel/AddSizeRequestModel.dart';
+import '../../dataRequestModel/DeliveryPart/AddDeliveryCompanyNameRequestModel.dart';
 import '../../dataRequestModel/EditCategoryModel.dart';
 import '../../dataRequestModel/EditSizeModel.dart';
 import '../../dataRequestModel/LoginRequestModel.dart';
@@ -20,10 +21,10 @@ import '../responsemodel/AddCategoryResponseModel.dart';
 import '../responsemodel/CategoryDeleteRespose.dart';
 import '../responsemodel/DeleteProductResponse.dart';
 import '../responsemodel/DeleteUserRoleResponse.dart';
+import '../responsemodel/DeliveryPart/AddDeliveryResponse.dart';
 import '../responsemodel/EditUserRoleResponse.dart';
 import '../responsemodel/GetAllCategoryDetail.dart';
 import '../responsemodel/LoginResponse.dart';
-import '../responsemodel/ProductByCategoryIdResponse.dart';
 import '../responsemodel/ProductResponse.dart';
 import '../responsemodel/ShopKeeperResponsePart/ShopKeeperResponse.dart';
 import '../responsemodel/SizeDeleteResponse.dart';
@@ -162,6 +163,19 @@ class UserRepository {
       rethrow;
     }
   }
+
+  //to add delivery company
+
+  Future<AddDeliveryResponse> addDelivery(AddDeliveryRequestModel addDeliveryRequestModel) async{
+    try{
+      final response= await _apiService.AddDelivery(addDeliveryRequestModel);
+      return response;
+    }
+    catch(e){
+      rethrow;
+    }
+  }
+
 
 /*  //to fetch all product item by category id
   Future<List<ProductItem>> fetchAllProductByCateId(int id) async {

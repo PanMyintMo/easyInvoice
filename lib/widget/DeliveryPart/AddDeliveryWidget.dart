@@ -54,48 +54,53 @@ class _AddDeliveryWidgetState extends State<AddDeliveryWidget> {
     }
   }
 
-
-
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: ListView(
-        children: [
-          Row(
+    return Stack(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: ListView(
             children: [
-              const Expanded(child: Text('Delivery')),
-              Expanded(
-                  child: ElevatedButton(
-                      onPressed: () {}, child: const Text('All Deliveries'))),
-            ],
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          const Text('Delivery Name'),
-          Container(
-            alignment: Alignment.centerLeft,
-            child: TextFormField(
-              decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0)),
-                  labelText: 'Delivery Name',
-                  hintText: 'Delivery Name'),
-            ),
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          ElevatedButton(onPressed: () {}, child: const Text('Add Delivery')),
-          const SizedBox(
-            height: 10,
-          ),
-          Row(
-            children: [
-              const Expanded(child: Text('Choose Delivery')),
-              Expanded(child: chooseItemIdForm(
-                  DropdownButton(
+              Align(
+                alignment: Alignment.topRight,
+                child: ElevatedButton(
+                    onPressed: () {},
+                    child: const Text('All Deliveries')),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+             // const Text('Delivery Name'),
+             /* const SizedBox(
+                height: 10,
+              ),*/
+              Container(
+                alignment: Alignment.centerLeft,
+                child: TextFormField(
+                  decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0)),
+                      labelText: 'Delivery Name',
+                      hintText: 'Delivery Name'),
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Align(
+                alignment: Alignment.centerRight,
+                child: ElevatedButton(
+                    onPressed: () {}, child: const Text('Add Delivery')),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Row(
+                children: [
+                  const Expanded(child: Text('Choose Delivery')),
+                  Expanded(
+                      child: chooseItemIdForm(DropdownButton(
                     items: [],
                     onChanged: (value) {
                       setState(() {
@@ -114,18 +119,17 @@ class _AddDeliveryWidgetState extends State<AddDeliveryWidget> {
                       color: Colors.black,
                       fontSize: 16,
                     ),
-                  )
-              ))
-            ],
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          Row(
-            children: [
-              const Expanded(child: Text('Choose City')),
-              Expanded(child: chooseItemIdForm(
-                  DropdownButton(
+                  )))
+                ],
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Row(
+                children: [
+                  const Expanded(child: Text('Choose City')),
+                  Expanded(
+                      child: chooseItemIdForm(DropdownButton(
                     items: [],
                     onChanged: (value) {
                       setState(() {
@@ -144,18 +148,17 @@ class _AddDeliveryWidgetState extends State<AddDeliveryWidget> {
                       color: Colors.black,
                       fontSize: 16,
                     ),
-                  )
-              ))
-            ],
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          Row(
-            children: [
-              const Expanded(child: Text('Choose Township')),
-              Expanded(child: chooseItemIdForm(
-                  DropdownButton(
+                  )))
+                ],
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Row(
+                children: [
+                  const Expanded(child: Text('Choose Township')),
+                  Expanded(
+                      child: chooseItemIdForm(DropdownButton(
                     items: [],
                     onChanged: (value) {
                       setState(() {
@@ -174,85 +177,96 @@ class _AddDeliveryWidgetState extends State<AddDeliveryWidget> {
                       color: Colors.black,
                       fontSize: 16,
                     ),
+                  )))
+                ],
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Row(
+                children: [
+                  const Expanded(child: Text('Basic Cost')),
+                  Expanded(
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      alignment: Alignment.centerLeft,
+                      child: TextFormField(
+                        decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10.0)),
+                            labelText: 'Basic Cost',
+                            hintText: 'Basic Cost'),
+                      ),
+                    ),
                   )
-              ))
-            ],
-          ),
-          const SizedBox(
-            height: 10,
-          ), const SizedBox(
-            height: 10,
-          ),
-          Row(
-            children: [
-              const Expanded(child: Text('Basic Cost')),
-              Expanded(child:
+                ],
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Row(
+                children: [
+                  const Expanded(child: Text('Waiting Time')),
+                  Expanded(
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      alignment: Alignment.centerLeft,
+                      child: TextFormField(
+                        decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10.0)),
+                            labelText: 'Waiting Time',
+                            hintText: 'Waiting Time'),
+                      ),
+                    ),
+                  )
+                ],
+              ),
 
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                alignment: Alignment.centerLeft,
-                child: TextFormField(
-                  decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10.0)),
-                      labelText: 'Basic Cost',
-                      hintText: 'Basic Cost'),
+              const SizedBox(
+                height: 10,
+              ),
+              const Text('Upload Image'),
+              const SizedBox(
+                height: 10,
+              ),
+              DottedBorder(
+                borderType: BorderType.RRect,
+                color: Colors.grey,
+                strokeWidth: 1,
+                radius: const Radius.circular(10),
+                dashPattern: const [4, 4],
+                child: InkWell(
+                  onTap: () {
+                    pickImage();
+                  },
+                  child: SizedBox(
+                    width: double.infinity,
+                    height: 100,
+                    child: Center(
+                      child: buildImageWidget(),
+                    ),
+                  ),
                 ),
               ),
-              )
+              const SizedBox(
+                height: 10,
+              ),
+              Align(
+                alignment: Alignment.bottomRight,
+                child: ElevatedButton(
+                    onPressed: validateAndSubmit, child: const Text('Add New')),
+              ),
             ],
           ),
-          const SizedBox(
-            height: 10,
-          ),
-          Row(
-            children: [
-              const Expanded(child: Text('Waiting Time')),
-              Expanded(child:
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                alignment: Alignment.centerLeft,
-                child: TextFormField(
-                  decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10.0)),
-                      labelText: 'Waiting Time',
-                      hintText: 'Waiting Time'),
-                ),
-              ),
-              )
-            ],
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          ElevatedButton(onPressed: () {}, child: const Text('Add New')
-          ),
-          const SizedBox(height: 10,),
-          const Text('Upload Image'),
-          const SizedBox(height: 10,),
-          DottedBorder(
-            borderType: BorderType.RRect,
-            color: Colors.grey,
-            strokeWidth: 1,
-            radius: const Radius.circular(10),
-            dashPattern: const [4, 4],
-            child: InkWell(
-              onTap: () {
-                pickImage();
-              },
-              child: SizedBox(
-                width: double.infinity,
-                height: 100,
-                child: Center(
-                  child: buildImageWidget(),
-                ),
-              ),
-            ),
-          ),
+        ),
 
-        ],
-      ),
+      ],
     );
   }
+
+  void validateAndSubmit() async {}
 }
