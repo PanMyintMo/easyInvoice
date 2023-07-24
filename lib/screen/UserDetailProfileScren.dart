@@ -153,11 +153,10 @@ class _UserDetailProfileScreenState extends State<UserDetailProfileScreen> {
                             padding: const EdgeInsets.all(10),
                             alignment: Alignment.center,
                             child: Container(
-                              padding: const EdgeInsets.all(10),
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(100),
                                 border:
-                                    Border.all(width: 5, color: Colors.white),
+                                    Border.all( color: Colors.white24),
                                 color: Colors.white,
                                 boxShadow: const [
                                   BoxShadow(
@@ -172,8 +171,8 @@ class _UserDetailProfileScreenState extends State<UserDetailProfileScreen> {
                                 child: widget.url.isNotEmpty
                                     ? Image.network(
                                         widget.url,
-                                        width: 80,
-                                        height: 80,
+                                        width: 130,
+                                        height: 130,
                                         fit: BoxFit.cover,
                                         errorBuilder:
                                             (context, error, stackTrace) {
@@ -181,14 +180,14 @@ class _UserDetailProfileScreenState extends State<UserDetailProfileScreen> {
                                           return Icon(
                                             Icons.person,
                                             color: Colors.grey.shade300,
-                                            size: 80.0,
+                                            size: 130.0,
                                           );
                                         },
                                       )
                                     : Icon(
                                         Icons.person,
                                         color: Colors.grey.shade300,
-                                        size: 80.0,
+                                        size: 130.0,
                                       ),
                               ),
                             ),

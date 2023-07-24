@@ -41,8 +41,6 @@ class _AllUserRoleWidgetState extends State<AllUserRoleWidget> {
     });
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
