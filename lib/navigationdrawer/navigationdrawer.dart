@@ -89,7 +89,7 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
                     ListTile(
                       leading: const Icon(
                         Icons.home,
-                        color: Colors.redAccent,
+                        color: Colors.black,
                       ),
                       title: GestureDetector(
                         onTap: () {
@@ -106,7 +106,7 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
                       ),
                     ),
                  const Divider(color: Colors.black12),
-                  SizedBox(height: 16,),
+                  const SizedBox(height: 16,),
                   if (utype == 'ADM')
                     buildMenuItem(
                       text: 'Delivery Man',
@@ -116,7 +116,7 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
                         builder: (context) => const DeliveryManScreen(),
                       )),
                     ),
-
+                  const SizedBox(height: 16,),
                   buildMenuExpansion(
                     text: 'Delivery System',
                     txtOne: 'View Delivery',
@@ -135,12 +135,12 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
                     },
                   ),
                   const Divider(color: Colors.black12),
-                  SizedBox(height: 16,),
+                  const SizedBox(height: 16,),
                   if (utype == 'SK' || utype == 'ADM')
                     ListTile(
                       leading: const Icon(
                         Icons.shop,
-                        color: Colors.redAccent,
+                        color: Colors.black,
                       ),
                       title: GestureDetector(
                         onTap: () {
@@ -156,7 +156,7 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
                         ),
                       ),
                     ),
-                  SizedBox(height: 16,),
+                  const SizedBox(height: 16,),
                   
                   if(utype == 'ADM')
                     buildMenuItem(text: 'FaultyItem', icon: Icons.add_business,onClicked: () =>
@@ -174,7 +174,7 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
                         ))),
 
                   const Divider(color: Colors.black12),
-                  SizedBox(height: 16,),
+                  const SizedBox(height: 16,),
                   if (utype == 'ADM')
                     buildMenuExpansion(
                       text: 'Category',
@@ -252,7 +252,7 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
                           builder: (context) => const AddOrderScreen()));
                     },
                   ),
-                  const SizedBox(height: 16),
+
                   const Divider(color: Colors.black12),
                   const SizedBox(height: 16),
                   if(utype == 'ADM' || utype == 'SK')
@@ -437,7 +437,7 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
             icon,
             color: color,
           ),
-          const SizedBox(width: 16),
+          const SizedBox(width: 32),
           Text(
             text,
             style: const TextStyle(color: color),
@@ -487,7 +487,7 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
             icon,
             color: color,
           ),
-          const SizedBox(width: 30),
+          const SizedBox(width: 32),
           Text(
             text,
             style: const TextStyle(color: color),

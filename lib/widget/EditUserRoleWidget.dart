@@ -1,11 +1,10 @@
 import 'dart:io';
 import 'package:easy_invoice/bloc/edit/edit_user_role_cubit.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import '../common/FormValidator.dart';
-import '../common/MyCustomClipper.dart';
+import '../common/HeaderWidget.dart';
 import '../common/ThemeHelperUserClass.dart';
 import '../dataRequestModel/EditUserRoleRequestModel.dart';
 
@@ -26,7 +25,7 @@ class EditUserRoleWidget extends StatefulWidget {
     required this.password,
     required this.utype,
     required this.newimage,
-     this.onSave,
+    this.onSave,
   }) : super(key: key);
 
   @override
@@ -56,9 +55,9 @@ class _EditUserRoleWidgetState extends State<EditUserRoleWidget> {
     selectedUserRole =
     utype.isNotEmpty ? getDropdownValueFromUtype(utype) : null;
     if (widget.newimage != null && widget.newimage!.isNotEmpty) {
-      image = File(widget.newimage!);
+      newimage = widget.newimage!;
     } else {
-      image = null;
+      newimage = null;
     }
   }
 
@@ -69,9 +68,11 @@ class _EditUserRoleWidgetState extends State<EditUserRoleWidget> {
       final file = File(pickedFile.path);
       setState(() {
         image = file;
+        newimage = null;
       });
     }
   }
+
 
   String? getUtypeFromDropdownValue(String value) {
     if (value == "User") {
@@ -119,56 +120,98 @@ class _EditUserRoleWidgetState extends State<EditUserRoleWidget> {
           children: [
             Stack(
               children: [
-                ClipPath(
-                  clipper: MyCustomClipper(),
-                  child: Container(
-                    height: 200,
-                    color: Colors.redAccent,
+                const SizedBox(
+                  height: 150,
+                  child: HeaderWidget(
+                    150,
+                    false,
+                    Icons.person_add_alt_1_rounded,
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 90),
-                  child: Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Column(
-                      children: [
-                        Stack(
-                          children: [
-                            Container(
-                              padding: const EdgeInsets.all(10),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(100),
-                                color: Colors.white,
-                                boxShadow: const [
-                                  BoxShadow(
-                                    color: Colors.black12,
-                                    blurRadius: 20,
-                                    offset: Offset(5, 5),
-                                  ),
-                                ],
-                              ),
-                              child: getImageWidget(),
-                            ),
-                            Positioned(
-                              bottom: 0,
-                              right: -20,
-                              child: RawMaterialButton(
-                                onPressed: _chooseProfilePicture,
-                                elevation: 4.0,
-                                fillColor: const Color(0xFFF5F6F9),
-                                padding: const EdgeInsets.all(10.0),
-                                shape: const CircleBorder(),
-                                child: const Icon(
-                                  Icons.camera_alt_outlined,
-                                  color: Colors.black,
-                                  size: 24,
-                                ),
-                              ),
+                Container(
+                  margin: const EdgeInsets.fromLTRB(25, 50, 25, 10),
+                  padding: const EdgeInsets.all(10),
+                  alignment: Alignment.center,
+                  child: Stack(
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(100),
+                          border:
+                          Border.all(color: Colors.white24),
+                          color: Colors.white,
+                          boxShadow: const [
+                            BoxShadow(
+                              color: Colors.black12,
+                              blurRadius: 20,
+                              offset: Offset(5, 5),
                             ),
                           ],
                         ),
-                      ],
-                    ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(100),
+                          child: Stack(
+                            children: [
+                              if (newimage != null && newimage!.isNotEmpty)
+                                Image.network(
+                                  newimage!, // Display image from network URL
+                                  width: 130,
+                                  height: 130,
+                                  fit: BoxFit.cover,
+                                  errorBuilder: (context, error, stackTrace) {
+                                    return Icon(
+                                      Icons.person,
+                                      color: Colors.grey.shade300,
+                                      size: 130.0,
+                                    );
+                                  },
+                                )
+                              else if (image != null)
+                                Image.file(
+                                  image!, // Display image from local file path
+                                  width: 130,
+                                  height: 130,
+                                  fit: BoxFit.cover,
+                                  errorBuilder: (context, error, stackTrace) {
+                                    return Icon(
+                                      Icons.person,
+                                      color: Colors.grey.shade300,
+                                      size: 130.0,
+                                    );
+                                  },
+                                )
+                              else
+                                Icon(
+                                  Icons.person,
+                                  color: Colors.grey.shade300,
+                                  size: 130.0,
+                                ),
+                            ],
+                          ),
+                        ),
+                      ), Positioned(
+                        bottom: 0,
+                        right: 0,
+                        child: Container(
+                          width: 50,
+                          height: 50,
+                          decoration: const BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Color(0xFFF5F6F9),
+                          ),
+                          child: RawMaterialButton(
+                            onPressed: _chooseProfilePicture,
+                            elevation: 3.0,
+                            fillColor: const Color(0xFFF5F6F9),
+                            padding: const EdgeInsets.all(10.0),
+                            shape: const CircleBorder(),
+                            child: const Icon(
+                              Icons.camera_alt_outlined,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
 
@@ -285,10 +328,7 @@ class _EditUserRoleWidgetState extends State<EditUserRoleWidget> {
                                   isSaving = false;
                                 });
                               });
-                              // call onSave call back
-
                               widget.onSave?.call();
-
                             }
                           }
                         },
@@ -307,6 +347,7 @@ class _EditUserRoleWidgetState extends State<EditUserRoleWidget> {
             ),
           ],
         ),
+
         if (isSaving)
           Container(
             color: Colors.black54,
@@ -317,44 +358,6 @@ class _EditUserRoleWidgetState extends State<EditUserRoleWidget> {
       ],
     );
   }
-
-  Widget getImageWidget() {
-    if (kIsWeb || Platform.isAndroid || Platform.isIOS) {
-      return image != null && image!.path.isNotEmpty
-          ? Image.file(
-        image!,
-        fit: BoxFit.cover,
-      )
-          : image != null
-          ? const CircleAvatar(
-        radius: 40,
-        backgroundImage: AssetImage('assets/userprofile.png'),
-      )
-          : const Icon(
-        Icons.person,
-        color: Colors.grey,
-        size: 80.0,
-      );
-    } else {
-      // For other platforms like desktop
-      return image != null
-          ? Image.file(
-        image!,
-        fit: BoxFit.cover,
-      )
-          : image != null
-          ? CircleAvatar(
-        radius: 40,
-        backgroundImage: NetworkImage(image as String),
-      )
-          : const Icon(
-        Icons.person,
-        color: Colors.grey,
-        size: 80.0,
-      );
-    }
-  }
-
 
   @override
   void dispose() {

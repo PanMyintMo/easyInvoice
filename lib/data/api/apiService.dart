@@ -21,6 +21,8 @@ import '../../dataRequestModel/RegisterRequestModel.dart';
 import '../../dataRequestModel/ShopKeeperPart/ShopKeeperRequestModel.dart';
 import '../responsemodel/AddCategoryResponseModel.dart';
 import '../responsemodel/CategoryDeleteRespose.dart';
+import '../responsemodel/CityPart/Cities.dart';
+import '../responsemodel/CountryPart/CountryResponse.dart';
 import '../responsemodel/DeleteProductResponse.dart';
 import '../responsemodel/DeleteUserRoleResponse.dart';
 import '../responsemodel/DeliveryPart/AddDeliveryResponse.dart';
@@ -260,6 +262,110 @@ class ApiService {
     }
   }
 
+  //fetch all city from db
+  Future<CityResponse> cities() async {
+    try {
+      int currentPage = 1;
+      CityData? cityData; // Change to nullable type
+      List<City> cityItems = [];
+
+      while (true) {
+        final response = await _dio.get('https://mmeasyinvoice.com/api/cities?page=$currentPage');
+        print('Cities Response is ${response.data}');
+
+        if (response.statusCode == 200) {
+          final dynamic responseData = response.data;
+          final cities = CityResponse.fromJson(responseData);
+          cityData = cities.data; // Update the cityData variable
+
+          final List<City> cityItem = cityData.cities;
+          cityItems.addAll(cityItem);
+
+          if (currentPage == cityData.lastPage) {
+            break;
+          } else {
+            currentPage++;
+          }
+        } else {
+          throw Exception('Failed to fetch city');
+        }
+      }
+
+      if (cityData == null) {
+        throw Exception('No city data found');
+      }
+
+      return CityResponse(
+        data: CityData(
+          currentPage: cityData.currentPage,
+          cities: cityItems,
+          firstPageUrl: 'https://mmeasyinvoice.com/api/cities?page=1',
+          lastPage: cityData.lastPage,
+          lastPageUrl: 'https://mmeasyinvoice.com/api/cities?page=${cityData.lastPage}',
+          links: cityData.links,
+          nextPageUrl: (currentPage < cityData.lastPage)
+              ? 'https://mmeasyinvoice.com/api/cities?page=${currentPage + 1}'
+              : null,
+        ),
+      );
+    } catch (e) {
+      throw Exception('Failed to fetch cities: $e');
+    }
+  }
+  //fetch all country from db
+  Future<CountryResponse> country() async {
+    try {
+      int currentPage = 1;
+      CountryData? countryData; // Change to nullable type
+      List<Country> countryItems = [];
+
+      while (true) {
+        final response = await _dio.get('https://mmeasyinvoice.com/api/countries?page=$currentPage');
+        print('Country Response is ${response.data}');
+
+        if (response.statusCode == 200) {
+          final dynamic responseData = response.data;
+          final countries = CountryResponse.fromJson(responseData);
+          countryData = countries.data; // Update the cityData variable
+
+          final List<Country> countryItem = countryData.data;
+          countryItems.addAll(countryItem);
+
+          if (currentPage == countryData.lastPage) {
+            break;
+          } else {
+            currentPage++;
+          }
+        } else {
+          throw Exception('Failed to fetch country');
+        }
+      }
+
+      if (countryData == null) {
+        throw Exception('No country data found');
+      }
+
+      return CountryResponse(
+        data: CountryData(
+          currentPage: countryData.currentPage,
+          data: countryItems,
+          firstPageUrl: 'https://mmeasyinvoice.com/api/countries?page=1',
+          lastPage: countryData.lastPage,
+          lastPageUrl: 'https://mmeasyinvoice.com/api/countries?page=${countryData.lastPage}',
+          links: countryData.links,
+          nextPageUrl: (currentPage < countryData.lastPage)
+              ? 'https://mmeasyinvoice.com/api/countries?page=${currentPage + 1}'
+              : null, from: 1, path: '',
+          perPage: countryItems.length, prevPageUrl: '',
+          to: countryItems.length, total: 0,
+        ),
+      );
+    } catch (e) {
+      throw Exception('Failed to fetch countries: $e');
+    }
+  }
+
+
 //fetch all product by category Id from db
 
   Future<List<ProductItem>> fetchAllProductByCateId(int id) async {
@@ -399,18 +505,55 @@ class ApiService {
 //fetch all user role from db
   Future<UserRoleResponse> getAllUserRole() async {
     try {
-      final response = await _dio.get('https://mmeasyinvoice.com/api/users');
-      //   print('User Role Response are ${response.data}');
-      if (response.statusCode == 200) {
-        final responseData = response.data;
-        return UserRoleResponse.fromJson(responseData);
-      } else {
-        throw Exception('Invalid data format for "data" field');
+      int currentPage = 1;
+      List<UserData> allUser = [];
+      UserRoleResponse userRoleResponse;
+      while (true) {
+        final response =
+        await _dio.get('https://mmeasyinvoice.com/api/users?page=$currentPage');
+        print('All User Response is ${response.data}');
+
+        if (response.statusCode == 200) {
+          final dynamic responseData = response.data;
+          userRoleResponse = UserRoleResponse.fromJson(responseData);
+          allUser.addAll(userRoleResponse.data);
+
+          if (currentPage == userRoleResponse.lastPage) {
+            break;
+          } else {
+            currentPage++;
+          }
+        } else {
+          throw Exception('Failed to fetch all users');
+        }
       }
+
+      return UserRoleResponse(
+        currentPage: currentPage,
+        data: allUser,
+        firstPageUrl: 'https://mmeasyinvoice.com/api/users?page=1',
+        from: 1,
+        lastPage: currentPage,
+        lastPageUrl: 'https://mmeasyinvoice.com/api/users?page=$currentPage',
+        links: [],
+        nextPageUrl: (currentPage < userRoleResponse.lastPage)
+            ? 'https://mmeasyinvoice.com/api/users?page=${currentPage + 1}'
+            : '',
+        path: 'https://mmeasyinvoice.com/api/users',
+        perPage: allUser.length,
+        prevPageUrl: (currentPage > 1)
+            ? 'https://mmeasyinvoice.com/api/users?page=${currentPage - 1}'
+            : null,
+        to: allUser.length,
+        total: 0, // You can set the correct value for the total number of users
+        status: 200, // Set the appropriate status code
+        message: 'Success', // Set the appropriate message
+      );
     } catch (e) {
-      throw Exception('Failed to fetch users role: $e');
+      throw Exception('Failed to fetch user roles: $e');
     }
   }
+
 
 //Delete category by id
 

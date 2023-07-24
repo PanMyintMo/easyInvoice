@@ -49,7 +49,34 @@ class _UpdateUserRoleScreenState extends State<UpdateUserRoleScreen> {
         },
         builder: (context, state) {
           return Scaffold(
-            appBar: AppBar(title: const Text('Edit User Role Screen')),
+            appBar: AppBar(
+              elevation: 0,
+              flexibleSpace: Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      Colors.redAccent.withOpacity(0.3),
+                      Colors.pink.withOpacity(0.7),
+                    ],
+                    begin: Alignment.topLeft,
+                    end: Alignment.topCenter,
+                  ),
+                ),
+              ),
+              leading: IconButton(
+                icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
+                onPressed: () {
+                  Navigator.pop(context); // Navigate back to the previous screen
+                },
+              ),
+              title: const Center(
+                child: Text(
+                  'Edit User Role Detail Profile',
+                  style: TextStyle(fontSize: 16, color: Colors.white),
+                ),
+              ),
+
+            ),
             body: EditUserRoleWidget(
               id: widget.id,
               name: widget.name,

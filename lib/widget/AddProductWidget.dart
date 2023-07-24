@@ -2,11 +2,11 @@ import 'dart:io';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:easy_invoice/bloc/post/add_product_cubit.dart';
 import 'package:easy_invoice/common/ToastMessage.dart';
-import 'package:easy_invoice/data/api/apiService.dart';
 import 'package:easy_invoice/dataRequestModel/AddProductRequestModel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import '../common/ApiHelper.dart';
 import '../common/FormValidator.dart';
 import '../common/ThemeHelperUserClass.dart';
 import '../data/responsemodel/GetAllCategoryDetail.dart';
@@ -47,37 +47,24 @@ class _AddProductWidgetState extends State<AddProductWidget> {
     super.initState();
     fetchCategoriesName();
     fetchSizeName();
-
     name.addListener(() {
       _updateSlugField();
     });
   }
 
   Future<void> fetchSizeName() async {
-    try {
-      final response = await ApiService().getAllSizes();
-      if (response.data.data.isNotEmpty) {
-        setState(() {
-          sizeIdList = response.data.data;
-
-        });
-      }
-    } catch (error) {
-      print('Error fetching sizes Id: $error');
-    }
+  final sizeIdList = await ApiHelper.fetchSizeName();
+  setState(() {
+    this.sizeIdList = sizeIdList;
+  });
   }
 
-  Future<void> fetchCategoriesName() async {
-    try {
-      final response = await ApiService().getAllCategories();
-      if (response.data.data.isNotEmpty) {
-        setState(() {
-          categories = response.data.data;
-        });
-      }
-    } catch (error) {
-      print('Error fetching categories: $error');
-    }
+void fetchCategoriesName() async {
+ final categories = await ApiHelper.fetchCategoriesName();
+ setState(() {
+   this.categories = categories;
+ });
+
   }
 
   File? image;
@@ -171,6 +158,7 @@ class _AddProductWidgetState extends State<AddProductWidget> {
                                 if (value == 'Select Category') {
                                   setState(() {
                                     category_id = value!;
+                                   // print('$category_id');
                                   });
                                   showDialog(
                                     context: context,

@@ -19,6 +19,7 @@ import '../../dataRequestModel/RegisterRequestModel.dart';
 import '../../dataRequestModel/ShopKeeperPart/ShopKeeperRequestModel.dart';
 import '../responsemodel/AddCategoryResponseModel.dart';
 import '../responsemodel/CategoryDeleteRespose.dart';
+import '../responsemodel/CityPart/Cities.dart';
 import '../responsemodel/DeleteProductResponse.dart';
 import '../responsemodel/DeleteUserRoleResponse.dart';
 import '../responsemodel/DeliveryPart/AddDeliveryResponse.dart';
@@ -131,9 +132,21 @@ class UserRepository {
       final response = await _apiService.getAllCategories();
       return response.data.data;
     } catch (error) {
-      throw Exception('Failed to get categories: $error');
+      throw Exception('Failed to fetch category: $error');
     }
   }
+
+  //fetch city from db
+  Future<List<City>> fetchCity() async {
+    try {
+      final response = await _apiService.cities();
+      return response.data.cities;
+    } catch (error) {
+      throw Exception('Failed to get city: $error');
+    }
+  }
+
+  //fetch all products
   Future<List<ProductListItem>> fetchAllProduct() async {
     try {
       final response = await _apiService.fetchAllProducts();
