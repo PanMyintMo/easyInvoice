@@ -147,7 +147,7 @@ class _AddDeliveryWidgetState extends State<AddDeliveryWidget> {
               ),
             ],
           ),
-          SizedBox(height: 10,),
+          const SizedBox(height: 10,),
           Row(
             children: [
               const Expanded(child: Text('Choose City')),

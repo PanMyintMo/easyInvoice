@@ -12,6 +12,9 @@ import 'package:easy_invoice/network/interceptor.dart';
 import '../../dataRequestModel/AddCategoryRequestModel.dart';
 import '../../dataRequestModel/AddProductRequestModel.dart';
 import '../../dataRequestModel/AddSizeRequestModel.dart';
+import '../../dataRequestModel/CityPart/AddCity.dart';
+import '../../dataRequestModel/CountryPart/AddCountry.dart';
+import '../../dataRequestModel/CountryPart/EditCountry.dart';
 import '../../dataRequestModel/DeliveryPart/AddDeliveryCompanyNameRequestModel.dart';
 import '../../dataRequestModel/EditCategoryModel.dart';
 import '../../dataRequestModel/EditSizeModel.dart';
@@ -21,8 +24,12 @@ import '../../dataRequestModel/RegisterRequestModel.dart';
 import '../../dataRequestModel/ShopKeeperPart/ShopKeeperRequestModel.dart';
 import '../responsemodel/AddCategoryResponseModel.dart';
 import '../responsemodel/CategoryDeleteRespose.dart';
+import '../responsemodel/CityPart/AddCityResponse.dart';
 import '../responsemodel/CityPart/Cities.dart';
 import '../responsemodel/CountryPart/CountryResponse.dart';
+import '../responsemodel/CountryPart/DeleteCountryResponse.dart';
+import '../responsemodel/CountryPart/EditCountryResponse.dart';
+import '../responsemodel/CountryPart/RequestCountryResponse.dart';
 import '../responsemodel/DeleteProductResponse.dart';
 import '../responsemodel/DeleteUserRoleResponse.dart';
 import '../responsemodel/DeliveryPart/AddDeliveryResponse.dart';
@@ -93,6 +100,81 @@ class ApiService {
     }
   }
 
+// fetch request country response
+  Future<RequestCountryResponse> requestCountry(AddCountry addCountry) async {
+    try {
+      final Response response = await _dio.post(
+        'https://mmeasyinvoice.com/api/add-country',
+        data: addCountry.toJson(),
+      );
+      if (response.statusCode == 200) {
+        final RequestCountryResponse data = RequestCountryResponse.fromJson(response.data);
+        return data;
+      } else {
+        // print("My response status code is ${response.statusCode}");
+        throw DioError(
+          requestOptions: RequestOptions(path: '/api/add-country'),
+          response: response,
+        );
+      }
+    } catch (error) {
+      throw DioError(
+        requestOptions: RequestOptions(path: '/api/add-country'),
+        error: error,
+      );
+    }
+  }
+
+  //edit country response
+  Future<EditCountryResponse> editCountry(int id,EditCountry editCountry) async {
+    try {
+      final Response response = await _dio.post(
+        'https://mmeasyinvoice.com/api/edit-country/$id',
+        data: editCountry.toJson(),
+      );
+      if (response.statusCode == 200) {
+        final EditCountryResponse data = EditCountryResponse.fromJson(response.data);
+        return data;
+      } else {
+        // print("My response status code is ${response.statusCode}");
+        throw DioError(
+          requestOptions: RequestOptions(path: '/api/eidt-country'),
+          response: response,
+        );
+      }
+    } catch (error) {
+      throw DioError(
+        requestOptions: RequestOptions(path: '/api/edit-country'),
+        error: error,
+      );
+    }
+  }
+
+// fetch request city response
+  Future<AddCityResponse> requestCity(AddCity addCity) async {
+    try {
+      final Response response = await _dio.post(
+        'https://mmeasyinvoice.com/api/add-city',
+        data: addCity.toJson(),
+      );
+      if (response.statusCode == 200) {
+        final AddCityResponse data = AddCityResponse.fromJson(response.data);
+        return data;
+      } else {
+        // print("My response status code is ${response.statusCode}");
+        throw DioError(
+          requestOptions: RequestOptions(path: '/api/add-city'),
+          response: response,
+        );
+      }
+    } catch (error) {
+      throw DioError(
+        requestOptions: RequestOptions(path: '/api/add-city'),
+        error: error,
+      );
+    }
+  }
+
 // add delivery company name
   Future<AddDeliveryResponse> AddDelivery(AddDeliveryRequestModel addDeliveryRequestModel) async {
     try {
@@ -117,7 +199,6 @@ class ApiService {
       );
     }
   }
-
 
 
   //Add category
@@ -358,7 +439,7 @@ class ApiService {
               : null, from: 1, path: '',
           perPage: countryItems.length, prevPageUrl: '',
           to: countryItems.length, total: 0,
-        ),
+        ), status: 200, message: 'Success',
       );
     } catch (e) {
       throw Exception('Failed to fetch countries: $e');
@@ -573,6 +654,25 @@ class ApiService {
     }
   }
 
+
+  //Delete country by id
+
+  Future<DeleteCountryResponse> deleteCountry(int id) async {
+    try {
+      final response =
+      await _dio.post('https://mmeasyinvoice.com/api/delete-country/$id');
+       print("Delete Country status response is ${response.statusCode}");
+      if (response.statusCode == 200) {
+        DeleteCountryResponse deleteCountry = DeleteCountryResponse.fromJson(response.data);
+        return deleteCountry;
+      } else {
+        throw Exception('Something wrong!');
+      }
+    } catch (error) {
+      throw Exception(error);
+    }
+  }
+
 //Delete product by id
 
   Future<DeleteProductResponse> deleteProductItem(int id) async {
@@ -699,7 +799,7 @@ class ApiService {
     }
   }
 
-//divide for user
+// for user role
 
   Future<UserResponse> user(UserRequestModel userRequestModel) async {
     try {

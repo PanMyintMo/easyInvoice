@@ -83,7 +83,7 @@ class _RequestShopKeeperWidgetState extends State<RequestShopKeeperWidget> {
               const SizedBox(
                 height: 16,
               ),
-              Container(
+              SizedBox(
                 width: double.infinity,
                 child: chooseItemIdForm(
                   DropdownButton<String>(
@@ -151,7 +151,7 @@ class _RequestShopKeeperWidgetState extends State<RequestShopKeeperWidget> {
               const SizedBox(
                 height: 16,
               ),
-              Container(
+              SizedBox(
                 width: double.infinity,
                 child: chooseItemIdForm(
                   DropdownButton<String>(
@@ -193,7 +193,7 @@ class _RequestShopKeeperWidgetState extends State<RequestShopKeeperWidget> {
               const SizedBox(
                 height: 16,
               ),
-              Container(
+              SizedBox(
                 width: double.infinity,
                 child: buildProductContainerForm(
                   'Quantity',
