@@ -3,6 +3,7 @@ import 'package:easy_invoice/screen/AllSizesScreen.dart';
 import 'package:easy_invoice/screen/AllUserRoleScreen.dart';
 import 'package:easy_invoice/screen/DeliveryPart/AddDeliveryScreen.dart';
 import 'package:easy_invoice/screen/DeliveryPart/DeliveryManScreen.dart';
+import 'package:easy_invoice/screen/LocationPart/CountryScreen.dart';
 import 'package:easy_invoice/screen/OrderPart/AddOrderScreen.dart';
 import 'package:easy_invoice/screen/UserAddScreen.dart';
 import 'package:easy_invoice/screen/mainscreen.dart';
@@ -13,6 +14,7 @@ import '../screen/AddProductScreen.dart';
 import '../screen/AllCategoryScreen.dart';
 import '../screen/AllProductScreen.dart';
 import '../screen/DeliveryPart/AllDeliveryScreen.dart';
+import '../screen/LocationPart/CityScreen.dart';
 import '../screen/ProductInvoicePart/ProductInvoiceScreen.dart';
 import '../screen/SizeAddScreen.dart';
 import '../screen/shopkeeperPart/ShopKeeperAddScreen.dart';
@@ -317,13 +319,20 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
                         ),
                       ),
                     ),
-                  if (utype == 'SK')
+                  if (utype == 'SK' || utype=='ADM')
                     buildMenuExpansionLocation(
                         text: 'Location',
                         icon: Icons.supervised_user_circle,
                         listData: [],
-                        viewCountries: () {},
-                        viewCities: () {},
+                        viewCountries: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => const Country()));
+                        },
+                        viewCities: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => const Cities()));
+
+                        },
                         viewTownships: () {})
                 ],
               ),

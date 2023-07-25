@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:easy_invoice/bloc/post/add_product_cubit.dart';
-import 'package:easy_invoice/common/ToastMessage.dart';
 import 'package:easy_invoice/dataRequestModel/AddProductRequestModel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -498,11 +497,9 @@ void fetchCategoriesName() async {
           category_id: category_id,
           size_id: sizeId));
 
-      // Show success toast
-      showToastMessage('Product successfully added.');
+
     } catch (e) {
-      //show error toast
-      showToastMessage('Fail add product $e!');
+
     }
   }
 

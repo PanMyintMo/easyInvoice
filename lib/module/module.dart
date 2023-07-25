@@ -21,8 +21,12 @@ import 'package:easy_invoice/data/userRepository/UserRepository.dart';
 import 'package:get_it/get_it.dart';
 import 'package:dio/dio.dart';
 
+import '../bloc/delete/CountryPart/delete_country_cubit.dart';
 import '../bloc/delete/delete_product_item_cubit.dart';
 import '../bloc/delete/delete_user_role_cubit.dart';
+import '../bloc/post/CityPart/add_city_cubit.dart';
+import '../bloc/edit/CountryPart/edit_country_cubit.dart';
+import '../bloc/post/CountryPart/request_country_cubit.dart';
 import '../bloc/post/add_size_cubit.dart';
 
 var getIt = GetIt.instance;
@@ -49,17 +53,17 @@ void locator() {
 
   //to add deliver company name
   AddDeliveryCubit addDeliveryCubit =
-  AddDeliveryCubit(getIt.get<UserRepository>());
+      AddDeliveryCubit(getIt.get<UserRepository>());
   getIt.registerLazySingleton(() => addDeliveryCubit);
 
   //to add product to db
   AddProductCubit addProductCubit =
-  AddProductCubit(getIt.get<UserRepository>());
+      AddProductCubit(getIt.get<UserRepository>());
   getIt.registerLazySingleton(() => addProductCubit);
 
   //to add product to shopkeeper request
   AddRequestProductShopKeeperCubit addRequestProductShopKeeperCubit =
-  AddRequestProductShopKeeperCubit(getIt.get<UserRepository>());
+      AddRequestProductShopKeeperCubit(getIt.get<UserRepository>());
   getIt.registerLazySingleton(() => addRequestProductShopKeeperCubit);
 
   //get all category
@@ -67,19 +71,26 @@ void locator() {
       GetCategoryDetailCubit(getIt.get<UserRepository>());
   getIt.registerLazySingleton(() => getCategoryDetailCubit);
 
-
-  //get all city
+  //fetch all city
   FetchAllCityCubit fetchAllCityCubit =
-  FetchAllCityCubit(getIt.get<UserRepository>());
+      FetchAllCityCubit(getIt.get<UserRepository>());
   getIt.registerLazySingleton(() => fetchAllCityCubit);
 
+  //fetch all country
+  RequestCountryCubit requestCountryCubit =
+      RequestCountryCubit(getIt.get<UserRepository>());
+  getIt.registerLazySingleton(() => requestCountryCubit);
+
+//fetch all city
+  AddCityCubit addCityCubit = AddCityCubit(getIt.get<UserRepository>());
+  getIt.registerLazySingleton(() => addCityCubit);
 
   //get all product
   GetAllProductCubit getAllProductCubit =
-  GetAllProductCubit(getIt.get<UserRepository>());
+      GetAllProductCubit(getIt.get<UserRepository>());
   getIt.registerLazySingleton(() => getAllProductCubit);
 
- /* //get all product by cate id
+  /* //get all product by cate id
   FetchAllProductByCateIdCubit fetchAllProductByCateIdCubit =
   FetchAllProductByCateIdCubit(getIt.get<UserRepository>());
   getIt.registerLazySingleton(() => fetchAllProductByCateIdCubit);
@@ -93,8 +104,13 @@ void locator() {
   DeleteCategoryCubit categoryDeleteCubit = DeleteCategoryCubit(getIt.call());
   getIt.registerLazySingleton(() => categoryDeleteCubit);
 
+  //to delete country
+  DeleteCountryCubit deleteCountryCubit = DeleteCountryCubit(getIt.call());
+  getIt.registerLazySingleton(() => deleteCountryCubit);
+
   //to delete product item
-  DeleteProductItemCubit productDeleteCubit = DeleteProductItemCubit(getIt.call());
+  DeleteProductItemCubit productDeleteCubit =
+      DeleteProductItemCubit(getIt.call());
   getIt.registerLazySingleton(() => productDeleteCubit);
 
   //to delete size
@@ -105,8 +121,13 @@ void locator() {
   EditCategoryCubit editCategoryCubit = EditCategoryCubit(getIt.call());
   getIt.registerLazySingleton(() => editCategoryCubit);
 
+  //to update country by id
+  EditCountryCubit editCountryCubit = EditCountryCubit(getIt.call());
+  getIt.registerLazySingleton(() => editCountryCubit);
+
   //to update product item
-  EditProductItemCubit editProductItemCubit = EditProductItemCubit(getIt.call());
+  EditProductItemCubit editProductItemCubit =
+      EditProductItemCubit(getIt.call());
   getIt.registerLazySingleton(() => editProductItemCubit);
 
   //to update size
@@ -117,21 +138,21 @@ void locator() {
   AddSizeCubit addSizeCubit = AddSizeCubit(getIt.get<UserRepository>());
   getIt.registerLazySingleton(() => addSizeCubit);
   //for add user role
-  AddUserRoleCubit addUserRoleCubit = AddUserRoleCubit(getIt.get<UserRepository>());
+  AddUserRoleCubit addUserRoleCubit =
+      AddUserRoleCubit(getIt.get<UserRepository>());
   getIt.registerLazySingleton(() => addUserRoleCubit);
 
   //to get all user role
-  GetAllUserRoleCubit getAllUserRoleCubit= GetAllUserRoleCubit(getIt.get<UserRepository>());
+  GetAllUserRoleCubit getAllUserRoleCubit =
+      GetAllUserRoleCubit(getIt.get<UserRepository>());
   getIt.registerLazySingleton(() => getAllUserRoleCubit);
 
   //to edit  user role
-  EditUserRoleCubit editUserRoleCubit= EditUserRoleCubit(getIt.get<UserRepository>());
+  EditUserRoleCubit editUserRoleCubit =
+      EditUserRoleCubit(getIt.get<UserRepository>());
   getIt.registerLazySingleton(() => editUserRoleCubit);
 
   //to delete user role
   DeleteUserRoleCubit deleteUserRoleCubit = DeleteUserRoleCubit(getIt.call());
   getIt.registerLazySingleton(() => deleteUserRoleCubit);
-
-
-
 }

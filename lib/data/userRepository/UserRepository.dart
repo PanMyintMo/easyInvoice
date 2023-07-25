@@ -1,5 +1,6 @@
 import 'package:easy_invoice/data/api/apiService.dart';
 import 'package:easy_invoice/data/responsemodel/AddSizeResponse.dart';
+import 'package:easy_invoice/data/responsemodel/CountryPart/CountryResponse.dart';
 import 'package:easy_invoice/data/responsemodel/EditProductResponse.dart';
 import 'package:easy_invoice/data/responsemodel/GetAllProductResponse.dart';
 import 'package:easy_invoice/data/responsemodel/GetAllSizeResponse.dart';
@@ -11,6 +12,9 @@ import 'package:easy_invoice/dataRequestModel/UserRequestModel.dart';
 import '../../dataRequestModel/AddCategoryRequestModel.dart';
 import '../../dataRequestModel/AddProductRequestModel.dart';
 import '../../dataRequestModel/AddSizeRequestModel.dart';
+import '../../dataRequestModel/CityPart/AddCity.dart';
+import '../../dataRequestModel/CountryPart/AddCountry.dart';
+import '../../dataRequestModel/CountryPart/EditCountry.dart';
 import '../../dataRequestModel/DeliveryPart/AddDeliveryCompanyNameRequestModel.dart';
 import '../../dataRequestModel/EditCategoryModel.dart';
 import '../../dataRequestModel/EditSizeModel.dart';
@@ -19,7 +23,11 @@ import '../../dataRequestModel/RegisterRequestModel.dart';
 import '../../dataRequestModel/ShopKeeperPart/ShopKeeperRequestModel.dart';
 import '../responsemodel/AddCategoryResponseModel.dart';
 import '../responsemodel/CategoryDeleteRespose.dart';
+import '../responsemodel/CityPart/AddCityResponse.dart';
 import '../responsemodel/CityPart/Cities.dart';
+import '../responsemodel/CountryPart/DeleteCountryResponse.dart';
+import '../responsemodel/CountryPart/EditCountryResponse.dart';
+import '../responsemodel/CountryPart/RequestCountryResponse.dart';
 import '../responsemodel/DeleteProductResponse.dart';
 import '../responsemodel/DeleteUserRoleResponse.dart';
 import '../responsemodel/DeliveryPart/AddDeliveryResponse.dart';
@@ -59,6 +67,26 @@ class UserRepository {
     }
   }
 
+  //request for add  country
+  Future<RequestCountryResponse> addCountry(AddCountry addCountry) async {
+    try {
+      final response = await _apiService.requestCountry(addCountry);
+      return response;
+    } catch (error) {
+      rethrow;
+    }
+  }
+
+  //request for add  city
+  Future<AddCityResponse> addCity(AddCity addCity) async {
+    try {
+      final response = await _apiService.requestCity(addCity);
+      return response;
+    } catch (error) {
+      rethrow;
+    }
+  }
+
   //for add category
   Future<AddCategoryResponse> addCategory(
       AddCategoryRequestModel addCategoryRequestModel) async {
@@ -74,7 +102,8 @@ class UserRepository {
   Future<AddShopKeeperResponse> addShopKeeperRequestProduct(
       ShopKeeperRequestModel shopKeeperRequestModel) async {
     try {
-      final response = await _apiService.addShopKeeperRequestProduct(shopKeeperRequestModel);
+      final response =
+          await _apiService.addShopKeeperRequestProduct(shopKeeperRequestModel);
       return response;
     } catch (error) {
       rethrow;
@@ -91,7 +120,6 @@ class UserRepository {
       rethrow;
     }
   }
-
 
   //For get all user role
   Future<UserRoleResponse> getAllUserRole() async {
@@ -142,7 +170,17 @@ class UserRepository {
       final response = await _apiService.cities();
       return response.data.cities;
     } catch (error) {
-      throw Exception('Failed to get city: $error');
+      throw Exception('Failed to fetch city: $error');
+    }
+  }
+
+  //fetch country from db
+  Future<List<Country>> fetchCountry() async {
+    try {
+      final response = await _apiService.country();
+      return response.data.data;
+    } catch (error) {
+      throw Exception('Failed to fetch country: $error');
     }
   }
 
@@ -177,18 +215,28 @@ class UserRepository {
     }
   }
 
-  //to add delivery company
+  //to delete country by id
 
-  Future<AddDeliveryResponse> addDelivery(AddDeliveryRequestModel addDeliveryRequestModel) async{
-    try{
-      final response= await _apiService.AddDelivery(addDeliveryRequestModel);
+  Future<DeleteCountryResponse> deleteCountry(int id) async {
+    try {
+      final response = await _apiService.deleteCountry(id);
       return response;
-    }
-    catch(e){
+    } catch (error) {
       rethrow;
     }
   }
 
+  //to add delivery company
+
+  Future<AddDeliveryResponse> addDelivery(
+      AddDeliveryRequestModel addDeliveryRequestModel) async {
+    try {
+      final response = await _apiService.AddDelivery(addDeliveryRequestModel);
+      return response;
+    } catch (e) {
+      rethrow;
+    }
+  }
 
 /*  //to fetch all product item by category id
   Future<List<ProductItem>> fetchAllProductByCateId(int id) async {
@@ -199,7 +247,6 @@ class UserRepository {
       rethrow;
     }
   }*/
-
 
   //to delete product item by id
 
@@ -246,12 +293,25 @@ class UserRepository {
     }
   }
 
+  // update country by id
+
+  Future<EditCountryResponse> updateCountry(
+      int id, EditCountry editCountry) async {
+    try {
+      final response = await _apiService.editCountry(id, editCountry);
+      return response;
+    } catch (error) {
+      rethrow;
+    }
+  }
+
   // update product by id
 
   Future<EditProductResponse> updateProductItem(
       EditProductRequestModel editProductRequestModel, int id) async {
     try {
-      final response = await _apiService.updateProductItem(editProductRequestModel, id);
+      final response =
+          await _apiService.updateProductItem(editProductRequestModel, id);
       return response;
     } catch (error) {
       rethrow;
