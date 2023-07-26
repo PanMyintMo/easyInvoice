@@ -13,6 +13,7 @@ import '../../dataRequestModel/AddCategoryRequestModel.dart';
 import '../../dataRequestModel/AddProductRequestModel.dart';
 import '../../dataRequestModel/AddSizeRequestModel.dart';
 import '../../dataRequestModel/CityPart/AddCity.dart';
+import '../../dataRequestModel/CityPart/EditCity.dart';
 import '../../dataRequestModel/CountryPart/AddCountry.dart';
 import '../../dataRequestModel/CountryPart/EditCountry.dart';
 import '../../dataRequestModel/DeliveryPart/AddDeliveryCompanyNameRequestModel.dart';
@@ -26,6 +27,8 @@ import '../responsemodel/AddCategoryResponseModel.dart';
 import '../responsemodel/CategoryDeleteRespose.dart';
 import '../responsemodel/CityPart/AddCityResponse.dart';
 import '../responsemodel/CityPart/Cities.dart';
+import '../responsemodel/CityPart/DeleteCityResponse.dart';
+import '../responsemodel/CityPart/EditCityResponse.dart';
 import '../responsemodel/CountryPart/CountryResponse.dart';
 import '../responsemodel/CountryPart/DeleteCountryResponse.dart';
 import '../responsemodel/CountryPart/EditCountryResponse.dart';
@@ -145,6 +148,30 @@ class ApiService {
     } catch (error) {
       throw DioError(
         requestOptions: RequestOptions(path: '/api/edit-country'),
+        error: error,
+      );
+    }
+  }
+
+  //edit city response
+  Future<EditCityResponse> editCity(int id,EditCity editCity) async {
+    try {
+      final Response response = await _dio.post(
+        'https://mmeasyinvoice.com/api/edit-city/$id',
+        data: editCity.toJson(),
+      );
+      if (response.statusCode == 200) {
+        final EditCityResponse data = EditCityResponse.fromJson(response.data);
+        return data;
+      } else {
+        throw DioError(
+          requestOptions: RequestOptions(path: '/api/edit-city'),
+          response: response,
+        );
+      }
+    } catch (error) {
+      throw DioError(
+        requestOptions: RequestOptions(path: '/api/edit-city'),
         error: error,
       );
     }
@@ -661,10 +688,28 @@ class ApiService {
     try {
       final response =
       await _dio.post('https://mmeasyinvoice.com/api/delete-country/$id');
-       print("Delete Country status response is ${response.statusCode}");
+     //  print("Delete Country status response is ${response.statusCode}");
       if (response.statusCode == 200) {
         DeleteCountryResponse deleteCountry = DeleteCountryResponse.fromJson(response.data);
         return deleteCountry;
+      } else {
+        throw Exception('Something wrong!');
+      }
+    } catch (error) {
+      throw Exception(error);
+    }
+  }
+
+  //Delete city by id
+
+  Future<DeleteCityResponse> deleteCity(int id) async {
+    try {
+      final response =
+      await _dio.post('https://mmeasyinvoice.com/api/delete-city/$id');
+      print("Delete City status response is ${response.statusCode}");
+      if (response.statusCode == 200) {
+        DeleteCityResponse deleteCity = DeleteCityResponse.fromJson(response.data);
+        return deleteCity;
       } else {
         throw Exception('Something wrong!');
       }

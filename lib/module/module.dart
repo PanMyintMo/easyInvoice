@@ -21,9 +21,11 @@ import 'package:easy_invoice/data/userRepository/UserRepository.dart';
 import 'package:get_it/get_it.dart';
 import 'package:dio/dio.dart';
 
+import '../bloc/delete/CityPart/delete_city_cubit.dart';
 import '../bloc/delete/CountryPart/delete_country_cubit.dart';
 import '../bloc/delete/delete_product_item_cubit.dart';
 import '../bloc/delete/delete_user_role_cubit.dart';
+import '../bloc/edit/CityPart/edit_city_cubit.dart';
 import '../bloc/post/CityPart/add_city_cubit.dart';
 import '../bloc/edit/CountryPart/edit_country_cubit.dart';
 import '../bloc/post/CountryPart/request_country_cubit.dart';
@@ -108,6 +110,10 @@ void locator() {
   DeleteCountryCubit deleteCountryCubit = DeleteCountryCubit(getIt.call());
   getIt.registerLazySingleton(() => deleteCountryCubit);
 
+  //to delete city
+  DeleteCityCubit deleteCityCubit = DeleteCityCubit(getIt.call());
+  getIt.registerLazySingleton(() => deleteCityCubit);
+
   //to delete product item
   DeleteProductItemCubit productDeleteCubit =
       DeleteProductItemCubit(getIt.call());
@@ -124,6 +130,10 @@ void locator() {
   //to update country by id
   EditCountryCubit editCountryCubit = EditCountryCubit(getIt.call());
   getIt.registerLazySingleton(() => editCountryCubit);
+
+  //to update city by id
+  EditCityCubit editCityCubit = EditCityCubit(getIt.call());
+  getIt.registerLazySingleton(() => editCityCubit);
 
   //to update product item
   EditProductItemCubit editProductItemCubit =

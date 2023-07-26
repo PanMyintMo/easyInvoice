@@ -13,6 +13,7 @@ import '../../dataRequestModel/AddCategoryRequestModel.dart';
 import '../../dataRequestModel/AddProductRequestModel.dart';
 import '../../dataRequestModel/AddSizeRequestModel.dart';
 import '../../dataRequestModel/CityPart/AddCity.dart';
+import '../../dataRequestModel/CityPart/EditCity.dart';
 import '../../dataRequestModel/CountryPart/AddCountry.dart';
 import '../../dataRequestModel/CountryPart/EditCountry.dart';
 import '../../dataRequestModel/DeliveryPart/AddDeliveryCompanyNameRequestModel.dart';
@@ -25,6 +26,8 @@ import '../responsemodel/AddCategoryResponseModel.dart';
 import '../responsemodel/CategoryDeleteRespose.dart';
 import '../responsemodel/CityPart/AddCityResponse.dart';
 import '../responsemodel/CityPart/Cities.dart';
+import '../responsemodel/CityPart/DeleteCityResponse.dart';
+import '../responsemodel/CityPart/EditCityResponse.dart';
 import '../responsemodel/CountryPart/DeleteCountryResponse.dart';
 import '../responsemodel/CountryPart/EditCountryResponse.dart';
 import '../responsemodel/CountryPart/RequestCountryResponse.dart';
@@ -216,10 +219,19 @@ class UserRepository {
   }
 
   //to delete country by id
-
   Future<DeleteCountryResponse> deleteCountry(int id) async {
     try {
       final response = await _apiService.deleteCountry(id);
+      return response;
+    } catch (error) {
+      rethrow;
+    }
+  }
+
+  //to delete city by id
+  Future<DeleteCityResponse> deleteCity(int id) async {
+    try {
+      final response = await _apiService.deleteCity(id);
       return response;
     } catch (error) {
       rethrow;
@@ -294,11 +306,21 @@ class UserRepository {
   }
 
   // update country by id
-
   Future<EditCountryResponse> updateCountry(
       int id, EditCountry editCountry) async {
     try {
       final response = await _apiService.editCountry(id, editCountry);
+      return response;
+    } catch (error) {
+      rethrow;
+    }
+  }
+
+  // update city by id
+  Future<EditCityResponse> updateCity(
+      int id, EditCity editCity) async {
+    try {
+      final response = await _apiService.editCity(id, editCity);
       return response;
     } catch (error) {
       rethrow;
