@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../bloc/delete/CityPart/delete_city_cubit.dart';
 import '../../common/ApiHelper.dart';
 import '../../data/responsemodel/CityPart/Cities.dart';
 import '../../screen/LocationPart/AddNewCity.dart';
+import '../../screen/LocationPart/EditCityScreen.dart';
+
 class CitiesWidget extends StatefulWidget {
   final bool isLoading;
   const CitiesWidget({super.key, required this.isLoading});
@@ -28,7 +32,6 @@ class _CitiesWidgetState extends State<CitiesWidget> {
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -50,7 +53,7 @@ class _CitiesWidgetState extends State<CitiesWidget> {
               DataColumn(label: Text('Name',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold))),
               DataColumn(label: Text('Action',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold))),
             ],
-            source: CityData(cities),
+            source: CityData(cities,context),
             horizontalMargin: 20,
             rowsPerPage: 8,
             columnSpacing: 85,
@@ -63,8 +66,8 @@ class _CitiesWidgetState extends State<CitiesWidget> {
 
 class CityData extends DataTableSource {
   final List<City> cities;
-
-  CityData(this.cities);
+  final BuildContext context;
+  CityData(this.cities, this.context);
 
   @override
   DataRow? getRow(int index) {
@@ -81,15 +84,15 @@ class CityData extends DataTableSource {
           IconButton(
             icon: const Icon(Icons.edit,color: Colors.green,),
             onPressed: () {
-              // Implement the edit functionality here
-              // For example, show a dialog to edit the country details
+              Navigator.push(context, MaterialPageRoute(builder: (context) =>
+                   EditCityScreen(country_id: city.countryId.toString(),name: city.name,id: city.id,)));
             },
           ),
           IconButton(
             icon: const Icon(Icons.delete,color: Colors.red,),
             onPressed: () {
-              // Implement the edit functionality here
-              // For example, show a dialog to edit the country details
+              showDeleteConfirmationDialog(context,city.id,context.read<DeleteCityCubit>());
+
             },
           ),
         ],
@@ -105,4 +108,32 @@ class CityData extends DataTableSource {
 
   @override
   int get selectedRowCount => 0;
+
+  void showDeleteConfirmationDialog(BuildContext context, int id, deleteCubit) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Confirmation'),
+          content: const Text('Are you sure you want to delete this?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                // Delete Action
+                deleteCubit.deleteCity(id);
+                Navigator.pop(context);
+              },
+              child: const Text('Delete'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('Cancel'),
+            ),
+          ],
+        );
+      },
+    );
+  }
 }

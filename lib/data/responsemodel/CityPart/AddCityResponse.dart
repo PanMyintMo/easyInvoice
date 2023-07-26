@@ -1,5 +1,4 @@
 class AddCityResponse {
-
   final int status;
   final String message;
   final AddCityResponseData data;

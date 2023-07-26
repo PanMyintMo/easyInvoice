@@ -94,24 +94,6 @@ class _CountryState extends State<Country> {
             );
           },
         ),
-
-
-        // BlocBuilder<RequestCountryCubit, RequestCountryState>(
-        //   builder: (context, state) {
-        //     if (state is RequestCountryLoading) {
-        //       return const CountryWidget(isLoading: true);
-        //     } else if (state is RequestCountrySuccess) {
-        //       showToastMessage('Country request successful.');
-        //       return const CountryWidget(isLoading: false);
-        //     } else if (state is RequestCountryFail) {
-        //       showToastMessage('Failed to request country. Please try again.');
-        //       return const CountryWidget(isLoading: false);
-        //     } else {
-        //       // Initial state or unknown state
-        //       return const CountryWidget(isLoading: false);
-        //     }
-        //   },
-        // ),
       ),
     );
   }

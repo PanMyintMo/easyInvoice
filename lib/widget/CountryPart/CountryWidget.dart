@@ -55,7 +55,7 @@ class _CountryWidgetState extends State<CountryWidget> {
             ],
             source: CountryData(countries,context),
             horizontalMargin: 15,
-            rowsPerPage: 10,
+            rowsPerPage: 8,
             columnSpacing: 70,
           ),
         ),
