@@ -45,3 +45,17 @@ String? validateProductField(String? value) {
   }
   return null;
 }
+
+String? validateFirstName(String? value) {
+  if(value == null || value.isEmpty){
+    return 'Please enter first name';
+  }
+  return null;
+}
+
+String? validateLastName(String? value) {
+  if(value == null || value.isEmpty){
+    return 'Please enter Last name';
+  }
+  return null;
+}

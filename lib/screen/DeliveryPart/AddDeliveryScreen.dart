@@ -28,22 +28,16 @@ class AddDeliveryScreen extends StatelessWidget {
             ),
           ),
         ),
-        body:  BlocBuilder<AddDeliveryCubit, AddDeliveryState>(
+        body: BlocBuilder<AddDeliveryCubit, AddDeliveryState>(
           builder: (context, state) {
             if (state is AddDeliveryLoading) {
-              return const AddDeliveryWidget(
-
-              );
+              return const AddDeliveryWidget(isLoading: true);
             } else if (state is AddDeliverySuccess) {
-              return AddDeliveryWidget(
-
-              );
+              return const AddDeliveryWidget(isLoading: false);
             } else if (state is AddDeliveryFail) {
-              return AddDeliveryWidget(
-
-              );
+              return const AddDeliveryWidget(isLoading: false);
             }
-            return const AddDeliveryWidget();
+            return const AddDeliveryWidget(isLoading: false);
           },
         ), // Remove the const from here
       ),

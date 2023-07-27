@@ -4,13 +4,14 @@ import 'package:easy_invoice/bloc/edit/edit_category_cubit.dart';
 import 'package:easy_invoice/bloc/edit/edit_product_item_cubit.dart';
 import 'package:easy_invoice/bloc/edit/edit_size_cubit.dart';
 import 'package:easy_invoice/bloc/edit/edit_user_role_cubit.dart';
-import 'package:easy_invoice/bloc/get/fetch_all_city_cubit.dart';
+import 'package:easy_invoice/bloc/get/CityPart/fetch_all_city_cubit.dart';
 import 'package:easy_invoice/bloc/get/get_all_product_cubit.dart';
 import 'package:easy_invoice/bloc/get/get_all_size_cubit.dart';
 import 'package:easy_invoice/bloc/get/get_all_user_role_cubit.dart';
 import 'package:easy_invoice/bloc/get/get_category_detail_cubit.dart';
 import 'package:easy_invoice/bloc/post/DeliveryPart/add_delivery_cubit.dart';
 import 'package:easy_invoice/bloc/post/ShopKeeperPart/add_request_product_shop_keeper_cubit.dart';
+import 'package:easy_invoice/bloc/post/TownshipPart/add_township_cubit.dart';
 import 'package:easy_invoice/bloc/post/add_category_cubit.dart';
 import 'package:easy_invoice/bloc/post/add_product_cubit.dart';
 import 'package:easy_invoice/bloc/post/sign_in_cubit.dart';
@@ -20,12 +21,14 @@ import 'package:easy_invoice/data/api/apiService.dart';
 import 'package:easy_invoice/data/userRepository/UserRepository.dart';
 import 'package:get_it/get_it.dart';
 import 'package:dio/dio.dart';
-
 import '../bloc/delete/CityPart/delete_city_cubit.dart';
 import '../bloc/delete/CountryPart/delete_country_cubit.dart';
 import '../bloc/delete/delete_product_item_cubit.dart';
 import '../bloc/delete/delete_user_role_cubit.dart';
 import '../bloc/edit/CityPart/edit_city_cubit.dart';
+import '../bloc/edit/TownshipPart/edit_township_cubit.dart';
+import '../bloc/get/DeliveryPart/fetch_all_delivery_company_name_cubit.dart';
+import '../bloc/get/TownshipPart/fetch_all_township_cubit.dart';
 import '../bloc/post/CityPart/add_city_cubit.dart';
 import '../bloc/edit/CountryPart/edit_country_cubit.dart';
 import '../bloc/post/CountryPart/request_country_cubit.dart';
@@ -78,14 +81,32 @@ void locator() {
       FetchAllCityCubit(getIt.get<UserRepository>());
   getIt.registerLazySingleton(() => fetchAllCityCubit);
 
+/*
+  //fetch all delivery company name
+  FetchAllDeliveryCompanyNameCubit fetchDeliveryNameCubit =
+  FetchAllDeliveryCompanyNameCubit(getIt.get<UserRepository>());
+  getIt.registerLazySingleton(() => fetchDeliveryNameCubit);
+
+*/
+
+  //fetch all township
+  FetchAllTownshipCubit fetchAllTownshipCubit =
+  FetchAllTownshipCubit(getIt.get<UserRepository>());
+  getIt.registerLazySingleton(() => fetchAllTownshipCubit);
+
+
   //fetch all country
   RequestCountryCubit requestCountryCubit =
       RequestCountryCubit(getIt.get<UserRepository>());
   getIt.registerLazySingleton(() => requestCountryCubit);
 
-//fetch all city
+  //add all city
   AddCityCubit addCityCubit = AddCityCubit(getIt.get<UserRepository>());
   getIt.registerLazySingleton(() => addCityCubit);
+
+  //add all township
+  AddTownshipCubit addTownshipCubit = AddTownshipCubit(getIt.get<UserRepository>());
+  getIt.registerLazySingleton(() => addTownshipCubit);
 
   //get all product
   GetAllProductCubit getAllProductCubit =
@@ -134,6 +155,10 @@ void locator() {
   //to update city by id
   EditCityCubit editCityCubit = EditCityCubit(getIt.call());
   getIt.registerLazySingleton(() => editCityCubit);
+
+  //to update township by id
+  EditTownshipCubit editTownshipCubit = EditTownshipCubit(getIt.call());
+  getIt.registerLazySingleton(() => editTownshipCubit);
 
   //to update product item
   EditProductItemCubit editProductItemCubit =

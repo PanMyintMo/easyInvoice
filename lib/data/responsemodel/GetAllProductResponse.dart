@@ -1,7 +1,6 @@
 class GetAllProductResponse {
   final ProductData data;
 
-
   GetAllProductResponse({
     required this.data,
 

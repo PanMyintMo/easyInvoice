@@ -1,13 +1,14 @@
 import 'package:dotted_border/dotted_border.dart';
+import 'package:easy_invoice/data/api/apiService.dart';
+import 'package:easy_invoice/data/responsemodel/DeliveryPart/FetchAllDeliveryName.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import '../../common/ApiHelper.dart';
 import '../../data/responsemodel/CityPart/Cities.dart';
-import '../../data/responsemodel/CountryPart/CountryResponse.dart';
-
 class AddDeliveryWidget extends StatefulWidget {
-  const AddDeliveryWidget({super.key});
+  final bool isLoading;
+  const AddDeliveryWidget({super.key, required this.isLoading});
 
   @override
   State<AddDeliveryWidget> createState() => _AddDeliveryWidgetState();
@@ -15,8 +16,8 @@ class AddDeliveryWidget extends StatefulWidget {
 
 class _AddDeliveryWidgetState extends State<AddDeliveryWidget> {
   File? image;
-  List<City> city = [];
-  List<Country> country =[];
+  List<AllDeliveryName> deliveryCompanyName = [];
+  List<City> cities =[];
 
   String? select_company; // Initialize select_company with null
   String? select_city;
@@ -26,19 +27,20 @@ class _AddDeliveryWidgetState extends State<AddDeliveryWidget> {
   void initState() {
     super.initState();
     //for company name info
+    fetchDeliveryCompanyName();
     fetchCityName();
-    fetchCountyName();
   }
-  void fetchCityName() async {
-    final city = await ApiHelper.fetchCityName();
+  void fetchDeliveryCompanyName() async {
+    final deliveryCompanyName = await ApiService().fetchAllDeliveryCompanyName();
     setState(() {
-      this.city = city;
+      this.deliveryCompanyName = deliveryCompanyName;
+      print('$deliveryCompanyName');
     });
   }
-  void fetchCountyName() async {
-    final country = await ApiHelper.fetchCountryName();
+  void fetchCityName() async {
+    final cities = await ApiHelper.fetchCityName();
     setState(() {
-      this.country = country;
+      this.cities = cities;
     });
   }
   Future pickImage() async {
@@ -120,10 +122,10 @@ class _AddDeliveryWidgetState extends State<AddDeliveryWidget> {
                       value: null, // Set initial value to null
                       child: Text('Select Company Name'),
                     ),
-                    ...city.map((cities) {
+                    ...deliveryCompanyName.map((deliveryCompanyName) {
                       return DropdownMenuItem<String>(
-                        value: cities.id.toString(),
-                        child: Text(cities.name),
+                        value: deliveryCompanyName.id.toString(),
+                        child: Text(deliveryCompanyName.name),
                       );
                     }).toList(),
                   ],
@@ -159,10 +161,10 @@ class _AddDeliveryWidgetState extends State<AddDeliveryWidget> {
                       value: null, // Set initial value to null
                       child: Text('Select City Name'),
                     ),
-                    ...country.map((country) {
+                    ...cities.map((cities) {
                       return DropdownMenuItem<String>(
-                        value: country.id.toString(),
-                        child: Text(country.name),
+                        value: cities.id.toString(),
+                        child: Text(cities.name),
                       );
                     }).toList(),
                   ],

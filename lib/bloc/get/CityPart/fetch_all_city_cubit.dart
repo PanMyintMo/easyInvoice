@@ -2,7 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:easy_invoice/data/responsemodel/CityPart/Cities.dart';
 import 'package:equatable/equatable.dart';
 
-import '../../data/userRepository/UserRepository.dart';
+import '../../../data/userRepository/UserRepository.dart';
 
 part 'fetch_all_city_state.dart';
 

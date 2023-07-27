@@ -3,6 +3,7 @@ import 'package:easy_invoice/screen/AllSizesScreen.dart';
 import 'package:easy_invoice/screen/AllUserRoleScreen.dart';
 import 'package:easy_invoice/screen/DeliveryPart/AddDeliveryScreen.dart';
 import 'package:easy_invoice/screen/DeliveryPart/DeliveryManScreen.dart';
+import 'package:easy_invoice/screen/DeliveryPart/TestingScreen.dart';
 import 'package:easy_invoice/screen/LocationPart/CountryScreen.dart';
 import 'package:easy_invoice/screen/OrderPart/AddOrderScreen.dart';
 import 'package:easy_invoice/screen/UserAddScreen.dart';
@@ -14,6 +15,7 @@ import '../screen/AddProductScreen.dart';
 import '../screen/AllCategoryScreen.dart';
 import '../screen/AllProductScreen.dart';
 import '../screen/DeliveryPart/AllDeliveryScreen.dart';
+import '../screen/LocationPart/AllTownshipsScreen.dart';
 import '../screen/LocationPart/CityScreen.dart';
 import '../screen/ProductInvoicePart/ProductInvoiceScreen.dart';
 import '../screen/SizeAddScreen.dart';
@@ -247,7 +249,7 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
                     listData: [],
                     onClicked: () {
                       Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => const AllProductScreen()));
+                          builder: (context) => const TestingScreen()));
                     },
                     onClickedItem: () {
                       Navigator.of(context).push(MaterialPageRoute(
@@ -333,7 +335,10 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
                               builder: (context) => const Cities()));
 
                         },
-                        viewTownships: () {})
+                        viewTownships: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => const Townships()));
+                        })
                 ],
               ),
             ),
