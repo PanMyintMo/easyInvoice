@@ -23,12 +23,15 @@ import '../../dataRequestModel/EditUserRoleRequestModel.dart';
 import '../../dataRequestModel/LoginRequestModel.dart';
 import '../../dataRequestModel/RegisterRequestModel.dart';
 import '../../dataRequestModel/ShopKeeperPart/ShopKeeperRequestModel.dart';
+import '../../dataRequestModel/TownshipPart/AddTownship.dart';
+import '../../dataRequestModel/TownshipPart/EditTownship.dart';
 import '../responsemodel/AddCategoryResponseModel.dart';
 import '../responsemodel/CategoryDeleteRespose.dart';
 import '../responsemodel/CityPart/AddCityResponse.dart';
 import '../responsemodel/CityPart/Cities.dart';
 import '../responsemodel/CityPart/DeleteCityResponse.dart';
 import '../responsemodel/CityPart/EditCityResponse.dart';
+import '../responsemodel/CityPart/FetchCityByCountryId.dart';
 import '../responsemodel/CountryPart/CountryResponse.dart';
 import '../responsemodel/CountryPart/DeleteCountryResponse.dart';
 import '../responsemodel/CountryPart/EditCountryResponse.dart';
@@ -36,6 +39,7 @@ import '../responsemodel/CountryPart/RequestCountryResponse.dart';
 import '../responsemodel/DeleteProductResponse.dart';
 import '../responsemodel/DeleteUserRoleResponse.dart';
 import '../responsemodel/DeliveryPart/AddDeliveryResponse.dart';
+import '../responsemodel/DeliveryPart/FetchAllDeliveryName.dart';
 import '../responsemodel/EditUserRoleResponse.dart';
 import '../responsemodel/LoginResponse.dart';
 import '../responsemodel/ProductByCategoryIdResponse.dart';
@@ -43,6 +47,10 @@ import '../responsemodel/ProductResponse.dart';
 import '../responsemodel/RegisterResponse.dart';
 import '../responsemodel/ShopKeeperResponsePart/ShopKeeperResponse.dart';
 import '../responsemodel/SizeDeleteResponse.dart';
+import '../responsemodel/TownshipsPart/AddTownshipResponse.dart';
+import '../responsemodel/TownshipsPart/AllTownshipResponse.dart';
+import '../responsemodel/TownshipsPart/DeleteTownshipResponse.dart';
+import '../responsemodel/TownshipsPart/EditTownshipResponse.dart';
 import '../responsemodel/UpdateSizeResponse.dart';
 import '../responsemodel/UserRoleResponse.dart';
 
@@ -62,13 +70,10 @@ class ApiService {
         'https://mmeasyinvoice.com/api/register',
         data: registerRequestModel.toJson(),
       );
-      //  print('Response Status Code: ${response.statusCode}');
-      //  print('Response Data: ${response.data}');
       if (response.statusCode == 200) {
         final RegisterResponse data = RegisterResponse.fromJson(response.data);
         return data;
       } else {
-        //   print("My response status code is ${response.statusCode}");
         throw DioError(
             requestOptions: RequestOptions(path: '/api/register'),
             response: response);
@@ -89,7 +94,6 @@ class ApiService {
         final LoginResponse data = LoginResponse.fromJson(response.data);
         return data;
       } else {
-        // print("My response status code is ${response.statusCode}");
         throw DioError(
           requestOptions: RequestOptions(path: '/api/login'),
           response: response,
@@ -111,10 +115,10 @@ class ApiService {
         data: addCountry.toJson(),
       );
       if (response.statusCode == 200) {
-        final RequestCountryResponse data = RequestCountryResponse.fromJson(response.data);
+        final RequestCountryResponse data =
+            RequestCountryResponse.fromJson(response.data);
         return data;
       } else {
-        // print("My response status code is ${response.statusCode}");
         throw DioError(
           requestOptions: RequestOptions(path: '/api/add-country'),
           response: response,
@@ -129,17 +133,18 @@ class ApiService {
   }
 
   //edit country response
-  Future<EditCountryResponse> editCountry(int id,EditCountry editCountry) async {
+  Future<EditCountryResponse> editCountry(
+      int id, EditCountry editCountry) async {
     try {
       final Response response = await _dio.post(
         'https://mmeasyinvoice.com/api/edit-country/$id',
         data: editCountry.toJson(),
       );
       if (response.statusCode == 200) {
-        final EditCountryResponse data = EditCountryResponse.fromJson(response.data);
+        final EditCountryResponse data =
+            EditCountryResponse.fromJson(response.data);
         return data;
       } else {
-        // print("My response status code is ${response.statusCode}");
         throw DioError(
           requestOptions: RequestOptions(path: '/api/eidt-country'),
           response: response,
@@ -154,7 +159,7 @@ class ApiService {
   }
 
   //edit city response
-  Future<EditCityResponse> editCity(int id,EditCity editCity) async {
+  Future<EditCityResponse> editCity(int id, EditCity editCity) async {
     try {
       final Response response = await _dio.post(
         'https://mmeasyinvoice.com/api/edit-city/$id',
@@ -177,6 +182,32 @@ class ApiService {
     }
   }
 
+  //edit township response
+  Future<EditTownshipResponse> editTownship(
+      int id, EditTownship editTownship) async {
+    try {
+      final Response response = await _dio.post(
+        'https://mmeasyinvoice.com/api/edit-township/$id',
+        data: editTownship.toJson(),
+      );
+      if (response.statusCode == 200) {
+        final EditTownshipResponse data =
+            EditTownshipResponse.fromJson(response.data);
+        return data;
+      } else {
+        throw DioError(
+          requestOptions: RequestOptions(path: '/api/edit-township'),
+          response: response,
+        );
+      }
+    } catch (error) {
+      throw DioError(
+        requestOptions: RequestOptions(path: '/api/edit-township'),
+        error: error,
+      );
+    }
+  }
+
 // fetch request city response
   Future<AddCityResponse> requestCity(AddCity addCity) async {
     try {
@@ -188,7 +219,6 @@ class ApiService {
         final AddCityResponse data = AddCityResponse.fromJson(response.data);
         return data;
       } else {
-        // print("My response status code is ${response.statusCode}");
         throw DioError(
           requestOptions: RequestOptions(path: '/api/add-city'),
           response: response,
@@ -202,18 +232,44 @@ class ApiService {
     }
   }
 
+  // fetch request township response
+  Future<AddTownshipResponse> requestTownship(AddTownship addTownship) async {
+    try {
+      final Response response = await _dio.post(
+        'https://mmeasyinvoice.com/api/add-township',
+        data: addTownship.toJson(),
+      );
+      if (response.statusCode == 200) {
+        final AddTownshipResponse data =
+            AddTownshipResponse.fromJson(response.data);
+        return data;
+      } else {
+        throw DioError(
+          requestOptions: RequestOptions(path: '/api/add-township'),
+          response: response,
+        );
+      }
+    } catch (error) {
+      throw DioError(
+        requestOptions: RequestOptions(path: '/api/add-township'),
+        error: error,
+      );
+    }
+  }
+
 // add delivery company name
-  Future<AddDeliveryResponse> AddDelivery(AddDeliveryRequestModel addDeliveryRequestModel) async {
+  Future<AddDeliveryResponse> AddDelivery(
+      AddDeliveryRequestModel addDeliveryRequestModel) async {
     try {
       final Response response = await _dio.post(
         'https://mmeasyinvoice.com/api/add-delivery-companyname',
         data: addDeliveryRequestModel.toJson(),
       );
       if (response.statusCode == 200) {
-        final AddDeliveryResponse data = AddDeliveryResponse.fromJson(response.data);
+        final AddDeliveryResponse data =
+            AddDeliveryResponse.fromJson(response.data);
         return data;
       } else {
-        // print("My response status code is ${response.statusCode}");
         throw DioError(
           requestOptions: RequestOptions(path: '/api/add-delivery-companyname'),
           response: response,
@@ -227,16 +283,13 @@ class ApiService {
     }
   }
 
-
   //Add category
-
   Future<AddCategoryResponse> addCategory(
       AddCategoryRequestModel addCategoryRequestModel) async {
     try {
       final Response response = await _dio.post(
           'https://mmeasyinvoice.com/api/add-category',
           data: addCategoryRequestModel.toJson());
-      //    print("AddCategory data is ${response.data}");
 
       if (response.statusCode == 200) {
         final AddCategoryResponse addCategoryResponseData =
@@ -257,14 +310,12 @@ class ApiService {
   }
 
   //Add product
-
   Future<ProductResponse> addProduct(
       AddProductRequestModel addProductRequestModel) async {
     try {
       final Response response = await _dio.post(
           'https://mmeasyinvoice.com/api/add-product',
           data: addProductRequestModel.toJson());
-      //      print("Add Product data is ${response.data}");
 
       if (response.statusCode == 200) {
         final ProductResponse addProductResponseData =
@@ -292,7 +343,6 @@ class ApiService {
       final Response response = await _dio.post(
           'https://mmeasyinvoice.com/api/add-shopkeeper',
           data: shopKeeperRequestModel.toJson());
-      print("Add shopkeeper request data is ${response.data}");
 
       if (response.statusCode == 200) {
         final AddShopKeeperResponse addShopKeeperResponse =
@@ -322,7 +372,6 @@ class ApiService {
       while (true) {
         final response = await _dio
             .get('https://mmeasyinvoice.com/api/categories?page=$currentPage');
-        //    print('Category Response is ${response.data}');
 
         if (response.statusCode == 200) {
           final dynamic responseData = response.data;
@@ -370,6 +419,67 @@ class ApiService {
     }
   }
 
+// Fetch all townships from the database
+  Future<TownshipResponse> townships() async {
+    try {
+      int currentPage = 1;
+      TownshipData? townshipData;
+      List<Township> townshipItems = [];
+
+      while (true) {
+        final response = await _dio.post(
+            'https://www.mmeasyinvoice.com/api/townships?page=$currentPage');
+        if (response.statusCode == 200) {
+          final dynamic responseData = response.data;
+          final townships = TownshipResponse.fromJson(responseData);
+          townshipData = townships.data;
+
+          final List<Township> townshipItem = townshipData.data;
+          townshipItems.addAll(townshipItem);
+
+          if (currentPage == townshipData.lastPage) {
+            break;
+          } else {
+            currentPage++;
+          }
+        } else {
+          throw Exception('Failed to fetch townships');
+        }
+      }
+
+      if (townshipData == null) {
+        throw Exception('No township data found');
+      }
+
+      return TownshipResponse(
+        data: TownshipData(
+          currentPage: townshipData.currentPage,
+          data: townshipItems,
+          firstPageUrl: 'https://mmeasyinvoice.com/api/townships?page=1',
+          lastPage: townshipData.lastPage,
+          lastPageUrl:
+              'https://mmeasyinvoice.com/api/townships?page=${townshipData.lastPage}',
+          links: townshipData.links,
+          nextPageUrl: (currentPage < townshipData.lastPage)
+              ? 'https://mmeasyinvoice.com/api/townships?page=${currentPage + 1}'
+              : null,
+          path: 'https://www.mmeasyinvoice.com/api/townships',
+          perPage: townshipData.perPage,
+          prevPageUrl: (currentPage > 1)
+              ? 'https://mmeasyinvoice.com/api/townships?page=${currentPage - 1}'
+              : null,
+          to: townshipData.to,
+          total: townshipData.total,
+          from: townshipData.from,
+        ),
+        status: 200,
+        message: 'All Township are Retrieved Successfully!',
+      );
+    } catch (e) {
+      throw Exception('Failed to fetch townships: $e');
+    }
+  }
+
   //fetch all city from db
   Future<CityResponse> cities() async {
     try {
@@ -378,8 +488,8 @@ class ApiService {
       List<City> cityItems = [];
 
       while (true) {
-        final response = await _dio.get('https://mmeasyinvoice.com/api/cities?page=$currentPage');
-        print('Cities Response is ${response.data}');
+        final response = await _dio
+            .get('https://mmeasyinvoice.com/api/cities?page=$currentPage');
 
         if (response.statusCode == 200) {
           final dynamic responseData = response.data;
@@ -409,7 +519,8 @@ class ApiService {
           cities: cityItems,
           firstPageUrl: 'https://mmeasyinvoice.com/api/cities?page=1',
           lastPage: cityData.lastPage,
-          lastPageUrl: 'https://mmeasyinvoice.com/api/cities?page=${cityData.lastPage}',
+          lastPageUrl:
+              'https://mmeasyinvoice.com/api/cities?page=${cityData.lastPage}',
           links: cityData.links,
           nextPageUrl: (currentPage < cityData.lastPage)
               ? 'https://mmeasyinvoice.com/api/cities?page=${currentPage + 1}'
@@ -420,6 +531,7 @@ class ApiService {
       throw Exception('Failed to fetch cities: $e');
     }
   }
+
   //fetch all country from db
   Future<CountryResponse> country() async {
     try {
@@ -428,8 +540,8 @@ class ApiService {
       List<Country> countryItems = [];
 
       while (true) {
-        final response = await _dio.get('https://mmeasyinvoice.com/api/countries?page=$currentPage');
-        print('Country Response is ${response.data}');
+        final response = await _dio
+            .get('https://mmeasyinvoice.com/api/countries?page=$currentPage');
 
         if (response.statusCode == 200) {
           final dynamic responseData = response.data;
@@ -459,33 +571,37 @@ class ApiService {
           data: countryItems,
           firstPageUrl: 'https://mmeasyinvoice.com/api/countries?page=1',
           lastPage: countryData.lastPage,
-          lastPageUrl: 'https://mmeasyinvoice.com/api/countries?page=${countryData.lastPage}',
+          lastPageUrl:
+              'https://mmeasyinvoice.com/api/countries?page=${countryData.lastPage}',
           links: countryData.links,
           nextPageUrl: (currentPage < countryData.lastPage)
               ? 'https://mmeasyinvoice.com/api/countries?page=${currentPage + 1}'
-              : null, from: 1, path: '',
-          perPage: countryItems.length, prevPageUrl: '',
-          to: countryItems.length, total: 0,
-        ), status: 200, message: 'Success',
+              : null,
+          from: 1,
+          path: '',
+          perPage: countryItems.length,
+          prevPageUrl: '',
+          to: countryItems.length,
+          total: 0,
+        ),
+        status: 200,
+        message: 'Success',
       );
     } catch (e) {
       throw Exception('Failed to fetch countries: $e');
     }
   }
 
-
 //fetch all product by category Id from db
-
   Future<List<ProductItem>> fetchAllProductByCateId(int id) async {
     try {
-      final response = await _dio.get(
-          'https://mmeasyinvoice.com/api/productByCategoryId/$id');
-      print('All Product by category id Response: ${response.data}');
+      final response = await _dio
+          .get('https://mmeasyinvoice.com/api/productByCategoryId/$id');
 
       if (response.statusCode == 200) {
         final responseData = response.data;
-        print('Response data for cateid of product $responseData');
-        final productByCategoryIdResponse= ProductByCategoryIdResponse.fromJson(responseData);
+        final productByCategoryIdResponse =
+            ProductByCategoryIdResponse.fromJson(responseData);
 
         return productByCategoryIdResponse.data;
       } else {
@@ -495,6 +611,42 @@ class ApiService {
       throw Exception('Failed to fetch product role: $e');
     }
   }
+
+  //fetch all cities by country Id
+  Future<List<CityByCountryIdData>> fetchAllCitiesByCountryId(int id) async {
+    try {
+      final response = await _dio
+          .get('https://mmeasyinvoice.com/api/cities-by-countryid/$id');
+      if (response.statusCode == 200) {
+        final responseData = response.data;
+        final cityByCountryIdResponse =
+        CityByCountryIdResponse.fromJson(responseData);
+        return cityByCountryIdResponse.data;
+      } else {
+        throw Exception('Invalid data format for city by country id field');
+      }
+    } catch (e) {
+      throw Exception('Failed to fetch city by country id : $e');
+    }
+  }
+
+
+//fetch all delivery company name
+  Future<List<AllDeliveryName>> fetchAllDeliveryCompanyName() async {
+    try {
+      final response = await _dio.get('https://mmeasyinvoice.com/api/companynames');
+      if (response.statusCode == 200) {
+        final responseData = response.data;
+        final fetchAllDeliveryName = FetchAllDeliveryName.fromJson(responseData);
+        return fetchAllDeliveryName.allDeliveryName;
+      } else {
+        throw Exception('Invalid data format for delivery company name field');
+      }
+    } catch (e) {
+      throw Exception('Failed to fetch delivery company name: $e');
+    }
+  }
+
 
   //fetch all product from db
   Future<GetAllProductResponse> fetchAllProducts() async {
@@ -507,7 +659,6 @@ class ApiService {
       while (!isLastPage) {
         final response = await _dio
             .get('https://mmeasyinvoice.com/api/products?page=$currentPage');
-        //  print('Product Response is ${response.data}');
         if (response.statusCode == 200) {
           final dynamic responseData = response.data;
 
@@ -562,7 +713,6 @@ class ApiService {
       while (true) {
         final response = await _dio
             .get('https://mmeasyinvoice.com/api/sizes?page=$currentPage');
-        //   print('Size Response is ${response.data}');
 
         if (response.statusCode == 200) {
           final dynamic responseData = response.data;
@@ -617,9 +767,8 @@ class ApiService {
       List<UserData> allUser = [];
       UserRoleResponse userRoleResponse;
       while (true) {
-        final response =
-        await _dio.get('https://mmeasyinvoice.com/api/users?page=$currentPage');
-        print('All User Response is ${response.data}');
+        final response = await _dio
+            .get('https://mmeasyinvoice.com/api/users?page=$currentPage');
 
         if (response.statusCode == 200) {
           final dynamic responseData = response.data;
@@ -653,8 +802,10 @@ class ApiService {
             ? 'https://mmeasyinvoice.com/api/users?page=${currentPage - 1}'
             : null,
         to: allUser.length,
-        total: 0, // You can set the correct value for the total number of users
-        status: 200, // Set the appropriate status code
+        total: 0,
+        // You can set the correct value for the total number of users
+        status: 200,
+        // Set the appropriate status code
         message: 'Success', // Set the appropriate message
       );
     } catch (e) {
@@ -662,14 +813,12 @@ class ApiService {
     }
   }
 
-
 //Delete category by id
 
   Future<DeleteCategory> deleteCategory(int id) async {
     try {
       final response =
           await _dio.post('https://mmeasyinvoice.com/api/delete-category/$id');
-      // print("Delete category status response is ${response.statusCode}");
       if (response.statusCode == 200) {
         DeleteCategory deleteCategory = DeleteCategory.fromJson(response.data);
         return deleteCategory;
@@ -681,16 +830,15 @@ class ApiService {
     }
   }
 
-
   //Delete country by id
 
   Future<DeleteCountryResponse> deleteCountry(int id) async {
     try {
       final response =
-      await _dio.post('https://mmeasyinvoice.com/api/delete-country/$id');
-     //  print("Delete Country status response is ${response.statusCode}");
+          await _dio.post('https://mmeasyinvoice.com/api/delete-country/$id');
       if (response.statusCode == 200) {
-        DeleteCountryResponse deleteCountry = DeleteCountryResponse.fromJson(response.data);
+        DeleteCountryResponse deleteCountry =
+            DeleteCountryResponse.fromJson(response.data);
         return deleteCountry;
       } else {
         throw Exception('Something wrong!');
@@ -701,15 +849,32 @@ class ApiService {
   }
 
   //Delete city by id
-
   Future<DeleteCityResponse> deleteCity(int id) async {
     try {
       final response =
-      await _dio.post('https://mmeasyinvoice.com/api/delete-city/$id');
-      print("Delete City status response is ${response.statusCode}");
+          await _dio.post('https://mmeasyinvoice.com/api/delete-city/$id');
       if (response.statusCode == 200) {
-        DeleteCityResponse deleteCity = DeleteCityResponse.fromJson(response.data);
+        DeleteCityResponse deleteCity =
+            DeleteCityResponse.fromJson(response.data);
         return deleteCity;
+      } else {
+        throw Exception('Something wrong!');
+      }
+    } catch (error) {
+      throw Exception(error);
+    }
+  }
+
+  //Delete township by id
+  Future<DeleteTownshipResponse> deleteTownship(int id) async {
+    try {
+      final response =
+          await _dio.post('https://mmeasyinvoice.com/api/delete-township/$id');
+      print("Delete Township status response is ${response.statusCode}");
+      if (response.statusCode == 200) {
+        DeleteTownshipResponse deleteTownship =
+            DeleteTownshipResponse.fromJson(response.data);
+        return deleteTownship;
       } else {
         throw Exception('Something wrong!');
       }
@@ -762,7 +927,6 @@ class ApiService {
       final response = await _dio.post(
           'https://mmeasyinvoice.com/api/edit-category/$id',
           data: editCategory.toJson());
-      //   print('Update response is ${response.data}');
       if (response.statusCode == 200) {
         CategoryUpdateResponse categoryUpdateResponse =
             CategoryUpdateResponse.fromJson(response.data);
@@ -783,7 +947,6 @@ class ApiService {
       final response = await _dio.post(
           'https://mmeasyinvoice.com/api/edit-product/$id',
           data: editProductItem.toJson());
-      print('Update Product Item response is ${response.data}');
       if (response.statusCode == 200) {
         EditProductResponse updateProductItem =
             EditProductResponse.fromJson(response.data);
@@ -802,7 +965,6 @@ class ApiService {
       final response = await _dio.post(
           'https://mmeasyinvoice.com/api/edit-size/$id',
           data: editSize.toJson());
-      //print('Update response is ${response.data}');
       if (response.statusCode == 200) {
         SizeUpdateResponse sizeUpdateResponse =
             SizeUpdateResponse.fromJson(response.data);
@@ -824,7 +986,6 @@ class ApiService {
       final Response response = await _dio.post(
           'https://mmeasyinvoice.com/api/add-size',
           data: addSizeRequestModel.toJson());
-      // print("Add Size Response data is ${response.data}");
 
       if (response.statusCode == 200) {
         final AddSizeResponse addSizeResponse =
@@ -852,13 +1013,10 @@ class ApiService {
         'https://mmeasyinvoice.com/api/add-user',
         data: userRequestModel.toJson(),
       );
-      //print('User response are $response');
-      // print('Response Status Code: ${response.statusCode}');
       if (response.statusCode == 200) {
         final UserResponse data = UserResponse.fromJson(response.data);
         return data;
       } else {
-        // print("My response status code is ${response.statusCode}");
         throw DioError(
           requestOptions: RequestOptions(path: '/api/add-user'),
           response: response,
@@ -885,7 +1043,6 @@ class ApiService {
             EditUserRoleResponse.fromJson(response.data);
         return data;
       } else {
-        // print("My response status code is ${response.statusCode}");
         throw DioError(
           requestOptions: RequestOptions(path: '/api/edit-user'),
           response: response,
@@ -904,7 +1061,6 @@ class ApiService {
     try {
       final response =
           await _dio.post('https://mmeasyinvoice.com/api/delete-user/$id');
-      //  print("Delete User role status response is ${response.statusCode}");
       if (response.statusCode == 200) {
         DeleteUserRoleResponse deleteUserRoleResponse =
             DeleteUserRoleResponse.fromJson(response.data);

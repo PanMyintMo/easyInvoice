@@ -96,24 +96,20 @@ Widget buildProductContainerText(String name) {
 Widget buildProductContainerForm(String label, TextInputType inputType,
     TextEditingController controller, String? Function(String?)? validator) {
   return Expanded(
-    child: SizedBox(
-      width: 200,
-      height: 50,
-      child: TextFormField(
-        keyboardType: inputType,
-        controller: controller,
-        validator: validator,
-        decoration: InputDecoration(
-          labelText: label, // Corrected the way label is provided
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10.0),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderSide: const BorderSide(color: Colors.blue, width: 1.0),
-            borderRadius: BorderRadius.circular(10.0),
-          ),
-          fillColor: Colors.grey,
+    child: TextFormField(
+      keyboardType: inputType,
+      controller: controller,
+      validator: validator,
+      decoration: InputDecoration(
+        labelText: label, // Corrected the way label is provided
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10.0),
         ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: const BorderSide(color: Colors.blue, width: 1.0),
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        fillColor: Colors.grey,
       ),
     ),
   );

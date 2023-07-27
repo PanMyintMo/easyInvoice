@@ -22,6 +22,8 @@ import '../../dataRequestModel/EditSizeModel.dart';
 import '../../dataRequestModel/LoginRequestModel.dart';
 import '../../dataRequestModel/RegisterRequestModel.dart';
 import '../../dataRequestModel/ShopKeeperPart/ShopKeeperRequestModel.dart';
+import '../../dataRequestModel/TownshipPart/AddTownship.dart';
+import '../../dataRequestModel/TownshipPart/EditTownship.dart';
 import '../responsemodel/AddCategoryResponseModel.dart';
 import '../responsemodel/CategoryDeleteRespose.dart';
 import '../responsemodel/CityPart/AddCityResponse.dart';
@@ -34,12 +36,17 @@ import '../responsemodel/CountryPart/RequestCountryResponse.dart';
 import '../responsemodel/DeleteProductResponse.dart';
 import '../responsemodel/DeleteUserRoleResponse.dart';
 import '../responsemodel/DeliveryPart/AddDeliveryResponse.dart';
+import '../responsemodel/DeliveryPart/FetchAllDeliveryName.dart';
 import '../responsemodel/EditUserRoleResponse.dart';
 import '../responsemodel/GetAllCategoryDetail.dart';
 import '../responsemodel/LoginResponse.dart';
 import '../responsemodel/ProductResponse.dart';
 import '../responsemodel/ShopKeeperResponsePart/ShopKeeperResponse.dart';
 import '../responsemodel/SizeDeleteResponse.dart';
+import '../responsemodel/TownshipsPart/AddTownshipResponse.dart';
+import '../responsemodel/TownshipsPart/AllTownshipResponse.dart';
+import '../responsemodel/TownshipsPart/DeleteTownshipResponse.dart';
+import '../responsemodel/TownshipsPart/EditTownshipResponse.dart';
 import '../responsemodel/UpdateCateResponse.dart';
 import '../responsemodel/UpdateSizeResponse.dart';
 import '../responsemodel/UserRoleResponse.dart';
@@ -84,6 +91,16 @@ class UserRepository {
   Future<AddCityResponse> addCity(AddCity addCity) async {
     try {
       final response = await _apiService.requestCity(addCity);
+      return response;
+    } catch (error) {
+      rethrow;
+    }
+  }
+
+  //request for add  township
+  Future<AddTownshipResponse> addTownship(AddTownship addTownship) async {
+    try {
+      final response = await _apiService.requestTownship(addTownship);
       return response;
     } catch (error) {
       rethrow;
@@ -177,6 +194,16 @@ class UserRepository {
     }
   }
 
+  //fetch townships from db
+  Future<List<Township>> fetchTownships() async {
+    try {
+      final response = await _apiService.townships();
+      return response.data.data;
+    } catch (error) {
+      throw Exception('Failed to fetch township: $error');
+    }
+  }
+
   //fetch country from db
   Future<List<Country>> fetchCountry() async {
     try {
@@ -196,6 +223,17 @@ class UserRepository {
       throw Exception('Failed to get products: $error');
     }
   }
+
+  /*//fetch all delivery company name
+  Future<List<AllDeliveryName>> fetchAllDeliveryCompanyName() async {
+    try {
+      final response = await _apiService.fetchAllDeliveryCompanyName();
+      return response;
+    } catch (error) {
+      throw Exception('Failed to fetch delivery company name: $error');
+    }
+  }
+*/
 
   //fetch all sizes
   Future<List<SizeItems>> getSizes() async {
@@ -232,6 +270,16 @@ class UserRepository {
   Future<DeleteCityResponse> deleteCity(int id) async {
     try {
       final response = await _apiService.deleteCity(id);
+      return response;
+    } catch (error) {
+      rethrow;
+    }
+  }
+
+  //to delete township by id
+  Future<DeleteTownshipResponse> deleteTownship(int id) async {
+    try {
+      final response = await _apiService.deleteTownship(id);
       return response;
     } catch (error) {
       rethrow;
@@ -317,8 +365,7 @@ class UserRepository {
   }
 
   // update city by id
-  Future<EditCityResponse> updateCity(
-      int id, EditCity editCity) async {
+  Future<EditCityResponse> updateCity(int id, EditCity editCity) async {
     try {
       final response = await _apiService.editCity(id, editCity);
       return response;
@@ -327,8 +374,18 @@ class UserRepository {
     }
   }
 
-  // update product by id
+  // update township by id
+  Future<EditTownshipResponse> updateTownship(
+      int id, EditTownship editTownship) async {
+    try {
+      final response = await _apiService.editTownship(id, editTownship);
+      return response;
+    } catch (error) {
+      rethrow;
+    }
+  }
 
+  // update product by id
   Future<EditProductResponse> updateProductItem(
       EditProductRequestModel editProductRequestModel, int id) async {
     try {

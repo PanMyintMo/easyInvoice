@@ -1,34 +1,32 @@
-import 'package:easy_invoice/bloc/get/CityPart/fetch_all_city_cubit.dart';
+import 'package:easy_invoice/bloc/delete/TownshipPart/township_delete_cubit.dart';
+import 'package:easy_invoice/widget/TownshipPart/AllTownshipsWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import '../../bloc/delete/CityPart/delete_city_cubit.dart';
+import '../../bloc/get/TownshipPart/fetch_all_township_cubit.dart';
 import '../../common/ToastMessage.dart';
 import '../../module/module.dart';
-import '../../widget/CityPart/CitiesWidget.dart';
-
-class Cities extends StatefulWidget {
-  const Cities({super.key});
+class Townships extends StatefulWidget {
+  const Townships({super.key});
 
   @override
-  State<Cities> createState() => _CitiesState();
+  State<Townships> createState() => _TownshipsState();
 }
 
-class _CitiesState extends State<Cities> {
+class _TownshipsState extends State<Townships> {
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider<FetchAllCityCubit>(
+        BlocProvider<FetchAllTownshipCubit>(
           create: (context) {
-            final cubit = FetchAllCityCubit(getIt
+            final cubit = FetchAllTownshipCubit(getIt
                 .call()); // Use getIt<ApiService>() to get the ApiService instance
-            cubit.fetchAllCity();
+            cubit.fetchAllTownship();
             return cubit;
           },
         ),
-        BlocProvider<DeleteCityCubit>(
-          create: (context) => DeleteCityCubit(getIt
+        BlocProvider<TownshipDeleteCubit>(
+          create: (context) => TownshipDeleteCubit(getIt
               .call()), // Use getIt<ApiService>() to get the ApiService instance
         ),
       ],
@@ -41,52 +39,52 @@ class _CitiesState extends State<Cities> {
             color: Colors.red, // Set the color of the navigation icon to black
           ),
           title: const Text(
-            'City Screen',
+            'Townships Screen',
             style: TextStyle(
                 color: Colors.black54,
                 fontWeight: FontWeight.bold,
                 fontSize: 16),
           ),
         ),
-        body: BlocConsumer<FetchAllCityCubit, FetchAllCityState>(
+        body: BlocConsumer<FetchAllTownshipCubit, FetchAllTownshipState>(
           listener: (context, state) {
-            if (state is FetchAllCityFail) {
+            if (state is FetchAllTownshipFail) {
               showToastMessage('Error: ${state.error}');
             }
           },
           builder: (context, state) {
-            if (state is FetchAllCityLoading) {
+            if (state is FetchAllTownshipLoading) {
               return const Center(child: CircularProgressIndicator());
-            } else if (state is FetchAllCitySuccess) {
-              return BlocConsumer<DeleteCityCubit, DeleteCityState>(
+            } else if (state is FetchAllTownshipSuccess) {
+              return BlocConsumer<TownshipDeleteCubit, TownshipDeleteState>(
                 listener: (context, deleteState) {
-                  if (deleteState is DeleteCityLoading) {
+                  if (deleteState is DeleteTownshipLoading) {
 
-                  } else if (deleteState is DeleteCitySuccess) {
-                    showToastMessage(deleteState.deleteCityResponse.message);
+                  } else if (deleteState is DeleteTownshipSuccess) {
+                    showToastMessage(deleteState.deleteTownshipResponse.message);
                     WidgetsBinding.instance.addPostFrameCallback((_) {
-                      context.read<FetchAllCityCubit>().fetchAllCity();
+                      context.read<FetchAllTownshipCubit>().fetchAllTownship();
                     });
-                  } else if (deleteState is DeleteCityFail) {
+                  } else if (deleteState is DeleteTownshipFail) {
                     showToastMessage(deleteState.error);
 
                   }
                 },
                 builder: (context, deleteState) {
-                  final bool loading = deleteState is DeleteCityLoading;
-                  return CitiesWidget(
+                  final bool loading = deleteState is DeleteTownshipLoading;
+                  return TownshipWidget(
                     isLoading: loading,
                   );
                 },
               );
-            } else if (state is FetchAllCityFail) {
-              const CitiesWidget(
+            } else if (state is FetchAllTownshipFail) {
+              const TownshipWidget(
                 isLoading: false,
               );
               return Center(child: Text('Error: ${state.error}'));
             }
 
-            return const CitiesWidget(
+            return const TownshipWidget(
               isLoading: false,
             );
           },
