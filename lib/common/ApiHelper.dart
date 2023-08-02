@@ -2,6 +2,7 @@ import 'package:easy_invoice/data/responsemodel/CityPart/Cities.dart';
 
 import '../data/api/apiService.dart';
 import '../data/responsemodel/CountryPart/CountryResponse.dart';
+import '../data/responsemodel/FaultyItemPart/AllFaultyItems.dart';
 import '../data/responsemodel/GetAllCategoryDetail.dart';
 import '../data/responsemodel/GetAllProductResponse.dart';
 import '../data/responsemodel/GetAllSizeResponse.dart';
@@ -83,6 +84,20 @@ class ApiHelper {
       }
     } catch (error) {
       print('Error fetching product: $error');
+    }
+    return [];
+  }
+
+  //fetch all faultyItem
+
+  static Future<List<FaultyItemData>> fetchAllFaultyItem() async {
+    try {
+      final response = await ApiService().fetchAllFaultyItem();
+      if (response.data.data.isNotEmpty) {
+        return response.data.data;
+      }
+    } catch (error) {
+      print('Error fetching faulty item: $error');
     }
     return [];
   }

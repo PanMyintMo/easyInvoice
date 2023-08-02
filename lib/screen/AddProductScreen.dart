@@ -1,4 +1,4 @@
-import 'package:easy_invoice/bloc/post/add_product_cubit.dart';
+import 'package:easy_invoice/bloc/post/ProductPart/add_product_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

@@ -177,7 +177,7 @@ _buildCardView(String image, String cardText, String profileText, String sign) {
                                 color: Colors.grey,
                               ),
                             ),
-                            Text('\$', style: TextStyle(color: Colors.red)),
+                            const Text('\$', style: TextStyle(color: Colors.red)),
                           ],
                         ),
                       ],

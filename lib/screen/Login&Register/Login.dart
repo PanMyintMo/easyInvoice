@@ -1,14 +1,15 @@
-import 'package:easy_invoice/bloc/post/sign_in_cubit.dart';
+import 'package:easy_invoice/bloc/post/Login&Register/sign_in_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_invoice/module/module.dart';
 import 'package:easy_invoice/network/SharedPreferenceHelper.dart';
 import 'package:easy_invoice/screen/mainscreen.dart';
 import 'package:flutter/gestures.dart';
-import 'package:easy_invoice/dataRequestModel/LoginRequestModel.dart';
+import 'package:easy_invoice/dataRequestModel/Login&Register/LoginRequestModel.dart';
 import 'package:flutter/material.dart';
-import '../common/FormValidator.dart';
-import '../common/HeaderWidget.dart';
-import '../common/theme_helper.dart';
+
+import '../../common/FormValidator.dart';
+import '../../common/HeaderWidget.dart';
+import '../../common/theme_helper.dart';
 import 'Register.dart';
 
 class Login extends StatefulWidget {
@@ -38,24 +39,22 @@ class _LoginState extends State<Login> {
               );
             } else if (state is SignInSuccess) {
               final token = state.loginResponse.token;
-              //  print("Login Success Status Code is ${state.loginResponse.status}");
               final name = state.loginResponse.name;
               final email = state.loginResponse.email;
-              final utype= state.loginResponse.utype;
-
+              final utype = state.loginResponse.utype;
               // Set the token using the SessionManager class
-              SessionManager sessingManager = SessionManager();
-              sessingManager.setAuthToken(token);
-              sessingManager.setUserName(name);
-              sessingManager.setEmail(email);
-              sessingManager.setUserType(utype);
+              SessionManager sessionManager = SessionManager();
+              sessionManager.setAuthToken(token);
+              sessionManager.setUserName(name);
+              sessionManager.setEmail(email);
+              sessionManager.setUserType(utype);
 
               // Navigate to the user profile page after the current frame is completed
               WidgetsBinding.instance.addPostFrameCallback((_) {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => MainPageScreen(),
+                      builder: (context) => const MainPageScreen(),
                     ),
                   );
 

@@ -5,17 +5,19 @@ import 'package:easy_invoice/bloc/edit/edit_product_item_cubit.dart';
 import 'package:easy_invoice/bloc/edit/edit_size_cubit.dart';
 import 'package:easy_invoice/bloc/edit/edit_user_role_cubit.dart';
 import 'package:easy_invoice/bloc/get/CityPart/fetch_all_city_cubit.dart';
-import 'package:easy_invoice/bloc/get/get_all_product_cubit.dart';
-import 'package:easy_invoice/bloc/get/get_all_size_cubit.dart';
-import 'package:easy_invoice/bloc/get/get_all_user_role_cubit.dart';
-import 'package:easy_invoice/bloc/get/get_category_detail_cubit.dart';
+import 'package:easy_invoice/bloc/get/ProductPart/get_all_product_cubit.dart';
+import 'package:easy_invoice/bloc/get/SizePart/get_all_size_cubit.dart';
+import 'package:easy_invoice/bloc/get/UserRolePart/get_all_user_role_cubit.dart';
+import 'package:easy_invoice/bloc/get/CategoryPart/get_category_detail_cubit.dart';
 import 'package:easy_invoice/bloc/post/DeliveryPart/add_delivery_cubit.dart';
+import 'package:easy_invoice/bloc/post/FaultyItemPart/add_request_faulty_item_cubit.dart';
+import 'package:easy_invoice/bloc/post/Login&Register/edit_company_profile_cubit.dart';
 import 'package:easy_invoice/bloc/post/ShopKeeperPart/add_request_product_shop_keeper_cubit.dart';
 import 'package:easy_invoice/bloc/post/TownshipPart/add_township_cubit.dart';
-import 'package:easy_invoice/bloc/post/add_category_cubit.dart';
-import 'package:easy_invoice/bloc/post/add_product_cubit.dart';
-import 'package:easy_invoice/bloc/post/sign_in_cubit.dart';
-import 'package:easy_invoice/bloc/post/sign_up_cubit.dart';
+import 'package:easy_invoice/bloc/post/CategoryPart/add_category_cubit.dart';
+import 'package:easy_invoice/bloc/post/ProductPart/add_product_cubit.dart';
+import 'package:easy_invoice/bloc/post/Login&Register/sign_in_cubit.dart';
+import 'package:easy_invoice/bloc/post/Login&Register/sign_up_cubit.dart';
 import 'package:easy_invoice/bloc/post/add_user_role_cubit.dart';
 import 'package:easy_invoice/data/api/apiService.dart';
 import 'package:easy_invoice/data/userRepository/UserRepository.dart';
@@ -27,7 +29,9 @@ import '../bloc/delete/delete_product_item_cubit.dart';
 import '../bloc/delete/delete_user_role_cubit.dart';
 import '../bloc/edit/CityPart/edit_city_cubit.dart';
 import '../bloc/edit/TownshipPart/edit_township_cubit.dart';
-import '../bloc/get/DeliveryPart/fetch_all_delivery_company_name_cubit.dart';
+import '../bloc/get/CompanyProfile/company_profile_cubit.dart';
+import '../bloc/get/DeliveryManPart/fetch_all_warehouse_request_cubit.dart';
+import '../bloc/get/FaultyItemPart/fetch_all_faulty_item_cubit.dart';
 import '../bloc/get/TownshipPart/fetch_all_township_cubit.dart';
 import '../bloc/post/CityPart/add_city_cubit.dart';
 import '../bloc/edit/CountryPart/edit_country_cubit.dart';
@@ -51,6 +55,17 @@ void locator() {
   //for register
   SignUpCubit signupCubit = SignUpCubit(getIt.get<UserRepository>());
   getIt.registerLazySingleton(() => signupCubit);
+
+  //for edit company profile
+  EditCompanyProfileCubit editCompanyProfileCubit = EditCompanyProfileCubit(getIt.get<UserRepository>());
+  getIt.registerLazySingleton(() => editCompanyProfileCubit);
+
+
+  //for company profile
+  CompanyProfileCubit companyProfileCubit = CompanyProfileCubit(getIt.get<UserRepository>());
+  getIt.registerLazySingleton(() => companyProfileCubit);
+
+
   //to add category to db
   AddCategoryCubit addCategoryCubit =
       AddCategoryCubit(getIt.get<UserRepository>());
@@ -61,33 +76,41 @@ void locator() {
       AddDeliveryCubit(getIt.get<UserRepository>());
   getIt.registerLazySingleton(() => addDeliveryCubit);
 
-  //to add product to db
+  //to add product to
   AddProductCubit addProductCubit =
       AddProductCubit(getIt.get<UserRepository>());
   getIt.registerLazySingleton(() => addProductCubit);
+
+  //to add request faulty item
+  AddRequestFaultyItemCubit addRequestFaultyItemCubit =
+  AddRequestFaultyItemCubit(getIt.get<UserRepository>());
+  getIt.registerLazySingleton(() => addRequestFaultyItemCubit);
 
   //to add product to shopkeeper request
   AddRequestProductShopKeeperCubit addRequestProductShopKeeperCubit =
       AddRequestProductShopKeeperCubit(getIt.get<UserRepository>());
   getIt.registerLazySingleton(() => addRequestProductShopKeeperCubit);
 
-  //get all category
+  //fetch all category
   GetCategoryDetailCubit getCategoryDetailCubit =
       GetCategoryDetailCubit(getIt.get<UserRepository>());
   getIt.registerLazySingleton(() => getCategoryDetailCubit);
+
+  //fetch all faulty items
+  FetchAllFaultyItemCubit fetchAllFaultyItemCubit =
+  FetchAllFaultyItemCubit(getIt.get<UserRepository>());
+  getIt.registerLazySingleton(() => fetchAllFaultyItemCubit);
+
+
+  //fetch all warehouse request for deliver man
+  FetchAllWarehouseRequestCubit fetchAllWarehouseRequestCubit =
+  FetchAllWarehouseRequestCubit(getIt.get<UserRepository>());
+  getIt.registerLazySingleton(() => fetchAllWarehouseRequestCubit);
 
   //fetch all city
   FetchAllCityCubit fetchAllCityCubit =
       FetchAllCityCubit(getIt.get<UserRepository>());
   getIt.registerLazySingleton(() => fetchAllCityCubit);
-
-/*
-  //fetch all delivery company name
-  FetchAllDeliveryCompanyNameCubit fetchDeliveryNameCubit =
-  FetchAllDeliveryCompanyNameCubit(getIt.get<UserRepository>());
-  getIt.registerLazySingleton(() => fetchDeliveryNameCubit);
-
-*/
 
   //fetch all township
   FetchAllTownshipCubit fetchAllTownshipCubit =

@@ -199,7 +199,7 @@ class _RequestShopKeeperWidgetState extends State<RequestShopKeeperWidget> {
                   'Quantity',
                   TextInputType.number,
                   quantity,
-                  validateProductField,
+                  validateField,
                 ),
               ),
               const SizedBox(

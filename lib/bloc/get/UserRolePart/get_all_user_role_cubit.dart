@@ -2,7 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:easy_invoice/data/responsemodel/UserRoleResponse.dart';
 import 'package:equatable/equatable.dart';
 
-import '../../data/userRepository/UserRepository.dart';
+import '../../../data/userRepository/UserRepository.dart';
 
 part 'get_all_user_role_state.dart';
 

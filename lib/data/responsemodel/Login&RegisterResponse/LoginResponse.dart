@@ -5,7 +5,7 @@ class LoginResponse {
   DateTime? emailVerifiedAt;
   String? image;
   String utype;
-  String profilePhotoUrl;
+  String? url;
   int status;
   String message;
   String token;
@@ -17,7 +17,7 @@ class LoginResponse {
     this.emailVerifiedAt,
     this.image,
     required this.utype,
-    required this.profilePhotoUrl,
+    required this.url,
     required this.status,
     required this.message,
     required this.token,
@@ -34,7 +34,7 @@ class LoginResponse {
           : null,
       image: dataJson['image'] as String?,
       utype: dataJson['utype'] as String,
-      profilePhotoUrl: dataJson['profile_photo_url'] as String,
+      url: dataJson['url'] as String?,
       status: data['status'] as int,
       message: data['message'] as String,
       token: data['token'] as String,

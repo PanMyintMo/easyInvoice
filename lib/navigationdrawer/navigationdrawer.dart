@@ -1,4 +1,3 @@
-import 'package:easy_invoice/network/SharedPreferenceHelper.dart';
 import 'package:easy_invoice/screen/AllSizesScreen.dart';
 import 'package:easy_invoice/screen/AllUserRoleScreen.dart';
 import 'package:easy_invoice/screen/DeliveryPart/AddDeliveryScreen.dart';
@@ -8,13 +7,15 @@ import 'package:easy_invoice/screen/LocationPart/CountryScreen.dart';
 import 'package:easy_invoice/screen/OrderPart/AddOrderScreen.dart';
 import 'package:easy_invoice/screen/UserAddScreen.dart';
 import 'package:easy_invoice/screen/mainscreen.dart';
-import 'package:easy_invoice/screen/user_profile.dart';
+import 'package:easy_invoice/screen/company_profile.dart';
 import 'package:flutter/material.dart';
+import '../network/SharedPreferenceHelper.dart';
 import '../screen/AddCategoryScreen.dart';
 import '../screen/AddProductScreen.dart';
 import '../screen/AllCategoryScreen.dart';
 import '../screen/AllProductScreen.dart';
 import '../screen/DeliveryPart/AllDeliveryScreen.dart';
+import '../screen/FaultyItemPart/AddRequestFaultyItemScreen.dart';
 import '../screen/LocationPart/AllTownshipsScreen.dart';
 import '../screen/LocationPart/CityScreen.dart';
 import '../screen/ProductInvoicePart/ProductInvoiceScreen.dart';
@@ -30,7 +31,10 @@ class NavigationDrawerWidget extends StatefulWidget {
 
 class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
   final padding = const EdgeInsets.symmetric(horizontal: 20);
-  String utype = '';
+  String? utype;
+  String? username;
+  String? url;
+  String? email;
 
   @override
   void initState() {
@@ -42,46 +46,24 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
   Future<void> fetchUserType() async {
     final sessionManager = SessionManager();
     final userType = await sessionManager.fetchUserType();
+    var userName = await sessionManager.getUsername();
+    var userEmail = await sessionManager.getEmail();
     setState(() {
+      username = userName ;
+      email= userEmail ;
       utype = userType ??
           ''; // Assign the retrieved user type to the 'utype' variable
     });
   }
-
   @override
   Widget build(BuildContext context) {
-    late String username;
-    late String email;
-    final urlImage =
-        'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80';
 
     return Drawer(
       child: Material(
         color: Colors.white70,
         child: ListView(
           children: <Widget>[
-            FutureBuilder<String?>(
-                future: SessionManager().getUsername(),
-                builder: (context, snapshot) {
-                  username = snapshot.data ?? '';
-                  return FutureBuilder(
-                      future: SessionManager().getEmail(),
-                      builder: (context, snapshot) {
-                        email = snapshot.data ?? '';
-                        return buildHeader(
-                            urlImage: urlImage,
-                            username: username,
-                            email: email,
-                            onClicked: () => {
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) => UserProfile(
-                                      username: username,
-                                      email: email,
-                                    ),
-                                  )),
-                                });
-                      });
-                }),
+            buildHeader(username: username,email: email,url: url ?? ''),
             Container(
               padding: padding,
               child: Column(
@@ -109,8 +91,10 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
                         ),
                       ),
                     ),
-                 const Divider(color: Colors.black12),
-                  const SizedBox(height: 16,),
+                  const Divider(color: Colors.black12),
+                  const SizedBox(
+                    height: 16,
+                  ),
                   if (utype == 'ADM')
                     buildMenuItem(
                       text: 'Delivery Man',
@@ -120,7 +104,9 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
                         builder: (context) => const DeliveryManScreen(),
                       )),
                     ),
-                  const SizedBox(height: 16,),
+                  const SizedBox(
+                    height: 16,
+                  ),
                   buildMenuExpansion(
                     text: 'Delivery System',
                     txtOne: 'View Delivery',
@@ -139,7 +125,9 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
                     },
                   ),
                   const Divider(color: Colors.black12),
-                  const SizedBox(height: 16,),
+                  const SizedBox(
+                    height: 16,
+                  ),
                   if (utype == 'SK' || utype == 'ADM')
                     ListTile(
                       leading: const Icon(
@@ -160,25 +148,33 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
                         ),
                       ),
                     ),
-                  const SizedBox(height: 16,),
-                  
-                  if(utype == 'ADM')
-                    buildMenuItem(text: 'FaultyItem', icon: Icons.add_business,onClicked: () =>
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => const DeliveryManScreen(),
-                    ))
-                    ),
                   const SizedBox(
                     height: 16,
                   ),
-                  if(utype == 'ADM')
-                    buildMenuItem(text: 'Transactions', icon: Icons.add_business,onClicked: () =>
-                        Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => const DeliveryManScreen(),
-                        ))),
-
+                  if (utype == 'ADM')
+                    buildMenuItem(
+                        text: 'FaultyItem',
+                        icon: Icons.add_business,
+                        onClicked: () =>
+                            Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) =>
+                                  const AddRequestFaultyItem(),
+                            ))),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  if (utype == 'ADM')
+                    buildMenuItem(
+                        text: 'Transactions',
+                        icon: Icons.add_business,
+                        onClicked: () =>
+                            Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => const DeliveryManScreen(),
+                            ))),
                   const Divider(color: Colors.black12),
-                  const SizedBox(height: 16,),
+                  const SizedBox(
+                    height: 16,
+                  ),
                   if (utype == 'ADM')
                     buildMenuExpansion(
                       text: 'Category',
@@ -256,27 +252,26 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
                           builder: (context) => const AddOrderScreen()));
                     },
                   ),
-
                   const Divider(color: Colors.black12),
                   const SizedBox(height: 16),
-                  if(utype == 'ADM' || utype == 'SK')
+                  if (utype == 'ADM' || utype == 'SK')
                     buildMenuItem(
-                    text: 'Product Invoice',
-                    icon: Icons.insert_drive_file_sharp,
-                    onClicked: () =>
-                        Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => const ProductInvoiceScreen(),
-                        )),
-                  ),
+                      text: 'Product Invoice',
+                      icon: Icons.insert_drive_file_sharp,
+                      onClicked: () =>
+                          Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => const ProductInvoiceScreen(),
+                      )),
+                    ),
                   const SizedBox(height: 16),
                   buildMenuItem(
-                    text: 'Profile',
-                    icon: Icons.person,
+                    text: 'Company Profile',
+                    icon: Icons.camera_outdoor,
                     onClicked: () =>
                         Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => UserProfile(
-                        username: username,
-                        email: email,
+                      builder: (context) => CompanyProfile(
+                        username: username.toString(),
+                        email: email.toString(),
                       ),
                     )),
                   ),
@@ -321,7 +316,7 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
                         ),
                       ),
                     ),
-                  if (utype == 'SK' || utype=='ADM')
+                  if (utype == 'SK' || utype == 'ADM')
                     buildMenuExpansionLocation(
                         text: 'Location',
                         icon: Icons.supervised_user_circle,
@@ -333,7 +328,6 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
                         viewCities: () {
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (context) => const Cities()));
-
                         },
                         viewTownships: () {
                           Navigator.of(context).push(MaterialPageRoute(
@@ -349,45 +343,47 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
   }
 
   Widget buildHeader({
-    required String urlImage,
-    required String username,
-    required String email,
-    required VoidCallback onClicked,
+    required String url,
+    required String? username,
+    required String? email,
+
   }) =>
       InkWell(
-        onTap: onClicked,
         child: Container(
           color: Colors.black12,
           height: 250,
           padding: padding.add(const EdgeInsets.symmetric(vertical: 40)),
           child: Column(
             children: [
-              CircleAvatar(radius: 30, backgroundImage: NetworkImage(urlImage)),
+             CircleAvatar(
+                radius: 30,
+                backgroundImage: url.isNotEmpty
+                    ? NetworkImage(url)
+                    : null, // Set backgroundImage to null when url is empty
+                child: url.isEmpty
+                    ? const Icon(Icons.account_circle_rounded, size: 60) // Use an Icon as default image
+                    : null, // Set child to null when url is not empty
+              ),
               const SizedBox(width: 10),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Center(
                     child: Text(
-                      username,
+                      username ?? '',
                       style: const TextStyle(fontSize: 20, color: Colors.black),
                     ),
                   ),
                   const SizedBox(height: 4),
                   Center(
                     child: Text(
-                      email,
+                      email ?? '',
                       style: const TextStyle(fontSize: 14, color: Colors.black),
                     ),
                   ),
                 ],
               ),
-              const Spacer(),
-              const CircleAvatar(
-                radius: 24,
-                backgroundColor: Color.fromRGBO(30, 60, 168, 1),
-                child: Icon(Icons.add_comment_outlined, color: Colors.black38),
-              )
+
             ],
           ),
         ),
@@ -461,7 +457,7 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
       children: [
         ListTile(
           leading: (txtOne.isNotEmpty)
-              ? Icon(Icons.production_quantity_limits)
+              ? const Icon(Icons.production_quantity_limits)
               : null,
           title: GestureDetector(
             onTap: onClicked,
@@ -472,7 +468,7 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
           ),
         ),
         ListTile(
-          leading: (txtTwo.isNotEmpty) ? Icon(Icons.add) : null,
+          leading: (txtTwo.isNotEmpty) ? const Icon(Icons.add) : null,
           title: GestureDetector(
             onTap: onClickedItem,
             child: Text(

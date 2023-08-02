@@ -39,7 +39,7 @@ class FormValidator {
   }
 }
 
-String? validateProductField(String? value) {
+String? validateField(String? value) {
   if (value!.isEmpty) {
     return 'Please fill this field!';
   }

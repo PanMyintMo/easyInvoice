@@ -1,5 +1,6 @@
 part of 'add_size_cubit.dart';
 
+
 abstract class AddSizeState extends Equatable {
   const AddSizeState();
 }

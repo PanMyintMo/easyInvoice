@@ -2,7 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:easy_invoice/data/responsemodel/GetAllSizeResponse.dart';
 import 'package:equatable/equatable.dart';
 
-import '../../data/userRepository/UserRepository.dart';
+import '../../../data/userRepository/UserRepository.dart';
 
 part 'get_all_size_state.dart';
 

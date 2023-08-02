@@ -4,10 +4,11 @@ import 'package:easy_invoice/data/responsemodel/CountryPart/CountryResponse.dart
 import 'package:easy_invoice/data/responsemodel/EditProductResponse.dart';
 import 'package:easy_invoice/data/responsemodel/GetAllProductResponse.dart';
 import 'package:easy_invoice/data/responsemodel/GetAllSizeResponse.dart';
-import 'package:easy_invoice/data/responsemodel/RegisterResponse.dart';
+import 'package:easy_invoice/data/responsemodel/Login&RegisterResponse/RegisterResponse.dart';
 import 'package:easy_invoice/data/responsemodel/UserResponse.dart';
 import 'package:easy_invoice/dataRequestModel/EditProductRequestModel.dart';
 import 'package:easy_invoice/dataRequestModel/EditUserRoleRequestModel.dart';
+import 'package:easy_invoice/dataRequestModel/FaultyItemPart/AddFaultyItemRequest.dart';
 import 'package:easy_invoice/dataRequestModel/UserRequestModel.dart';
 import '../../dataRequestModel/AddCategoryRequestModel.dart';
 import '../../dataRequestModel/AddProductRequestModel.dart';
@@ -19,8 +20,9 @@ import '../../dataRequestModel/CountryPart/EditCountry.dart';
 import '../../dataRequestModel/DeliveryPart/AddDeliveryCompanyNameRequestModel.dart';
 import '../../dataRequestModel/EditCategoryModel.dart';
 import '../../dataRequestModel/EditSizeModel.dart';
-import '../../dataRequestModel/LoginRequestModel.dart';
-import '../../dataRequestModel/RegisterRequestModel.dart';
+import '../../dataRequestModel/Login&Register/EditCompanyProfileRequestModel.dart';
+import '../../dataRequestModel/Login&Register/LoginRequestModel.dart';
+import '../../dataRequestModel/Login&Register/RegisterRequestModel.dart';
 import '../../dataRequestModel/ShopKeeperPart/ShopKeeperRequestModel.dart';
 import '../../dataRequestModel/TownshipPart/AddTownship.dart';
 import '../../dataRequestModel/TownshipPart/EditTownship.dart';
@@ -36,10 +38,14 @@ import '../responsemodel/CountryPart/RequestCountryResponse.dart';
 import '../responsemodel/DeleteProductResponse.dart';
 import '../responsemodel/DeleteUserRoleResponse.dart';
 import '../responsemodel/DeliveryPart/AddDeliveryResponse.dart';
-import '../responsemodel/DeliveryPart/FetchAllDeliveryName.dart';
+import '../responsemodel/DeliveryPart/DeliveryManResponse.dart';
 import '../responsemodel/EditUserRoleResponse.dart';
+import '../responsemodel/FaultyItemPart/AddFaultyItemResponse.dart';
+import '../responsemodel/FaultyItemPart/AllFaultyItems.dart';
 import '../responsemodel/GetAllCategoryDetail.dart';
-import '../responsemodel/LoginResponse.dart';
+import '../responsemodel/Login&RegisterResponse/EditCompanyProfileResponse.dart';
+import '../responsemodel/Login&RegisterResponse/LoginResponse.dart';
+import '../responsemodel/Login&RegisterResponse/CompanyProfileResponse.dart';
 import '../responsemodel/ProductResponse.dart';
 import '../responsemodel/ShopKeeperResponsePart/ShopKeeperResponse.dart';
 import '../responsemodel/SizeDeleteResponse.dart';
@@ -71,6 +77,28 @@ class UserRepository {
   Future<LoginResponse> signIn(LoginRequestModel loginRequestModel) async {
     try {
       final response = await _apiService.signIn(loginRequestModel);
+      return response;
+    } catch (error) {
+      rethrow;
+    }
+  }
+
+
+
+  //For company profile
+  Future<CompanyProfileResponse> companyProfile() async {
+    try {
+      final response = await _apiService.companyProfile();
+      return response;
+    } catch (error) {
+      rethrow;
+    }
+  }
+
+  //For edit company profile
+  Future<EditCompanyProfileResponse> editCompanyProfile(EditCompanyProfileRequestModel editProfileRequestModel,int id) async {
+    try {
+      final response = await _apiService.editCompanyProfile(editProfileRequestModel,id);
       return response;
     } catch (error) {
       rethrow;
@@ -184,6 +212,28 @@ class UserRepository {
     }
   }
 
+  //fetch all faulty items
+  Future<List<FaultyItemData>> fetchAllFaultyItem() async {
+    try {
+      final response = await _apiService.fetchAllFaultyItem();
+      return response.data.data;
+    } catch (error) {
+      throw Exception('Failed to fetch faulty items: $error');
+    }
+  }
+
+  //fetch all warehouse request for delivery man
+  Future<List<DeliveryItemData>> fetchAllWarehouseRequest() async {
+    try {
+      final response = await _apiService.fetchAllWarehouseRequest();
+      return response.data.data;
+    } catch (error) {
+      throw Exception('Failed to fetch warehouse request items for delivery man: $error');
+    }
+  }
+
+
+
   //fetch city from db
   Future<List<City>> fetchCity() async {
     try {
@@ -224,16 +274,7 @@ class UserRepository {
     }
   }
 
-  /*//fetch all delivery company name
-  Future<List<AllDeliveryName>> fetchAllDeliveryCompanyName() async {
-    try {
-      final response = await _apiService.fetchAllDeliveryCompanyName();
-      return response;
-    } catch (error) {
-      throw Exception('Failed to fetch delivery company name: $error');
-    }
-  }
-*/
+
 
   //fetch all sizes
   Future<List<SizeItems>> getSizes() async {
@@ -298,18 +339,19 @@ class UserRepository {
     }
   }
 
-/*  //to fetch all product item by category id
-  Future<List<ProductItem>> fetchAllProductByCateId(int id) async {
+  //to add request faulty Item
+  Future<AddFaultyItemResponse> addRequestFaultyItem(
+      AddFaultyItemRequest addFaultyItemRequest) async {
     try {
-      final response = await _apiService.fetchAllProductByCateId(id);
+      final response = await _apiService.addRequestFaultyItem(addFaultyItemRequest);
       return response;
-    } catch (error) {
+    } catch (e) {
       rethrow;
     }
-  }*/
+  }
+
 
   //to delete product item by id
-
   Future<DeleteProductResponse> deleteProductItem(int id) async {
     try {
       final response = await _apiService.deleteProductItem(id);

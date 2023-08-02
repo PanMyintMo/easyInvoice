@@ -63,4 +63,11 @@ class SessionManager {
     final SharedPreferences preferences = await SharedPreferences.getInstance();
     return preferences.getString(emailKey);
   }
+
+  // Get the password from shared preference
+  Future<String?> getPassword() async {
+    final SharedPreferences preferences = await SharedPreferences.getInstance();
+    return preferences.getString(emailKey); // Change 'passwordKey' to 'emailKey'
+  }
 }
+

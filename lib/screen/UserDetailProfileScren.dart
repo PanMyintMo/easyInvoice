@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import '../bloc/edit/edit_user_role_cubit.dart';
-import '../bloc/get/get_all_user_role_cubit.dart';
+import '../bloc/get/UserRolePart/get_all_user_role_cubit.dart';
 import '../common/HeaderWidget.dart';
 import '../common/ToastMessage.dart';
 import '../common/theme_helper.dart';
