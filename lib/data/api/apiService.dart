@@ -20,8 +20,10 @@ import '../../dataRequestModel/DeliveryPart/AddDeliveryCompanyNameRequestModel.d
 import '../../dataRequestModel/EditCategoryModel.dart';
 import '../../dataRequestModel/EditSizeModel.dart';
 import '../../dataRequestModel/EditUserRoleRequestModel.dart';
-import '../../dataRequestModel/LoginRequestModel.dart';
-import '../../dataRequestModel/RegisterRequestModel.dart';
+import '../../dataRequestModel/FaultyItemPart/AddFaultyItemRequest.dart';
+import '../../dataRequestModel/Login&Register/EditCompanyProfileRequestModel.dart';
+import '../../dataRequestModel/Login&Register/LoginRequestModel.dart';
+import '../../dataRequestModel/Login&Register/RegisterRequestModel.dart';
 import '../../dataRequestModel/ShopKeeperPart/ShopKeeperRequestModel.dart';
 import '../../dataRequestModel/TownshipPart/AddTownship.dart';
 import '../../dataRequestModel/TownshipPart/EditTownship.dart';
@@ -39,12 +41,17 @@ import '../responsemodel/CountryPart/RequestCountryResponse.dart';
 import '../responsemodel/DeleteProductResponse.dart';
 import '../responsemodel/DeleteUserRoleResponse.dart';
 import '../responsemodel/DeliveryPart/AddDeliveryResponse.dart';
+import '../responsemodel/DeliveryPart/DeliveryManResponse.dart';
 import '../responsemodel/DeliveryPart/FetchAllDeliveryName.dart';
 import '../responsemodel/EditUserRoleResponse.dart';
-import '../responsemodel/LoginResponse.dart';
+import '../responsemodel/FaultyItemPart/AddFaultyItemResponse.dart';
+import '../responsemodel/FaultyItemPart/AllFaultyItems.dart';
+import '../responsemodel/Login&RegisterResponse/EditCompanyProfileResponse.dart';
+import '../responsemodel/Login&RegisterResponse/LoginResponse.dart';
+import '../responsemodel/Login&RegisterResponse/CompanyProfileResponse.dart';
 import '../responsemodel/ProductByCategoryIdResponse.dart';
 import '../responsemodel/ProductResponse.dart';
-import '../responsemodel/RegisterResponse.dart';
+import '../responsemodel/Login&RegisterResponse/RegisterResponse.dart';
 import '../responsemodel/ShopKeeperResponsePart/ShopKeeperResponse.dart';
 import '../responsemodel/SizeDeleteResponse.dart';
 import '../responsemodel/TownshipsPart/AddTownshipResponse.dart';
@@ -102,6 +109,87 @@ class ApiService {
     } catch (error) {
       throw DioError(
         requestOptions: RequestOptions(path: '/api/login'),
+        error: error,
+      );
+    }
+  }
+
+// Company Profile Data
+  Future<CompanyProfileResponse> companyProfile() async {
+    try {
+      final Response response = await _dio.get(
+        'https://mmeasyinvoice.com/api/profile'
+      );
+
+      if (response.statusCode == 200) {
+        final CompanyProfileResponse data = CompanyProfileResponse.fromJson(response.data);
+        return data;
+      } else {
+        throw DioError(
+          requestOptions: RequestOptions(path: '/api/profile'),
+          response: response,
+        );
+      }
+    } catch (error) {
+      throw DioError(
+        requestOptions: RequestOptions(path: '/api/profile'),
+        error: error,
+      );
+    }
+  }
+
+  //Edit company profile detail
+  Future<EditCompanyProfileResponse> editCompanyProfile(EditCompanyProfileRequestModel editProfileRequestModel, int id) async {
+    try {
+
+      final Response response = await _dio.post(
+        'https://mmeasyinvoice.com/api/edit-profile/$id',
+        data: editProfileRequestModel.toFormData(),
+      );
+      print("Update company profile status code is ${response.statusCode}");
+      if (response.statusCode == 200) {
+        final EditCompanyProfileResponse data = EditCompanyProfileResponse.fromJson(response.data);
+        return data;
+      } else {
+
+        throw DioError(
+          requestOptions: RequestOptions(path: '/api/edit-profile'),
+          response: response,
+        );
+      }
+    } catch (error) {
+      print("response error is $error");
+      throw DioError(
+        requestOptions: RequestOptions(path: '/api/edit-profile'),
+        error: error,
+      );
+
+    }
+  }
+
+
+
+//add request for faulty items
+  Future<AddFaultyItemResponse> addRequestFaultyItem(
+      AddFaultyItemRequest addFaultyItemRequst) async {
+    try {
+      final Response response = await _dio.post(
+        'https://mmeasyinvoice.com/api/add-faulty-item',
+        data: addFaultyItemRequst.toJson(),
+      );
+      if (response.statusCode == 200) {
+        final AddFaultyItemResponse data =
+            AddFaultyItemResponse.fromJson(response.data);
+        return data;
+      } else {
+        throw DioError(
+          requestOptions: RequestOptions(path: '/api/add-faulty-item'),
+          response: response,
+        );
+      }
+    } catch (error) {
+      throw DioError(
+        requestOptions: RequestOptions(path: '/api/add-faulty-item'),
         error: error,
       );
     }
@@ -362,7 +450,7 @@ class ApiService {
     }
   }
 
-  //fetch all category from db
+  //fetch all category
   Future<CategoryDataResponse> getAllCategories() async {
     try {
       int currentPage = 1;
@@ -416,6 +504,116 @@ class ApiService {
       );
     } catch (e) {
       throw Exception('Failed to fetch categories: $e');
+    }
+  }
+
+// fetch all faulty item
+  Future<AllFaultyItemsResponse> fetchAllFaultyItem() async {
+    try {
+      int currentPage = 1;
+      FaultyDatas faultyData;
+      List<FaultyItemData> faultyItemDatas = [];
+
+      while (true) {
+        final response = await _dio
+            .get('https://mmeasyinvoice.com/api/faulty-item?page=$currentPage');
+
+        if (response.statusCode == 200) {
+          final dynamic responseData = response.data;
+
+          final faultyDataResponse =
+              AllFaultyItemsResponse.fromJson(responseData);
+          faultyData = faultyDataResponse.data;
+          final List<FaultyItemData> faultyItems = faultyData.data;
+          faultyItemDatas.addAll(faultyItems);
+
+          if (currentPage == faultyData.last_page) {
+            break;
+          } else {
+            currentPage++;
+          }
+        } else {
+          throw Exception('Failed to fetch faulty items');
+        }
+      }
+
+      return AllFaultyItemsResponse(
+        data: FaultyDatas(
+          current_page: faultyData.current_page,
+          data: faultyItemDatas,
+          first_page_url: faultyData.first_page_url,
+          from: faultyData.from,
+          last_page: faultyData.last_page,
+          last_page_url: faultyData.last_page_url,
+          next_page_url: faultyData.next_page_url,
+          path: faultyData.path,
+          per_page: faultyData.per_page,
+          prev_page_url: faultyData.prev_page_url,
+          to: faultyData.to,
+          total: faultyData.total,
+          links: faultyData.links, // Adjusted 'link' to 'links'
+        ),
+        status: 200,
+        message: "Successfully retrieved",
+      );
+    } catch (e) {
+      throw Exception('Failed to fetch all faulty items: $e');
+    }
+  }
+
+  // fetch all warehouse request from delivery man
+  Future<DeliveryManResponse> fetchAllWarehouseRequest() async {
+    try {
+      int currentPage = 1;
+      DeliveryData deliveryData;
+      List<DeliveryItemData> deliveryItemData =
+          []; // Corrected variable name here
+
+      while (true) {
+        final response = await _dio
+            .get('https://mmeasyinvoice.com/api/faulty-item?page=$currentPage');
+        print("$response");
+        if (response.statusCode == 200) {
+          final dynamic responseData = response.data;
+
+          final faultyDataResponse = DeliveryManResponse.fromJson(responseData);
+          deliveryData = faultyDataResponse.data;
+          final List<DeliveryItemData> deliveryItem = deliveryData.data;
+          deliveryItemData.addAll(deliveryItem); // Corrected variable name here
+
+          if (currentPage == deliveryData.last_page) {
+            break;
+          } else {
+            currentPage++;
+          }
+        } else {
+          throw Exception(
+              'Failed to fetch warehouse request for deliver items');
+        }
+      }
+
+      return DeliveryManResponse(
+        data: DeliveryData(
+          current_page: deliveryData.current_page,
+          data: deliveryItemData,
+          // Corrected variable name here
+          first_page_url: deliveryData.first_page_url,
+          from: deliveryData.from,
+          last_page: deliveryData.last_page,
+          last_page_url: deliveryData.last_page_url,
+          next_page_url: deliveryData.next_page_url,
+          path: deliveryData.path,
+          per_page: deliveryData.per_page,
+          prev_page_url: deliveryData.prev_page_url,
+          to: deliveryData.to,
+          total: deliveryData.total,
+          links: deliveryData.links,
+        ),
+        status: 200,
+        message: "Successfully retrieved",
+      );
+    } catch (e) {
+      throw Exception('Failed to fetch warehouse request for delivery man: $e');
     }
   }
 
@@ -620,7 +818,7 @@ class ApiService {
       if (response.statusCode == 200) {
         final responseData = response.data;
         final cityByCountryIdResponse =
-        CityByCountryIdResponse.fromJson(responseData);
+            CityByCountryIdResponse.fromJson(responseData);
         return cityByCountryIdResponse.data;
       } else {
         throw Exception('Invalid data format for city by country id field');
@@ -630,14 +828,15 @@ class ApiService {
     }
   }
 
-
 //fetch all delivery company name
   Future<List<AllDeliveryName>> fetchAllDeliveryCompanyName() async {
     try {
-      final response = await _dio.get('https://mmeasyinvoice.com/api/companynames');
+      final response =
+          await _dio.get('https://mmeasyinvoice.com/api/companynames');
       if (response.statusCode == 200) {
         final responseData = response.data;
-        final fetchAllDeliveryName = FetchAllDeliveryName.fromJson(responseData);
+        final fetchAllDeliveryName =
+            FetchAllDeliveryName.fromJson(responseData);
         return fetchAllDeliveryName.allDeliveryName;
       } else {
         throw Exception('Invalid data format for delivery company name field');
@@ -646,7 +845,6 @@ class ApiService {
       throw Exception('Failed to fetch delivery company name: $e');
     }
   }
-
 
   //fetch all product from db
   Future<GetAllProductResponse> fetchAllProducts() async {

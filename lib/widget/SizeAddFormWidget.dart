@@ -1,4 +1,4 @@
-import 'package:easy_invoice/bloc/post/add_category_cubit.dart';
+import 'package:easy_invoice/bloc/post/CategoryPart/add_category_cubit.dart';
 import 'package:easy_invoice/bloc/post/add_size_cubit.dart';
 import 'package:easy_invoice/module/module.dart';
 import 'package:easy_invoice/dataRequestModel/AddSizeRequestModel.dart';

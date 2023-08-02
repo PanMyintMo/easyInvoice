@@ -16,7 +16,7 @@ class _ProductInvoiceWidgetState extends State<ProductInvoiceWidget> {
   @override
   Widget build(BuildContext context) {
     return  Padding(
-      padding:  EdgeInsets.all(16.0),
+      padding:  const EdgeInsets.all(16.0),
       child: ListView(
         
         children:  [
@@ -24,13 +24,13 @@ class _ProductInvoiceWidgetState extends State<ProductInvoiceWidget> {
           Align(
             alignment: Alignment.topRight,
               child: ElevatedButton(onPressed: () {  }, child: const Text('Print'),)),
-          SizedBox(height: 16,),
+          const SizedBox(height: 16,),
           Expanded(
             child: buildProductContainerForm(
               'Invoice no',
               TextInputType.phone,
               prouductno,
-              validateProductField,
+              validateField,
             ),
           ),
         ],

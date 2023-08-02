@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'package:easy_invoice/network/SharedPreferenceHelper.dart';
-import 'package:easy_invoice/screen/Login.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'Login&Register/Login.dart';
 import 'mainscreen.dart';
 
 class SplashScreen extends StatefulWidget {

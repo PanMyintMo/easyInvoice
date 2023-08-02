@@ -77,7 +77,6 @@ class _CountryState extends State<Country> {
                 builder: (context, deleteState) {
                   final bool loading = deleteState is DeleteCountryLoading;
                   return CountryWidget(
-
                     isLoading: loading,
 
                   );

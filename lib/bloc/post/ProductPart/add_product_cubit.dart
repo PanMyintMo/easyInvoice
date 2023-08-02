@@ -1,9 +1,9 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
-import '../../data/responsemodel/ProductResponse.dart';
-import '../../data/userRepository/UserRepository.dart';
-import '../../dataRequestModel/AddProductRequestModel.dart';
+import '../../../data/responsemodel/ProductResponse.dart';
+import '../../../data/userRepository/UserRepository.dart';
+import '../../../dataRequestModel/AddProductRequestModel.dart';
 
 part 'add_product_state.dart';
 

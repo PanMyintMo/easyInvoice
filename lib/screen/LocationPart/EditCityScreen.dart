@@ -6,18 +6,13 @@ import '../../common/ToastMessage.dart';
 import '../../module/module.dart';
 import '../../widget/CityPart/EditCityWidget.dart';
 
-class EditCityScreen extends StatefulWidget {
+class EditCityScreen extends StatelessWidget {
   final String country_id;
   final String name;
   final int id;
 
   const EditCityScreen({super.key, required this.country_id, required this.name, required this.id});
 
-  @override
-  State<EditCityScreen> createState() => _EditCityScreenState();
-}
-
-class _EditCityScreenState extends State<EditCityScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -41,9 +36,9 @@ class _EditCityScreenState extends State<EditCityScreen> {
           builder: (context, state) {
             if (state is EditCityLoading) {
               return EditCityWidget(
-                name: widget.name,
+                name: name,
                 isLoading: true,
-                country_id: widget.country_id, id: widget.id,
+                country_id: country_id, id: id,
               );
             } else if (state is EditCitySuccess) {
               showToastMessage("City updated successfully.");
@@ -51,23 +46,23 @@ class _EditCityScreenState extends State<EditCityScreen> {
               Navigator.pop(
                   context,
                   EditCityWidget(
-                    name: widget.name,
+                    name: name,
                     isLoading: false,
-                    country_id: widget.country_id, id: widget.id,
+                    country_id: country_id, id: id,
                   ));
             } else if (state is EditCityFail) {
               showToastMessage("City updated fail.");
               return EditCityWidget(
-                name: widget.name,
+                name: name,
                 isLoading: false,
-                country_id: widget.country_id, id: widget.id,
+                country_id: country_id, id: id,
               );
             }
 
             return EditCityWidget(
-              name: widget.name,
+              name: name,
               isLoading: false,
-              country_id: widget.country_id, id: widget.id,
+              country_id: country_id, id: id,
             );
           },
         ),

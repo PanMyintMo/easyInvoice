@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:dotted_border/dotted_border.dart';
-import 'package:easy_invoice/bloc/post/add_product_cubit.dart';
+import 'package:easy_invoice/bloc/post/ProductPart/add_product_cubit.dart';
 import 'package:easy_invoice/dataRequestModel/AddProductRequestModel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -276,7 +276,7 @@ void fetchCategoriesName() async {
                                   'Product Name',
                                   TextInputType.name,
                                   name,
-                                  validateProductField),
+                                  validateField),
                               const SizedBox(
                                 width: 10,
                               ),
@@ -284,7 +284,7 @@ void fetchCategoriesName() async {
                                   'Slug',
                                   TextInputType.name,
                                   slug,
-                                  validateProductField),
+                                  validateField),
                             ],
                           ),
                         ],
@@ -298,7 +298,7 @@ void fetchCategoriesName() async {
                               'Regular Price',
                               TextInputType.number,
                               regular_price,
-                              validateProductField),
+                              validateField),
                         ],
                       ),
                       const SizedBox(height: 30),
@@ -310,7 +310,7 @@ void fetchCategoriesName() async {
                               'Sale Price',
                               TextInputType.number,
                               sale_price,
-                              validateProductField),
+                              validateField),
                         ],
                       ),
                       const SizedBox(height: 30),
@@ -322,7 +322,7 @@ void fetchCategoriesName() async {
                               'Buying Price',
                               TextInputType.number,
                               buying_price,
-                              validateProductField),
+                              validateField),
                         ],
                       ),
                       const SizedBox(height: 30),
@@ -331,7 +331,7 @@ void fetchCategoriesName() async {
                         children: [
                           buildProductContainerText("SKU"),
                           buildProductContainerForm('SKU', TextInputType.text,
-                              SKU, validateProductField),
+                              SKU, validateField),
                         ],
                       ),
                       const SizedBox(height: 30),
@@ -343,7 +343,7 @@ void fetchCategoriesName() async {
                               'Quantity',
                               TextInputType.number,
                               quantity,
-                              validateProductField),
+                              validateField),
                         ],
                       ),
                       const SizedBox(height: 30),
@@ -355,7 +355,7 @@ void fetchCategoriesName() async {
                               'Short description',
                               TextInputType.text,
                               short_description,
-                              validateProductField),
+                              validateField),
                         ],
                       ),
                       const SizedBox(height: 20),

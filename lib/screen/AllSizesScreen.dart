@@ -1,6 +1,6 @@
 import 'package:easy_invoice/bloc/delete/delete_size_cubit.dart';
 import 'package:easy_invoice/bloc/edit/edit_size_cubit.dart';
-import 'package:easy_invoice/bloc/get/get_all_size_cubit.dart';
+import 'package:easy_invoice/bloc/get/SizePart/get_all_size_cubit.dart';
 import 'package:easy_invoice/module/module.dart';
 import 'package:easy_invoice/widget/AllSizePageWidget.dart';
 import 'package:flutter/material.dart';

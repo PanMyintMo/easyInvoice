@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../bloc/post/add_product_cubit.dart';
+import '../../bloc/post/ProductPart/add_product_cubit.dart';
 import '../../module/module.dart';
 import '../../widget/OrderPart/AddOrderWidget.dart';
 

@@ -1,16 +1,16 @@
-import 'package:easy_invoice/bloc/post/sign_up_cubit.dart';
+import 'package:easy_invoice/bloc/post/Login&Register/sign_up_cubit.dart';
 import 'package:easy_invoice/common/HeaderWidget.dart';
 import 'package:easy_invoice/module/module.dart';
 import 'package:flutter/material.dart';
-import 'package:easy_invoice/dataRequestModel/RegisterRequestModel.dart';
+import 'package:easy_invoice/dataRequestModel/Login&Register/RegisterRequestModel.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hexcolor/hexcolor.dart';
 
-import '../common/FormValidator.dart';
-import '../common/theme_helper.dart';
-import '../network/SharedPreferenceHelper.dart';
-import 'mainscreen.dart';
+import '../../common/FormValidator.dart';
+import '../../common/theme_helper.dart';
+import '../../network/SharedPreferenceHelper.dart';
+import '../mainscreen.dart';
 
 class Register extends StatefulWidget {
   const Register({Key? key}) : super(key: key);
