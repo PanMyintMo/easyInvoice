@@ -1,11 +1,13 @@
 import 'package:easy_invoice/common/ApiHelper.dart';
+import 'package:easy_invoice/data/api/apiService.dart';
 import 'package:flutter/material.dart';
 import '../../common/FormValidator.dart';
 import '../../common/ThemeHelperUserClass.dart';
-import '../../data/responsemodel/CityPart/Cities.dart';
+import '../../data/responsemodel/CityPart/FetchCityByCountryId.dart';
 import '../../data/responsemodel/CountryPart/CountryResponse.dart';
+import '../../data/responsemodel/DeliveryPart/DeliCompanyNameByTownshipId.dart';
 import '../../data/responsemodel/GetAllProductResponse.dart';
-import '../../data/responsemodel/TownshipsPart/AllTownshipResponse.dart';
+import '../../data/responsemodel/TownshipsPart/TownshipByCityIdResponse.dart';
 
 class AddOrderWidget extends StatefulWidget {
   final bool isLoading;
@@ -20,12 +22,20 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
   String payment = ''; // no radio button will be selected on initial
   String? select_product;
   List<ProductListItem> products = [];
+  List<CompanyData> companyData = [];
   List<Country> countries = [];
   String? select_country;
-  List<City> cities = [];
+  List<String> companyName = [];
+
   String? select_city;
-  List<Township> townships = [];
+  late String city_id;
+  late String township_id;
+
+  List<int>? companyId = [];
+
   String? select_township;
+  List<CityByCountryIdData> cities = [];
+  List<TownshipByCityIdData> townships = [];
 
   final TextEditingController firstname = TextEditingController();
   final TextEditingController lastname = TextEditingController();
@@ -40,14 +50,14 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
   final TextEditingController total = TextEditingController();
 
   bool checkboxValue = false;
+  bool hasCitiesForSelectedCountry = true;
+  bool hasTownshipForSelectedCity = true;
 
   @override
   void initState() {
     super.initState();
     fetchProductListItem();
     fetchCountyName();
-    fetchCityName();
-    fetchTownshipName();
   }
 
   void fetchProductListItem() async {
@@ -60,21 +70,63 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
   void fetchCountyName() async {
     final country = await ApiHelper.fetchCountryName();
     setState(() {
-      this.countries = country;
+      countries = country;
     });
   }
 
-  void fetchCityName() async {
-    final city = await ApiHelper.fetchCityName();
-    setState(() {
-      this.cities = city;
-    });
+  void fetchCitiesByCountryId(int id) async {
+    try {
+      final response = await ApiService().fetchAllCitiesByCountryId(id);
+      setState(() {
+        cities = response;
+        if (response.isNotEmpty) {
+          city_id = 'Select City'; // Reset city_id to default 'Select City'
+          hasCitiesForSelectedCountry = true;
+        } else {
+          hasCitiesForSelectedCountry = false;
+        }
+      });
+    } catch (e) {
+      setState(() {
+        cities = [];
+        hasCitiesForSelectedCountry = false;
+      });
+    }
   }
 
-  Future<void> fetchTownshipName() async {
-    final township = await ApiHelper.fetchTownshipName();
+  void fetchTownshipByCityId(int id) async {
+    try {
+      final response = await ApiService().fetchAllTownshipByCityId(id);
+      setState(() {
+        townships = response;
+        if (response.isNotEmpty) {
+          township_id =
+              'Select Township'; // Reset city_id to default 'Select City'
+          hasTownshipForSelectedCity = true;
+        } else {
+          hasTownshipForSelectedCity = false;
+        }
+      });
+    } catch (e) {
+      setState(() {
+        townships = [];
+        hasTownshipForSelectedCity = false;
+      });
+    }
+  }
+
+  void fetchDeliCompanyNameByTownshipId(int id) async {
+    final response = await ApiService().fetchAllCompanyByTownshipId(id);
     setState(() {
-      this.townships = township;
+      companyData = response;
+      if (response.isNotEmpty) {
+        companyData = companyData.map((x) => x).toList();
+
+        companyName = companyData
+            .where((data) => data.cityId == id)
+            .map((data) => data.companyType.name)
+            .toList();
+      }
     });
   }
 
@@ -124,13 +176,13 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
               Row(
                 children: [
                   buildProductContainerForm('First Name', TextInputType.name,
-                      firstname, validateFirstName),
+                      firstname, validateField),
                   const SizedBox(width: 10.0),
                   buildProductContainerForm(
                     'Last Name',
                     TextInputType.name,
                     lastname,
-                    validateLastName,
+                    validateField,
                   ),
                 ],
               ),
@@ -203,6 +255,8 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
                   onChanged: (value) {
                     setState(() {
                       select_country = value;
+                      int countryId = int.parse(value!);
+                      fetchCitiesByCountryId(countryId);
                     });
                   },
                   underline: const SizedBox(),
@@ -228,22 +282,25 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
               SizedBox(
                 width: double.infinity,
                 child: chooseItemIdForm(DropdownButton(
-                  value: select_city,
+                  value: hasCitiesForSelectedCountry ? select_city : null,
                   items: [
                     const DropdownMenuItem(
                       value: null, // Set initial value to null
                       child: Text('Select City Name'),
                     ),
-                    ...cities.map((city) {
-                      return DropdownMenuItem<String>(
-                        value: city.id.toString(),
-                        child: Text(city.name),
-                      );
-                    }).toList(),
+                    if (hasCitiesForSelectedCountry)
+                      ...cities.map((city) {
+                        return DropdownMenuItem<String>(
+                          value: city.id.toString(),
+                          child: Text(city.name),
+                        );
+                      }).toList(),
                   ],
                   onChanged: (value) {
                     setState(() {
                       select_city = value;
+                      int cityId = int.parse(value!);
+                      fetchTownshipByCityId(cityId);
                     });
                   },
                   underline: const SizedBox(),
@@ -269,22 +326,25 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
               SizedBox(
                 width: double.infinity,
                 child: chooseItemIdForm(DropdownButton(
-                  value: select_township,
+                  value: hasTownshipForSelectedCity ? select_township : null,
                   items: [
                     const DropdownMenuItem(
                       value: null, // Set initial value to null
                       child: Text('Select Township Name'),
                     ),
-                    ...townships.map((township) {
-                      return DropdownMenuItem<String>(
-                        value: township.id.toString(),
-                        child: Text(township.name),
-                      );
-                    }).toList(),
+                    if (hasTownshipForSelectedCity)
+                      ...townships.map((township) {
+                        return DropdownMenuItem<String>(
+                          value: township.id.toString(),
+                          child: Text(township.name),
+                        );
+                      }).toList(),
                   ],
                   onChanged: (value) {
                     setState(() {
                       select_township = value;
+                      int townshipId = int.parse(value!);
+                      fetchDeliCompanyNameByTownshipId(townshipId);
                     });
                   },
                   underline: const SizedBox(),
@@ -314,20 +374,29 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
               const SizedBox(
                 height: 18,
               ),
-              Row(
+              Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Checkbox(
-                    value: checkboxValue,
-                    onChanged: (value) {
-                      setState(() {
-                        checkboxValue = value ?? false;
-                      });
-                    },
+                  if (select_township != null)
+                    const Text(
+                      'Choose Delivery service',
+                      style: TextStyle(color: Colors.black),
+                    ),
+                  const SizedBox(
+                    height: 18,
                   ),
-                  const Text(
-                    'Ship to a different address?',
-                    style: TextStyle(color: Colors.grey),
-                  ),
+                  if (select_township != null && companyData.isNotEmpty)
+                    ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: companyData.length,
+                        itemBuilder: (context, index) {
+                          var companyName = companyData[index].companyType.name;
+                          return Text(
+                            "Service Name :$companyName",
+                            style: const TextStyle(color: Colors.black),
+                          );
+                        })
                 ],
               ),
               const SizedBox(
@@ -474,17 +543,9 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
               Center(
                   child: ElevatedButton(
                       onPressed: () {
-
-                  if(_formKey.currentState!.validate()){
-
-
-
-                  }
-
-
-
-
-                      }, child: const Text('Place Order Now')))
+                        if (_formKey.currentState!.validate()) {}
+                      },
+                      child: const Text('Place Order Now')))
             ],
           ),
         ),
