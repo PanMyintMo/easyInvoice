@@ -20,6 +20,7 @@ class AddOrderWidget extends StatefulWidget {
 
 class _AddOrderWidgetState extends State<AddOrderWidget> {
   String payment = ''; // no radio button will be selected on initial
+  int serviceId = 0;
   String? select_product;
   List<ProductListItem> products = [];
   List<CompanyData> companyData = [];
@@ -49,7 +50,6 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
   final TextEditingController quantity = TextEditingController();
   final TextEditingController total = TextEditingController();
 
-  bool checkboxValue = false;
   bool hasCitiesForSelectedCountry = true;
   bool hasTownshipForSelectedCity = true;
 
@@ -121,11 +121,6 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
       companyData = response;
       if (response.isNotEmpty) {
         companyData = companyData.map((x) => x).toList();
-
-        companyName = companyData
-            .where((data) => data.cityId == id)
-            .map((data) => data.companyType.name)
-            .toList();
       }
     });
   }
@@ -392,12 +387,33 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
                         itemCount: companyData.length,
                         itemBuilder: (context, index) {
                           var companyName = companyData[index].companyType.name;
-                          return Text(
-                            "Service Name :$companyName",
-                            style: const TextStyle(color: Colors.black),
-                          );
+                          var id = companyData[index].companyType.id;
+
+                          return RadioListTile(
+                              dense: true,
+                              activeColor: Colors.pink,
+                              title: Text(
+                                "Service :$companyName",
+                                style: const TextStyle(color: Colors.black),
+                              ),
+                              value: id,
+                              groupValue: serviceId,
+                              onChanged: (value) {
+                                setState(() {
+                                  serviceId= value as int;
+
+                                  if(companyData[index].companyId== companyData[index].companyType.id){
+                                    var waitingTime = companyData[index].waitingTime;
+
+                                    print("Waiting Time is: $waitingTime");
+                                  }
+
+                                });
+                              });
                         })
                 ],
+
+
               ),
               const SizedBox(
                 height: 18,
