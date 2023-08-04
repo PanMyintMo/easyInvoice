@@ -46,16 +46,9 @@ String? validateField(String? value) {
   return null;
 }
 
-String? validateFirstName(String? value) {
+String? validateFieldlName(String? value,String fieldName) {
   if(value == null || value.isEmpty){
-    return 'Please enter first name';
-  }
-  return null;
-}
-
-String? validateLastName(String? value) {
-  if(value == null || value.isEmpty){
-    return 'Please enter Last name';
+    return 'Please enter $fieldName';
   }
   return null;
 }

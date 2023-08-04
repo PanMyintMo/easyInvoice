@@ -41,6 +41,7 @@ import '../responsemodel/CountryPart/RequestCountryResponse.dart';
 import '../responsemodel/DeleteProductResponse.dart';
 import '../responsemodel/DeleteUserRoleResponse.dart';
 import '../responsemodel/DeliveryPart/AddDeliveryResponse.dart';
+import '../responsemodel/DeliveryPart/DeliCompanyNameByTownshipId.dart';
 import '../responsemodel/DeliveryPart/DeliveryManResponse.dart';
 import '../responsemodel/DeliveryPart/FetchAllDeliveryName.dart';
 import '../responsemodel/EditUserRoleResponse.dart';
@@ -58,6 +59,7 @@ import '../responsemodel/TownshipsPart/AddTownshipResponse.dart';
 import '../responsemodel/TownshipsPart/AllTownshipResponse.dart';
 import '../responsemodel/TownshipsPart/DeleteTownshipResponse.dart';
 import '../responsemodel/TownshipsPart/EditTownshipResponse.dart';
+import '../responsemodel/TownshipsPart/TownshipByCityIdResponse.dart';
 import '../responsemodel/UpdateSizeResponse.dart';
 import '../responsemodel/UserRoleResponse.dart';
 
@@ -828,6 +830,24 @@ class ApiService {
     }
   }
 
+  //fetch all township by city Id
+  Future<List<TownshipByCityIdData>> fetchAllTownshipByCityId(int id) async {
+    try {
+      final response = await _dio
+          .get('https://mmeasyinvoice.com/api/townships-by-cityid/$id');
+      if (response.statusCode == 200) {
+        final responseData = response.data;
+        final townshipByCityIdResponse =
+        TownshipByCityIdResponse.fromJson(responseData);
+        return townshipByCityIdResponse.data;
+      } else {
+        throw Exception('Invalid data format for township by city id field');
+      }
+    } catch (e) {
+      throw Exception('Failed to fetch township by city id : $e');
+    }
+  }
+
 //fetch all delivery company name
   Future<List<AllDeliveryName>> fetchAllDeliveryCompanyName() async {
     try {
@@ -843,6 +863,24 @@ class ApiService {
       }
     } catch (e) {
       throw Exception('Failed to fetch delivery company name: $e');
+    }
+  }
+
+  //fetch all company name by township Id
+  Future<List<CompanyData>> fetchAllCompanyByTownshipId(int id) async {
+    try {
+      final response = await _dio
+          .get('https://mmeasyinvoice.com/api/deliveryCompany/$id');
+      if (response.statusCode == 200) {
+        final responseData = response.data;
+        final fetchAllCompanyByTownshipId =
+        DeliveryCompanyResponse.fromJson(responseData);
+        return fetchAllCompanyByTownshipId.companyData;
+      } else {
+        throw Exception('Invalid data format for fetch company by township id field');
+      }
+    } catch (e) {
+      throw Exception('Failed to fetch company by township id : $e');
     }
   }
 

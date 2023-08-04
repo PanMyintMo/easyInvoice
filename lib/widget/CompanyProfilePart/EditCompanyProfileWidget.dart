@@ -59,20 +59,20 @@ class _EditProfileWidgetState extends State<EditCompanyProfileWidget> {
   @override
   Widget build(BuildContext context) {
     final _formKey = GlobalKey<FormState>();
-    var mobile = TextEditingController();
-    var line1 = TextEditingController();
-    var line2 = TextEditingController();
-    var city = TextEditingController();
-    var country = TextEditingController();
-    var zipcode = TextEditingController();
-    var company_name = TextEditingController();
+    final TextEditingController mobile = TextEditingController();
+    final TextEditingController line1 = TextEditingController();
+    final TextEditingController line2 = TextEditingController();
+    final TextEditingController city = TextEditingController();
+    final TextEditingController country = TextEditingController();
+    final TextEditingController zipcode = TextEditingController();
+    final TextEditingController company_name = TextEditingController();
 
     return SingleChildScrollView(
-      child: Stack(
-        children: [
-          Form(
-            key: _formKey,
-            child: Padding(
+      child: Form(
+        key: _formKey,
+        child: Stack(
+          children: [
+            Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 children: [
@@ -121,7 +121,7 @@ class _EditProfileWidgetState extends State<EditCompanyProfileWidget> {
                         child: Column(
                           children: [
                             TextFormField(
-                              validator: validateField,
+                              validator: FormValidator.validateName,
                               controller: username,
                               decoration: const InputDecoration(
                                   border: OutlineInputBorder(
@@ -145,7 +145,7 @@ class _EditProfileWidgetState extends State<EditCompanyProfileWidget> {
                             const SizedBox(height: 50 - 30),
                             TextFormField(
                               controller: mobile,
-                              validator: validateField,
+                              validator: (value) => validateFieldlName(value, 'mobile'),
                               keyboardType: TextInputType.number,
                               decoration: const InputDecoration(
                                   border: OutlineInputBorder(
@@ -156,6 +156,7 @@ class _EditProfileWidgetState extends State<EditCompanyProfileWidget> {
                             ),
                             const SizedBox(height: 50 - 30),
                             TextFormField(
+                              validator: (value) => validateFieldlName(value,'Line1'),
                               controller: line1,
                               keyboardType: TextInputType.number,
                               decoration: const InputDecoration(
@@ -168,7 +169,7 @@ class _EditProfileWidgetState extends State<EditCompanyProfileWidget> {
                             const SizedBox(height: 30),
                             TextFormField(
                               controller: line2,
-                              validator: validateField,
+                              validator: (value) => validateFieldlName(value, 'Line 2'),
                               keyboardType: TextInputType.number,
                               decoration: const InputDecoration(
                                 border: OutlineInputBorder(
@@ -180,7 +181,7 @@ class _EditProfileWidgetState extends State<EditCompanyProfileWidget> {
                             const SizedBox(height: 50 - 30),
                             TextFormField(
                               controller: city,
-                              validator: validateField,
+                              validator: (value) => validateFieldlName(value, 'City'),
                               decoration: const InputDecoration(
                                 border: OutlineInputBorder(
                                     borderSide: BorderSide(color: Colors.pink)),
@@ -191,7 +192,7 @@ class _EditProfileWidgetState extends State<EditCompanyProfileWidget> {
                             const SizedBox(height: 50 - 30),
                             TextFormField(
                               controller: country,
-                              validator: validateField,
+                              validator: (value) => validateFieldlName(value, 'Country'),
                               decoration: const InputDecoration(
                                 border: OutlineInputBorder(
                                     borderSide: BorderSide(color: Colors.pink)),
@@ -202,7 +203,8 @@ class _EditProfileWidgetState extends State<EditCompanyProfileWidget> {
                             const SizedBox(height: 50 - 30),
                             TextFormField(
                               controller: zipcode,
-                              validator: validateField,
+                              keyboardType: TextInputType.number,
+                              validator: (value) => validateFieldlName(value,'ZipCode'),
                               decoration: const InputDecoration(
                                 border: OutlineInputBorder(
                                     borderSide: BorderSide(color: Colors.pink)),
@@ -213,7 +215,7 @@ class _EditProfileWidgetState extends State<EditCompanyProfileWidget> {
                             const SizedBox(height: 50 - 30),
                             TextFormField(
                               controller: company_name,
-                              validator: validateField,
+                              validator: (value) => validateFieldlName(value, 'Company name'),
                               decoration: const InputDecoration(
                                 border: OutlineInputBorder(
                                     borderSide: BorderSide(color: Colors.pink)),
@@ -291,15 +293,15 @@ class _EditProfileWidgetState extends State<EditCompanyProfileWidget> {
                 ],
               ),
             ),
-          ),
-          if (widget.isLoading)
-            Container(
-              color: Colors.black54,
-              child: const Center(
-                child: CircularProgressIndicator(),
+            if (widget.isLoading)
+              Container(
+                color: Colors.black54,
+                child: const Center(
+                  child: CircularProgressIndicator(),
+                ),
               ),
-            ),
-        ],
+          ],
+        ),
       ),
     );
   }

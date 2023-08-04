@@ -197,7 +197,7 @@ class _AddRequestFaultyItemWidgetState
                       'Quantity',
                       TextInputType.number,
                       quantity,
-                      validateField,
+                     validateField,
                     ),
                   ),
                   const SizedBox(
