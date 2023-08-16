@@ -5,7 +5,9 @@ import 'package:easy_invoice/bloc/edit/edit_product_item_cubit.dart';
 import 'package:easy_invoice/bloc/edit/edit_size_cubit.dart';
 import 'package:easy_invoice/bloc/edit/edit_user_role_cubit.dart';
 import 'package:easy_invoice/bloc/get/CityPart/fetch_all_city_cubit.dart';
+import 'package:easy_invoice/bloc/get/MainPagePart/order_filter_by_date_cubit.dart';
 import 'package:easy_invoice/bloc/get/ProductPart/get_all_product_cubit.dart';
+import 'package:easy_invoice/bloc/get/ShopKeeperPart/shop_product_list_cubit.dart';
 import 'package:easy_invoice/bloc/get/SizePart/get_all_size_cubit.dart';
 import 'package:easy_invoice/bloc/get/UserRolePart/get_all_user_role_cubit.dart';
 import 'package:easy_invoice/bloc/get/CategoryPart/get_category_detail_cubit.dart';
@@ -19,6 +21,7 @@ import 'package:easy_invoice/bloc/post/ProductPart/add_product_cubit.dart';
 import 'package:easy_invoice/bloc/post/Login&Register/sign_in_cubit.dart';
 import 'package:easy_invoice/bloc/post/Login&Register/sign_up_cubit.dart';
 import 'package:easy_invoice/bloc/post/add_user_role_cubit.dart';
+import 'package:easy_invoice/bloc/post/product_invoice_cubit.dart';
 import 'package:easy_invoice/data/api/apiService.dart';
 import 'package:easy_invoice/data/userRepository/UserRepository.dart';
 import 'package:get_it/get_it.dart';
@@ -32,10 +35,13 @@ import '../bloc/edit/TownshipPart/edit_township_cubit.dart';
 import '../bloc/get/CompanyProfile/company_profile_cubit.dart';
 import '../bloc/get/DeliveryManPart/fetch_all_warehouse_request_cubit.dart';
 import '../bloc/get/FaultyItemPart/fetch_all_faulty_item_cubit.dart';
+import '../bloc/get/ShopKeeperPart/shop_keeper_request_cubit.dart';
 import '../bloc/get/TownshipPart/fetch_all_township_cubit.dart';
+import '../bloc/get/WarehousePart/warehouse_product_list_cubit.dart';
 import '../bloc/post/CityPart/add_city_cubit.dart';
 import '../bloc/edit/CountryPart/edit_country_cubit.dart';
 import '../bloc/post/CountryPart/request_country_cubit.dart';
+import '../bloc/post/DeliveryPart/add_order_cubit.dart';
 import '../bloc/post/add_size_cubit.dart';
 
 var getIt = GetIt.instance;
@@ -188,9 +194,29 @@ void locator() {
       EditProductItemCubit(getIt.call());
   getIt.registerLazySingleton(() => editProductItemCubit);
 
+  //to fetch shop all product list item
+  ShopProductListCubit shopProductListCubit =
+  ShopProductListCubit(getIt.call());
+  getIt.registerLazySingleton(() => shopProductListCubit);
+
+  //fetch warehouse product list
+  WarehouseProductListCubit warehouseProductListCubit =
+  WarehouseProductListCubit(getIt.call());
+  getIt.registerLazySingleton(() => warehouseProductListCubit);
+
   //to update size
   EditSizeCubit editSizeCubit = EditSizeCubit(getIt.call());
   getIt.registerLazySingleton(() => editSizeCubit);
+
+
+  //shopkeeper request list
+  ShopKeeperRequestCubit shopKeeperRequestCubit = ShopKeeperRequestCubit(getIt.call());
+  getIt.registerLazySingleton(() => shopKeeperRequestCubit);
+
+  //fetch order filter by date
+  OrderFilterByDateCubit orderFilterByDate =
+  OrderFilterByDateCubit(getIt.call());
+  getIt.registerLazySingleton(() => orderFilterByDate);
 
   //add size to db
   AddSizeCubit addSizeCubit = AddSizeCubit(getIt.get<UserRepository>());
@@ -199,6 +225,18 @@ void locator() {
   AddUserRoleCubit addUserRoleCubit =
       AddUserRoleCubit(getIt.get<UserRepository>());
   getIt.registerLazySingleton(() => addUserRoleCubit);
+
+
+  //to add order
+  AddOrderCubit addOrderCubit =
+  AddOrderCubit(getIt.get<UserRepository>());
+  getIt.registerLazySingleton(() => addOrderCubit);
+
+  //product invoice
+  ProductInvoiceCubit productInvoice =
+  ProductInvoiceCubit(getIt.get<UserRepository>());
+  getIt.registerLazySingleton(() => productInvoice);
+
 
   //to get all user role
   GetAllUserRoleCubit getAllUserRoleCubit =

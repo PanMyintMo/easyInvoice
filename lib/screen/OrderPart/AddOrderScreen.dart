@@ -1,7 +1,7 @@
+import 'package:easy_invoice/bloc/post/DeliveryPart/add_order_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import '../../bloc/post/ProductPart/add_product_cubit.dart';
+import '../../common/ToastMessage.dart';
 import '../../module/module.dart';
 import '../../widget/OrderPart/AddOrderWidget.dart';
 
@@ -13,10 +13,13 @@ class AddOrderScreen extends StatefulWidget {
 }
 
 class _AddOrderScreenState extends State<AddOrderScreen> {
+
+
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => AddProductCubit(getIt.call()),
+      create: (context) => AddOrderCubit(getIt.call()),
       child: Scaffold(
         appBar: AppBar(elevation: 0.0,
           backgroundColor: Colors.white24,
@@ -26,18 +29,20 @@ class _AddOrderScreenState extends State<AddOrderScreen> {
               color: Colors.black54,
               fontWeight: FontWeight.bold,
               fontSize: 16)),),
-        body: BlocBuilder<AddProductCubit, AddProductState>(
+        body: BlocBuilder<AddOrderCubit, AddOrderState>(
           builder: (context, state) {
-            if (state is AddProductLoading) {
+            if (state is AddOrderLoading) {
               return const AddOrderWidget(
                 isLoading: true,
 
               );
-            } else if (state is AddProductSuccess) {
+            } else if (state is AddOrderSuccess) {
+              showToastMessage(state.addOrderResponse.message);
               return const AddOrderWidget(
                 isLoading: false,
               );
-            } else if (state is AddProductFail) {
+            } else if (state is AddOrderFail) {
+              showToastMessage(state.error);
               return const AddOrderWidget(
                 isLoading: false,
               );

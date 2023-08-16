@@ -124,13 +124,13 @@ Widget buildProfileBox(String name, String realName) {
         children: [
           Text(name),
           Container(
-            padding: EdgeInsets.symmetric(horizontal: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 10),
             alignment: Alignment.centerLeft,
             width: 200,
             height: 50,
             decoration: BoxDecoration(
               border: Border.all(color: Colors.redAccent, width: 0.3),
-              borderRadius: BorderRadius.all(Radius.circular(10.0)),
+              borderRadius: const BorderRadius.all(Radius.circular(10.0)),
             ),
             child: Text(realName),
           )

@@ -29,6 +29,4 @@ class AddCityResponseData {
         id: json['id']
     );
   }
-
-
 }

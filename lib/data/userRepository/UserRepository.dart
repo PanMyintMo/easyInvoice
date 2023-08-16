@@ -18,6 +18,8 @@ import '../../dataRequestModel/CityPart/EditCity.dart';
 import '../../dataRequestModel/CountryPart/AddCountry.dart';
 import '../../dataRequestModel/CountryPart/EditCountry.dart';
 import '../../dataRequestModel/DeliveryPart/AddDeliveryCompanyNameRequestModel.dart';
+import '../../dataRequestModel/DeliveryPart/AddOrderRequestModel.dart';
+import '../../dataRequestModel/DeliveryPart/ProductInvoiceRequest.dart';
 import '../../dataRequestModel/EditCategoryModel.dart';
 import '../../dataRequestModel/EditSizeModel.dart';
 import '../../dataRequestModel/Login&Register/EditCompanyProfileRequestModel.dart';
@@ -38,7 +40,9 @@ import '../responsemodel/CountryPart/RequestCountryResponse.dart';
 import '../responsemodel/DeleteProductResponse.dart';
 import '../responsemodel/DeleteUserRoleResponse.dart';
 import '../responsemodel/DeliveryPart/AddDeliveryResponse.dart';
+import '../responsemodel/DeliveryPart/AddOrderResponse.dart';
 import '../responsemodel/DeliveryPart/DeliveryManResponse.dart';
+import '../responsemodel/DeliveryPart/ProductInvoiceResponse.dart';
 import '../responsemodel/EditUserRoleResponse.dart';
 import '../responsemodel/FaultyItemPart/AddFaultyItemResponse.dart';
 import '../responsemodel/FaultyItemPart/AllFaultyItems.dart';
@@ -46,8 +50,11 @@ import '../responsemodel/GetAllCategoryDetail.dart';
 import '../responsemodel/Login&RegisterResponse/EditCompanyProfileResponse.dart';
 import '../responsemodel/Login&RegisterResponse/LoginResponse.dart';
 import '../responsemodel/Login&RegisterResponse/CompanyProfileResponse.dart';
+import '../responsemodel/MainPagePart/MainPageResponse.dart';
 import '../responsemodel/ProductResponse.dart';
+import '../responsemodel/ShopKeeperResponsePart/ShopKeeperRequestResponse.dart';
 import '../responsemodel/ShopKeeperResponsePart/ShopKeeperResponse.dart';
+import '../responsemodel/ShopKeeperResponsePart/ShopProductListResponse.dart';
 import '../responsemodel/SizeDeleteResponse.dart';
 import '../responsemodel/TownshipsPart/AddTownshipResponse.dart';
 import '../responsemodel/TownshipsPart/AllTownshipResponse.dart';
@@ -56,6 +63,7 @@ import '../responsemodel/TownshipsPart/EditTownshipResponse.dart';
 import '../responsemodel/UpdateCateResponse.dart';
 import '../responsemodel/UpdateSizeResponse.dart';
 import '../responsemodel/UserRoleResponse.dart';
+import '../responsemodel/WarehousePart/WarehouseResponse.dart';
 
 class UserRepository {
   final ApiService _apiService;
@@ -83,8 +91,6 @@ class UserRepository {
     }
   }
 
-
-
   //For company profile
   Future<CompanyProfileResponse> companyProfile() async {
     try {
@@ -96,9 +102,11 @@ class UserRepository {
   }
 
   //For edit company profile
-  Future<EditCompanyProfileResponse> editCompanyProfile(EditCompanyProfileRequestModel editProfileRequestModel,int id) async {
+  Future<EditCompanyProfileResponse> editCompanyProfile(
+      EditCompanyProfileRequestModel editProfileRequestModel, int id) async {
     try {
-      final response = await _apiService.editCompanyProfile(editProfileRequestModel,id);
+      final response =
+          await _apiService.editCompanyProfile(editProfileRequestModel, id);
       return response;
     } catch (error) {
       rethrow;
@@ -110,6 +118,63 @@ class UserRepository {
     try {
       final response = await _apiService.requestCountry(addCountry);
       return response;
+    } catch (error) {
+      rethrow;
+    }
+  }
+
+  //For add order
+  Future<AddOrderResponse> addOrder(
+      AddOrderRequestModel addOrderRequest) async {
+    try {
+      final response = await _apiService.addOrder(addOrderRequest);
+      return response;
+    } catch (error) {
+      rethrow;
+    }
+  }
+
+  //For warehouse product list
+  Future<WarehouseResponse> warehouse() async {
+    try {
+      final response = await _apiService.fetchWarehouseProductList();
+      return response;
+    } catch (error) {
+      rethrow;
+    }
+  }
+
+  //For main page order filter
+  Future<OrderApiResponse?> fetchDataForDifferentFilterTypes(String filterType) async {
+    try {
+      OrderApiResponse? responseData;
+      if (filterType == "All Orders") {
+        responseData = await _apiService.orderFilter("default");
+      } else if (filterType == "Daily Orders") {
+        responseData = await _apiService.orderFilter("daily");
+      } else if (filterType == "Weekly Orders") {
+        responseData = await _apiService.orderFilter("weekly");
+      } else if (filterType == "Monthly Orders") {
+        responseData = await _apiService.orderFilter("monthly");
+      } else if (filterType == "Yearly Orders") {
+        responseData = await _apiService.orderFilter("yearly");
+      } else if (filterType == "lastmonth") {
+        responseData = await _apiService.orderFilter("lastmonth");
+      }
+      return responseData;
+
+    } catch (error) {
+
+      rethrow;
+    }
+  }
+
+  //product invoice
+  Future<List<InvoiceData>> productInvoice(
+      ProductInvoiceRequest productInvoiceRequest) async {
+    try {
+      final response = await _apiService.productInvoice(productInvoiceRequest);
+      return response.data;
     } catch (error) {
       rethrow;
     }
@@ -222,17 +287,27 @@ class UserRepository {
     }
   }
 
+
+  //fetch all shop product list from db
+  Future<List<ShopProductItem>> fetchAllShopProductList() async {
+    try {
+      final response = await _apiService.shopProductList();
+      return response.data.data;
+    } catch (error) {
+      throw Exception('Failed to fetch shop product list: $error');
+    }
+  }
+
   //fetch all warehouse request for delivery man
   Future<List<DeliveryItemData>> fetchAllWarehouseRequest() async {
     try {
       final response = await _apiService.fetchAllWarehouseRequest();
       return response.data.data;
     } catch (error) {
-      throw Exception('Failed to fetch warehouse request items for delivery man: $error');
+      throw Exception(
+          'Failed to fetch warehouse request items for delivery man: $error');
     }
   }
-
-
 
   //fetch city from db
   Future<List<City>> fetchCity() async {
@@ -273,8 +348,6 @@ class UserRepository {
       throw Exception('Failed to get products: $error');
     }
   }
-
-
 
   //fetch all sizes
   Future<List<SizeItems>> getSizes() async {
@@ -343,7 +416,18 @@ class UserRepository {
   Future<AddFaultyItemResponse> addRequestFaultyItem(
       AddFaultyItemRequest addFaultyItemRequest) async {
     try {
-      final response = await _apiService.addRequestFaultyItem(addFaultyItemRequest);
+      final response =
+          await _apiService.addRequestFaultyItem(addFaultyItemRequest);
+      return response;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  //shopkeeper request list
+  Future<ShopKeeperRequestResponse> shopKeeperRequestList() async {
+    try {
+      final response = await _apiService.shopKeeperRequestList();
       return response;
     } catch (e) {
       rethrow;

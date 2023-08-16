@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../bloc/post/DeliveryPart/add_delivery_cubit.dart';
+import '../../common/ToastMessage.dart';
 import '../../module/module.dart';
 import '../../widget/DeliveryPart/AddDeliveryWidget.dart';
 
@@ -33,8 +34,10 @@ class AddDeliveryScreen extends StatelessWidget {
             if (state is AddDeliveryLoading) {
               return const AddDeliveryWidget(isLoading: true);
             } else if (state is AddDeliverySuccess) {
+              showToastMessage("Successfully delivery added.");
               return const AddDeliveryWidget(isLoading: false);
             } else if (state is AddDeliveryFail) {
+              showToastMessage("Failed delivery added.");
               return const AddDeliveryWidget(isLoading: false);
             }
             return const AddDeliveryWidget(isLoading: false);

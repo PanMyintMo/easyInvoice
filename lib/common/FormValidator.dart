@@ -46,9 +46,21 @@ String? validateField(String? value) {
   return null;
 }
 
+
+String? validateTwoField(String value1, String value2, String message) {
+  if (value1.compareTo(value2) > 0) {
+    return message;
+  } else {
+    return null; // or return an empty string if you prefer
+  }
+}
+
+
 String? validateFieldlName(String? value,String fieldName) {
   if(value == null || value.isEmpty){
     return 'Please enter $fieldName';
   }
   return null;
 }
+
+

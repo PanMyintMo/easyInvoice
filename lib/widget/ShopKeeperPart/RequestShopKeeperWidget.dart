@@ -8,6 +8,7 @@ import 'package:easy_invoice/data/responsemodel/GetAllCategoryDetail.dart';
 import 'package:easy_invoice/dataRequestModel/ShopKeeperPart/ShopKeeperRequestModel.dart';
 import '../../bloc/post/ShopKeeperPart/add_request_product_shop_keeper_cubit.dart';
 import '../../data/responsemodel/ProductByCategoryIdResponse.dart';
+import '../../screen/shopkeeperPart/ShopKeeperRequestListScreen.dart';
 
 class RequestShopKeeperWidget extends StatefulWidget {
   final bool isLoading;
@@ -56,171 +57,174 @@ class _RequestShopKeeperWidgetState extends State<RequestShopKeeperWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children:[
-        Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  const Expanded(child: Text('ShopKeeper')),
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: () {},
-                      child: const Text('All Requesting Products'),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(
-                height: 16,
-              ),
-              const Text('Category'),
-              const SizedBox(
-                height: 16,
-              ),
-              SizedBox(
-                width: double.infinity,
-                child: chooseItemIdForm(
-                  DropdownButton<String>(
-                    value: category_id,
-                    items: [
-                      const DropdownMenuItem<String>(
-                        value: 'Select Category',
-                        child: Text('Select Category'),
-                      ),
-                      ...categories.map((category) {
-                        return DropdownMenuItem<String>(
-                          value: category.id.toString(),
-                          child: Text(category.name),
-                        );
-                      }).toList(),
-                    ],
-                    onChanged: (value) {
-                      if (value == 'Select Category') {
-                        setState(() {
-                          category_id = value!;
-                          product_id = 'Select Product';
-                        });
-                        showDialog(
-                          context: context,
-                          builder: (context) {
-                            return AlertDialog(
-                              title: const Text('Error'),
-                              content:
-                                  const Text('You need to choose a category.'),
-                              actions: [
-                                ElevatedButton(
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                  child: const Text('OK'),
-                                ),
-                              ],
-                            );
-                          },
-                        );
-                      } else {
-                        setState(() {
-                          category_id = value!;
-                        });
-                        fetchProductsByCategory(int.parse(value!));
-                      }
+    return SingleChildScrollView(
+      scrollDirection: Axis.vertical,
+      child: Stack(
+        children:[
+          Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Align(
+                  alignment: Alignment.topRight,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => const ShopKeeperRequestListScreen()));
                     },
-                    underline: const SizedBox(),
-                    borderRadius: BorderRadius.circular(10),
-                    icon: const Icon(Icons.arrow_drop_down),
-                    iconSize: 24,
-                    isExpanded: true,
-                    dropdownColor: Colors.white,
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 16,
-                    ),
+                    child: const Text('All Requesting Products'),
                   ),
                 ),
-              ),
-              const SizedBox(
-                height: 16,
-              ),
-              const Text('Product'),
-              const SizedBox(
-                height: 16,
-              ),
-              SizedBox(
-                width: double.infinity,
-                child: chooseItemIdForm(
-                  DropdownButton<String>(
-                    value: product_id,
-                    items: [
-                      const DropdownMenuItem<String>(
-                        value: 'Select Product',
-                        child: Text('Select Product'),
+                const SizedBox(
+                  height: 24,
+                ),
+                const Text('Category'),
+                const SizedBox(
+                  height: 16,
+                ),
+                SizedBox(
+                  width: double.infinity,
+                  child: chooseItemIdForm(
+                    DropdownButton<String>(
+                      value: category_id,
+                      items: [
+                        const DropdownMenuItem<String>(
+                          value: 'Select Category',
+                          child: Text('Select Category'),
+                        ),
+                        ...categories.map((category) {
+                          return DropdownMenuItem<String>(
+                            value: category.id.toString(),
+                            child: Text(category.name),
+                          );
+                        }).toList(),
+                      ],
+                      onChanged: (value) {
+                        if (value == 'Select Category') {
+                          setState(() {
+                            category_id = value!;
+                            product_id = 'Select Product';
+                          });
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                title: const Text('Error'),
+                                content:
+                                    const Text('You need to choose a category.'),
+                                actions: [
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: const Text('OK'),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        } else {
+                          setState(() {
+                            category_id = value!;
+                          });
+                          fetchProductsByCategory(int.parse(value!));
+                        }
+                      },
+                      underline: const SizedBox(),
+                      borderRadius: BorderRadius.circular(10),
+                      icon: const Icon(Icons.arrow_drop_down),
+                      iconSize: 24,
+                      isExpanded: true,
+                      dropdownColor: Colors.white,
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 16,
                       ),
-                      ...products.map((product) {
-                        return DropdownMenuItem<String>(
-                          value: product.id.toString(),
-                          child: Text(product.name),
-                        );
-                      }).toList(),
-                    ],
-                    onChanged: (value) {
-                      setState(() {
-                        product_id = value!;
-                      });
-                    },
-                    underline: const SizedBox(),
-                    borderRadius: BorderRadius.circular(10),
-                    icon: const Icon(Icons.arrow_drop_down),
-                    iconSize: 24,
-                    isExpanded: true,
-                    dropdownColor: Colors.white,
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 16,
                     ),
                   ),
                 ),
-              ),
-              const SizedBox(
-                height: 16,
-              ),
-              const Text('Quantity'),
-              const SizedBox(
-                height: 16,
-              ),
-              SizedBox(
-                width: double.infinity,
-                child: buildProductContainerForm(
-                  'Quantity',
-                  TextInputType.number,
-                  quantity,
-                  validateField,
+                const SizedBox(
+                  height: 16,
                 ),
-              ),
-              const SizedBox(
-                height: 16,
-              ),
-              ElevatedButton(
-                onPressed: validateAndSubmit,
-                child: const Text('Add ShopKeeper'),
-              ),
-            ],
-          ),
-        ),
-      ),
-        if (widget.isLoading)
-          Container(
-            color: Colors.black.withOpacity(0.5),
-            child: const Center(
-              child: CircularProgressIndicator(),
+                const Text('Product'),
+                const SizedBox(
+                  height: 16,
+                ),
+                SizedBox(
+                  width: double.infinity,
+                  child: chooseItemIdForm(
+                    DropdownButton<String>(
+                      value: product_id,
+                      items: [
+                        const DropdownMenuItem<String>(
+                          value: 'Select Product',
+                          child: Text('Select Product'),
+                        ),
+                        ...products.map((product) {
+                          return DropdownMenuItem<String>(
+                            value: product.id.toString(),
+                            child: Text(product.name),
+                          );
+                        }).toList(),
+                      ],
+                      onChanged: (value) {
+                        setState(() {
+                          product_id = value!;
+                        });
+                      },
+                      underline: const SizedBox(),
+                      borderRadius: BorderRadius.circular(10),
+                      icon: const Icon(Icons.arrow_drop_down),
+                      iconSize: 24,
+                      isExpanded: true,
+                      dropdownColor: Colors.white,
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 16,
+                ),
+                const Text('Quantity'),
+                const SizedBox(
+                  height: 16,
+                ),
+                SizedBox(
+                  width: double.infinity,
+                  child: buildProductContainerForm(
+                    'Quantity',
+                    TextInputType.number,
+                    quantity,
+                    validateField,
+                  ),
+                ),
+                const SizedBox(
+                  height: 16,
+                ),
+                Center(
+                  child: ElevatedButton(
+                    onPressed: validateAndSubmit,
+                    child: const Text('Add ShopKeeper'),
+                  ),
+                ),
+              ],
             ),
           ),
-      ],
+        ),
+          if (widget.isLoading)
+            Container(
+              color: Colors.black.withOpacity(0.5),
+              child: const Center(
+                child: CircularProgressIndicator(),
+              ),
+            ),
+        ],
+      ),
     );
   }
 
