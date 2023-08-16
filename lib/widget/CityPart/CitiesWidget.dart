@@ -55,6 +55,7 @@ class _CitiesWidgetState extends State<CitiesWidget> {
             ],
             source: CityData(cities,context),
             horizontalMargin: 20,
+            arrowHeadColor: Colors.blueAccent,
             rowsPerPage: 8,
             columnSpacing: 85,
           ),

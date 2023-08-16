@@ -108,7 +108,8 @@ class _AllProductWidgetState extends State<AllProductWidget> {
                                 Expanded(
                                   child: Text(
                                     'Product name: ${product.name}',
-                                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                                    maxLines: 2,softWrap: true,
+                                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                                   ),
                                 ),
                                 Expanded(

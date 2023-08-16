@@ -42,12 +42,14 @@ class _LoginState extends State<Login> {
               final name = state.loginResponse.name;
               final email = state.loginResponse.email;
               final utype = state.loginResponse.utype;
+              final id=state.loginResponse.id;
               // Set the token using the SessionManager class
               SessionManager sessionManager = SessionManager();
               sessionManager.setAuthToken(token);
               sessionManager.setUserName(name);
               sessionManager.setEmail(email);
               sessionManager.setUserType(utype);
+              sessionManager.setId(id!);
 
               // Navigate to the user profile page after the current frame is completed
               WidgetsBinding.instance.addPostFrameCallback((_) {

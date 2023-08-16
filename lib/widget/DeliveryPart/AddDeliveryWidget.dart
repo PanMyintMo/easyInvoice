@@ -1,11 +1,18 @@
 import 'package:dotted_border/dotted_border.dart';
 import 'package:easy_invoice/data/api/apiService.dart';
 import 'package:easy_invoice/data/responsemodel/DeliveryPart/FetchAllDeliveryName.dart';
+import 'package:easy_invoice/dataRequestModel/DeliveryPart/AddDeliveryCompanyNameRequestModel.dart';
+import 'package:easy_invoice/dataRequestModel/DeliveryPart/ChangeOrderProductQty.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
+import '../../bloc/post/DeliveryPart/add_delivery_cubit.dart';
 import '../../common/ApiHelper.dart';
+import '../../common/FormValidator.dart';
+import '../../common/ThemeHelperUserClass.dart';
 import '../../data/responsemodel/CityPart/Cities.dart';
+import '../../data/responsemodel/TownshipsPart/TownshipByCityIdResponse.dart';
 class AddDeliveryWidget extends StatefulWidget {
   final bool isLoading;
   const AddDeliveryWidget({super.key, required this.isLoading});
@@ -18,9 +25,19 @@ class _AddDeliveryWidgetState extends State<AddDeliveryWidget> {
   File? image;
   List<AllDeliveryName> deliveryCompanyName = [];
   List<City> cities =[];
+  List<TownshipByCityIdData> townships = [];
+  late String township_id;
+  bool hasTownshipForSelectedCity = true;
 
   String? select_company; // Initialize select_company with null
   String? select_city;
+  String? select_township;
+
+
+  final formKey = GlobalKey<FormState>();
+  final name=TextEditingController();
+  final basicCost=TextEditingController();
+  final waitingTime=TextEditingController();
 
 
   @override
@@ -54,6 +71,29 @@ class _AddDeliveryWidgetState extends State<AddDeliveryWidget> {
     }
   }
 
+  void fetchTownshipByCityId(int id) async {
+    try {
+      final response = await ApiService().fetchAllTownshipByCityId(id);
+      setState(() {
+        townships = response;
+        if (response.isNotEmpty) {
+          township_id =
+          'Select Township'; // Reset city_id to default 'Select City'
+          hasTownshipForSelectedCity = true;
+        } else {
+          hasTownshipForSelectedCity = false;
+        }
+      });
+    } catch (e) {
+      setState(() {
+        townships = [];
+        hasTownshipForSelectedCity = false;
+      });
+    }
+  }
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -72,6 +112,8 @@ class _AddDeliveryWidgetState extends State<AddDeliveryWidget> {
           Container(
             alignment: Alignment.centerLeft,
             child: TextFormField(
+              validator: validateField,
+              controller: name,
               decoration: InputDecoration(
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0)),
@@ -82,7 +124,7 @@ class _AddDeliveryWidgetState extends State<AddDeliveryWidget> {
           const SizedBox(
             height: 10,
           ),
-     const SizedBox(height: 10,),
+          const SizedBox(height: 10,),
           DottedBorder(
             borderType: BorderType.RRect,
             color: Colors.grey,
@@ -108,7 +150,13 @@ class _AddDeliveryWidgetState extends State<AddDeliveryWidget> {
           Align(
             alignment: Alignment.centerRight,
             child: ElevatedButton(
-                onPressed: () {}, child: const Text('Add Delivery')),
+                onPressed: () {
+                  if (formKey.currentState!.validate()){
+                    formKey.currentState!.save();
+                    context.read<AddDeliveryCubit>().addDelivery(AddDeliveryRequestModel(name: name.text, image: image!));
+                  }
+
+                  }, child: const Text('Add Delivery')),
           ),
           const SizedBox(height: 10,),
           Row(
@@ -171,6 +219,9 @@ class _AddDeliveryWidgetState extends State<AddDeliveryWidget> {
                   onChanged: (value) {
                     setState(() {
                       select_city = value; // Update the selected city
+                      int cityId = int.parse(value!);
+                      fetchTownshipByCityId(cityId);
+
                     });
                   },
                   hint: const Text('Select City Name'),
@@ -188,6 +239,92 @@ class _AddDeliveryWidgetState extends State<AddDeliveryWidget> {
               ),
             ],
           ),
+          const SizedBox(height: 16,),
+          Row(
+            children: [
+              const Expanded(child: Text('Choose Township')),
+              Expanded(
+                child: DropdownButton<String>(
+                  value: hasTownshipForSelectedCity ? select_township : null,
+                  items: [
+                    const DropdownMenuItem(
+                      value: null, // Set initial value to null
+                      child: Text('Select Township'),
+                    ),
+                    if (hasTownshipForSelectedCity)
+                      ...townships.map((township) {
+                        return DropdownMenuItem<String>(
+                          value: township.id.toString(),
+                          child: Text(township.name),
+                        );
+                      }).toList(),
+                  ],
+                    onChanged: (value) {
+                      setState(() {
+                        select_township = value;
+                      });
+                    },
+                  hint: const Text('Select Township Name'),
+                  underline: const SizedBox(),
+                  borderRadius: BorderRadius.circular(10),
+                  icon: const Icon(Icons.arrow_drop_down),
+                  iconSize: 24,
+                  isExpanded: true,
+                  dropdownColor: Colors.white,
+                  style: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 16,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16,),
+          Form(
+            key: formKey,
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    buildProductContainerText("Basic Cost"),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    buildProductContainerForm(
+                      'Basic Cost',
+                      TextInputType.number,
+                      basicCost,
+                      validateField,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16,),
+                Row(
+                  children: [
+                    buildProductContainerText("Waiting Time"),
+                    const SizedBox(width: 10,),
+                    buildProductContainerForm(
+                      'Waiting Time',
+                      TextInputType.name,
+                      waitingTime,
+                      validateField,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16,),
+                ElevatedButton(onPressed: (){
+
+                  if (formKey.currentState!.validate()){
+                    formKey.currentState!.save();
+
+                    context.read<AddDeliveryCubit>().addDelivery(AddDeliveryRequestModel(name: name.text, image: image!));
+                  }
+
+                }, child: const Text("Add New"),)
+              ],
+            ),
+          ),
+
         ],
       ),
     );
@@ -221,5 +358,5 @@ class _AddDeliveryWidgetState extends State<AddDeliveryWidget> {
     }
   }
 
-  void validateAndSubmit() async {}
+
 }

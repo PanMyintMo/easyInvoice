@@ -20,6 +20,7 @@ import '../screen/LocationPart/AllTownshipsScreen.dart';
 import '../screen/LocationPart/CityScreen.dart';
 import '../screen/ProductInvoicePart/ProductInvoiceScreen.dart';
 import '../screen/SizeAddScreen.dart';
+import '../screen/WarehousePart/WareHouseTableScreen.dart';
 import '../screen/shopkeeperPart/ShopKeeperAddScreen.dart';
 
 class NavigationDrawerWidget extends StatefulWidget {
@@ -115,7 +116,7 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
                     listData: [],
                     onClicked: () {
                       Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => const AllDeliveryScreen(),
+                        builder: (context) => const WarehouseTableScreen(),
                       ));
                     },
                     onClickedItem: () {

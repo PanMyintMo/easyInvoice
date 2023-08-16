@@ -89,8 +89,7 @@ class DeliveryItemData {
   final int quantity;
   final int product_id;
   final String status;
-  final String created_at;
-  final String updated_at;
+
   final String product_name;
 
   DeliveryItemData({
@@ -98,8 +97,6 @@ class DeliveryItemData {
     required this.quantity,
     required this.product_id,
     required this.status,
-    required this.created_at,
-    required this.updated_at,
     required this.product_name,
   });
 
@@ -109,8 +106,6 @@ class DeliveryItemData {
       quantity: json['quantity'],
       product_id: json['product_id'],
       status: json['status'],
-      created_at: json['created_at'],
-      updated_at: json['updated_at'],
       product_name: json['product_name'] ?? '',
     );
   }

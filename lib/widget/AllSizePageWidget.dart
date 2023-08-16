@@ -25,137 +25,124 @@ class AllSizePageWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
         create: (context) => GetAllSizeCubit(getIt.call()),
-        child: Scaffold(
-          appBar: AppBar(
-            title: const Text('All Size'),
-            backgroundColor: Colors.redAccent.withOpacity(0.8), // Customize the background color here
-
-          ),
-          body: Column(
+        child: Column(
             children: [
-            Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Padding(
-                padding: EdgeInsets.all(12.0),
-                child: Text(
-                  'Sizes',
-                  style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-                ),
-              ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Align(
-                    alignment: Alignment.topRight,
-                    child: Container(
-                      padding:  const EdgeInsets.symmetric(horizontal: 50),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
-                        borderRadius: BorderRadius.circular(5),
+              Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Align(
+                alignment: Alignment.topRight,
+                child: Container(
+                  padding:  const EdgeInsets.symmetric(horizontal: 50),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey),
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  child: const Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.search),
+                      SizedBox(width: 5),
+                      Text(
+                        'Search:',
+                        style: TextStyle(fontWeight: FontWeight.normal),
                       ),
-                      child: const Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(Icons.search),
-                          SizedBox(width: 5),
-                          Text(
-                            'Search:',
-                            style: TextStyle(fontWeight: FontWeight.normal),
-                          ),
-                        ],
-                      ),
-                    ),
+                    ],
                   ),
                 ),
               ),
-            ],
-          ),
+            ),
 
-              const SizedBox(height: 10,),
+              const SizedBox(height: 16,),
               Stack(
                 children: [
                   SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: DataTable(
-                      columns: const [
-                        DataColumn(
-                          label: Text(
-                            'ID',
-                            style: TextStyle(fontSize: 24, color: Colors.black54),
+                    padding: const EdgeInsets.fromLTRB(5, 0, 5, 5),
+                    scrollDirection: Axis.vertical,
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      
+                      child: DataTable(
+                        headingRowColor: MaterialStateColor.resolveWith((states) => Colors.teal),
+                        columnSpacing: 40.0,
+                        columns: const [
+                          DataColumn(
+                            label: Text(
+                              'ID',
+                              style: TextStyle(fontSize: 16, color: Colors.white),
+                            ),
                           ),
-                        ),
-                        DataColumn(
-                          label: Text(
-                            'Name',
-                            style: TextStyle(fontSize: 24, color: Colors.black54),
+                          DataColumn(
+                            label: Text(
+                              'Name',
+                              style: TextStyle(fontSize: 16, color: Colors.white),
+                            ),
                           ),
-                        ),
-                        DataColumn(
-                          label: Text(
-                            'Slug',
-                            style: TextStyle(fontSize: 24, color: Colors.black54),
+                          DataColumn(
+                            label: Text(
+                              'Slug',
+                              style: TextStyle(fontSize: 16, color: Colors.white),
+                            ),
                           ),
-                        ),
-                        DataColumn(
-                          label: Text(
-                            'Update',
-                            style: TextStyle(fontSize: 24, color: Colors.black54),
+                          DataColumn(
+                            label: Text(
+                              'Update',
+                              style: TextStyle(fontSize: 16, color: Colors.white),
+                            ),
                           ),
-                        ),
-                        DataColumn(
-                          label: Text(
-                            'Delete',
-                            style: TextStyle(fontSize: 24, color: Colors.black54),
+                          DataColumn(
+                            label: Text(
+                              'Delete',
+                              style: TextStyle(fontSize: 16, color: Colors.white),
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
 
-                      rows: sizes.map((sizes) {
-                        return DataRow(cells: [
-                          DataCell(Text(sizes.id.toString())),
-                          DataCell(Text(sizes.name)),
-                          DataCell(Text(sizes.slug)),
-                          DataCell(GestureDetector(
-                            onTap: () async {
-                              var result = await Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      UpdateSizeScreen(
-                                        id: sizes.id,
-                                        name: sizes.name,
-                                        slug: sizes.slug,
-                                      ),
-                                ),
-                              );
-                              if (result != null) {
-                                BlocProvider.of<GetAllSizeCubit>(context)
-                                    .getAllSizes();
-                                showToastMessage(
-                                    'Size Updated Successfully');
-                              } else if (result != null && result is String) {
-                                showToastMessage(
-                                    'Failed to update sizes: $result');
-                              }
-                            },
-                            child: const Icon(
-                              Icons.edit,
-                              color: Colors.yellow,
-                            ),
-                          )),
-                          DataCell(GestureDetector(
-                            onTap: () {
-                              showDeleteConfirmationDialog(context, sizes,
-                                  context.read<DeleteSizeCubit>());
-                            },
-                            child: const Icon(
-                              Icons.delete_forever,
-                              color: Colors.red,
-                            ),
-                          )),
-                        ]);
-                      }).toList(),
+                        rows: sizes.map((sizes) {
+                          return DataRow(cells: [
+                            DataCell(Text(sizes.id.toString())),
+                            DataCell(Text(sizes.name)),
+                            DataCell(Text(sizes.slug)),
+                            DataCell(GestureDetector(
+                              onTap: () async {
+                                var result = await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        UpdateSizeScreen(
+                                          id: sizes.id,
+                                          name: sizes.name,
+                                          slug: sizes.slug,
+                                        ),
+                                  ),
+                                );
+                                if (result != null) {
+                                  BlocProvider.of<GetAllSizeCubit>(context)
+                                      .getAllSizes();
+                                  showToastMessage(
+                                      'Size Updated Successfully');
+                                } else if (result != null && result is String) {
+                                  showToastMessage(
+                                      'Failed to update sizes: $result');
+                                }
+                              },
+                              child: const Icon(
+                                Icons.edit,
+                                color: Colors.green,
+                              ),
+                            )),
+                            DataCell(GestureDetector(
+                              onTap: () {
+                                showDeleteConfirmationDialog(context, sizes,
+                                    context.read<DeleteSizeCubit>());
+                              },
+                              child: const Icon(
+                                Icons.delete_forever,
+                                color: Colors.red,
+                              ),
+                            )),
+                          ]);
+                        }).toList(),
+                      ),
                     ),
                   ),
                   if (isLoading)
@@ -171,7 +158,7 @@ class AllSizePageWidget extends StatelessWidget {
             ],
           ),
 
-        ));
+        );
   }
 }
 

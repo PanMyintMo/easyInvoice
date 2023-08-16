@@ -46,146 +46,135 @@ class _AllCategoryPageWidgetState extends State<AllCategoryPageWidget> {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => GetCategoryDetailCubit(getIt.call()),
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Center(child: Text('All Category')),
-          backgroundColor: Colors.redAccent.withOpacity(0.8),
-        ),
-        body: Column(
+      child: Column(
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                const Padding(
-                  padding: EdgeInsets.all(12.0),
-                  child: Text(
-                    'Categories',
-                    style: TextStyle(fontSize: 25, fontWeight: FontWeight.normal),
+
+            Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Align(
+                alignment: Alignment.topRight,
+                child: Container(
+                  width: 250,
+                  padding: const EdgeInsets.symmetric(horizontal: 40),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey),
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  child: const Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Icon(Icons.search),
+                      SizedBox(width: 5),
+                      Expanded(
+                        child: TextField(
+                          decoration: InputDecoration(
+                            hintText: 'Enter your search',
+                            border: InputBorder.none,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: Align(
-                      alignment: Alignment.topRight,
-                      child: Container(
-                        width: 250,
-                        padding: const EdgeInsets.symmetric(horizontal: 40),
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.grey),
-                          borderRadius: BorderRadius.circular(5),
+              ),
+            ),
+            const SizedBox(height: 16),
+            Stack(
+              children: [
+                SingleChildScrollView(
+                  padding: const EdgeInsets.fromLTRB(5, 0, 5, 5),
+                  scrollDirection: Axis.vertical,
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: DataTable(
+                      headingRowColor: MaterialStateColor.resolveWith((states) => Colors.teal),
+                      columnSpacing: 7.0,
+                      border: TableBorder.all(width: 0.2),
+                      columns: const [
+                        DataColumn(
+                          label: Text(
+                            'ID',
+                            style: TextStyle(fontSize: 16, color: Colors.white),
+                          ),
                         ),
-                        child: const Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Icon(Icons.search),
-                            SizedBox(width: 5),
-                            Expanded(
-                              child: TextField(
-                                decoration: InputDecoration(
-                                  hintText: 'Enter your search',
-                                  border: InputBorder.none,
+                        DataColumn(
+                          label: Text(
+                            'Name',
+                            style: TextStyle(fontSize: 16, color: Colors.white),
+                          ),
+                        ),
+                        DataColumn(
+                          label: Text(
+                            'Slug',
+                            style: TextStyle(fontSize: 16, color: Colors.white),
+                          ),
+                        ),
+                        DataColumn(
+                          label: Text(
+                            'Update',
+                            style: TextStyle(fontSize: 16, color: Colors.white),
+                          ),
+                        ),
+                        DataColumn(
+                          label: Text(
+                            'Delete',
+                            style: TextStyle(fontSize: 16, color: Colors.white),
+                          ),
+                        ),
+                      ],
+                      rows: displayCategories.map((category) {
+                        return
+                          DataRow(
+                          cells: [
+                            DataCell(Text(category.id.toString())),
+                            DataCell(Text(category.name)),
+                            DataCell(Text(category.slug)),
+                            DataCell(
+                              GestureDetector(
+                                onTap: () async {
+                                  var result = await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => UpdateCategoryScreen(
+                                        id: category.id,
+                                        name: category.name,
+                                        slug: category.slug,
+                                      ),
+                                    ),
+                                  );
+                                  if (result != null) {
+                                    BlocProvider.of<GetCategoryDetailCubit>(context)
+                                        .getCategoryDetail();
+                                    showToastMessage('Category Updated Successfully');
+                                  } else if (result != null && result is String) {
+                                    showToastMessage('Failed to update category: $result');
+                                  }
+                                },
+                                child: const Icon(
+                                  Icons.edit,
+                                  color: Colors.green,
+                                ),
+                              ),
+                            ),
+                            DataCell(
+                              GestureDetector(
+                                onTap: () {
+                                  showDeleteConfirmationDialog(
+                                    context,
+                                    category,
+                                    context.read<DeleteCategoryCubit>(),
+                                  );
+                                },
+                                child: const Icon(
+                                  Icons.delete_forever,
+                                  color: Colors.red,
                                 ),
                               ),
                             ),
                           ],
-                        ),
-                      ),
+                        );
+                      }).toList(),
                     ),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 10),
-            Stack(
-              children: [
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: DataTable(
-                    columns: const [
-                      DataColumn(
-                        label: Text(
-                          'ID',
-                          style: TextStyle(fontSize: 24, color: Colors.black54),
-                        ),
-                      ),
-                      DataColumn(
-                        label: Text(
-                          'Name',
-                          style: TextStyle(fontSize: 24, color: Colors.black54),
-                        ),
-                      ),
-                      DataColumn(
-                        label: Text(
-                          'Slug',
-                          style: TextStyle(fontSize: 24, color: Colors.black54),
-                        ),
-                      ),
-                      DataColumn(
-                        label: Text(
-                          'Update',
-                          style: TextStyle(fontSize: 24, color: Colors.black54),
-                        ),
-                      ),
-                      DataColumn(
-                        label: Text(
-                          'Delete',
-                          style: TextStyle(fontSize: 24, color: Colors.black54),
-                        ),
-                      ),
-                    ],
-                    rows: displayCategories.map((category) {
-                      return
-                        DataRow(
-                        cells: [
-                          DataCell(Text(category.id.toString())),
-                          DataCell(Text(category.name)),
-                          DataCell(Text(category.slug)),
-                          DataCell(
-                            GestureDetector(
-                              onTap: () async {
-                                var result = await Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => UpdateCategoryScreen(
-                                      id: category.id,
-                                      name: category.name,
-                                      slug: category.slug,
-                                    ),
-                                  ),
-                                );
-                                if (result != null) {
-                                  BlocProvider.of<GetCategoryDetailCubit>(context)
-                                      .getCategoryDetail();
-                                  showToastMessage('Category Updated Successfully');
-                                } else if (result != null && result is String) {
-                                  showToastMessage('Failed to update category: $result');
-                                }
-                              },
-                              child: const Icon(
-                                Icons.edit,
-                                color: Colors.yellow,
-                              ),
-                            ),
-                          ),
-                          DataCell(
-                            GestureDetector(
-                              onTap: () {
-                                showDeleteConfirmationDialog(
-                                  context,
-                                  category,
-                                  context.read<DeleteCategoryCubit>(),
-                                );
-                              },
-                              child: const Icon(
-                                Icons.delete_forever,
-                                color: Colors.red,
-                              ),
-                            ),
-                          ),
-                        ],
-                      );
-                    }).toList(),
                   ),
                 ),
                 if (widget.isLoading)
@@ -202,7 +191,7 @@ class _AllCategoryPageWidgetState extends State<AllCategoryPageWidget> {
             ),
           ],
         ),
-      ),
+
     );
   }
 }

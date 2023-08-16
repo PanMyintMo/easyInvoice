@@ -30,6 +30,21 @@ class AllSizesScreen extends StatelessWidget {
         ),
       ],
       child: Scaffold(
+          appBar: AppBar(
+            elevation: 0.0,
+            backgroundColor: Colors.white24,
+            iconTheme: const IconThemeData(
+              color: Colors.red, // Set the color of the navigation icon to black
+            ),
+            title: const Text(
+              'All Size',
+              style: TextStyle(
+                color: Colors.black54,
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+              ),
+            ),
+          ),
         body: BlocConsumer<GetAllSizeCubit, GetAllSizeState>(
           listener: (context, state) {
             if (state is GetAllSizeFail) {

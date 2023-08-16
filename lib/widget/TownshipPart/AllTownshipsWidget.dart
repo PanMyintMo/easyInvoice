@@ -53,6 +53,7 @@ class _TownshipWidgetState extends State<TownshipWidget> {
             ],
             source: TownshipData(townships,context),
             horizontalMargin: 20,
+            arrowHeadColor: Colors.blueAccent,
             rowsPerPage: 8,
             columnSpacing: 85,
           ),
