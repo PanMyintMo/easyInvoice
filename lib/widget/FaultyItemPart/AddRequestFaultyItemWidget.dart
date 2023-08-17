@@ -77,8 +77,8 @@ class _AddRequestFaultyItemWidgetState
                       =>
                           const AllFaultyItemsScreen()));
                     },
-                        child: const Text('All FaultyItems', style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold))),
+                        child: const Text('All FaultyItems', style: TextStyle(decoration: TextDecoration.underline,color: Colors.blue,
+                            fontSize: 16, fontWeight: FontWeight.bold))),
                   ),
 
                   const Text('Category', style: TextStyle(fontSize: 18,

@@ -25,7 +25,7 @@ class FaultyItemWidget extends StatelessWidget {
               padding: EdgeInsets.all(8.0),
               child: Text(
                 'Add New Faulty Item',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold,decoration: TextDecoration.underline,color: Colors.blue),
               ),
             ),
           ),

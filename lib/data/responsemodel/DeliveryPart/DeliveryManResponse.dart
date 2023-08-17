@@ -1,36 +1,32 @@
 class DeliveryManResponse {
   final DeliveryData data;
-  final int status;
-  final String message;
+
 
   DeliveryManResponse({
     required this.data,
-    required this.status,
-    required this.message,
   });
 
   factory DeliveryManResponse.fromJson(Map<String, dynamic> json) {
     return DeliveryManResponse(
       data: DeliveryData.fromJson(json['data']),
-      status: json['status'],
-      message: json['message'],
+
     );
   }
 }
 
 class DeliveryData {
   final int current_page;
-  final String first_page_url;
-  final int from;
+  final String? first_page_url;
+  final int? from;
   final List<DeliveryItemData> data;
   final List<DeliveryLink> links;
   final int last_page;
-  final String last_page_url;
+  final String? last_page_url;
   final String? next_page_url;
-  final String path;
-  final int per_page;
+  final String? path;
+  final int? per_page;
   final String? prev_page_url;
-  final int to;
+  final int? to;
   final int total;
 
   DeliveryData({
@@ -57,11 +53,11 @@ class DeliveryData {
       first_page_url: json['first_page_url'],
       from: json['from'],
       last_page: json['last_page'],
-      last_page_url: json['last_page_url'],
-      next_page_url: json['next_page_url'],
+      last_page_url: json['last_page_url'] ?? '',
+      next_page_url: json['next_page_url'] ?? '',
       path: json['path'],
       per_page: json['per_page'],
-      prev_page_url: json['prev_page_url'],
+      prev_page_url: json['prev_page_url'] ?? '',
       to: json['to'],
       total: json['total'],
     );
@@ -70,7 +66,7 @@ class DeliveryData {
 
 class DeliveryLink {
   final String? url;
-  final String label;
+  final String? label;
   final bool active;
 
   DeliveryLink({required this.url, required this.active, required this.label});
@@ -89,7 +85,6 @@ class DeliveryItemData {
   final int quantity;
   final int product_id;
   final String status;
-
   final String product_name;
 
   DeliveryItemData({

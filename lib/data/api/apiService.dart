@@ -686,25 +686,25 @@ class ApiService {
       throw Exception('Failed to fetch all faulty items: $e');
     }
   }
+
   // fetch all warehouse request from delivery man
   Future<DeliveryManResponse> fetchAllWarehouseRequest() async {
     try {
       int currentPage = 1;
       DeliveryData deliveryData;
-      List<DeliveryItemData> deliveryItemData =
-          []; // Corrected variable name here
+      List<DeliveryItemData> deliveryItemsData = [];
 
       while (true) {
-        final response = await _dio
-            .get('https://mmeasyinvoice.com/api/faulty-item?page=$currentPage');
-        print("$response");
+        final response = await _dio.get('https://www.mmeasyinvoice.com/api/received-warehouse-request?page=$currentPage');
+
         if (response.statusCode == 200) {
           final dynamic responseData = response.data;
 
-          final faultyDataResponse = DeliveryManResponse.fromJson(responseData);
-          deliveryData = faultyDataResponse.data;
-          final List<DeliveryItemData> deliveryItem = deliveryData.data;
-          deliveryItemData.addAll(deliveryItem); // Corrected variable name here
+          final deliveryManResponse =
+          DeliveryManResponse.fromJson(responseData);
+          deliveryData = deliveryManResponse.data;
+          final List<DeliveryItemData> deliveryItemData = deliveryData.data;
+          deliveryItemsData.addAll(deliveryItemData);
 
           if (currentPage == deliveryData.last_page) {
             break;
@@ -712,35 +712,37 @@ class ApiService {
             currentPage++;
           }
         } else {
-          throw Exception(
-              'Failed to fetch warehouse request for deliver items');
+          throw Exception('Failed to fetch delivery man response');
         }
       }
 
       return DeliveryManResponse(
         data: DeliveryData(
-          current_page: deliveryData.current_page,
-          data: deliveryItemData,
-          // Corrected variable name here
-          first_page_url: deliveryData.first_page_url,
-          from: deliveryData.from,
-          last_page: deliveryData.last_page,
-          last_page_url: deliveryData.last_page_url,
-          next_page_url: deliveryData.next_page_url,
-          path: deliveryData.path,
-          per_page: deliveryData.per_page,
-          prev_page_url: deliveryData.prev_page_url,
-          to: deliveryData.to,
-          total: deliveryData.total,
-          links: deliveryData.links,
+          current_page: currentPage,
+          data: deliveryItemsData,
+          first_page_url: 'https://mmeasyinvoice.com/api/received-warehouse-request?page=1',
+          from: 1,
+          last_page: currentPage,
+          last_page_url:
+          'https://mmeasyinvoice.com/api/received-warehouse-request?page=$currentPage',
+          links: [],
+          next_page_url: (currentPage < deliveryData.last_page)
+              ? 'https://mmeasyinvoice.com/api/received-warehouse-request?page=${currentPage + 1}'
+              : '',
+          path: 'https://mmeasyinvoice.com/api/received-warehouse-request',
+          per_page: deliveryItemsData.length,
+          prev_page_url: (currentPage > 1)
+              ? 'https://mmeasyinvoice.com/api/received-warehouse-request?page=${currentPage - 1}'
+              : null,
+          to: deliveryItemsData.length,
+          total: 0,
         ),
-        status: 200,
-        message: "Successfully retrieved",
       );
     } catch (e) {
-      throw Exception('Failed to fetch warehouse request for delivery man: $e');
+      throw Exception('Failed to fetch delivery man response: $e');
     }
   }
+
 
   //Main Page for order filter
   Future<OrderApiResponse> orderFilter(String filterType) async {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../../data/responsemodel/ShopKeeperResponsePart/ShopKeeperRequestResponse.dart';
 class ShopKeeperRequestListWidget extends StatefulWidget {
@@ -18,18 +19,13 @@ class _ShopKeeperRequestListWidgetState extends State<ShopKeeperRequestListWidge
       children: [
         Expanded(
           child: PaginatedDataTable(
-
-
-                     columns: const [
+            columns:  const [
               DataColumn(label: Text('Number',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold),)),
               DataColumn(label: Text('Product Name',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold))),
               DataColumn(label: Text('Quantity',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold))),
               DataColumn(label: Text('Action',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold))),
-
-
             ],
             source: ShopData(widget.shopData,context),
-            horizontalMargin: 20,
             rowsPerPage: 8,
             arrowHeadColor : Colors.lightBlue,
             columnSpacing: 10,
@@ -55,7 +51,7 @@ class ShopData extends DataTableSource {
       DataCell(Text(shopItem.id.toString())),
       DataCell(Text(shopItem.product_name.toString())),
       DataCell(Text(shopItem.quantity.toString())),
-      DataCell(ElevatedButton(onPressed: (){}, child: Text(shopItem.status.toUpperCase()))),
+      DataCell(ElevatedButton(onPressed: (){}, child: Text(shopItem.status.capitalizeFirst.toString()))),
     ]);
   }
 
@@ -67,34 +63,5 @@ class ShopData extends DataTableSource {
 
   @override
   int get selectedRowCount => 0;
-
-
-  void showDeleteConfirmationDialog(BuildContext context, int id, deleteCubit) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Confirmation'),
-          content: const Text('Are you sure you want to delete this?'),
-          actions: [
-            TextButton(
-              onPressed: () {
-                // Delete Action
-                deleteCubit.deleteTownship(id);
-                Navigator.pop(context);
-              },
-              child: const Text('Delete'),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: const Text('Cancel'),
-            ),
-          ],
-        );
-      },
-    );
-  }
 
 }

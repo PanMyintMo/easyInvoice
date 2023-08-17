@@ -14,7 +14,6 @@ import '../screen/AddCategoryScreen.dart';
 import '../screen/AddProductScreen.dart';
 import '../screen/AllCategoryScreen.dart';
 import '../screen/AllProductScreen.dart';
-import '../screen/DeliveryPart/AllDeliveryScreen.dart';
 import '../screen/FaultyItemPart/AddRequestFaultyItemScreen.dart';
 import '../screen/LocationPart/AllTownshipsScreen.dart';
 import '../screen/LocationPart/CityScreen.dart';
@@ -164,14 +163,6 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
                   const SizedBox(
                     height: 16,
                   ),
-                  if (utype == 'ADM')
-                    buildMenuItem(
-                        text: 'Transactions',
-                        icon: Icons.add_business,
-                        onClicked: () =>
-                            Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => const DeliveryManScreen(),
-                            ))),
                   const Divider(color: Colors.black12),
                   const SizedBox(
                     height: 16,

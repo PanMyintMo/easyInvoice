@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../../data/responsemodel/DeliveryPart/DeliveryManResponse.dart';
 
@@ -51,13 +52,7 @@ class Delivery extends DataTableSource {
       DataCell(Text(deliveryItemData.id.toString())),
       DataCell(Text(deliveryItemData.product_name.toString())),
       DataCell(Text(deliveryItemData.quantity.toString())),
-      DataCell(
-        IconButton(
-          icon: const Icon(Icons.delete, color: Colors.red),
-          onPressed: () {
-            // Handle delete action here
-          },
-        ),
+      DataCell(ElevatedButton(onPressed: () {  }, child: Text(deliveryItemData.status.capitalizeFirst.toString()),)
       ),
     ]);
   }

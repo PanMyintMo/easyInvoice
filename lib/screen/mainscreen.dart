@@ -10,6 +10,8 @@ import '../module/module.dart';
 import '../navigationdrawer/navigationdrawer.dart';
 import 'package:easy_invoice/network/SharedPreferenceHelper.dart';
 
+import 'FaultyItemPart/FaultyItems.dart';
+
 class MainPageScreen extends StatefulWidget {
   const MainPageScreen({Key? key}) : super(key: key);
 
@@ -195,7 +197,9 @@ class _MainPageState extends State<MainPageScreen> {
                         'assets/faulty.png',
                         'Faulty Item',
                         '${mainPageResponse?.totalFaultyItem.toString() ?? 0}',
-                        ' (Items)',(){}
+                        ' (Items)',(){
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => const AllFaultyItemsScreen()));
+                      }
                       ),
                       _buildCardView(
                         'assets/warehouse.png',
