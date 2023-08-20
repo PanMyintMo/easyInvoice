@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../bloc/delete/CityPart/delete_city_cubit.dart';
 import '../../common/ApiHelper.dart';
+import '../../common/showDeleteConfirmationDialog.dart';
 import '../../data/responsemodel/CityPart/Cities.dart';
 import '../../screen/LocationPart/AddNewCity.dart';
 import '../../screen/LocationPart/EditCityScreen.dart';
@@ -92,7 +93,10 @@ class CityData extends DataTableSource {
           IconButton(
             icon: const Icon(Icons.delete,color: Colors.red,),
             onPressed: () {
-              showDeleteConfirmationDialog(context,city.id,context.read<DeleteCityCubit>());
+
+              showDeleteConfirmationDialogs(context,"Are you sure you want to delete this city?",(){
+                context.read<DeleteCityCubit>().deleteCity(city.id);
+              });
 
             },
           ),
@@ -110,31 +114,4 @@ class CityData extends DataTableSource {
   @override
   int get selectedRowCount => 0;
 
-  void showDeleteConfirmationDialog(BuildContext context, int id, deleteCubit) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Confirmation'),
-          content: const Text('Are you sure you want to delete this?'),
-          actions: [
-            TextButton(
-              onPressed: () {
-                // Delete Action
-                deleteCubit.deleteCity(id);
-                Navigator.pop(context);
-              },
-              child: const Text('Delete'),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: const Text('Cancel'),
-            ),
-          ],
-        );
-      },
-    );
-  }
 }

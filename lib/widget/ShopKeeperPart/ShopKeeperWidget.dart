@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-
 import '../../data/responsemodel/ShopKeeperResponsePart/ShopKeeperRequestResponse.dart';
+import '../../screen/shopkeeperPart/EditShopKeeperScreen.dart';
 import '../../screen/shopkeeperPart/RequestShopKeeper.dart';
 
 
@@ -78,16 +77,27 @@ class ShopData extends DataTableSource {
       return null;
     }
     final shopItem = shopData[index];
+    final shopItemCateId= shopData[index].productData.category_id;
+
+
     return DataRow(cells: [
       DataCell(Text(shopItem.id.toString())),
       DataCell(Text(shopItem.product_name.toString())),
       DataCell(Text(shopItem.quantity.toString())),
       DataCell(Row(
         children: [
-          IconButton(onPressed: (){},
+          IconButton(onPressed: (){
+           Navigator.push(context, MaterialPageRoute(builder: (context) =>  UpdateShopKeeperScreen(id: shopItem.id.toInt(), quantity:  shopItem.quantity.toString(), categoryId: shopItemCateId.toString(), shopProductId: shopItem.product_id.toString(),  )));
+          },
               icon: const Icon(Icons.edit,color: Colors.green,),
               ),
-          IconButton(onPressed: (){}, icon: const Icon(Icons.delete,color: Colors.red,),
+          IconButton(onPressed: (){
+
+
+
+          }, icon: const Icon(Icons.delete,color: Colors.red,),
+
+
           ),
         ],
       )

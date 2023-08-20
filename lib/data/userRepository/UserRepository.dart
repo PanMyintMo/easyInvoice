@@ -25,6 +25,7 @@ import '../../dataRequestModel/EditSizeModel.dart';
 import '../../dataRequestModel/Login&Register/EditCompanyProfileRequestModel.dart';
 import '../../dataRequestModel/Login&Register/LoginRequestModel.dart';
 import '../../dataRequestModel/Login&Register/RegisterRequestModel.dart';
+import '../../dataRequestModel/ShopKeeperPart/EditShopKeeperRequestModel.dart';
 import '../../dataRequestModel/ShopKeeperPart/ShopKeeperRequestModel.dart';
 import '../../dataRequestModel/TownshipPart/AddTownship.dart';
 import '../../dataRequestModel/TownshipPart/EditTownship.dart';
@@ -52,6 +53,7 @@ import '../responsemodel/Login&RegisterResponse/LoginResponse.dart';
 import '../responsemodel/Login&RegisterResponse/CompanyProfileResponse.dart';
 import '../responsemodel/MainPagePart/MainPageResponse.dart';
 import '../responsemodel/ProductResponse.dart';
+import '../responsemodel/ShopKeeperResponsePart/EditShopKeeperResponse.dart';
 import '../responsemodel/ShopKeeperResponsePart/ShopKeeperRequestResponse.dart';
 import '../responsemodel/ShopKeeperResponsePart/ShopKeeperResponse.dart';
 import '../responsemodel/ShopKeeperResponsePart/ShopProductListResponse.dart';
@@ -217,6 +219,18 @@ class UserRepository {
     try {
       final response =
           await _apiService.addShopKeeperRequestProduct(shopKeeperRequestModel);
+      return response;
+    } catch (error) {
+      rethrow;
+    }
+  }
+
+  //update shopkeeper
+  Future<EditShopKeeperResponse> updateShopKeeper(
+      EditShopKeeperRequestModel editShopKeeperRequestModel,int id) async {
+    try {
+      final response =
+      await _apiService.editShopKeeper(editShopKeeperRequestModel,id);
       return response;
     } catch (error) {
       rethrow;

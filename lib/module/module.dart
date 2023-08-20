@@ -42,6 +42,7 @@ import '../bloc/post/CityPart/add_city_cubit.dart';
 import '../bloc/edit/CountryPart/edit_country_cubit.dart';
 import '../bloc/post/CountryPart/request_country_cubit.dart';
 import '../bloc/post/DeliveryPart/add_order_cubit.dart';
+import '../bloc/post/ShopKeeperPart/update_shop_keeper_cubit.dart';
 import '../bloc/post/add_size_cubit.dart';
 
 var getIt = GetIt.instance;
@@ -112,6 +113,12 @@ void locator() {
   FetchAllWarehouseRequestCubit fetchAllWarehouseRequestCubit =
   FetchAllWarehouseRequestCubit(getIt.get<UserRepository>());
   getIt.registerLazySingleton(() => fetchAllWarehouseRequestCubit);
+
+
+  //update shopkeeper
+  UpdateShopKeeperCubit updateShopKeeperCubit =
+  UpdateShopKeeperCubit(getIt.get<UserRepository>());
+  getIt.registerLazySingleton(() => updateShopKeeperCubit);
 
   //fetch all city
   FetchAllCityCubit fetchAllCityCubit =

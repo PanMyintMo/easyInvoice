@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../common/ApiHelper.dart';
+import '../../common/showDeleteConfirmationDialog.dart';
 import '../../data/responsemodel/CountryPart/CountryResponse.dart';
 
 class CountryWidget extends StatefulWidget {
@@ -92,8 +93,10 @@ class CountryData extends DataTableSource {
           IconButton(
             icon: const Icon(Icons.delete,color: Colors.red,),
             onPressed: () {
-            showDeleteConfirmationDialog(context,country.id,context.read<DeleteCountryCubit>());
-            },
+              showDeleteConfirmationDialogs(context,"Are you sure you want to delete this country?",(){
+                context.read<DeleteCountryCubit>().deleteCountry(country.id);
+              });
+              },
           ),
         ],
       )),
@@ -109,31 +112,4 @@ class CountryData extends DataTableSource {
   @override
   int get selectedRowCount => 0;
 
-  void showDeleteConfirmationDialog(BuildContext context,int id, deleteCubit) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Confirmation'),
-          content: const Text('Are you sure you want to delete this?'),
-          actions: [
-            TextButton(
-              onPressed: () {
-                // Delete Action
-                deleteCubit.deleteCountry(id);
-                Navigator.pop(context);
-              },
-              child: const Text('Delete'),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: const Text('Cancel'),
-            ),
-          ],
-        );
-      },
-    );
-  }
 }

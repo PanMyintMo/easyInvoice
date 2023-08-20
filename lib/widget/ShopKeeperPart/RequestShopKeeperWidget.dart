@@ -8,7 +8,7 @@ import 'package:easy_invoice/data/responsemodel/GetAllCategoryDetail.dart';
 import 'package:easy_invoice/dataRequestModel/ShopKeeperPart/ShopKeeperRequestModel.dart';
 import '../../bloc/post/ShopKeeperPart/add_request_product_shop_keeper_cubit.dart';
 import '../../data/responsemodel/ProductByCategoryIdResponse.dart';
-import '../../screen/shopkeeperPart/ShopKeeperRequestListScreen.dart';
+import '../../screen/shopkeeperPart/ShopKeeperAddScreen.dart';
 
 class RequestShopKeeperWidget extends StatefulWidget {
   final bool isLoading;
@@ -72,7 +72,7 @@ class _RequestShopKeeperWidgetState extends State<RequestShopKeeperWidget> {
                   alignment: Alignment.topRight,
                   child: ElevatedButton(
                     onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => const ShopKeeperRequestListScreen()));
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => const ShopKeeperScreen()));
                     },
                     child: const Text('All Requesting Products'),
                   ),

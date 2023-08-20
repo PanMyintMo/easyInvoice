@@ -29,6 +29,7 @@ import '../../dataRequestModel/FaultyItemPart/AddFaultyItemRequest.dart';
 import '../../dataRequestModel/Login&Register/EditCompanyProfileRequestModel.dart';
 import '../../dataRequestModel/Login&Register/LoginRequestModel.dart';
 import '../../dataRequestModel/Login&Register/RegisterRequestModel.dart';
+import '../../dataRequestModel/ShopKeeperPart/EditShopKeeperRequestModel.dart';
 import '../../dataRequestModel/ShopKeeperPart/ShopKeeperRequestModel.dart';
 import '../../dataRequestModel/TownshipPart/AddTownship.dart';
 import '../../dataRequestModel/TownshipPart/EditTownship.dart';
@@ -64,6 +65,7 @@ import '../responsemodel/MainPagePart/MainPageResponse.dart';
 import '../responsemodel/ProductByCategoryIdResponse.dart';
 import '../responsemodel/ProductResponse.dart';
 import '../responsemodel/Login&RegisterResponse/RegisterResponse.dart';
+import '../responsemodel/ShopKeeperResponsePart/EditShopKeeperResponse.dart';
 import '../responsemodel/ShopKeeperResponsePart/ShopKeeperRequestResponse.dart';
 import '../responsemodel/ShopKeeperResponsePart/ShopKeeperResponse.dart';
 import '../responsemodel/ShopKeeperResponsePart/ShopProductListResponse.dart';
@@ -576,6 +578,34 @@ class ApiService {
       );
     }
   }
+
+  //Update shopkeeper
+  Future<EditShopKeeperResponse> editShopKeeper(
+      EditShopKeeperRequestModel editShopKeeperRequestModel , int id) async {
+    try {
+      final Response response = await _dio.post(
+          'https://mmeasyinvoice.com/api/edit-shopkeeper/$id',
+          data: editShopKeeperRequestModel.toJson());
+
+      if (response.statusCode == 200) {
+        final EditShopKeeperResponse updateShopKeeperResponse =
+        EditShopKeeperResponse.fromJson(response.data);
+        return updateShopKeeperResponse;
+      } else {
+        throw DioError(
+          requestOptions: RequestOptions(path: '/api/edit-shopkeeper/$id'),
+          response: response,
+        );
+      }
+    } catch (error) {
+      throw DioError(
+        requestOptions: RequestOptions(path: '/api/edit-shopkeeper/$id'),
+        error: error,
+      );
+    }
+  }
+
+
 
   //fetch all category
   Future<CategoryDataResponse> getAllCategories() async {

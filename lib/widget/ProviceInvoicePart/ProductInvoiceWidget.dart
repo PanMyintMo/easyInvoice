@@ -45,7 +45,8 @@ class _ProductInvoiceWidgetState extends State<ProductInvoiceWidget> {
       final result = await Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => const SimpleBarcodeScannerPage(
+          builder: (context) =>
+          const SimpleBarcodeScannerPage(
             cancelButtonText: "Cancel",
             scanType: ScanType.barcode,
           ),
@@ -79,7 +80,7 @@ class _ProductInvoiceWidgetState extends State<ProductInvoiceWidget> {
   Future<void> updateQuantity(UpdateQuantityBarcodeRequest request) async {
     try {
       List<UpdateQuantity> response =
-          await ApiService().updatedQuantityItemBarcode(request);
+      await ApiService().updatedQuantityItemBarcode(request);
 
       if (response.isNotEmpty) {
         setState(() {
@@ -100,23 +101,6 @@ class _ProductInvoiceWidgetState extends State<ProductInvoiceWidget> {
     }
   }
 
-  // void _handleAddClick(InvoiceData item) {
-  //   setState(() {
-  //     final index = widget.invoiceData.indexOf(item);
-  //     if (index != -1) {
-  //       widget.invoiceData[index].quantity++;
-  //     }
-  //   });
-  // }
-  //
-  // void _handleRemoveClick(InvoiceData item) {
-  //   setState(() {
-  //     final index = widget.invoiceData.indexOf(item);
-  //     if (index != -1 && widget.invoiceData[index].quantity > 0) {
-  //       widget.invoiceData[index].quantity--;
-  //     }
-  //   });
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -128,16 +112,29 @@ class _ProductInvoiceWidgetState extends State<ProductInvoiceWidget> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              ElevatedButton(
-                onPressed:  barcodeScanner,
-                child: const Text("Scan barcode"),
+              Stack(
+                alignment: Alignment.center,
+                children: [
+                  ElevatedButton(
+                    onPressed: barcodeScanner,
+                    style: ElevatedButton.styleFrom(
+                      shape: const CircleBorder(),
+                      padding: const EdgeInsets.all(10),
+                    ),
+                    child: const Icon(
+                      Icons.qr_code_scanner,
+                      size: 25,
+                    ),
+                  ),
+
+                ],
               ),
               const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: isClick
                     ? () {
-                        // Handle print button click
-                      }
+                  // Handle print button click
+                }
                     : null,
                 child: const Text('Print'),
               ),
@@ -154,7 +151,7 @@ class _ProductInvoiceWidgetState extends State<ProductInvoiceWidget> {
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderSide:
-                        const BorderSide(color: Colors.blue, width: 1.0),
+                    const BorderSide(color: Colors.blue, width: 1.0),
                     borderRadius: BorderRadius.circular(10.0),
                   ),
                   fillColor: Colors.grey,
@@ -203,15 +200,16 @@ class _ProductInvoiceWidgetState extends State<ProductInvoiceWidget> {
                               ),
                               child: Row(
                                 mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                MainAxisAlignment.spaceBetween,
                                 children: <Widget>[
                                   IconButton(
                                     icon: const Icon(Icons.add),
-                                    onPressed: () => updateQuantity(
-                                        UpdateQuantityBarcodeRequest(
-                                            quantity: (item.quantity + 1)
-                                                .toString(),
-                                            invoice_id:
+                                    onPressed: () =>
+                                        updateQuantity(
+                                            UpdateQuantityBarcodeRequest(
+                                                quantity: (item.quantity + 1)
+                                                    .toString(),
+                                                invoice_id:
                                                 item.id.toString())),
                                   ),
                                   Text(
@@ -220,11 +218,12 @@ class _ProductInvoiceWidgetState extends State<ProductInvoiceWidget> {
                                   ),
                                   IconButton(
                                     icon: const Icon(Icons.remove),
-                                    onPressed: () => updateQuantity(
-                                        UpdateQuantityBarcodeRequest(
-                                            quantity: (item.quantity - 1)
-                                                .toString(),
-                                            invoice_id:
+                                    onPressed: () =>
+                                        updateQuantity(
+                                            UpdateQuantityBarcodeRequest(
+                                                quantity: (item.quantity - 1)
+                                                    .toString(),
+                                                invoice_id:
                                                 item.id.toString())),
                                   ),
                                 ],
