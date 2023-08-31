@@ -18,7 +18,11 @@ class EditShopKeeperWidget extends StatefulWidget {
   final String shProductId;
 
   const EditShopKeeperWidget(
-      {super.key, required this.isLoading, required this.quantity, required this.shCategoryId, required this.shProductId});
+      {super.key,
+      required this.isLoading,
+      required this.quantity,
+      required this.shCategoryId,
+      required this.shProductId});
 
   @override
   State<EditShopKeeperWidget> createState() => _EditShopKeeperWidgetState();
@@ -28,38 +32,32 @@ class _EditShopKeeperWidgetState extends State<EditShopKeeperWidget> {
   List<CategoryItem> categories = [];
   List<ProductListItem> products = [];
 
-
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   var quantity = TextEditingController();
-  String category_id = 'Select Category';
-  String product_id='Select Product';
-
+  String category_id = '';
+  String product_id = '';
 
   @override
   void initState() {
     super.initState();
     quantity = TextEditingController(text: widget.quantity.toString());
-    fetchCategoriesName();
-
-
-    if (widget.shCategoryId != 'Select Category') {
-      category_id = widget.shCategoryId;
-      fetchProductsByCategory(int.parse(category_id));
-    }
-
-
-    if(widget.shProductId != 'Select Product'){
-      product_id = widget.shProductId;
-      final selectedProductIndex = products.indexWhere((product) => product.id == product_id);
-      if(selectedProductIndex >= 0 ){
-        product_id = products[selectedProductIndex].id.toString();
-      }
-    } else {
-      product_id = 'Select Product';
-    }
-
+    _fetchData();
   }
 
+  Future<void> _fetchData() async {
+    await fetchCategoriesName();
+    if (widget.shCategoryId != '') {
+      category_id = widget.shCategoryId;
+      await fetchProductsByCategory(int.parse(category_id));
+
+      if (products
+          .any((product) => product.id == int.parse(widget.shProductId))) {
+        product_id = widget.shProductId;
+      } else {
+        product_id = '';
+      }
+    }
+  }
 
   Future<void> fetchCategoriesName() async {
     final categories = await ApiHelper.fetchCategoriesName();
@@ -74,14 +72,12 @@ class _EditShopKeeperWidgetState extends State<EditShopKeeperWidget> {
       if (response.isNotEmpty) {
         setState(() {
           products = response;
-
         });
       }
     } catch (e) {
       print('Error fetching products: $e');
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -95,132 +91,131 @@ class _EditShopKeeperWidgetState extends State<EditShopKeeperWidget> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                Align(
-                alignment: Alignment.topRight,
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(
-                        builder: (context) => const ShopKeeperScreen()));
-                  },
-                  child: const Text('All ShopKeeper'),
-                ),
-              ),
-              const SizedBox(
-                height: 24,
-              ),
-              const Text('Category'),
-              const SizedBox(
-                height: 16,
-              ),
-              SizedBox(
-                width: double.infinity,
-                child: chooseItemIdForm(
-                  DropdownButton<String>(
-                    value: category_id,
-                    items: [
-                      ...categories.map((category) {
-                        return DropdownMenuItem<String>(
-                          value: category.id.toString(),
-                          child: Text(category.name),
-                        );
-                      }).toList(),
-                    ],
-                    onChanged: (value) {
-                      setState(() {
-                        category_id = value!;
-                        product_id = 'Select Product';
-                      });
-                      fetchProductsByCategory(int.parse(value!));
-                    },
-                    underline: const SizedBox(),
-                    borderRadius: BorderRadius.circular(10),
-                    icon: const Icon(Icons.arrow_drop_down),
-                    iconSize: 24,
-                    isExpanded: true,
-                    dropdownColor: Colors.white,
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 16,
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    const ShopKeeperScreen()));
+                      },
+                      child: const Text('All ShopKeeper'),
                     ),
                   ),
-                ),
-              ),
-              const SizedBox(
-                height: 16,
-              ),
-              const Text('Product'),
-              const SizedBox(
-                height: 16,
-              ),
-              SizedBox(
-                  width: double.infinity,
-                  child: chooseItemIdForm(
+                  const SizedBox(
+                    height: 24,
+                  ),
+                  const Text('Category'),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  SizedBox(
+                    width: double.infinity,
+                    child: chooseItemIdForm(
                       DropdownButton<String>(
-                          value:  product_id != 'Select Product' ? product_id : null,
-                          items: [
-                            const DropdownMenuItem<String>(
-                              value:  null,
-                              child: Text('Select Product'),
-                            ),
-                          ...products.map((product) {
-                  return DropdownMenuItem<String>(
-                  value: product.id.toString(),
-                  child: Text(product.name),
-                  );
-                  }).toList(),
+                        value: category_id,
+                        items: [
+                          ...categories.map((category) {
+                            return DropdownMenuItem<String>(
+                              value: category.id.toString(),
+                              child: Text(category.name),
+                            );
+                          }).toList(),
+                        ],
+                        onChanged: (value) async {
+                          // Fetch products for the selected category
+                          await fetchProductsByCategory(int.parse(value!));
 
-                  ],
-                  onChanged: (value)
-              {
-              setState(() {
-              product_id = value!;
-              });
-              },
-              underline: const SizedBox(),
-              borderRadius: BorderRadius.circular(10),
-              icon: const Icon(Icons.arrow_drop_down),
-              iconSize: 24,
-              isExpanded: true,
-              dropdownColor: Colors.white,
-              style: const TextStyle(
-                color: Colors.black,
-                fontSize: 16,
+                          setState(() {
+                            category_id = value;
+                            product_id = ''; // Reset product_id
+                          });
+                        },
+                        underline: const SizedBox(),
+                        borderRadius: BorderRadius.circular(10),
+                        icon: const Icon(Icons.arrow_drop_down),
+                        iconSize: 24,
+                        isExpanded: true,
+                        dropdownColor: Colors.white,
+                        style: const TextStyle(
+                          color: Colors.black,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  const Text('Product'),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  SizedBox(
+                    width: double.infinity,
+                    child: chooseItemIdForm(
+                      DropdownButton<String>(
+                        value: product_id.isNotEmpty ? product_id : null,
+                        items: [
+                          ...products.map((product) {
+                            return DropdownMenuItem<String>(
+                              value: product.id.toString(),
+                              child: Text(product.name),
+                            );
+                          }).toList(),
+                        ],
+                        onChanged: (value) {
+                          setState(() {
+                            product_id = value!;
+                          });
+                        },
+                        hint: const Text('Select Product'),
+                        underline: const SizedBox(),
+                        borderRadius: BorderRadius.circular(10),
+                        icon: const Icon(Icons.arrow_drop_down),
+                        iconSize: 24,
+                        isExpanded: true,
+                        dropdownColor: Colors.white,
+                        style: const TextStyle(
+                          color: Colors.black,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  const Text('Quantity'),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  SizedBox(
+                    width: double.infinity,
+                    child: buildProductContainerForm(
+                      'Quantity',
+                      TextInputType.number,
+                      quantity,
+                      validateField,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  Center(
+                    child: ElevatedButton(
+                      onPressed: validateAndSubmit,
+                      child: const Text('Update ShopKeeper'),
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
         ),
-
-        const SizedBox(
-          height: 16,
-        ),
-        const Text('Quantity'),
-        const SizedBox(
-          height: 16,
-        ),
-        SizedBox(
-          width: double.infinity,
-          child: buildProductContainerForm(
-            'Quantity',
-            TextInputType.number,
-            quantity,
-            validateField,
-          ),
-        ),
-        const SizedBox(
-          height: 16,
-        ),
-        Center(
-          child: ElevatedButton(
-            onPressed: validateAndSubmit,
-            child: const Text('Update ShopKeeper'),
-          ),
-        ),
       ],
-    ),
-    ),
-    ),
-    ),
-    ],
     );
   }
 
@@ -231,7 +226,8 @@ class _EditShopKeeperWidgetState extends State<EditShopKeeperWidget> {
         product_id: product_id,
         quantity: quantity.text,
       );
-      context.read<AddRequestProductShopKeeperCubit>()
+      context
+          .read<AddRequestProductShopKeeperCubit>()
           .addRequestShopkeeperProduct(requestModel);
     } else {
       showDialog(
