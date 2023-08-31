@@ -10,6 +10,7 @@ import '../../data/responsemodel/CountryPart/CountryResponse.dart';
 import '../../data/responsemodel/DeliveryPart/DeliCompanyNameByTownshipId.dart';
 import '../../data/responsemodel/GetAllProductResponse.dart';
 import '../../data/responsemodel/TownshipsPart/TownshipByCityIdResponse.dart';
+import '../../data/responsemodel/common/ProductListItemResponse.dart';
 import '../../dataRequestModel/DeliveryPart/AddOrderRequestModel.dart';
 import '../../dataRequestModel/DeliveryPart/ChangeOrderProductQty.dart';
 import '../../dataRequestModel/DeliveryPart/ChooseProductForOrderRequestModel.dart';
@@ -78,13 +79,12 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
     fetchLoginUserId();
   }
 
-
   // Retrieve the user type from shared preferences
   Future<void> fetchLoginUserId() async {
     final sessionManager = SessionManager();
-    userId= await sessionManager.getLoginUserId();
+    userId = await sessionManager.getLoginUserId();
     setState(() {
-      userId  = userId ;
+      userId = userId;
     });
   }
 
@@ -429,7 +429,7 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
                 children: [
                   const Text(
                     'Choose Delivery service :',
-                    style: TextStyle(color: Colors.pink,fontSize: 18),
+                    style: TextStyle(color: Colors.pink, fontSize: 18),
                   ),
                   const SizedBox(
                     height: 18,
@@ -477,15 +477,27 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Text("Waiting time is : $waitingTime",style: const TextStyle(fontSize: 16,fontWeight: FontWeight.bold),),
+                        Text(
+                          "Waiting time is : $waitingTime",
+                          style: const TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
                         const SizedBox(
                           height: 18,
                         ),
-                        Text("Basic Cost is : $basicCost",style: const TextStyle(fontSize: 16,fontWeight: FontWeight.bold),),
+                        Text(
+                          "Basic Cost is : $basicCost",
+                          style: const TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
                         const SizedBox(
                           height: 18,
                         ),
-                        Text("Company Name is : $cname",style: const TextStyle(fontSize: 16,fontWeight: FontWeight.bold),),
+                        Text(
+                          "Company Name is : $cname",
+                          style: const TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
                         const SizedBox(
                           height: 18,
                         ),
@@ -595,80 +607,85 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
               const SizedBox(
                 height: 18,
               ),
-          Row(
-            children: [
-              const Text(
-                "Quantity",
-                style: TextStyle(fontSize: 18, color: Colors.black),
-              ),
-              const SizedBox(width: 25,),
-              Expanded(
-                child: TextFormField(
-                  textAlign: TextAlign.center,
-                  controller: quantity,
-                  onChanged: (val) {
-                    if (val.isNotEmpty) {
-                      int enteredQuantity = int.tryParse(val) ?? 0;
-                      if (enteredQuantity > productQuality!) {
-                        setState(() {
-                          totalQty = 0;
-                          errorText = 'Quality can not be greater than available quanity!';
-                        });
-                      } else {
-                        setState(() {
-                          totalQty = 0;
-                          errorText = null;
-                        });
-                        changeOrderQty(ChangeOrderProductQtyRequest(
-                          selectedProductId: product_id,
-                          selectedProductQuantity:
-                          productQuality.toString(),
-                          quantity: val.toString(),
-                          sale_price: salePrice.toString(),
-                        ));
-                      }
-                    } else {
-                      setState(() {
-                        totalQty = 0;
-                        errorText = null;
-                        changeOrderQty(ChangeOrderProductQtyRequest(
-                          selectedProductId: product_id,
-                          selectedProductQuantity:
-                          productQuality.toString(),
-                          quantity: val.toString(),
-                          sale_price: salePrice.toString(),
-                        ));
-                      });
-                    }
-                  },
-                  keyboardType: TextInputType.number,
-                  validator: validateField,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide:
-                      const BorderSide(color: Colors.blue, width: 1.0),
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                    fillColor: Colors.grey,
-                    errorText: errorText, // Display the error message
+              Row(
+                children: [
+                  const Text(
+                    "Quantity",
+                    style: TextStyle(fontSize: 18, color: Colors.black),
                   ),
-                ),
+                  const SizedBox(
+                    width: 25,
+                  ),
+                  Expanded(
+                    child: TextFormField(
+                      textAlign: TextAlign.center,
+                      controller: quantity,
+                      onChanged: (val) {
+                        if (val.isNotEmpty) {
+                          int enteredQuantity = int.tryParse(val) ?? 0;
+                          if (enteredQuantity > productQuality!) {
+                            setState(() {
+                              totalQty = 0;
+                              errorText =
+                                  'Quality can not be greater than available quanity!';
+                            });
+                          } else {
+                            setState(() {
+                              totalQty = 0;
+                              errorText = null;
+                            });
+                            changeOrderQty(ChangeOrderProductQtyRequest(
+                              selectedProductId: product_id,
+                              selectedProductQuantity:
+                                  productQuality.toString(),
+                              quantity: val.toString(),
+                              sale_price: salePrice.toString(),
+                            ));
+                          }
+                        } else {
+                          setState(() {
+                            totalQty = 0;
+                            errorText = null;
+                            changeOrderQty(ChangeOrderProductQtyRequest(
+                              selectedProductId: product_id,
+                              selectedProductQuantity:
+                                  productQuality.toString(),
+                              quantity: val.toString(),
+                              sale_price: salePrice.toString(),
+                            ));
+                          });
+                        }
+                      },
+                      keyboardType: TextInputType.number,
+                      validator: validateField,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide:
+                              const BorderSide(color: Colors.blue, width: 1.0),
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        fillColor: Colors.grey,
+                        errorText: errorText, // Display the error message
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),const SizedBox(
+              const SizedBox(
                 height: 18,
               ),
-
               Row(
                 children: [
                   const Text(
                     "Total",
                     style: TextStyle(fontSize: 18, color: Colors.black),
                   ),
-                  const SizedBox(width: 50,),
+                  const SizedBox(
+                    width: 50,
+                  ),
                   Expanded(
                     child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -678,14 +695,13 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
                       decoration: BoxDecoration(
                         border: Border.all(color: Colors.black54, width: 0.3),
                         borderRadius:
-                        const BorderRadius.all(Radius.circular(10.0)),
+                            const BorderRadius.all(Radius.circular(10.0)),
                       ),
                       child: Text("$totalQty"),
                     ),
                   ),
                 ],
               ),
-
               const SizedBox(
                 height: 18,
               ),
@@ -742,27 +758,30 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
                   )
                 ],
               ),
-
-              const SizedBox(height : 18),
-
+              const SizedBox(height: 18),
               Center(
                   child: ElevatedButton(
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {}
-                    context.read<AddOrderCubit>().addOrder(
-                        AddOrderRequestModel(firstname: firstname.text,
-                            lastname: lastname.text, email: email.text,
-                            mobile: mobile.text, line1: line1.text,
-                            line2: line2.text,
-                            selectedCountry: select_country.toString(),
-                            selectedTownship: select_township.toString(),
-                            selectedCity: select_city.toString(),
-                            zipcode: zipcode.text, mode: payment, delivery: serviceId.toString(),
-                            user_sign: '', product_id: product_id, price: salePrice.toString(),
-                            quantity: quantity.text, user_id: userId.toString()
-                          ));
-
-
+                        context.read<AddOrderCubit>().addOrder(
+                            AddOrderRequestModel(
+                                firstname: firstname.text,
+                                lastname: lastname.text,
+                                email: email.text,
+                                mobile: mobile.text,
+                                line1: line1.text,
+                                line2: line2.text,
+                                selectedCountry: select_country.toString(),
+                                selectedTownship: select_township.toString(),
+                                selectedCity: select_city.toString(),
+                                zipcode: zipcode.text,
+                                mode: payment,
+                                delivery: serviceId.toString(),
+                                user_sign: '',
+                                product_id: product_id,
+                                price: salePrice.toString(),
+                                quantity: quantity.text,
+                                user_id: userId.toString()));
                       },
                       child: const Text('Place Order Now')))
             ],

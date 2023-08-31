@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import '../bloc/edit/edit_product_item_cubit.dart';
 import '../bloc/get/ProductPart/get_all_product_cubit.dart';
 import '../common/ToastMessage.dart';
+import '../data/responsemodel/common/ProductListItemResponse.dart';
 import '../module/module.dart';
 import '../screen/EditProductItemScreen.dart';
 

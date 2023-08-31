@@ -7,6 +7,7 @@ import '../data/responsemodel/GetAllCategoryDetail.dart';
 import '../data/responsemodel/GetAllProductResponse.dart';
 import '../data/responsemodel/GetAllSizeResponse.dart';
 import '../data/responsemodel/TownshipsPart/AllTownshipResponse.dart';
+import '../data/responsemodel/common/ProductListItemResponse.dart';
 
 class ApiHelper {
   //By using static , you can call directly apiHelper.fetchCategoryName like that

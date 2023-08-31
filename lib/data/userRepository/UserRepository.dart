@@ -66,6 +66,7 @@ import '../responsemodel/UpdateCateResponse.dart';
 import '../responsemodel/UpdateSizeResponse.dart';
 import '../responsemodel/UserRoleResponse.dart';
 import '../responsemodel/WarehousePart/WarehouseResponse.dart';
+import '../responsemodel/common/ProductListItemResponse.dart';
 
 class UserRepository {
   final ApiService _apiService;

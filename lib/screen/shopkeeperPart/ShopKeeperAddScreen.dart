@@ -30,7 +30,7 @@ class _ShopKeeperScreenState extends State<ShopKeeperScreen> {
               backgroundColor: Colors.white70,
               iconTheme: const IconThemeData(
                 color: Colors
-                    .red, // Set the color of the navigation icon to black
+                    .red,
               ),
               title: const Text('ShopKeeper Screen', style: TextStyle(
                   color: Colors.black54,

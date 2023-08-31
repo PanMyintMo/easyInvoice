@@ -6,19 +6,15 @@ import '../../bloc/post/ShopKeeperPart/update_shop_keeper_cubit.dart';
 import '../../common/ToastMessage.dart';
 import '../../module/module.dart';
 
-class UpdateShopKeeperScreen extends StatefulWidget {
+class UpdateShopKeeperScreen extends StatelessWidget {
   final int id;
   final String shopProductId;
   final String categoryId;
   final String quantity;
 
+
   const UpdateShopKeeperScreen( {super.key, required this.id, required this.quantity, required this.categoryId, required this.shopProductId, });
 
-  @override
-  State<UpdateShopKeeperScreen> createState() => _UpdateShopKeeperScreenState();
-}
-
-class _UpdateShopKeeperScreenState extends State<UpdateShopKeeperScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -46,13 +42,13 @@ class _UpdateShopKeeperScreenState extends State<UpdateShopKeeperScreen> {
             }
             else if (state is  UpdateShopKeeperSuccess) {
               showToastMessage(state.updateShopkeeper.message);
-              return  EditShopKeeperWidget(isLoading: false, quantity: widget.quantity.toString(), shCategoryId: widget.categoryId, shProductId: widget.shopProductId, );
+              return  EditShopKeeperWidget(isLoading: false, quantity: quantity.toString(), shCategoryId: categoryId, shProductId: shopProductId, );
             }
             else if (state is UpdateShopKeeperFail) {
               showToastMessage(state.error);
-              return  EditShopKeeperWidget(isLoading: false, quantity: '', shCategoryId: widget.categoryId, shProductId: widget.shopProductId,);
+              return  EditShopKeeperWidget(isLoading: false, quantity: '', shCategoryId: categoryId, shProductId: shopProductId,);
             }
-            return  EditShopKeeperWidget(isLoading: false, quantity: widget.quantity.toString(), shCategoryId: widget.categoryId, shProductId: widget.shopProductId,);
+            return  EditShopKeeperWidget(isLoading: false, quantity: quantity.toString(), shCategoryId: categoryId, shProductId: shopProductId,);
           },
         ),
       ),

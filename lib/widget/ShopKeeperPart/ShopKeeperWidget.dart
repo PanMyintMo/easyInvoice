@@ -87,13 +87,11 @@ class ShopData extends DataTableSource {
       DataCell(Row(
         children: [
           IconButton(onPressed: (){
-           Navigator.push(context, MaterialPageRoute(builder: (context) =>  UpdateShopKeeperScreen(id: shopItem.id.toInt(), quantity:  shopItem.quantity.toString(), categoryId: shopItemCateId.toString(), shopProductId: shopItem.product_id.toString(),  )));
+           Navigator.push(context, MaterialPageRoute(builder: (context) =>  UpdateShopKeeperScreen(id: shopItem.id.toInt(), quantity:  shopItem.quantity.toString(), categoryId: shopItemCateId.toString(), shopProductId: shopItem.product_id.toString(),)));
           },
               icon: const Icon(Icons.edit,color: Colors.green,),
               ),
           IconButton(onPressed: (){
-
-
 
           }, icon: const Icon(Icons.delete,color: Colors.red,),
 

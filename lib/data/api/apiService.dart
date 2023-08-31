@@ -78,6 +78,7 @@ import '../responsemodel/TownshipsPart/TownshipByCityIdResponse.dart';
 import '../responsemodel/UpdateSizeResponse.dart';
 import '../responsemodel/UserRoleResponse.dart';
 import '../responsemodel/WarehousePart/WarehouseResponse.dart';
+import '../responsemodel/common/ProductListItemResponse.dart';
 
 class ApiService {
   final Dio _dio = Dio();
@@ -1071,7 +1072,7 @@ class ApiService {
   }
 
   //fetch all product by category Id from db
-  Future<List<ProductItem>> fetchAllProductByCateId(int id) async {
+  Future<List<ProductListItem>> fetchAllProductByCateId(int id) async {
     try {
       final response = await _dio
           .get('https://mmeasyinvoice.com/api/productByCategoryId/$id');

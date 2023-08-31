@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../bloc/delete/delete_product_item_cubit.dart';
 import '../bloc/edit/edit_product_item_cubit.dart';
-import '../data/responsemodel/GetAllProductResponse.dart';
+import '../data/responsemodel/common/ProductListItemResponse.dart';
 import '../module/module.dart';
 import '../widget/ProductDetailWidget.dart';
 
