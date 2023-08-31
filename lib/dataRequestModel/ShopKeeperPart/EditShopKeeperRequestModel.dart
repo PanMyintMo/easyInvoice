@@ -8,7 +8,8 @@ class EditShopKeeperRequestModel {
 
   Map<String, dynamic> toJson() {
     return {
-      product_id: 'product_id', quantity: 'quantity'
+     'product_id' : product_id,
+      'quantity' : quantity
     };
   }
 }

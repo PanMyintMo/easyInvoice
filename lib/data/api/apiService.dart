@@ -455,7 +455,6 @@ class ApiService {
         data: productInvoiceRequest.toJson(),
       );
 
-    //  print("$response");
       if (response.statusCode == 200) {
         final ProductInvoiceResponse data =
         ProductInvoiceResponse.fromJson(response.data);
@@ -585,8 +584,12 @@ class ApiService {
       EditShopKeeperRequestModel editShopKeeperRequestModel , int id) async {
     try {
       final Response response = await _dio.post(
-          'https://mmeasyinvoice.com/api/edit-shopkeeper/$id',
+          'https://www.mmeasyinvoice.com/api/edit-shopkeeper/$id',
           data: editShopKeeperRequestModel.toJson());
+
+
+        print("$response");
+
 
       if (response.statusCode == 200) {
         final EditShopKeeperResponse updateShopKeeperResponse =

@@ -1,14 +1,14 @@
+import 'package:easy_invoice/bloc/post/ShopKeeperPart/update_shop_keeper_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../bloc/post/ShopKeeperPart/add_request_product_shop_keeper_cubit.dart';
 import '../../common/ApiHelper.dart';
 import '../../common/FormValidator.dart';
 import '../../common/ThemeHelperUserClass.dart';
 import '../../data/api/apiService.dart';
 import '../../data/responsemodel/GetAllCategoryDetail.dart';
 import '../../data/responsemodel/common/ProductListItemResponse.dart';
-import '../../dataRequestModel/ShopKeeperPart/ShopKeeperRequestModel.dart';
+import '../../dataRequestModel/ShopKeeperPart/EditShopKeeperRequestModel.dart';
 import '../../screen/shopkeeperPart/ShopKeeperAddScreen.dart';
 
 class EditShopKeeperWidget extends StatefulWidget {
@@ -16,13 +16,14 @@ class EditShopKeeperWidget extends StatefulWidget {
   final String quantity;
   final String shCategoryId;
   final String shProductId;
+  final int id;
 
   const EditShopKeeperWidget(
       {super.key,
       required this.isLoading,
       required this.quantity,
       required this.shCategoryId,
-      required this.shProductId});
+      required this.shProductId, required this.id});
 
   @override
   State<EditShopKeeperWidget> createState() => _EditShopKeeperWidgetState();
@@ -125,9 +126,7 @@ class _EditShopKeeperWidgetState extends State<EditShopKeeperWidget> {
                           }).toList(),
                         ],
                         onChanged: (value) async {
-                          // Fetch products for the selected category
                           await fetchProductsByCategory(int.parse(value!));
-
                           setState(() {
                             category_id = value;
                             product_id = ''; // Reset product_id
@@ -221,14 +220,13 @@ class _EditShopKeeperWidgetState extends State<EditShopKeeperWidget> {
 
   void validateAndSubmit() async {
     if (_formKey.currentState!.validate()) {
-      final requestModel = ShopKeeperRequestModel(
-        category_id: category_id,
+      final requestModel = EditShopKeeperRequestModel(
         product_id: product_id,
         quantity: quantity.text,
       );
       context
-          .read<AddRequestProductShopKeeperCubit>()
-          .addRequestShopkeeperProduct(requestModel);
+          .read<UpdateShopKeeperCubit>()
+          .updateShopKeeper(requestModel,widget.id);
     } else {
       showDialog(
         context: context,

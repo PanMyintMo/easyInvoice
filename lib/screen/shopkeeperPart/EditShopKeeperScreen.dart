@@ -1,7 +1,6 @@
 import 'package:easy_invoice/widget/ShopKeeperPart/EditShopKeeperWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import '../../bloc/post/ShopKeeperPart/update_shop_keeper_cubit.dart';
 import '../../common/ToastMessage.dart';
 import '../../module/module.dart';
@@ -42,13 +41,13 @@ class UpdateShopKeeperScreen extends StatelessWidget {
             }
             else if (state is  UpdateShopKeeperSuccess) {
               showToastMessage(state.updateShopkeeper.message);
-              return  EditShopKeeperWidget(isLoading: false, quantity: quantity.toString(), shCategoryId: categoryId, shProductId: shopProductId, );
+              return  EditShopKeeperWidget(isLoading: false, quantity: quantity.toString(), shCategoryId: categoryId, shProductId: shopProductId, id: id, );
             }
             else if (state is UpdateShopKeeperFail) {
               showToastMessage(state.error);
-              return  EditShopKeeperWidget(isLoading: false, quantity: '', shCategoryId: categoryId, shProductId: shopProductId,);
+              return  EditShopKeeperWidget( isLoading: false, quantity: '', shCategoryId: categoryId, shProductId: shopProductId, id: id,);
             }
-            return  EditShopKeeperWidget(isLoading: false, quantity: quantity.toString(), shCategoryId: categoryId, shProductId: shopProductId,);
+            return  EditShopKeeperWidget(isLoading: false, quantity: quantity.toString(), shCategoryId: categoryId, shProductId: shopProductId, id: id,);
           },
         ),
       ),
