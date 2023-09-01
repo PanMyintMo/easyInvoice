@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
-import 'package:easy_invoice/data/responsemodel/DeleteUserRoleResponse.dart';
 import 'package:equatable/equatable.dart';
+import '../../data/responsemodel/common/DeleteResponse.dart';
 import '../../data/userRepository/UserRepository.dart';
 part 'delete_user_role_state.dart';
 

@@ -15,7 +15,7 @@ class DeleteTownshipLoading extends TownshipDeleteState {
 }
 
 class DeleteTownshipSuccess extends TownshipDeleteState {
-  final DeleteTownshipResponse deleteTownshipResponse;
+  final DeleteResponse deleteTownshipResponse;
 
   const DeleteTownshipSuccess(this.deleteTownshipResponse);
 

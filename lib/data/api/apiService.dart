@@ -37,15 +37,12 @@ import '../responsemodel/AddCategoryResponseModel.dart';
 import '../responsemodel/CategoryDeleteRespose.dart';
 import '../responsemodel/CityPart/AddCityResponse.dart';
 import '../responsemodel/CityPart/Cities.dart';
-import '../responsemodel/CityPart/DeleteCityResponse.dart';
+import '../responsemodel/common/DeleteResponse.dart';
 import '../responsemodel/CityPart/EditCityResponse.dart';
 import '../responsemodel/CityPart/FetchCityByCountryId.dart';
 import '../responsemodel/CountryPart/CountryResponse.dart';
-import '../responsemodel/CountryPart/DeleteCountryResponse.dart';
 import '../responsemodel/CountryPart/EditCountryResponse.dart';
 import '../responsemodel/CountryPart/RequestCountryResponse.dart';
-import '../responsemodel/DeleteProductResponse.dart';
-import '../responsemodel/DeleteUserRoleResponse.dart';
 import '../responsemodel/DeliveryPart/AddDeliveryResponse.dart';
 import '../responsemodel/DeliveryPart/AddOrderResponse.dart';
 import '../responsemodel/DeliveryPart/ChangeOrderQtyResponse.dart';
@@ -69,10 +66,8 @@ import '../responsemodel/ShopKeeperResponsePart/EditShopKeeperResponse.dart';
 import '../responsemodel/ShopKeeperResponsePart/ShopKeeperRequestResponse.dart';
 import '../responsemodel/ShopKeeperResponsePart/ShopKeeperResponse.dart';
 import '../responsemodel/ShopKeeperResponsePart/ShopProductListResponse.dart';
-import '../responsemodel/SizeDeleteResponse.dart';
 import '../responsemodel/TownshipsPart/AddTownshipResponse.dart';
 import '../responsemodel/TownshipsPart/AllTownshipResponse.dart';
-import '../responsemodel/TownshipsPart/DeleteTownshipResponse.dart';
 import '../responsemodel/TownshipsPart/EditTownshipResponse.dart';
 import '../responsemodel/TownshipsPart/TownshipByCityIdResponse.dart';
 import '../responsemodel/UpdateSizeResponse.dart';
@@ -608,8 +603,6 @@ class ApiService {
       );
     }
   }
-
-
 
   //fetch all category
   Future<CategoryDataResponse> getAllCategories() async {
@@ -1368,13 +1361,13 @@ class ApiService {
 
   //Delete country by id
 
-  Future<DeleteCountryResponse> deleteCountry(int id) async {
+  Future<DeleteResponse> deleteCountry(int id) async {
     try {
       final response =
           await _dio.post('https://mmeasyinvoice.com/api/delete-country/$id');
       if (response.statusCode == 200) {
-        DeleteCountryResponse deleteCountry =
-            DeleteCountryResponse.fromJson(response.data);
+        DeleteResponse deleteCountry =
+            DeleteResponse.fromJson(response.data);
         return deleteCountry;
       } else {
         throw Exception('Something wrong!');
@@ -1385,13 +1378,13 @@ class ApiService {
   }
 
   //Delete city by id
-  Future<DeleteCityResponse> deleteCity(int id) async {
+  Future<DeleteResponse> deleteCity(int id) async {
     try {
       final response =
           await _dio.post('https://mmeasyinvoice.com/api/delete-city/$id');
       if (response.statusCode == 200) {
-        DeleteCityResponse deleteCity =
-            DeleteCityResponse.fromJson(response.data);
+        DeleteResponse deleteCity =
+            DeleteResponse.fromJson(response.data);
         return deleteCity;
       } else {
         throw Exception('Something wrong!');
@@ -1401,14 +1394,34 @@ class ApiService {
     }
   }
 
+
+  //Delete shopkeeper request product by id
+  Future<DeleteResponse> deleteShopKeeperRequestProduct(int id) async {
+    try {
+      final response =
+      await _dio.post('https://mmeasyinvoice.com/api/delete-shopkeeper/$id');
+      if (response.statusCode == 200) {
+        DeleteResponse deleteShopKeeperRequestProduct =
+        DeleteResponse.fromJson(response.data);
+        return deleteShopKeeperRequestProduct;
+      } else {
+        throw Exception('Something wrong!');
+      }
+    } catch (error) {
+      throw Exception(error);
+    }
+  }
+
+
+
   //Delete township by id
-  Future<DeleteTownshipResponse> deleteTownship(int id) async {
+  Future<DeleteResponse> deleteTownship(int id) async {
     try {
       final response =
           await _dio.post('https://mmeasyinvoice.com/api/delete-township/$id');
       if (response.statusCode == 200) {
-        DeleteTownshipResponse deleteTownship =
-            DeleteTownshipResponse.fromJson(response.data);
+        DeleteResponse deleteTownship =
+            DeleteResponse.fromJson(response.data);
         return deleteTownship;
       } else {
         throw Exception('Something wrong!');
@@ -1420,14 +1433,14 @@ class ApiService {
 
   //Delete product by id
 
-  Future<DeleteProductResponse> deleteProductItem(int id) async {
+  Future<DeleteResponse> deleteProductItem(int id) async {
     try {
       final response =
           await _dio.post('https://mmeasyinvoice.com/api/delete-product/$id');
       //  print("Delete Product status response is ${response.statusCode}");
       if (response.statusCode == 200) {
-        DeleteProductResponse deleteProductResponse =
-            DeleteProductResponse.fromJson(response.data);
+        DeleteResponse deleteProductResponse =
+            DeleteResponse.fromJson(response.data);
         return deleteProductResponse;
       } else {
         throw Exception('Something wrong!');
@@ -1438,14 +1451,14 @@ class ApiService {
   }
 
    //to delete size
-  Future<SizeDeleteResponse> deleteSize(int id) async {
+  Future<DeleteResponse> deleteSize(int id) async {
     try {
       final response =
           await _dio.post('https://mmeasyinvoice.com/api/delete-size/$id');
       // print("Delete Size status response is ${response.statusCode}");
       if (response.statusCode == 200) {
-        SizeDeleteResponse deleteSize =
-            SizeDeleteResponse.fromJson(response.data);
+        DeleteResponse deleteSize =
+           DeleteResponse.fromJson(response.data);
         return deleteSize;
       } else {
         throw Exception('Something wrong!');
@@ -1592,13 +1605,13 @@ class ApiService {
   }
 
   //to delete user role
-  Future<DeleteUserRoleResponse> deleteUserRole(int id) async {
+  Future<DeleteResponse> deleteUserRole(int id) async {
     try {
       final response =
           await _dio.post('https://mmeasyinvoice.com/api/delete-user/$id');
       if (response.statusCode == 200) {
-        DeleteUserRoleResponse deleteUserRoleResponse =
-            DeleteUserRoleResponse.fromJson(response.data);
+        DeleteResponse deleteUserRoleResponse =
+            DeleteResponse.fromJson(response.data);
         return deleteUserRoleResponse;
       } else {
         throw Exception('Something wrong!');

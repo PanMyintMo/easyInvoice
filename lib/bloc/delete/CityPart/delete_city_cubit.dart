@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
-import '../../../data/responsemodel/CityPart/DeleteCityResponse.dart';
+import '../../../data/responsemodel/common/DeleteResponse.dart';
 import '../../../data/userRepository/UserRepository.dart';
 
 part 'delete_city_state.dart';

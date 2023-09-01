@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
-import 'package:easy_invoice/data/responsemodel/DeleteProductResponse.dart';
 import 'package:equatable/equatable.dart';
 
+import '../../data/responsemodel/common/DeleteResponse.dart';
 import '../../data/userRepository/UserRepository.dart';
 
 part 'delete_product_item_state.dart';

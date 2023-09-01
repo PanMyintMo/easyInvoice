@@ -1,3 +1,4 @@
+import 'package:easy_invoice/bloc/delete/ShopKeeperPart/delete_shop_keeper_product_request_cubit.dart';
 import 'package:easy_invoice/bloc/delete/delete_category_cubit.dart';
 import 'package:easy_invoice/bloc/delete/delete_size_cubit.dart';
 import 'package:easy_invoice/bloc/edit/edit_category_cubit.dart';
@@ -149,11 +150,7 @@ void locator() {
       GetAllProductCubit(getIt.get<UserRepository>());
   getIt.registerLazySingleton(() => getAllProductCubit);
 
-  /* //get all product by cate id
-  FetchAllProductByCateIdCubit fetchAllProductByCateIdCubit =
-  FetchAllProductByCateIdCubit(getIt.get<UserRepository>());
-  getIt.registerLazySingleton(() => fetchAllProductByCateIdCubit);
-*/
+
   //get all size
   GetAllSizeCubit getAllSizeCubit =
       GetAllSizeCubit(getIt.get<UserRepository>());
@@ -170,6 +167,11 @@ void locator() {
   //to delete city
   DeleteCityCubit deleteCityCubit = DeleteCityCubit(getIt.call());
   getIt.registerLazySingleton(() => deleteCityCubit);
+
+  //to delete shopkeeper request product
+  DeleteShopKeeperProductRequestCubit deleteShopKeeperProductRequestCubit = DeleteShopKeeperProductRequestCubit(getIt.call());
+  getIt.registerLazySingleton(() => deleteShopKeeperProductRequestCubit);
+
 
   //to delete product item
   DeleteProductItemCubit productDeleteCubit =

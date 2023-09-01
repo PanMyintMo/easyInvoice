@@ -15,7 +15,7 @@ class DeleteSizeLoading extends DeleteSizeState {
 }
 
 class DeleteSizeSuccess extends DeleteSizeState {
-  final SizeDeleteResponse deleteSizeResponse;
+  final DeleteResponse deleteSizeResponse;
 
   const DeleteSizeSuccess(this.deleteSizeResponse);
 

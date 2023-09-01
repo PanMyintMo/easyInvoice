@@ -32,13 +32,10 @@ import '../responsemodel/AddCategoryResponseModel.dart';
 import '../responsemodel/CategoryDeleteRespose.dart';
 import '../responsemodel/CityPart/AddCityResponse.dart';
 import '../responsemodel/CityPart/Cities.dart';
-import '../responsemodel/CityPart/DeleteCityResponse.dart';
+import '../responsemodel/common/DeleteResponse.dart';
 import '../responsemodel/CityPart/EditCityResponse.dart';
-import '../responsemodel/CountryPart/DeleteCountryResponse.dart';
 import '../responsemodel/CountryPart/EditCountryResponse.dart';
 import '../responsemodel/CountryPart/RequestCountryResponse.dart';
-import '../responsemodel/DeleteProductResponse.dart';
-import '../responsemodel/DeleteUserRoleResponse.dart';
 import '../responsemodel/DeliveryPart/AddDeliveryResponse.dart';
 import '../responsemodel/DeliveryPart/AddOrderResponse.dart';
 import '../responsemodel/DeliveryPart/DeliveryManResponse.dart';
@@ -56,10 +53,8 @@ import '../responsemodel/ShopKeeperResponsePart/EditShopKeeperResponse.dart';
 import '../responsemodel/ShopKeeperResponsePart/ShopKeeperRequestResponse.dart';
 import '../responsemodel/ShopKeeperResponsePart/ShopKeeperResponse.dart';
 import '../responsemodel/ShopKeeperResponsePart/ShopProductListResponse.dart';
-import '../responsemodel/SizeDeleteResponse.dart';
 import '../responsemodel/TownshipsPart/AddTownshipResponse.dart';
 import '../responsemodel/TownshipsPart/AllTownshipResponse.dart';
-import '../responsemodel/TownshipsPart/DeleteTownshipResponse.dart';
 import '../responsemodel/TownshipsPart/EditTownshipResponse.dart';
 import '../responsemodel/UpdateCateResponse.dart';
 import '../responsemodel/UpdateSizeResponse.dart';
@@ -385,7 +380,7 @@ class UserRepository {
   }
 
   //to delete country by id
-  Future<DeleteCountryResponse> deleteCountry(int id) async {
+  Future<DeleteResponse> deleteCountry(int id) async {
     try {
       final response = await _apiService.deleteCountry(id);
       return response;
@@ -395,7 +390,7 @@ class UserRepository {
   }
 
   //to delete city by id
-  Future<DeleteCityResponse> deleteCity(int id) async {
+  Future<DeleteResponse> deleteCity(int id) async {
     try {
       final response = await _apiService.deleteCity(id);
       return response;
@@ -404,8 +399,18 @@ class UserRepository {
     }
   }
 
+  //to delete shopkeeper product request by id
+  Future<DeleteResponse> deleteShopKeeperRequestProduct(int id) async {
+    try {
+      final response = await _apiService.deleteShopKeeperRequestProduct(id);
+      return response;
+    } catch (error) {
+      rethrow;
+    }
+  }
+
   //to delete township by id
-  Future<DeleteTownshipResponse> deleteTownship(int id) async {
+  Future<DeleteResponse> deleteTownship(int id) async {
     try {
       final response = await _apiService.deleteTownship(id);
       return response;
@@ -450,7 +455,7 @@ class UserRepository {
 
 
   //to delete product item by id
-  Future<DeleteProductResponse> deleteProductItem(int id) async {
+  Future<DeleteResponse> deleteProductItem(int id) async {
     try {
       final response = await _apiService.deleteProductItem(id);
       return response;
@@ -461,7 +466,7 @@ class UserRepository {
 
   //to delete user role by id
 
-  Future<DeleteUserRoleResponse> deleteUserRole(int id) async {
+  Future<DeleteResponse> deleteUserRole(int id) async {
     try {
       final response = await _apiService.deleteUserRole(id);
       return response;
@@ -472,7 +477,7 @@ class UserRepository {
 
   //to delete size by id
 
-  Future<SizeDeleteResponse> deleteSize(int id) async {
+  Future<DeleteResponse> deleteSize(int id) async {
     try {
       final response = await _apiService.deleteSize(id);
       return response;

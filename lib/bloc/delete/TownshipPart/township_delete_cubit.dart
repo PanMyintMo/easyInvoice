@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
-import '../../../data/responsemodel/TownshipsPart/DeleteTownshipResponse.dart';
+import '../../../data/responsemodel/common/DeleteResponse.dart';
 import '../../../data/userRepository/UserRepository.dart';
 
 part 'township_delete_state.dart';

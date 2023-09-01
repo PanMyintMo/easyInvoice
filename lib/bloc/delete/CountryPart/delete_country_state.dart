@@ -16,7 +16,7 @@ class DeleteCountryLoading extends DeleteCountryState {
 }
 
 class DeleteCountrySuccess extends DeleteCountryState {
-  final DeleteCountryResponse deleteCountryResponse;
+  final DeleteResponse deleteCountryResponse;
 
   const DeleteCountrySuccess(this.deleteCountryResponse);
 

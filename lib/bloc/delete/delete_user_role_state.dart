@@ -15,7 +15,7 @@ class DeleteUserRoleLoading extends DeleteUserRoleState {
 }
 
 class DeleteUserRoleSuccess extends DeleteUserRoleState {
-  final DeleteUserRoleResponse deleteUserRoleResponse;
+  final DeleteResponse deleteUserRoleResponse;
 
   const DeleteUserRoleSuccess(this.deleteUserRoleResponse);
 

@@ -15,7 +15,7 @@ class DeleteProductItemLoading extends DeleteProductItemState {
 }
 
 class DeleteProductItemSuccess extends DeleteProductItemState {
-  final DeleteProductResponse deleteResponse;
+  final DeleteResponse deleteResponse;
 
   const DeleteProductItemSuccess(this.deleteResponse);
 

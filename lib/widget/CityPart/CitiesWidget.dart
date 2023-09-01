@@ -93,7 +93,6 @@ class CityData extends DataTableSource {
           IconButton(
             icon: const Icon(Icons.delete,color: Colors.red,),
             onPressed: () {
-
               showDeleteConfirmationDialogs(context,"Are you sure you want to delete this city?",(){
                 context.read<DeleteCityCubit>().deleteCity(city.id);
               });

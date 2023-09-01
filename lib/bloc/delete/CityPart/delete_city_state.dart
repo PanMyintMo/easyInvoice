@@ -15,7 +15,7 @@ class DeleteCityLoading extends DeleteCityState {
 }
 
 class DeleteCitySuccess extends DeleteCityState {
-  final DeleteCityResponse deleteCityResponse;
+  final DeleteResponse deleteCityResponse;
 
   const DeleteCitySuccess(this.deleteCityResponse);
 
