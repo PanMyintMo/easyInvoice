@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_invoice/common/FormValidator.dart';
 import 'package:easy_invoice/common/ThemeHelperUserClass.dart';
 import 'package:easy_invoice/data/api/apiService.dart';
-import 'package:easy_invoice/data/responsemodel/GetAllCategoryDetail.dart';
+import 'package:easy_invoice/data/responsemodel/GetAllPagnitaionDataResponse.dart';
 import 'package:easy_invoice/dataRequestModel/ShopKeeperPart/ShopKeeperRequestModel.dart';
 import '../../bloc/post/ShopKeeperPart/add_request_product_shop_keeper_cubit.dart';
 import '../../data/responsemodel/common/ProductListItemResponse.dart';
@@ -20,7 +20,7 @@ class RequestShopKeeperWidget extends StatefulWidget {
 }
 
 class _RequestShopKeeperWidgetState extends State<RequestShopKeeperWidget> {
-  List<CategoryItem> categories = [];
+  List<PaginationItem> categories = [];
   List<ProductListItem> products = [];
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   var quantity = TextEditingController();

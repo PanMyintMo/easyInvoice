@@ -15,7 +15,7 @@ class EditSizeLoading extends EditSizeState{
 }
 class EditSizeSuccess extends EditSizeState{
 
-  final SizeUpdateResponse sizeUpdateResponse;
+  final UpdateResponse sizeUpdateResponse;
   const EditSizeSuccess(this.sizeUpdateResponse);
   @override
   List<Object?> get props => [sizeUpdateResponse];

@@ -6,9 +6,9 @@ import '../../common/ApiHelper.dart';
 import '../../common/FormValidator.dart';
 import '../../common/ThemeHelperUserClass.dart';
 import '../../data/api/apiService.dart';
-import '../../data/responsemodel/GetAllCategoryDetail.dart';
+import '../../data/responsemodel/GetAllPagnitaionDataResponse.dart';
 import '../../data/responsemodel/common/ProductListItemResponse.dart';
-import '../../dataRequestModel/ShopKeeperPart/EditShopKeeperRequestModel.dart';
+import '../../dataRequestModel/ShopKeeperPart/EditRequestModel.dart';
 import '../../screen/shopkeeperPart/ShopKeeperAddScreen.dart';
 
 class EditShopKeeperWidget extends StatefulWidget {
@@ -30,7 +30,7 @@ class EditShopKeeperWidget extends StatefulWidget {
 }
 
 class _EditShopKeeperWidgetState extends State<EditShopKeeperWidget> {
-  List<CategoryItem> categories = [];
+  List<PaginationItem> categories = [];
   List<ProductListItem> products = [];
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -220,7 +220,7 @@ class _EditShopKeeperWidgetState extends State<EditShopKeeperWidget> {
 
   void validateAndSubmit() async {
     if (_formKey.currentState!.validate()) {
-      final requestModel = EditShopKeeperRequestModel(
+      final requestModel = EditRequestModel(
         product_id: product_id,
         quantity: quantity.text,
       );

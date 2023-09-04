@@ -1,10 +1,10 @@
 import 'package:dio/dio.dart';
 import 'package:easy_invoice/data/responsemodel/AddSizeResponse.dart';
 import 'package:easy_invoice/data/responsemodel/EditProductResponse.dart';
-import 'package:easy_invoice/data/responsemodel/GetAllCategoryDetail.dart';
+import 'package:easy_invoice/data/responsemodel/GetAllPagnitaionDataResponse.dart';
 import 'package:easy_invoice/data/responsemodel/GetAllProductResponse.dart';
 import 'package:easy_invoice/data/responsemodel/GetAllSizeResponse.dart';
-import 'package:easy_invoice/data/responsemodel/UpdateCateResponse.dart';
+import 'package:easy_invoice/data/responsemodel/common/UpdateResponse.dart';
 import 'package:easy_invoice/data/responsemodel/UserResponse.dart';
 import 'package:easy_invoice/dataRequestModel/EditProductRequestModel.dart';
 import 'package:easy_invoice/dataRequestModel/UserRequestModel.dart';
@@ -29,14 +29,15 @@ import '../../dataRequestModel/FaultyItemPart/AddFaultyItemRequest.dart';
 import '../../dataRequestModel/Login&Register/EditCompanyProfileRequestModel.dart';
 import '../../dataRequestModel/Login&Register/LoginRequestModel.dart';
 import '../../dataRequestModel/Login&Register/RegisterRequestModel.dart';
-import '../../dataRequestModel/ShopKeeperPart/EditShopKeeperRequestModel.dart';
+import '../../dataRequestModel/ShopKeeperPart/EditRequestModel.dart';
 import '../../dataRequestModel/ShopKeeperPart/ShopKeeperRequestModel.dart';
 import '../../dataRequestModel/TownshipPart/AddTownship.dart';
 import '../../dataRequestModel/TownshipPart/EditTownship.dart';
 import '../responsemodel/AddCategoryResponseModel.dart';
-import '../responsemodel/CategoryDeleteRespose.dart';
 import '../responsemodel/CityPart/AddCityResponse.dart';
 import '../responsemodel/CityPart/Cities.dart';
+import '../responsemodel/DeliveryPart/FetchAllDeliveries.dart';
+import '../responsemodel/ShopKeeperResponsePart/DeliveredWarehouseRequest.dart';
 import '../responsemodel/common/DeleteResponse.dart';
 import '../responsemodel/CityPart/EditCityResponse.dart';
 import '../responsemodel/CityPart/FetchCityByCountryId.dart';
@@ -70,7 +71,6 @@ import '../responsemodel/TownshipsPart/AddTownshipResponse.dart';
 import '../responsemodel/TownshipsPart/AllTownshipResponse.dart';
 import '../responsemodel/TownshipsPart/EditTownshipResponse.dart';
 import '../responsemodel/TownshipsPart/TownshipByCityIdResponse.dart';
-import '../responsemodel/UpdateSizeResponse.dart';
 import '../responsemodel/UserRoleResponse.dart';
 import '../responsemodel/WarehousePart/WarehouseResponse.dart';
 import '../responsemodel/common/ProductListItemResponse.dart';
@@ -575,20 +575,16 @@ class ApiService {
   }
 
   //Update shopkeeper
-  Future<EditShopKeeperResponse> editShopKeeper(
-      EditShopKeeperRequestModel editShopKeeperRequestModel , int id) async {
+  Future<EditResponse> editShopKeeper(
+      EditRequestModel editShopKeeperRequestModel , int id) async {
     try {
       final Response response = await _dio.post(
           'https://www.mmeasyinvoice.com/api/edit-shopkeeper/$id',
           data: editShopKeeperRequestModel.toJson());
 
-
-        print("$response");
-
-
       if (response.statusCode == 200) {
-        final EditShopKeeperResponse updateShopKeeperResponse =
-        EditShopKeeperResponse.fromJson(response.data);
+        final EditResponse updateShopKeeperResponse =
+        EditResponse.fromJson(response.data);
         return updateShopKeeperResponse;
       } else {
         throw DioError(
@@ -604,12 +600,154 @@ class ApiService {
     }
   }
 
-  //fetch all category
-  Future<CategoryDataResponse> getAllCategories() async {
+
+  //Update faulty item
+  Future<EditResponse> editFaulty(
+      EditRequestModel editRequestModel , int id) async {
+    try {
+      final Response response = await _dio.post(
+          'https://www.mmeasyinvoice.com/api/edit-faulty-item/$id',
+          data: editRequestModel.toJson());
+
+      if (response.statusCode == 200) {
+        final EditResponse updateFaultyResponse =
+        EditResponse.fromJson(response.data);
+        return updateFaultyResponse;
+      } else {
+        throw DioError(
+          requestOptions: RequestOptions(path: '/api/edit-faulty-item/$id'),
+          response: response,
+        );
+      }
+    } catch (error) {
+      throw DioError(
+        requestOptions: RequestOptions(path: '/api/edit-faulty-item/$id'),
+        error: error,
+      );
+    }
+  }
+//Receive product form delivery man
+  Future<DeliveryWarehouseResponse> deliverWarehouseRequest() async {
     try {
       int currentPage = 1;
-      CategoryData categoryData;
-      List<CategoryItem> allCategories = [];
+      DeliveryWarehouseData deliveryWarehouseData;
+      List<DeliveryWarehouseItem> allDeliveryItem = [];
+
+      while (true) {
+        final response = await _dio
+            .get('https://mmeasyinvoice.com/api/delivered-warehouse-request?page=$currentPage');
+
+
+        if (response.statusCode == 200) {
+          final dynamic responseData = response.data;
+
+          final deliveryDataResponse =
+          DeliveryWarehouseResponse.fromJson(responseData);
+          deliveryWarehouseData = deliveryDataResponse.data;
+          final List<DeliveryWarehouseItem> deliveryItems = deliveryWarehouseData.data;
+          allDeliveryItem.addAll(deliveryItems);
+
+          if (currentPage == deliveryWarehouseData.last_page) {
+            break;
+          } else {
+            currentPage++;
+          }
+        } else {
+          throw Exception('Failed to fetch data');
+        }
+      }
+
+      return DeliveryWarehouseResponse(
+        data: DeliveryWarehouseData(
+          current_page: currentPage,
+          data: allDeliveryItem,
+          first_page_url: 'https://mmeasyinvoice.com/api/delivered-warehouse-request?page=1',
+          from: 1,
+          last_page: currentPage,
+          last_page_url:
+          'https://mmeasyinvoice.com/api/delivered-warehouse-request?page=$currentPage',
+          links: [],
+          next_page_url: (currentPage < deliveryWarehouseData.last_page)
+              ? 'https://mmeasyinvoice.com/api/delivered-warehouse-request?page=${currentPage + 1}'
+              : '',
+          path: 'https://mmeasyinvoice.com/api/delivered-warehouse-request',
+          per_page: allDeliveryItem.length,
+          prev_page_url: (currentPage > 1)
+              ? 'https://mmeasyinvoice.com/api/delivered-warehouse-request?page=${currentPage - 1}'
+              : null,
+          to: allDeliveryItem.length,
+          total: 0,
+        ),
+      );
+    } catch (e) {
+      throw Exception('Failed to fetch data: $e');
+    }
+  }
+// fetch all deliveries
+  Future<FetchAllDelivery> fetchAllDelivery() async {
+    try {
+      int currentPage = 1;
+      DeliveriesData deliveryData;
+      List<DeliveriesItem> allDeliveryItem = [];
+
+      while (true) {
+        final response = await _dio
+            .get('https://mmeasyinvoice.com/api/all-deliveries?page=$currentPage');
+
+
+        if (response.statusCode == 200) {
+          final dynamic responseData = response.data;
+
+          final deliveryDataResponse =
+          FetchAllDelivery.fromJson(responseData);
+          deliveryData = deliveryDataResponse.data;
+          final List<DeliveriesItem> deliveryItems = deliveryData.data;
+          allDeliveryItem.addAll(deliveryItems);
+
+          if (currentPage == deliveryData.last_page) {
+            break;
+          } else {
+            currentPage++;
+          }
+        } else {
+          throw Exception('Failed to fetch data');
+        }
+      }
+
+      return FetchAllDelivery(
+        data: DeliveriesData(
+          current_page: currentPage,
+          data: allDeliveryItem,
+          first_page_url: 'https://mmeasyinvoice.com/api/all-deliveries?page=1',
+          from: 1,
+          last_page: currentPage,
+          last_page_url:
+          'https://mmeasyinvoice.com/api/all-deliveries?page=$currentPage',
+          links: [],
+          next_page_url: (currentPage < deliveryData.last_page)
+              ? 'https://mmeasyinvoice.com/api/all-deliveries?page=${currentPage + 1}'
+              : '',
+          path: 'https://mmeasyinvoice.com/api/all-deliveries',
+          per_page: allDeliveryItem.length,
+          prev_page_url: (currentPage > 1)
+              ? 'https://mmeasyinvoice.com/api/all-deliveries?page=${currentPage - 1}'
+              : null,
+          to: allDeliveryItem.length,
+          total: 0,
+        ),
+      );
+    } catch (e) {
+      throw Exception('Failed to fetch data: $e');
+    }
+  }
+
+
+  //fetch all category
+  Future<PaginationDataResponse> getAllCategories() async {
+    try {
+      int currentPage = 1;
+      PaginationData categoryData;
+      List<PaginationItem> allCategories = [];
 
       while (true) {
         final response = await _dio
@@ -619,9 +757,9 @@ class ApiService {
           final dynamic responseData = response.data;
 
           final categoryDataResponse =
-              CategoryDataResponse.fromJson(responseData);
+          PaginationDataResponse.fromJson(responseData);
           categoryData = categoryDataResponse.data;
-          final List<CategoryItem> categories = categoryData.data;
+          final List<PaginationItem> categories = categoryData.data;
           allCategories.addAll(categories);
 
           if (currentPage == categoryData.last_page) {
@@ -634,8 +772,8 @@ class ApiService {
         }
       }
 
-      return CategoryDataResponse(
-        data: CategoryData(
+      return PaginationDataResponse(
+        data: PaginationData(
           current_page: currentPage,
           data: allCategories,
           first_page_url: 'https://mmeasyinvoice.com/api/categories?page=1',
@@ -1344,12 +1482,12 @@ class ApiService {
 
   //Delete category by id
 
-  Future<DeleteCategory> deleteCategory(int id) async {
+  Future<DeleteResponse> deleteCategory(int id) async {
     try {
       final response =
           await _dio.post('https://mmeasyinvoice.com/api/delete-category/$id');
       if (response.statusCode == 200) {
-        DeleteCategory deleteCategory = DeleteCategory.fromJson(response.data);
+        DeleteResponse deleteCategory = DeleteResponse.fromJson(response.data);
         return deleteCategory;
       } else {
         throw Exception('Something wrong!');
@@ -1376,6 +1514,27 @@ class ApiService {
       throw Exception(error);
     }
   }
+  //Delete Faulty item by id
+  Future<DeleteResponse> deleteFaulty(int id) async {
+    try {
+      final response =
+      await _dio.post('https://mmeasyinvoice.com/api/delete-faulty-item/$id');
+    print("$response");
+
+      if (response.statusCode == 200) {
+        DeleteResponse deleteFaulty =
+        DeleteResponse.fromJson(response.data);
+        return deleteFaulty;
+      } else {
+        throw Exception('Something wrong!');
+      }
+    } catch (error) {
+      throw Exception(error);
+    }
+  }
+
+
+
 
   //Delete city by id
   Future<DeleteResponse> deleteCity(int id) async {
@@ -1393,6 +1552,25 @@ class ApiService {
       throw Exception(error);
     }
   }
+
+  //Delete delivery by id
+
+  Future<DeleteResponse> deleteDelivery(int id) async {
+    try {
+      final response =
+      await _dio.post('https://mmeasyinvoice.com/api/delete-delivery/$id');
+      if (response.statusCode == 200) {
+        DeleteResponse deleteDelivery =
+        DeleteResponse.fromJson(response.data);
+        return deleteDelivery;
+      } else {
+        throw Exception('Something wrong!');
+      }
+    } catch (error) {
+      throw Exception(error);
+    }
+  }
+
 
 
   //Delete shopkeeper request product by id
@@ -1469,15 +1647,15 @@ class ApiService {
   }
 
   //to update category by id
-  Future<CategoryUpdateResponse> updateCategory(
+  Future<UpdateResponse> updateCategory(
       EditCategory editCategory, int id) async {
     try {
       final response = await _dio.post(
           'https://mmeasyinvoice.com/api/edit-category/$id',
           data: editCategory.toJson());
       if (response.statusCode == 200) {
-        CategoryUpdateResponse categoryUpdateResponse =
-            CategoryUpdateResponse.fromJson(response.data);
+        UpdateResponse categoryUpdateResponse =
+            UpdateResponse.fromJson(response.data);
 
         return categoryUpdateResponse;
       } else {
@@ -1508,14 +1686,14 @@ class ApiService {
   }
 
   //to update size by id
-  Future<SizeUpdateResponse> updateSize(EditSize editSize, int id) async {
+  Future<UpdateResponse> updateSize(EditSize editSize, int id) async {
     try {
       final response = await _dio.post(
           'https://mmeasyinvoice.com/api/edit-size/$id',
           data: editSize.toJson());
       if (response.statusCode == 200) {
-        SizeUpdateResponse sizeUpdateResponse =
-            SizeUpdateResponse.fromJson(response.data);
+        UpdateResponse sizeUpdateResponse =
+            UpdateResponse.fromJson(response.data);
 
         return sizeUpdateResponse;
       } else {

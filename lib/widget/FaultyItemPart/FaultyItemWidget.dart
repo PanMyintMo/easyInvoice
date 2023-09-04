@@ -1,11 +1,16 @@
+import 'package:easy_invoice/bloc/delete/FaultyPart/delete_faulty_item_cubit.dart';
+import 'package:easy_invoice/screen/FaultyItemPart/UpdateFaultyItemScreen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../common/showDeleteConfirmationDialog.dart';
 import '../../data/responsemodel/FaultyItemPart/AllFaultyItems.dart';
 import '../../screen/FaultyItemPart/AddRequestFaultyItemScreen.dart';
 
 class FaultyItemWidget extends StatelessWidget {
   final List<FaultyItemData> faultyItems;
 
-  const FaultyItemWidget({Key? key, required this.faultyItems}) : super(key: key);
+  const FaultyItemWidget({Key? key, required this.faultyItems})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +30,11 @@ class FaultyItemWidget extends StatelessWidget {
               padding: EdgeInsets.all(8.0),
               child: Text(
                 'Add New Faulty Item',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold,decoration: TextDecoration.underline,color: Colors.blue),
+                style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    decoration: TextDecoration.underline,
+                    color: Colors.blue),
               ),
             ),
           ),
@@ -73,13 +82,22 @@ class FaultyData extends DataTableSource {
             IconButton(
               icon: const Icon(Icons.edit, color: Colors.green),
               onPressed: () {
-                // Handle edit action here
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>  UpdateFaultyItemScreen(quantity: faultyItem.quantity, id: faultyItem.id,)));
               },
             ),
             IconButton(
               icon: const Icon(Icons.delete, color: Colors.red),
               onPressed: () {
-                // Handle delete action here
+                showDeleteConfirmationDialogs(
+                    context, "Are you sure you want to delete  this faulty item?",
+                        () {
+                      context
+                          .read<DeleteFaultyItemCubit>()
+                          .deleteFaultyItem(faultyItem.id);
+                    });
               },
             ),
           ],

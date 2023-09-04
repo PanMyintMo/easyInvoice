@@ -15,7 +15,7 @@ part of 'delete_category_cubit.dart';
  }
 
  class DeleteCategorySuccess extends DeleteCategoryState {
-   final DeleteCategory deleteResponse;
+   final DeleteResponse deleteResponse;
 
    const DeleteCategorySuccess(this.deleteResponse);
 

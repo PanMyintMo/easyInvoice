@@ -1,20 +1,20 @@
-class CategoryDataResponse {
-  final CategoryData data;
+class PaginationDataResponse {
+  final PaginationData data;
 
-  CategoryDataResponse({
+  PaginationDataResponse({
     required this.data,
   });
 
-  factory CategoryDataResponse.fromJson(Map<String, dynamic> json) {
-    return CategoryDataResponse(
-      data: CategoryData.fromJson(json['data']),
+  factory PaginationDataResponse.fromJson(Map<String, dynamic> json) {
+    return PaginationDataResponse(
+      data: PaginationData.fromJson(json['data']),
     );
   }
 }
 
-class CategoryData {
+class PaginationData {
   final int current_page;
-  final List<CategoryItem> data;
+  final List<PaginationItem> data;
   final String first_page_url;
   final int from;
   final int last_page;
@@ -27,7 +27,7 @@ class CategoryData {
   final int to;
   final int total;
 
-  CategoryData({
+  PaginationData({
     required this.current_page,
     required this.data,
     required this.first_page_url,
@@ -43,10 +43,10 @@ class CategoryData {
     required this.total,
   });
 
-  factory CategoryData.fromJson(Map<String, dynamic> json) {
-    return CategoryData(
+  factory PaginationData.fromJson(Map<String, dynamic> json) {
+    return PaginationData(
       current_page: json['current_page'],
-      data: List<CategoryItem>.from(json['data'].map((item) => CategoryItem.fromJson(item))),
+      data: List<PaginationItem>.from(json['data'].map((item) => PaginationItem.fromJson(item))),
       first_page_url: json['first_page_url'],
       from: json['from'],
       last_page: json['last_page'],
@@ -83,14 +83,14 @@ class PageLink {
   }
 }
 
-class CategoryItem {
+class PaginationItem {
   final int id;
   final String name;
   final String slug;
   final DateTime created_at;
   final DateTime updated_at;
 
-  CategoryItem({
+  PaginationItem({
     required this.id,
     required this.name,
     required this.slug,
@@ -98,8 +98,8 @@ class CategoryItem {
     required this.updated_at,
   });
 
-  factory CategoryItem.fromJson(Map<String, dynamic> json) {
-    return CategoryItem(
+  factory PaginationItem.fromJson(Map<String, dynamic> json) {
+    return PaginationItem(
       id: json['id'],
       name: json['name'],
       slug: json['slug'],

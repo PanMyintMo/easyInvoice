@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
-import 'package:easy_invoice/data/responsemodel/UpdateSizeResponse.dart';
 import 'package:equatable/equatable.dart';
 
+import '../../data/responsemodel/common/UpdateResponse.dart';
 import '../../data/userRepository/UserRepository.dart';
 import '../../dataRequestModel/EditSizeModel.dart';
 

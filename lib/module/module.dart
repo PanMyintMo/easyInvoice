@@ -1,6 +1,7 @@
 import 'package:easy_invoice/bloc/delete/ShopKeeperPart/delete_shop_keeper_product_request_cubit.dart';
 import 'package:easy_invoice/bloc/delete/delete_category_cubit.dart';
 import 'package:easy_invoice/bloc/delete/delete_size_cubit.dart';
+import 'package:easy_invoice/bloc/edit/FaultyPart/update_faulty_cubit.dart';
 import 'package:easy_invoice/bloc/edit/edit_category_cubit.dart';
 import 'package:easy_invoice/bloc/edit/edit_product_item_cubit.dart';
 import 'package:easy_invoice/bloc/edit/edit_size_cubit.dart';
@@ -29,13 +30,17 @@ import 'package:get_it/get_it.dart';
 import 'package:dio/dio.dart';
 import '../bloc/delete/CityPart/delete_city_cubit.dart';
 import '../bloc/delete/CountryPart/delete_country_cubit.dart';
+import '../bloc/delete/DeliveryPart/delete_delivery_cubit.dart';
+import '../bloc/delete/FaultyPart/delete_faulty_item_cubit.dart';
 import '../bloc/delete/delete_product_item_cubit.dart';
 import '../bloc/delete/delete_user_role_cubit.dart';
 import '../bloc/edit/CityPart/edit_city_cubit.dart';
 import '../bloc/edit/TownshipPart/edit_township_cubit.dart';
 import '../bloc/get/CompanyProfile/company_profile_cubit.dart';
+import '../bloc/get/DeliveryManPart/fetch_all_delivery_cubit.dart';
 import '../bloc/get/DeliveryManPart/fetch_all_warehouse_request_cubit.dart';
 import '../bloc/get/FaultyItemPart/fetch_all_faulty_item_cubit.dart';
+import '../bloc/get/ShopKeeperPart/deliver_warehouse_request_cubit.dart';
 import '../bloc/get/ShopKeeperPart/shop_keeper_request_cubit.dart';
 import '../bloc/get/TownshipPart/fetch_all_township_cubit.dart';
 import '../bloc/get/WarehousePart/warehouse_product_list_cubit.dart';
@@ -104,10 +109,22 @@ void locator() {
       GetCategoryDetailCubit(getIt.get<UserRepository>());
   getIt.registerLazySingleton(() => getCategoryDetailCubit);
 
+
+  //Delivered Warehouse Request
+  DeliverWarehouseRequestCubit deliveryWarehouseRequestCubit =
+  DeliverWarehouseRequestCubit(getIt.get<UserRepository>());
+  getIt.registerLazySingleton(() => deliveryWarehouseRequestCubit);
+
   //fetch all faulty items
   FetchAllFaultyItemCubit fetchAllFaultyItemCubit =
   FetchAllFaultyItemCubit(getIt.get<UserRepository>());
   getIt.registerLazySingleton(() => fetchAllFaultyItemCubit);
+
+
+  //fetch all delivery
+  FetchAllDeliveryCubit fetchAllDeliveryCubit =
+  FetchAllDeliveryCubit(getIt.get<UserRepository>());
+  getIt.registerLazySingleton(() => fetchAllDeliveryCubit);
 
 
   //fetch all warehouse request for deliver man
@@ -164,6 +181,14 @@ void locator() {
   DeleteCountryCubit deleteCountryCubit = DeleteCountryCubit(getIt.call());
   getIt.registerLazySingleton(() => deleteCountryCubit);
 
+  //to delete faulty item
+  DeleteFaultyItemCubit deleteFaultyItemCubit = DeleteFaultyItemCubit(getIt.call());
+  getIt.registerLazySingleton(() => deleteFaultyItemCubit);
+
+  //to delete delivery
+  DeleteDeliveryCubit deleteDeliveryCubit = DeleteDeliveryCubit(getIt.call());
+  getIt.registerLazySingleton(() => deleteDeliveryCubit);
+
   //to delete city
   DeleteCityCubit deleteCityCubit = DeleteCityCubit(getIt.call());
   getIt.registerLazySingleton(() => deleteCityCubit);
@@ -193,6 +218,12 @@ void locator() {
   //to update city by id
   EditCityCubit editCityCubit = EditCityCubit(getIt.call());
   getIt.registerLazySingleton(() => editCityCubit);
+
+
+  //to update faulty
+  UpdateFaultyCubit editCubit = UpdateFaultyCubit(getIt.call());
+  getIt.registerLazySingleton(() => editCubit);
+
 
   //to update township by id
   EditTownshipCubit editTownshipCubit = EditTownshipCubit(getIt.call());

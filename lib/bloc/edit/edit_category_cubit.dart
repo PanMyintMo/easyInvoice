@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import '../../data/responsemodel/UpdateCateResponse.dart';
+import '../../data/responsemodel/common/UpdateResponse.dart';
 import '../../data/userRepository/UserRepository.dart';
 import '../../dataRequestModel/EditCategoryModel.dart';
 

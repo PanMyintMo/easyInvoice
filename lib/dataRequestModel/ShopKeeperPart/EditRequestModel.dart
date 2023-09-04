@@ -1,9 +1,9 @@
-class EditShopKeeperRequestModel {
+class EditRequestModel {
   final String product_id;
   final String quantity;
 
 
-  EditShopKeeperRequestModel(
+  EditRequestModel(
       {required this.product_id, required this.quantity});
 
   Map<String, dynamic> toJson() {

@@ -1,17 +1,17 @@
-class EditShopKeeperResponse {
+class EditResponse {
 
   final ShopKeeperUpdatedData data;
   final int status;
   final String message;
 
-  EditShopKeeperResponse({
+  EditResponse({
     required this.status,
     required this.message,
     required this.data,
   });
 
-  factory EditShopKeeperResponse.fromJson(Map<String, dynamic> json) {
-    return EditShopKeeperResponse(
+  factory EditResponse.fromJson(Map<String, dynamic> json) {
+    return EditResponse(
       status: json['status'],
       message: json['message'],
       data: ShopKeeperUpdatedData.fromJson(json['data']),

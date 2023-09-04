@@ -15,7 +15,7 @@ class  UpdateShopKeeperLoading extends UpdateShopKeeperState {
 }
 
 class  UpdateShopKeeperSuccess extends UpdateShopKeeperState {
-  final EditShopKeeperResponse updateShopkeeper;
+  final EditResponse updateShopkeeper;
 
   const UpdateShopKeeperSuccess(this.updateShopkeeper);
 

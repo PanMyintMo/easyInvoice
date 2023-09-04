@@ -1,8 +1,8 @@
  import 'package:bloc/bloc.dart';
- import 'package:easy_invoice/data/responsemodel/CategoryDeleteRespose.dart';
  import 'package:equatable/equatable.dart';
 
- import '../../data/userRepository/UserRepository.dart';
+ import '../../data/responsemodel/common/DeleteResponse.dart';
+import '../../data/userRepository/UserRepository.dart';
 
  part 'delete_category_state.dart';
 
@@ -22,5 +22,4 @@
        emit(DeleteCategoryFail(error.toString()));
      }
  }
-
  }

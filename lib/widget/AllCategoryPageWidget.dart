@@ -1,16 +1,16 @@
 import 'package:easy_invoice/bloc/delete/delete_category_cubit.dart';
 import 'package:easy_invoice/bloc/get/CategoryPart/get_category_detail_cubit.dart';
-import 'package:easy_invoice/data/responsemodel/GetAllCategoryDetail.dart';
 import 'package:easy_invoice/module/module.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import '../common/ToastMessage.dart';
+import '../data/responsemodel/GetAllPagnitaionDataResponse.dart';
 import '../screen/UpdateCategoryScreen.dart';
 
 class AllCategoryPageWidget extends StatefulWidget {
-  final List<CategoryItem> categories;
+  final List<PaginationItem> categories;
   final bool isLoading;
   final String message;
 
@@ -26,7 +26,7 @@ class AllCategoryPageWidget extends StatefulWidget {
 }
 
 class _AllCategoryPageWidgetState extends State<AllCategoryPageWidget> {
-  List<CategoryItem> displayCategories = [];
+  List<PaginationItem> displayCategories = [];
   int currentPage = 1;
 
   @override
@@ -198,7 +198,7 @@ class _AllCategoryPageWidgetState extends State<AllCategoryPageWidget> {
 
 void showDeleteConfirmationDialog(
     BuildContext context,
-    CategoryItem item,
+    PaginationItem item,
     DeleteCategoryCubit deleteCategoryCubit,
     ) {
   showDialog(

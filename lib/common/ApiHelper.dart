@@ -3,15 +3,14 @@ import 'package:easy_invoice/data/responsemodel/CityPart/Cities.dart';
 import '../data/api/apiService.dart';
 import '../data/responsemodel/CountryPart/CountryResponse.dart';
 import '../data/responsemodel/FaultyItemPart/AllFaultyItems.dart';
-import '../data/responsemodel/GetAllCategoryDetail.dart';
-import '../data/responsemodel/GetAllProductResponse.dart';
+import '../data/responsemodel/GetAllPagnitaionDataResponse.dart';
 import '../data/responsemodel/GetAllSizeResponse.dart';
 import '../data/responsemodel/TownshipsPart/AllTownshipResponse.dart';
 import '../data/responsemodel/common/ProductListItemResponse.dart';
 
 class ApiHelper {
   //By using static , you can call directly apiHelper.fetchCategoryName like that
-  static Future<List<CategoryItem>> fetchCategoriesName() async {
+  static Future<List<PaginationItem>> fetchCategoriesName() async {
     try {
       final response = await ApiService().getAllCategories();
       if (response.data.data.isNotEmpty) {

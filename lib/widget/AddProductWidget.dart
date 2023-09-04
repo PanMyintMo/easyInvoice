@@ -8,7 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import '../common/ApiHelper.dart';
 import '../common/FormValidator.dart';
 import '../common/ThemeHelperUserClass.dart';
-import '../data/responsemodel/GetAllCategoryDetail.dart';
+import '../data/responsemodel/GetAllPagnitaionDataResponse.dart';
 import '../data/responsemodel/GetAllSizeResponse.dart';
 
 class AddProductWidget extends StatefulWidget {
@@ -37,7 +37,7 @@ class _AddProductWidgetState extends State<AddProductWidget> {
 
   String category_id = 'Select Category';
   String sizeId='Select Size';
-  List<CategoryItem> categories = [];
+  List<PaginationItem> categories = [];
   List<SizeItems> sizeIdList = [];
 
 

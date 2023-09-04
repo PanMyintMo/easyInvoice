@@ -24,14 +24,15 @@ import '../../dataRequestModel/EditSizeModel.dart';
 import '../../dataRequestModel/Login&Register/EditCompanyProfileRequestModel.dart';
 import '../../dataRequestModel/Login&Register/LoginRequestModel.dart';
 import '../../dataRequestModel/Login&Register/RegisterRequestModel.dart';
-import '../../dataRequestModel/ShopKeeperPart/EditShopKeeperRequestModel.dart';
+import '../../dataRequestModel/ShopKeeperPart/EditRequestModel.dart';
 import '../../dataRequestModel/ShopKeeperPart/ShopKeeperRequestModel.dart';
 import '../../dataRequestModel/TownshipPart/AddTownship.dart';
 import '../../dataRequestModel/TownshipPart/EditTownship.dart';
 import '../responsemodel/AddCategoryResponseModel.dart';
-import '../responsemodel/CategoryDeleteRespose.dart';
 import '../responsemodel/CityPart/AddCityResponse.dart';
 import '../responsemodel/CityPart/Cities.dart';
+import '../responsemodel/DeliveryPart/FetchAllDeliveries.dart';
+import '../responsemodel/ShopKeeperResponsePart/DeliveredWarehouseRequest.dart';
 import '../responsemodel/common/DeleteResponse.dart';
 import '../responsemodel/CityPart/EditCityResponse.dart';
 import '../responsemodel/CountryPart/EditCountryResponse.dart';
@@ -43,7 +44,7 @@ import '../responsemodel/DeliveryPart/ProductInvoiceResponse.dart';
 import '../responsemodel/EditUserRoleResponse.dart';
 import '../responsemodel/FaultyItemPart/AddFaultyItemResponse.dart';
 import '../responsemodel/FaultyItemPart/AllFaultyItems.dart';
-import '../responsemodel/GetAllCategoryDetail.dart';
+import '../responsemodel/GetAllPagnitaionDataResponse.dart';
 import '../responsemodel/Login&RegisterResponse/EditCompanyProfileResponse.dart';
 import '../responsemodel/Login&RegisterResponse/LoginResponse.dart';
 import '../responsemodel/Login&RegisterResponse/CompanyProfileResponse.dart';
@@ -56,8 +57,7 @@ import '../responsemodel/ShopKeeperResponsePart/ShopProductListResponse.dart';
 import '../responsemodel/TownshipsPart/AddTownshipResponse.dart';
 import '../responsemodel/TownshipsPart/AllTownshipResponse.dart';
 import '../responsemodel/TownshipsPart/EditTownshipResponse.dart';
-import '../responsemodel/UpdateCateResponse.dart';
-import '../responsemodel/UpdateSizeResponse.dart';
+import '../responsemodel/common/UpdateResponse.dart';
 import '../responsemodel/UserRoleResponse.dart';
 import '../responsemodel/WarehousePart/WarehouseResponse.dart';
 import '../responsemodel/common/ProductListItemResponse.dart';
@@ -221,11 +221,24 @@ class UserRepository {
   }
 
   //update shopkeeper
-  Future<EditShopKeeperResponse> updateShopKeeper(
-      EditShopKeeperRequestModel editShopKeeperRequestModel,int id) async {
+  Future<EditResponse> updateShopKeeper(
+      EditRequestModel editShopKeeperRequestModel,int id) async {
     try {
       final response =
       await _apiService.editShopKeeper(editShopKeeperRequestModel,id);
+      return response;
+    } catch (error) {
+      rethrow;
+    }
+  }
+
+
+  //update faulty item
+  Future<EditResponse> updateFaulty(
+      EditRequestModel editRequestModel,int id) async {
+    try {
+      final response =
+      await _apiService.editFaulty(editRequestModel,id);
       return response;
     } catch (error) {
       rethrow;
@@ -277,7 +290,7 @@ class UserRepository {
   }
 
   //fetch all categories from db
-  Future<List<CategoryItem>> getCategory() async {
+  Future<List<PaginationItem>> getCategory() async {
     try {
       final response = await _apiService.getAllCategories();
       return response.data.data;
@@ -285,6 +298,27 @@ class UserRepository {
       throw Exception('Failed to fetch category: $error');
     }
   }
+
+  //Receive product form delivery man
+  Future<List<DeliveryWarehouseItem>> deliverWarehouseRequest() async {
+    try {
+      final response = await _apiService.deliverWarehouseRequest();
+      return response.data.data;
+    } catch (error) {
+      throw Exception('Failed to fetch data: $error');
+    }
+  }
+
+  //fetch all deliveries
+  Future<List<DeliveriesItem>> fetchAllDelivery() async {
+    try {
+      final response = await _apiService.fetchAllDelivery();
+      return response.data.data;
+    } catch (error) {
+      throw Exception('Failed to fetch data: $error');
+    }
+  }
+
 
   //fetch all faulty items
   Future<List<FaultyItemData>> fetchAllFaultyItem() async {
@@ -370,9 +404,20 @@ class UserRepository {
 
 //to delete category by id
 
-  Future<DeleteCategory> deleteCategory(int id) async {
+  Future<DeleteResponse> deleteCategory(int id) async {
     try {
       final response = await _apiService.deleteCategory(id);
+      return response;
+    } catch (error) {
+      rethrow;
+    }
+  }
+
+  //to delete faulty item by id
+
+  Future<DeleteResponse> deleteFaultyItem(int id) async {
+    try {
+      final response = await _apiService.deleteFaulty(id);
       return response;
     } catch (error) {
       rethrow;
@@ -388,6 +433,17 @@ class UserRepository {
       rethrow;
     }
   }
+
+  //to delete delivery by id
+  Future<DeleteResponse> deleteDelivery(int id) async {
+    try {
+      final response = await _apiService.deleteDelivery(id);
+      return response;
+    } catch (error) {
+      rethrow;
+    }
+  }
+
 
   //to delete city by id
   Future<DeleteResponse> deleteCity(int id) async {
@@ -488,7 +544,7 @@ class UserRepository {
 
 // update category by id
 
-  Future<CategoryUpdateResponse> updateCategory(
+  Future<UpdateResponse> updateCategory(
       EditCategory editCategory, int id) async {
     try {
       final response = await _apiService.updateCategory(editCategory, id);
@@ -544,7 +600,7 @@ class UserRepository {
 
 // update size by id
 
-  Future<SizeUpdateResponse> updateSize(EditSize editSize, int id) async {
+  Future<UpdateResponse> updateSize(EditSize editSize, int id) async {
     try {
       final response = await _apiService.updateSize(editSize, id);
       return response;

@@ -1,4 +1,5 @@
 import 'package:easy_invoice/bloc/delete/ShopKeeperPart/delete_shop_keeper_product_request_cubit.dart';
+import 'package:easy_invoice/screen/shopkeeperPart/DeliverWarehouseToShopkeeperScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../common/showDeleteConfirmationDialog.dart';
@@ -44,7 +45,9 @@ class _ShopKeeperWidgetState extends State<ShopKeeperWidget> {
                   const SizedBox(width: 10),
                   Expanded(
                     child: TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (content) => const DeliverWarehouseToShopkeeperScreen()));
+                      },
                       child: const Text('Receive Products',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold),),
                     ),
                   ),

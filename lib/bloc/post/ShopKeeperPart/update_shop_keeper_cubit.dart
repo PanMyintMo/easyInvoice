@@ -3,7 +3,7 @@ import 'package:equatable/equatable.dart';
 
 import '../../../data/responsemodel/ShopKeeperResponsePart/EditShopKeeperResponse.dart';
 import '../../../data/userRepository/UserRepository.dart';
-import '../../../dataRequestModel/ShopKeeperPart/EditShopKeeperRequestModel.dart';
+import '../../../dataRequestModel/ShopKeeperPart/EditRequestModel.dart';
 
 part 'update_shop_keeper_state.dart';
 
@@ -14,7 +14,7 @@ class UpdateShopKeeperCubit extends Cubit<UpdateShopKeeperState> {
   UpdateShopKeeperCubit(this._userRepository) : super(UpdateShopKeeperInitial());
 
   Future<void> updateShopKeeper(
-      EditShopKeeperRequestModel updateShopKeeperRequestModel,int id) async {
+      EditRequestModel updateShopKeeperRequestModel,int id) async {
     emit(UpdateShopKeeperLoading());
     try {
       final response =

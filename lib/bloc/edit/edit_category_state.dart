@@ -17,7 +17,7 @@ class EditCategoryLoading extends EditCategoryState{
 
 class EditCategorySuccess extends EditCategoryState{
 
-  final CategoryUpdateResponse categoryUpdateResponse;
+  final UpdateResponse categoryUpdateResponse;
   const EditCategorySuccess(this.categoryUpdateResponse);
   @override
   List<Object?> get props => [categoryUpdateResponse];

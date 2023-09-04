@@ -5,7 +5,7 @@ import '../bloc/edit/edit_product_item_cubit.dart';
 import '../common/ThemeHelperUserClass.dart';
 import '../common/ToastMessage.dart';
 import '../data/api/apiService.dart';
-import '../data/responsemodel/GetAllCategoryDetail.dart';
+import '../data/responsemodel/GetAllPagnitaionDataResponse.dart';
 import '../data/responsemodel/GetAllSizeResponse.dart';
 
 class EditProductItemScreen extends StatefulWidget {
@@ -58,7 +58,7 @@ class _EditProductItemScreenState extends State<EditProductItemScreen> {
   late TextEditingController category_id;
   late TextEditingController size_id;
 
-  List<CategoryItem> categories = [];
+  List<PaginationItem> categories = [];
   List<SizeItems> sizes = [];
   bool isLoading = false;
 

@@ -6,7 +6,7 @@ import '../../common/ApiHelper.dart';
 import '../../common/FormValidator.dart';
 import '../../common/ThemeHelperUserClass.dart';
 import '../../data/api/apiService.dart';
-import '../../data/responsemodel/GetAllCategoryDetail.dart';
+import '../../data/responsemodel/GetAllPagnitaionDataResponse.dart';
 import '../../data/responsemodel/common/ProductListItemResponse.dart';
 import '../../screen/FaultyItemPart/FaultyItems.dart';
 
@@ -22,7 +22,7 @@ class AddRequestFaultyItemWidget extends StatefulWidget {
 class _AddRequestFaultyItemWidgetState
     extends State<AddRequestFaultyItemWidget> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  List<CategoryItem> categories = [];
+  List<PaginationItem> categories = [];
   List<ProductListItem> products = [];
   String category_id = 'Select Category';
   String product_id = 'Select Product';
