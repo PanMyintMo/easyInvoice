@@ -1,5 +1,4 @@
 import 'package:easy_invoice/bloc/delete/delete_product_item_cubit.dart';
-import 'package:easy_invoice/data/responsemodel/GetAllProductResponse.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -8,6 +7,7 @@ import 'package:provider/provider.dart';
 import '../bloc/edit/edit_product_item_cubit.dart';
 import '../bloc/get/ProductPart/get_all_product_cubit.dart';
 import '../common/ToastMessage.dart';
+import '../common/showDeleteConfirmationDialog.dart';
 import '../data/responsemodel/common/ProductListItemResponse.dart';
 import '../module/module.dart';
 import '../screen/EditProductItemScreen.dart';
@@ -35,7 +35,7 @@ class _ProductDetailWidgetState extends State<ProductDetailWidget> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0.0,
-        backgroundColor: Colors.white70,
+        backgroundColor: Colors.white24,
         iconTheme: const IconThemeData(
           color: Colors.red, // Set the color of the navigation icon to black
         ),
@@ -58,8 +58,9 @@ class _ProductDetailWidgetState extends State<ProductDetailWidget> {
         title: const Text(
           'Product Detail Screen',
           style: TextStyle(
-            color: Colors.redAccent,
+            color: Colors.black54,
             fontWeight: FontWeight.bold,
+            fontSize: 16,
           ),
         ),
         leading: IconButton(
@@ -87,7 +88,8 @@ class _ProductDetailWidgetState extends State<ProductDetailWidget> {
               Container(
                 padding: const EdgeInsets.fromLTRB(30, 10, 10, 10),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+
                   children: [
                     const SizedBox(
                       height: 150,
@@ -97,53 +99,200 @@ class _ProductDetailWidgetState extends State<ProductDetailWidget> {
                         size: 100,
                       ),
                     ),
-                    Expanded(child: Text('Product Id: ${widget.products.id}')),
                     Expanded(
-                        child: Text('Product Name: ${widget.products.name}')),
-                    Expanded(child: Text('Slug Name: ${widget.products.slug}')),
-                    Expanded(
-                        child: Text(
-                            'Stock Status: ${widget.products.stockStatus}')),
-                    Expanded(
-                        child: Text(
-                            'Regular Price: ${widget.products.regular_price}')),
-                    Expanded(
-                        child:
-                            Text('Sale Price: ${widget.products.salePrice}')),
-                    Expanded(
-                        child: Text(
-                            'Buying Price: ${widget.products.buying_price}')),
-                    Expanded(
-                        child: Text(
-                            'Product Quantity: ${widget.products.quantity}')),
-                    Expanded(child: Text('SKU: ${widget.products.SKU}')),
-                    Expanded(
-                        child: Text(
-                            'Category Id: ${widget.products.category_id}')),
-                    Expanded(
-                        child: Text('Size Id: ${widget.products.size_id}')),
-                    Expanded(
-                        child: Text('Feature: ${widget.products.feature}')),
-                    Expanded(
-                      child: Text(
-                        'Updated At: ${widget.products.updatedAt.substring(0, 10)}',
+                      child: Row(
+                        children: [
+                           const Expanded(child: Text('Product Id: ')),
+                          Expanded(child: Text('${widget.products.id}')),
+                        ],
                       ),
                     ),
                     Expanded(
-                      child: Text(
-                        'Created At: ${widget.products.createdAt.substring(0, 10)}',
+                      child: Row(
+                        children: [
+                          const Expanded(child: Text('Product Name: ')),
+                          Expanded(child: Text(widget.products.name)),
+                        ],
                       ),
                     ),
                     Expanded(
-                        child: Text('Barcode ID: ${widget.products.barcode}')),
-                    Expanded(
-                      child: Text(
-                        'Short Description: ${widget.products.short_description}',
+                      child: Row(
+                        children: [
+                          const Expanded(child: Text('Slug Name:')),
+                          Expanded(child: Text(widget.products.slug)),
+                        ],
                       ),
                     ),
                     Expanded(
-                        child: Text(
-                            'Description: ${widget.products.description}')),
+                      child: Row(
+                        children: [
+                          const Expanded(
+                            child: Text(
+                                'Stock Status:'),
+                          ),
+                          Expanded(
+                            child: Text(
+                                widget.products.stockStatus),
+                          ),
+
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      child: Row(
+                        children: [
+                          const Expanded(
+                            child: Text(
+                                'Regular Price:'),
+                          ),
+                          Expanded(
+                            child: Text(
+                                widget.products.regular_price),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      child: Row(
+                        children: [
+                          const Expanded(child: Text('Sale Price:')),
+                          Expanded(child: Text(widget.products.salePrice)),
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      child: Row(
+                        children: [
+                          const Expanded(
+                            child: Text(
+                                'Buying Price: '),
+                          ),
+                          Expanded(
+                            child: Text(
+                                widget.products.buying_price),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      child: Row(
+                        children: [
+                          const Expanded(
+                            child: Text(
+                                'Product Quantity: '),
+                          ),
+                          Expanded(
+                            child: Text(
+                                '${widget.products.quantity}'),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      child: Row(
+                        children: [
+                          const Expanded(child: Text('SKU: ')),
+                          Expanded(child: Text(widget.products.SKU)),
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      child: Row(
+                        children: [
+                          const Expanded(
+                            child: Text(
+                                'Category Id: '),
+                          ),
+                          Expanded(
+                            child: Text(
+                                '${widget.products.category_id}'),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      child: Row(
+                        children: [
+                          const Expanded(child: Text('Size Id: ')),
+                          Expanded(child: Text('${widget.products.size_id}')),
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                        child: Row(
+                          children: [
+                            const Expanded(child: Text('Feature: ')),
+                            Expanded(child: Text('${widget.products.feature}')),
+                          ],
+                        )),
+                    Expanded(
+                      child: Row(
+                        children: [
+                          const Expanded(
+                            child: Text(
+                              'Updated At: ',
+                            ),
+                          ),
+                          Expanded(
+                            child: Text(
+                              widget.products.updatedAt.substring(0, 10),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      child: Row(
+                        children: [
+                          const Expanded(
+                            child: Text(
+                              'Created At:',
+                            ),
+                          ),
+                          Expanded(
+                            child: Text(
+                              widget.products.createdAt.substring(0, 10),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                        child: Row(
+                          children: [
+                            const Expanded(child: Text('Barcode ID: ')),
+                            Expanded(child: Text('${widget.products.barcode}')),
+                          ],
+                        )),
+                    Expanded(
+                      child: Row(
+                        children: [
+                          const Expanded(
+                            child: Text(
+                              'Short Description: ',
+                            ),
+                          ),
+                          Expanded(
+                            child: Text(
+                              widget.products.short_description,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                        child: Row(
+                          children: [
+                            const Expanded(
+                              child: Text(
+                                  'Description: '),
+                            ),
+                            Expanded(
+                              child: Text(
+                                  widget.products.description),
+                            ),
+                          ],
+                        )),
                   ],
                 ),
               ),
@@ -167,8 +316,9 @@ class _ProductDetailWidgetState extends State<ProductDetailWidget> {
   void onSelected(BuildContext context, item) async {
     switch (item) {
       case 0:
-        final deleteCubit = context.read<DeleteProductItemCubit>();
-        showDeleteConfirmationDialog(context, deleteCubit, widget.products);
+        showDeleteConfirmationDialogs(context,"Are you sure you want to delete this city?",(){
+          context.read<DeleteProductItemCubit>().deleteProductItem(widget.products.id);
+        });
         break;
 
       case 1:
@@ -222,35 +372,35 @@ class _ProductDetailWidgetState extends State<ProductDetailWidget> {
     }
   }
 
-  void showDeleteConfirmationDialog(
-    BuildContext context,
-    DeleteProductItemCubit deleteProductItemCubit,
-    ProductListItem product,
-  ) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Confirmation'),
-          content: const Text('Are you sure you want to delete this product?'),
-          actions: [
-            TextButton(
-              onPressed: () {
-                // Delete Action
-                deleteProductItemCubit.deleteProductItem(product.id);
-                Navigator.pop(context);
-              },
-              child: const Text('Delete'),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: const Text('Cancel'),
-            ),
-          ],
-        );
-      },
-    );
-  }
+  // void showDeleteConfirmationDialog(
+  //   BuildContext context,
+  //   DeleteProductItemCubit deleteProductItemCubit,
+  //   ProductListItem product,
+  // ) {
+  //   showDialog(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return AlertDialog(
+  //         title: const Text('Confirmation'),
+  //         content: const Text('Are you sure you want to delete this product?'),
+  //         actions: [
+  //           TextButton(
+  //             onPressed: () {
+  //               // Delete Action
+  //               deleteProductItemCubit.deleteProductItem(product.id);
+  //               Navigator.pop(context);
+  //             },
+  //             child: const Text('Delete'),
+  //           ),
+  //           TextButton(
+  //             onPressed: () {
+  //               Navigator.pop(context);
+  //             },
+  //             child: const Text('Cancel'),
+  //           ),
+  //         ],
+  //       );
+  //     },
+  //   );
+  // }
 }

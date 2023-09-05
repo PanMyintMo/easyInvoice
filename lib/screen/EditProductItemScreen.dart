@@ -148,7 +148,16 @@ class _EditProductItemScreenState extends State<EditProductItemScreen> {
       builder: (context, state) {
         return Scaffold(
           appBar: AppBar(
-            title: const Text('Edit Product Screen'),
+            elevation: 0.0,
+            backgroundColor: Colors.white24,
+            iconTheme: const IconThemeData(
+              color: Colors.red, // Set the color of the navigation icon to black
+            ),
+            title: const Text('Edit Product Screen',style: TextStyle(
+              color: Colors.black54,
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+            )),
           ),
           body: Stack(
             children: [

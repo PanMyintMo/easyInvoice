@@ -5,16 +5,8 @@ import '../../common/ToastMessage.dart';
 import '../../module/module.dart';
 import '../../widget/OrderPart/AddOrderWidget.dart';
 
-class AddOrderScreen extends StatefulWidget {
+class AddOrderScreen extends StatelessWidget {
   const AddOrderScreen({super.key});
-
-  @override
-  State<AddOrderScreen> createState() => _AddOrderScreenState();
-}
-
-class _AddOrderScreenState extends State<AddOrderScreen> {
-
-
 
   @override
   Widget build(BuildContext context) {

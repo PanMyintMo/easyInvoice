@@ -56,7 +56,7 @@ class _AllProductWidgetState extends State<AllProductWidget> {
                   },
                 ),
                 title: const Text(
-                  'All Product',
+                  'All Product Screen',
                   style: TextStyle(
                       color: Colors.black54, fontWeight: FontWeight.bold, fontSize: 16),
                 ),
@@ -89,9 +89,9 @@ class _AllProductWidgetState extends State<AllProductWidget> {
                     child: Container(
                       color: Colors.white,
                       width: double.infinity,
-                      margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                      padding: const EdgeInsets.all(10),
-                      height: 150,
+                      margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+                      padding: const EdgeInsets.all(12),
+                      height: 160,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
@@ -101,24 +101,25 @@ class _AllProductWidgetState extends State<AllProductWidget> {
                             size: 50.0,
                           ),
                           const SizedBox(width: 10),
-                          Expanded(
+                          Flexible(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Expanded(
+                                Flexible(
                                   child: Text(
                                     'Product name: ${product.name}',
-                                    maxLines: 2,softWrap: true,
+                                    maxLines: 3,
+                                    overflow: TextOverflow.ellipsis,
                                     style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                                   ),
                                 ),
-                                Expanded(
+                                Flexible(
                                   child: Text('Category Id: ${product.category_id}'),
                                 ),
-                                Expanded(
+                                Flexible(
                                   child: Text('Stock: ${product.stockStatus}'),
                                 ),
-                                Expanded(
+                                Flexible(
                                   child: Text('Product Id: ${product.id}'),
                                 ),
                               ],
