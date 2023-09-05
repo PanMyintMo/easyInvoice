@@ -12,6 +12,7 @@ import '../../screen/FaultyItemPart/FaultyItems.dart';
 
 class AddRequestFaultyItemWidget extends StatefulWidget {
   final bool isLoading;
+
   const AddRequestFaultyItemWidget({super.key, required this.isLoading});
 
   @override
@@ -42,26 +43,19 @@ class _AddRequestFaultyItemWidgetState
   }
 
   Future<void> fetchProductsByCategory(int id) async {
-    try {
-      final response = await ApiService().fetchAllProductByCateId(id);
-      if (response.isNotEmpty) {
-        setState(() {
-          products = response;
-          product_id = 'Select Product'; // Reset selected product
-        });
-      }
-    } catch (e) {
-      print('Error fetching products: $e');
-    }
-  }
+    final response = await ApiService().fetchAllProductByCateId(id);
 
+    setState(() {
+      products = response;
+      product_id = 'Select Product'; // Reset selected product
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Stack(
-        children:
-        [
+        children: [
           Form(
             key: _formKey,
             child: Padding(
@@ -71,20 +65,29 @@ class _AddRequestFaultyItemWidgetState
                 children: [
                   Align(
                     alignment: Alignment.topRight,
-                    child: TextButton(onPressed: () {
-                      Navigator.push(
-                          context, MaterialPageRoute(builder: (context)
-                      =>
-                          const AllFaultyItemsScreen()));
-                    },
-                        child: const Text('All FaultyItems', style: TextStyle(decoration: TextDecoration.underline,color: Colors.blue,
-                            fontSize: 16, fontWeight: FontWeight.bold))),
+                    child: TextButton(
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      const AllFaultyItemsScreen()));
+                        },
+                        child: const Text('All FaultyItems',
+                            style: TextStyle(
+                                decoration: TextDecoration.underline,
+                                color: Colors.blue,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold))),
                   ),
-
-                  const Text('Category', style: TextStyle(fontSize: 18,
-                      color: Colors.pink,
-                      fontWeight: FontWeight.bold)),
-                  const SizedBox(height: 18,),
+                  const Text('Category',
+                      style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.pink,
+                          fontWeight: FontWeight.bold)),
+                  const SizedBox(
+                    height: 18,
+                  ),
                   SizedBox(
                     width: double.infinity,
                     child: chooseItemIdForm(
@@ -113,8 +116,8 @@ class _AddRequestFaultyItemWidgetState
                               builder: (context) {
                                 return AlertDialog(
                                   title: const Text('Error'),
-                                  content:
-                                  const Text('You need to choose a category.'),
+                                  content: const Text(
+                                      'You need to choose a category.'),
                                   actions: [
                                     ElevatedButton(
                                       onPressed: () {
@@ -146,11 +149,17 @@ class _AddRequestFaultyItemWidgetState
                       ),
                     ),
                   ),
-                  const SizedBox(height: 18,),
-                  const Text('Product', style: TextStyle(fontSize: 18,
-                      color: Colors.pink,
-                      fontWeight: FontWeight.bold)),
-                  const SizedBox(height: 18,),
+                  const SizedBox(
+                    height: 18,
+                  ),
+                  const Text('Product',
+                      style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.pink,
+                          fontWeight: FontWeight.bold)),
+                  const SizedBox(
+                    height: 18,
+                  ),
                   SizedBox(
                     width: double.infinity,
                     child: chooseItemIdForm(
@@ -186,18 +195,26 @@ class _AddRequestFaultyItemWidgetState
                       ),
                     ),
                   ),
-                  const SizedBox(height: 18,),
-                  const Text('Quantity', style: TextStyle(fontSize: 18,
-                      color: Colors.pink,
-                      fontWeight: FontWeight.bold),),
-                  const SizedBox(height: 18,),
+                  const SizedBox(
+                    height: 18,
+                  ),
+                  const Text(
+                    'Quantity',
+                    style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.pink,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(
+                    height: 18,
+                  ),
                   SizedBox(
                     width: double.infinity,
                     child: buildProductContainerForm(
                       'Quantity',
                       TextInputType.number,
                       quantity,
-                     validateField,
+                      validateField,
                     ),
                   ),
                   const SizedBox(
@@ -209,10 +226,11 @@ class _AddRequestFaultyItemWidgetState
                         if (_formKey.currentState!.validate()) {
                           _formKey.currentState!.save();
 
-                          context.read<AddRequestFaultyItemCubit>()
+                          context
+                              .read<AddRequestFaultyItemCubit>()
                               .addRequestFaultyItem(AddFaultyItemRequest(
-                              product_id: product_id,
-                              quantity: quantity.text.toString()));
+                                  product_id: product_id,
+                                  quantity: quantity.text.toString()));
                         }
                       },
                       child: const Text('Add Faulty Item'),

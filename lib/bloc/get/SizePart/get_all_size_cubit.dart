@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
-import 'package:easy_invoice/data/responsemodel/GetAllSizeResponse.dart';
 import 'package:equatable/equatable.dart';
 
+import '../../../data/responsemodel/GetAllPagnitaionDataResponse.dart';
 import '../../../data/userRepository/UserRepository.dart';
 
 part 'get_all_size_state.dart';
@@ -16,7 +16,7 @@ class GetAllSizeCubit extends Cubit<GetAllSizeState> {
     emit(GetAllSizeLoading());
 
     try {
-      final List<SizeItems> response = await _userRepository.getSizes();
+      final List<PaginationItem> response = await _userRepository.getSizes();
       emit(GetAllSizeSuccess(response));
     } catch (error) {
       emit(GetAllSizeFail(error.toString()));

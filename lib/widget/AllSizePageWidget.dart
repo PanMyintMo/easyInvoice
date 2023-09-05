@@ -1,6 +1,5 @@
 import 'package:easy_invoice/bloc/delete/delete_size_cubit.dart';
 import 'package:easy_invoice/bloc/get/SizePart/get_all_size_cubit.dart';
-import 'package:easy_invoice/data/responsemodel/GetAllSizeResponse.dart';
 import 'package:easy_invoice/module/module.dart';
 import 'package:easy_invoice/screen/UpdateSizeScreen.dart';
 import 'package:flutter/material.dart';
@@ -8,9 +7,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import '../common/ToastMessage.dart';
+import '../common/showDeleteConfirmationDialog.dart';
+import '../data/responsemodel/GetAllPagnitaionDataResponse.dart';
 
 class AllSizePageWidget extends StatelessWidget {
-  final List<SizeItems> sizes;
+  final List<PaginationItem> sizes;
   final bool isLoading;
 
   final String message;
@@ -132,8 +133,12 @@ class AllSizePageWidget extends StatelessWidget {
                             )),
                             DataCell(GestureDetector(
                               onTap: () {
-                                showDeleteConfirmationDialog(context, sizes,
-                                    context.read<DeleteSizeCubit>());
+                                showDeleteConfirmationDialogs(context,"Are you sure you want to delete this city?",(){
+                                  context.read<DeleteSizeCubit>().deleteSize(sizes.id);
+                                });
+
+                                // showDeleteConfirmationDialog(context, sizes,
+                                //     context.read<DeleteSizeCubit>());
                               },
                               child: const Icon(
                                 Icons.delete_forever,
@@ -160,35 +165,5 @@ class AllSizePageWidget extends StatelessWidget {
 
         );
   }
-}
-
-void showDeleteConfirmationDialog(BuildContext context,
-    SizeItems item,
-    DeleteSizeCubit deleteSizeCubit,) {
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: const Text('Confirmation'),
-        content: const Text('Are you sure you want to delete this item?'),
-        actions: [
-          TextButton(
-            onPressed: () {
-              // Delete Action
-              deleteSizeCubit.deleteSize(item.id);
-              Navigator.pop(context);
-            },
-            child: const Text('Delete'),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            child: const Text('Cancel'),
-          ),
-        ],
-      );
-    },
-  );
 }
 

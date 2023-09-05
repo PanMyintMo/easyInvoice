@@ -56,6 +56,5 @@ class _EditCountryWidgetState extends State<EditCountryWidget> {
             )
         ],
       );
-
   }
 }

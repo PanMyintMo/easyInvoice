@@ -8,7 +8,6 @@ import '../../common/ThemeHelperUserClass.dart';
 import '../../data/responsemodel/CityPart/FetchCityByCountryId.dart';
 import '../../data/responsemodel/CountryPart/CountryResponse.dart';
 import '../../data/responsemodel/DeliveryPart/DeliCompanyNameByTownshipId.dart';
-import '../../data/responsemodel/GetAllProductResponse.dart';
 import '../../data/responsemodel/TownshipsPart/TownshipByCityIdResponse.dart';
 import '../../data/responsemodel/common/ProductListItemResponse.dart';
 import '../../dataRequestModel/DeliveryPart/AddOrderRequestModel.dart';

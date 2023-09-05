@@ -18,12 +18,11 @@ class EditShopKeeperWidget extends StatefulWidget {
   final String shProductId;
   final int id;
 
-  const EditShopKeeperWidget(
-      {super.key,
-      required this.isLoading,
-      required this.quantity,
-      required this.shCategoryId,
-      required this.shProductId, required this.id});
+  const EditShopKeeperWidget({super.key,
+    required this.isLoading,
+    required this.quantity,
+    required this.shCategoryId,
+    required this.shProductId, required this.id});
 
   @override
   State<EditShopKeeperWidget> createState() => _EditShopKeeperWidgetState();
@@ -68,16 +67,10 @@ class _EditShopKeeperWidgetState extends State<EditShopKeeperWidget> {
   }
 
   Future<void> fetchProductsByCategory(int id) async {
-    try {
-      final response = await ApiService().fetchAllProductByCateId(id);
-      if (response.isNotEmpty) {
-        setState(() {
-          products = response;
-        });
-      }
-    } catch (e) {
-      print('Error fetching products: $e');
-    }
+    final response = await ApiService().fetchAllProductByCateId(id);
+    setState(() {
+      products = response;
+    });
   }
 
   @override
@@ -100,7 +93,7 @@ class _EditShopKeeperWidgetState extends State<EditShopKeeperWidget> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) =>
-                                    const ShopKeeperScreen()));
+                                const ShopKeeperScreen()));
                       },
                       child: const Text('All ShopKeeper'),
                     ),
@@ -226,7 +219,7 @@ class _EditShopKeeperWidgetState extends State<EditShopKeeperWidget> {
       );
       context
           .read<UpdateShopKeeperCubit>()
-          .updateShopKeeper(requestModel,widget.id);
+          .updateShopKeeper(requestModel, widget.id);
     } else {
       showDialog(
         context: context,

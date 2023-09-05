@@ -6,7 +6,6 @@ import '../common/ThemeHelperUserClass.dart';
 import '../common/ToastMessage.dart';
 import '../data/api/apiService.dart';
 import '../data/responsemodel/GetAllPagnitaionDataResponse.dart';
-import '../data/responsemodel/GetAllSizeResponse.dart';
 
 class EditProductItemScreen extends StatefulWidget {
   final int id;
@@ -59,7 +58,7 @@ class _EditProductItemScreenState extends State<EditProductItemScreen> {
   late TextEditingController size_id;
 
   List<PaginationItem> categories = [];
-  List<SizeItems> sizes = [];
+  List<PaginationItem> sizes = [];
   bool isLoading = false;
 
   @override

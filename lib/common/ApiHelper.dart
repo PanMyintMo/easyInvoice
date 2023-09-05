@@ -4,7 +4,6 @@ import '../data/api/apiService.dart';
 import '../data/responsemodel/CountryPart/CountryResponse.dart';
 import '../data/responsemodel/FaultyItemPart/AllFaultyItems.dart';
 import '../data/responsemodel/GetAllPagnitaionDataResponse.dart';
-import '../data/responsemodel/GetAllSizeResponse.dart';
 import '../data/responsemodel/TownshipsPart/AllTownshipResponse.dart';
 import '../data/responsemodel/common/ProductListItemResponse.dart';
 
@@ -23,7 +22,7 @@ class ApiHelper {
   }
 
   //Fetch size Name
-  static Future<List<SizeItems>> fetchSizeName() async {
+  static Future<List<PaginationItem>> fetchSizeName() async {
     try {
       final response = await ApiService().getAllSizes();
       if (response.data.data.isNotEmpty) {

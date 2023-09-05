@@ -9,7 +9,6 @@ import '../common/ApiHelper.dart';
 import '../common/FormValidator.dart';
 import '../common/ThemeHelperUserClass.dart';
 import '../data/responsemodel/GetAllPagnitaionDataResponse.dart';
-import '../data/responsemodel/GetAllSizeResponse.dart';
 
 class AddProductWidget extends StatefulWidget {
   final bool isLoading; // Add the isLoading property
@@ -38,7 +37,7 @@ class _AddProductWidgetState extends State<AddProductWidget> {
   String category_id = 'Select Category';
   String sizeId='Select Size';
   List<PaginationItem> categories = [];
-  List<SizeItems> sizeIdList = [];
+  List<PaginationItem> sizeIdList = [];
 
 
   @override

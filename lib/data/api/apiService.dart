@@ -3,7 +3,6 @@ import 'package:easy_invoice/data/responsemodel/AddSizeResponse.dart';
 import 'package:easy_invoice/data/responsemodel/EditProductResponse.dart';
 import 'package:easy_invoice/data/responsemodel/GetAllPagnitaionDataResponse.dart';
 import 'package:easy_invoice/data/responsemodel/GetAllProductResponse.dart';
-import 'package:easy_invoice/data/responsemodel/GetAllSizeResponse.dart';
 import 'package:easy_invoice/data/responsemodel/common/UpdateResponse.dart';
 import 'package:easy_invoice/data/responsemodel/UserResponse.dart';
 import 'package:easy_invoice/dataRequestModel/EditProductRequestModel.dart';
@@ -908,7 +907,6 @@ class ApiService {
     }
   }
 
-
   //Main Page for order filter
   Future<OrderApiResponse> orderFilter(String filterType) async {
     try {
@@ -1371,11 +1369,11 @@ class ApiService {
   }
 
   //fetch all sizes from db
-  Future<GetAllSizeResponse> getAllSizes() async {
+  Future<PaginationDataResponse> getAllSizes() async {
     try {
       int currentPage = 1;
-      SizeData sizeData;
-      List<SizeItems> allSizes = [];
+      PaginationData sizeData;
+      List<PaginationItem> allSizes = [];
 
       while (true) {
         final response = await _dio
@@ -1384,10 +1382,10 @@ class ApiService {
         if (response.statusCode == 200) {
           final dynamic responseData = response.data;
 
-          final sizeDataResponse = GetAllSizeResponse.fromJson(responseData);
+          final sizeDataResponse = PaginationDataResponse.fromJson(responseData);
 
           sizeData = sizeDataResponse.data;
-          final List<SizeItems> sizes = sizeData.data;
+          final List<PaginationItem> sizes = sizeData.data;
           allSizes.addAll(sizes);
 
           if (currentPage == sizeData.last_page) {
@@ -1400,8 +1398,8 @@ class ApiService {
         }
       }
 
-      return GetAllSizeResponse(
-        data: SizeData(
+      return PaginationDataResponse(
+        data: PaginationData(
           current_page: currentPage,
           data: allSizes,
           first_page_url: 'https://mmeasyinvoice.com/api/sizes?page=1',

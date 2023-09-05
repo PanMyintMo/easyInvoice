@@ -2,7 +2,6 @@ import 'package:easy_invoice/data/api/apiService.dart';
 import 'package:easy_invoice/data/responsemodel/AddSizeResponse.dart';
 import 'package:easy_invoice/data/responsemodel/CountryPart/CountryResponse.dart';
 import 'package:easy_invoice/data/responsemodel/EditProductResponse.dart';
-import 'package:easy_invoice/data/responsemodel/GetAllSizeResponse.dart';
 import 'package:easy_invoice/data/responsemodel/Login&RegisterResponse/RegisterResponse.dart';
 import 'package:easy_invoice/data/responsemodel/UserResponse.dart';
 import 'package:easy_invoice/dataRequestModel/EditProductRequestModel.dart';
@@ -393,7 +392,7 @@ class UserRepository {
   }
 
   //fetch all sizes
-  Future<List<SizeItems>> getSizes() async {
+  Future<List<PaginationItem>> getSizes() async {
     try {
       final response = await _apiService.getAllSizes();
       return response.data.data;

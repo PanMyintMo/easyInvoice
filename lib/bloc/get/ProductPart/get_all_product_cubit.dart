@@ -1,5 +1,4 @@
 import 'package:bloc/bloc.dart';
-import 'package:easy_invoice/data/responsemodel/GetAllProductResponse.dart';
 import 'package:equatable/equatable.dart';
 import '../../../data/responsemodel/common/ProductListItemResponse.dart';
 import '../../../data/userRepository/UserRepository.dart';
