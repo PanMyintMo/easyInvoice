@@ -1039,9 +1039,7 @@ class ApiService {
         }
       }
 
-      if (townshipData == null) {
-        throw Exception('No township data found');
-      }
+
 
       return TownshipResponse(
         data: TownshipData(
