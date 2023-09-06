@@ -198,77 +198,80 @@ class _MainPageState extends State<MainPageScreen> {
                               const SizedBox(
                                 height: 16,
                               ),
-                              Container(
-                                height: 100,
-                                color: Colors.white10,
-                                child: ListView(
-                                  scrollDirection: Axis.horizontal,
-                                  children: [
-                                    if (utype == 'ADM')
+                              Padding(
+                                padding: const EdgeInsets.all(12.0),
+                                child: Container(
+                                  height: 100,
+                                  color: Colors.white10,
+                                  child: ListView(
+                                    scrollDirection: Axis.horizontal,
+                                    children: [
+                                      if (utype == 'ADM')
+                                        _buildCardView(
+                                            'assets/revenue.png',
+                                            'Total Revenue',
+                                            '${mainPageResponse?.totalRevenue
+                                                .toString() ?? 0}',
+                                            '\$',
+                                                () {}),
                                       _buildCardView(
-                                          'assets/revenue.png',
-                                          'Total Revenue',
-                                          '${mainPageResponse?.totalRevenue
+                                          'assets/sale.jpg',
+                                          'Total Sale',
+                                          '${mainPageResponse?.totalSales
+                                              .toString() ?? 0}',
+                                          ' (Sales)',
+                                              () {}),
+                                      _buildCardView(
+                                          'assets/profits.png',
+                                          'Total Profit',
+                                          '${mainPageResponse?.totalProfit
                                               .toString() ?? 0}',
                                           '\$',
                                               () {}),
-                                    _buildCardView(
-                                        'assets/sale.jpg',
-                                        'Total Sale',
-                                        '${mainPageResponse?.totalSales
-                                            .toString() ?? 0}',
-                                        ' (Sales)',
-                                            () {}),
-                                    _buildCardView(
-                                        'assets/profits.png',
-                                        'Total Profit',
-                                        '${mainPageResponse?.totalProfit
-                                            .toString() ?? 0}',
-                                        '\$',
-                                            () {}),
-                                    _buildCardView(
-                                        'assets/faulty.png',
-                                        'Faulty Item',
-                                        '${mainPageResponse?.totalFaultyItem
-                                            .toString() ?? 0}',
-                                        ' (Items)', () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                              const AllFaultyItemsScreen()));
-                                    }),
-                                    _buildCardView(
-                                      'assets/warehouse.png',
-                                      'Ware House',
-                                      '${mainPageResponse
-                                          ?.totalWareHouseQuantity.toString() ??
-                                          0}',
-                                      '',
-                                          () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                              const WarehouseTableScreen()), // Replace WarehousePage() with your actual destination page
-                                        );
-                                      },
-                                    ),
-                                    if (utype == 'ADM' || utype == 'SK')
                                       _buildCardView(
-                                          'assets/shopkeeper.jpg',
-                                          'Shop Keeper',
-                                          '${mainPageResponse?.shopKeeper
+                                          'assets/faulty.png',
+                                          'Faulty Item',
+                                          '${mainPageResponse?.totalFaultyItem
                                               .toString() ?? 0}',
-                                          '(Item Left)', () {
+                                          ' (Items)', () {
                                         Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                              const ShopKeeperProductTableScreen()), // Replace WarehousePage() with your actual destination page
-                                        );
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                const AllFaultyItemsScreen()));
                                       }),
-                                  ],
+                                      _buildCardView(
+                                        'assets/warehouse.png',
+                                        'Ware House',
+                                        '${mainPageResponse
+                                            ?.totalWareHouseQuantity.toString() ??
+                                            0}',
+                                        '',
+                                            () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                const WarehouseTableScreen()), // Replace WarehousePage() with your actual destination page
+                                          );
+                                        },
+                                      ),
+                                      if (utype == 'ADM' || utype == 'SK')
+                                        _buildCardView(
+                                            'assets/shopkeeper.jpg',
+                                            'Shop Keeper',
+                                            '${mainPageResponse?.shopKeeper
+                                                .toString() ?? 0}',
+                                            '(Item Left)', () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                const ShopKeeperProductTableScreen()), // Replace WarehousePage() with your actual destination page
+                                          );
+                                        }),
+                                    ],
+                                  ),
                                 ),
                               ),
                               const SizedBox(
@@ -277,7 +280,6 @@ class _MainPageState extends State<MainPageScreen> {
                               SingleChildScrollView(
                                 scrollDirection: Axis.horizontal,
                                 child: SizedBox(
-                                 // height: 300,
                                   child: DataTable(
                                     headingRowColor:
                                     MaterialStateColor.resolveWith((

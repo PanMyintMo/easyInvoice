@@ -47,18 +47,21 @@ class _CitiesWidgetState extends State<CitiesWidget> {
             child: Text('Add New City',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold),),
           ),),
         ),
-        Expanded(
-          child: PaginatedDataTable(
-            columns: const [
-              DataColumn(label: Text('ID',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold),)),
-              DataColumn(label: Text('Name',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold))),
-              DataColumn(label: Text('Action',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold))),
-            ],
-            source: CityData(cities,context),
-            horizontalMargin: 20,
-            arrowHeadColor: Colors.blueAccent,
-            rowsPerPage: 8,
-            columnSpacing: 85,
+        Flexible(
+          child: SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            child: PaginatedDataTable(
+              columns: const [
+                DataColumn(label: Text('ID',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold),)),
+                DataColumn(label: Text('Name',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold))),
+                DataColumn(label: Text('Action',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold))),
+              ],
+              source: CityData(cities,context),
+              horizontalMargin: 20,
+              arrowHeadColor: Colors.blueAccent,
+              rowsPerPage: 8,
+              columnSpacing: 85,
+            ),
           ),
         ),
       ],

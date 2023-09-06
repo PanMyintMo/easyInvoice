@@ -1,6 +1,7 @@
 import 'package:easy_invoice/bloc/delete/CountryPart/delete_country_cubit.dart';
 import 'package:easy_invoice/screen/LocationPart/AddNewCountryScreen.dart';
 import 'package:easy_invoice/screen/LocationPart/EditCountryScreen.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -47,18 +48,22 @@ class _CountryWidgetState extends State<CountryWidget> {
             child: Text('Add New Country',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold),),
           ),),
         ),
-        Expanded(
-          child: PaginatedDataTable(
-            columns: const [
-              DataColumn(label: Text('ID',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold),)),
-              DataColumn(label: Text('Name',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold))),
-              DataColumn(label: Text('Action',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold))),
-            ],
-            source: CountryData(countries,context),
-            horizontalMargin: 15,
-            rowsPerPage: 8,
-            arrowHeadColor: Colors.blueAccent,
-            columnSpacing: 70,
+        Flexible(
+          child: SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            child: PaginatedDataTable(
+              columns: const [
+                DataColumn(label: Text('ID',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold),)),
+                DataColumn(label: Text('Name',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold))),
+                DataColumn(label: Text('Action',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold))),
+              ],
+              source: CountryData(countries,context),
+              horizontalMargin: 15,
+              rowsPerPage: 8,
+              dragStartBehavior: DragStartBehavior.start,
+              arrowHeadColor: Colors.blueAccent,
+              columnSpacing: 70,
+            ),
           ),
         ),
       ],

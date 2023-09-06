@@ -17,17 +17,23 @@ class _DeliveryManWidgetState extends State<DeliveryManWidget> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        PaginatedDataTable(
-          columns: const [
-            DataColumn(label: Text('ID')),
-            DataColumn(label: Text('Product Name')),
-            DataColumn(label: Text('Quantity')),
-            DataColumn(label: Text('Action')),
-          ],
-          source: Delivery(widget.delivery, context),
-          horizontalMargin: 20,
-          rowsPerPage: 8,
-          columnSpacing: 30,
+        Flexible(
+          child: SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            child: PaginatedDataTable(
+
+              columns: const [
+                DataColumn(label: Text('ID')),
+                DataColumn(label: Text('Product Name')),
+                DataColumn(label: Text('Quantity')),
+                DataColumn(label: Text('Action')),
+              ],
+              source: Delivery(widget.delivery, context),
+              horizontalMargin: 20,
+              rowsPerPage: 8,
+              columnSpacing: 30,
+            ),
+          ),
         ),
       ],
     );

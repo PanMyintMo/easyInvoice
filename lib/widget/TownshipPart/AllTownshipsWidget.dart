@@ -1,4 +1,5 @@
 import 'package:easy_invoice/bloc/delete/TownshipPart/township_delete_cubit.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../common/ApiHelper.dart';
@@ -45,18 +46,22 @@ class _TownshipWidgetState extends State<TownshipWidget> {
             child: Text('Add New Township',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold),),
           ),),
         ),
-        Expanded(
-          child: PaginatedDataTable(
-            columns: const [
-              DataColumn(label: Text('ID',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold),)),
-              DataColumn(label: Text('Name',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold))),
-              DataColumn(label: Text('Action',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold))),
-            ],
-            source: TownshipData(townships,context),
-            horizontalMargin: 20,
-            arrowHeadColor: Colors.blueAccent,
-            rowsPerPage: 8,
-            columnSpacing: 85,
+        Flexible(
+          child: SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            child: PaginatedDataTable(
+              columns: const [
+                DataColumn(label: Text('ID',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold),)),
+                DataColumn(label: Text('Name',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold))),
+                DataColumn(label: Text('Action',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold))),
+              ],
+              source: TownshipData(townships,context),
+              horizontalMargin: 20,
+              dragStartBehavior: DragStartBehavior.down,
+              arrowHeadColor: Colors.blueAccent,
+              rowsPerPage: 8,
+              columnSpacing: 85,
+            ),
           ),
         ),
       ],

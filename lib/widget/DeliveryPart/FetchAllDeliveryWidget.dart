@@ -48,19 +48,22 @@ class _FetchAllDeliveryWidgetState extends State<FetchAllDeliveryWidget> {
           ),
         ),
         const SizedBox(height: 20,),
-        Expanded(
-          child: PaginatedDataTable(
-            columns: const [
-              DataColumn(label: Text('Cost')),
-              DataColumn(label: Text('City')),
-              DataColumn(label: Text('State')),
-              DataColumn(label: Text('Company')),
-              DataColumn(label: Text('Action')),
-            ],
-            source: DeliData(widget.deliveriesItem, context),
-            horizontalMargin: 20,
-            rowsPerPage: 8,
-            columnSpacing: 30,
+        Flexible(
+          child: SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            child: PaginatedDataTable(
+              columns: const [
+                DataColumn(label: Text('Cost')),
+                DataColumn(label: Text('City')),
+                DataColumn(label: Text('State')),
+                DataColumn(label: Text('Company')),
+                DataColumn(label: Text('Action')),
+              ],
+              source: DeliData(widget.deliveriesItem, context),
+              horizontalMargin: 20,
+              rowsPerPage: 8,
+              columnSpacing: 30,
+            ),
           ),
         ),
       ],
