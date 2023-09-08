@@ -14,6 +14,7 @@ import 'package:easy_invoice/bloc/get/SizePart/get_all_size_cubit.dart';
 import 'package:easy_invoice/bloc/get/UserRolePart/get_all_user_role_cubit.dart';
 import 'package:easy_invoice/bloc/get/CategoryPart/get_category_detail_cubit.dart';
 import 'package:easy_invoice/bloc/post/DeliveryPart/add_delivery_cubit.dart';
+import 'package:easy_invoice/bloc/post/DeliveryPart/fetch_order_by_date_cubit.dart';
 import 'package:easy_invoice/bloc/post/FaultyItemPart/add_request_faulty_item_cubit.dart';
 import 'package:easy_invoice/bloc/post/Login&Register/edit_company_profile_cubit.dart';
 import 'package:easy_invoice/bloc/post/ShopKeeperPart/add_request_product_shop_keeper_cubit.dart';
@@ -108,6 +109,11 @@ void locator() {
   GetCategoryDetailCubit getCategoryDetailCubit =
       GetCategoryDetailCubit(getIt.get<UserRepository>());
   getIt.registerLazySingleton(() => getCategoryDetailCubit);
+
+  //fetch all order by date
+  FetchOrderByDateCubit fetchOrderByDateCubit =
+  FetchOrderByDateCubit(getIt.get<UserRepository>());
+  getIt.registerLazySingleton(() => fetchOrderByDateCubit);
 
 
   //Delivered Warehouse Request

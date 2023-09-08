@@ -19,6 +19,7 @@ import '../../dataRequestModel/DeliveryPart/AddDeliveryCompanyNameRequestModel.d
 import '../../dataRequestModel/DeliveryPart/AddOrderRequestModel.dart';
 import '../../dataRequestModel/DeliveryPart/ChangeOrderProductQty.dart';
 import '../../dataRequestModel/DeliveryPart/ChooseProductForOrderRequestModel.dart';
+import '../../dataRequestModel/DeliveryPart/OrderByDateRequestModel.dart';
 import '../../dataRequestModel/DeliveryPart/ProductInvoiceRequest.dart';
 import '../../dataRequestModel/DeliveryPart/UpdateQuantityInBarcodeRequest.dart';
 import '../../dataRequestModel/EditCategoryModel.dart';
@@ -36,6 +37,7 @@ import '../responsemodel/AddCategoryResponseModel.dart';
 import '../responsemodel/CityPart/AddCityResponse.dart';
 import '../responsemodel/CityPart/Cities.dart';
 import '../responsemodel/DeliveryPart/FetchAllDeliveries.dart';
+import '../responsemodel/DeliveryPart/FetchAllOrderByDate.dart';
 import '../responsemodel/ShopKeeperResponsePart/DeliveredWarehouseRequest.dart';
 import '../responsemodel/common/DeleteResponse.dart';
 import '../responsemodel/CityPart/EditCityResponse.dart';
@@ -991,6 +993,65 @@ class ApiService {
     }
   }
 
+
+  // fetch all order by date
+  Future<AllOrderByDateResponse> fetchAllOrderByDate(OrderByDateRequest orderByDateRequestModel) async {
+    try {
+      int currentPage = 1;
+      OrderFilterData orderbyDateData;
+      List<OrderFilterItem> orderFileterData = [];
+
+      while (true) {
+        final response = await _dio.post('https://www.mmeasyinvoice.com/api/ordersByDate?page=$currentPage', data: orderByDateRequestModel.toJson());
+
+        print("${response}");
+
+        if (response.statusCode == 200) {
+          final dynamic responseData = response.data;
+
+          final orderByDateResponse =
+          AllOrderByDateResponse.fromJson(responseData);
+          orderbyDateData = orderByDateResponse.data;
+          final List<OrderFilterItem> orderItemData = orderbyDateData.data;
+          orderFileterData.addAll(orderItemData);
+
+          if (currentPage == orderbyDateData.last_page) {
+            break;
+          } else {
+            currentPage++;
+          }
+        } else {
+          throw Exception('Failed to fetch all order by date.');
+        }
+      }
+
+      return AllOrderByDateResponse(
+        data: OrderFilterData(
+          current_page: currentPage,
+          data: orderFileterData,
+          first_page_url: 'https://mmeasyinvoice.com/api/ordersByDate?page=1',
+          from: 1,
+          last_page: currentPage,
+          last_page_url:
+          'https://mmeasyinvoice.com/api/ordersByDate?page=$currentPage',
+          links: [],
+          next_page_url: (currentPage < orderbyDateData.last_page)
+              ? 'https://mmeasyinvoice.com/api/ordersByDate?page=${currentPage + 1}'
+              : '',
+          path: 'https://mmeasyinvoice.com/api/ordersByDate',
+          per_page: orderFileterData.length,
+          prev_page_url: (currentPage > 1)
+              ? 'https://mmeasyinvoice.com/api/ordersByDate?page=${currentPage - 1}'
+              : null,
+          to: orderFileterData.length,
+          total: 0,
+        ),
+      );
+    } catch (e) {
+      throw Exception('Failed to fetch order by date response: $e');
+    }
+  }
+
   //shopkeeper request list
   Future<ShopKeeperRequestResponse> shopKeeperRequestList() async {
     try {
@@ -1099,10 +1160,6 @@ class ApiService {
         }
       }
 
-      if (cityData == null) {
-        throw Exception('No city data found');
-      }
-
       return CityResponse(
         data: CityData(
           currentPage: cityData.currentPage,
@@ -1170,9 +1227,6 @@ class ApiService {
         }
       }
 
-      if (countryData == null) {
-        throw Exception('No country data found');
-      }
 
       return CountryResponse(
         data: CountryData(

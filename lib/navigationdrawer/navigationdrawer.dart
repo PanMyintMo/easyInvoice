@@ -17,7 +17,7 @@ import '../screen/DeliveryPart/AllDeliveryScreen.dart';
 import '../screen/FaultyItemPart/AddRequestFaultyItemScreen.dart';
 import '../screen/LocationPart/AllTownshipsScreen.dart';
 import '../screen/LocationPart/CityScreen.dart';
-import '../screen/OrderPart/AllOrderScreen.dart';
+import '../screen/OrderPart/OrderByDateScreen.dart';
 import '../screen/ProductInvoicePart/ProductInvoiceScreen.dart';
 import '../screen/SizeAddScreen.dart';
 import '../screen/shopkeeperPart/ShopKeeperAddScreen.dart';
@@ -237,7 +237,7 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
                     listData: [],
                     onClicked: () {
                       Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => const AllOrderScreen()));
+                          builder: (context) => const FetchOrderByDateScreen()));
                     },
                     onClickedItem: () {
                       Navigator.of(context).push(MaterialPageRoute(

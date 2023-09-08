@@ -17,6 +17,7 @@ import '../../dataRequestModel/CountryPart/AddCountry.dart';
 import '../../dataRequestModel/CountryPart/EditCountry.dart';
 import '../../dataRequestModel/DeliveryPart/AddDeliveryCompanyNameRequestModel.dart';
 import '../../dataRequestModel/DeliveryPart/AddOrderRequestModel.dart';
+import '../../dataRequestModel/DeliveryPart/OrderByDateRequestModel.dart';
 import '../../dataRequestModel/DeliveryPart/ProductInvoiceRequest.dart';
 import '../../dataRequestModel/EditCategoryModel.dart';
 import '../../dataRequestModel/EditSizeModel.dart';
@@ -31,6 +32,7 @@ import '../responsemodel/AddCategoryResponseModel.dart';
 import '../responsemodel/CityPart/AddCityResponse.dart';
 import '../responsemodel/CityPart/Cities.dart';
 import '../responsemodel/DeliveryPart/FetchAllDeliveries.dart';
+import '../responsemodel/DeliveryPart/FetchAllOrderByDate.dart';
 import '../responsemodel/ShopKeeperResponsePart/DeliveredWarehouseRequest.dart';
 import '../responsemodel/common/DeleteResponse.dart';
 import '../responsemodel/CityPart/EditCityResponse.dart';
@@ -171,6 +173,17 @@ class UserRepository {
     try {
       final response = await _apiService.productInvoice(productInvoiceRequest);
       return response.data;
+    } catch (error) {
+      rethrow;
+    }
+  }
+
+  //fetch all order by date
+  Future<List<OrderFilterItem>> allOrderByDate(
+      OrderByDateRequest orderByDateRequest) async {
+    try {
+      final response = await _apiService.fetchAllOrderByDate(orderByDateRequest);
+      return response.data.data;
     } catch (error) {
       rethrow;
     }
