@@ -995,60 +995,56 @@ class ApiService {
 
 
   // fetch all order by date
-  Future<AllOrderByDateResponse> fetchAllOrderByDate(OrderByDateRequest orderByDateRequestModel) async {
+  Future<OrderByDateResponse> fetchAllOrderByDate(OrderByDateRequest orderByDateRequestModel) async {
     try {
       int currentPage = 1;
-      OrderFilterData orderbyDateData;
-      List<OrderFilterItem> orderFileterData = [];
+      List<OrderFilterItem> orderFilterData = [];
+      String? nextPageUrl;
 
       while (true) {
         final response = await _dio.post('https://www.mmeasyinvoice.com/api/ordersByDate?page=$currentPage', data: orderByDateRequestModel.toJson());
 
-        print("${response}");
-
         if (response.statusCode == 200) {
           final dynamic responseData = response.data;
 
-          final orderByDateResponse =
-          AllOrderByDateResponse.fromJson(responseData);
-          orderbyDateData = orderByDateResponse.data;
-          final List<OrderFilterItem> orderItemData = orderbyDateData.data;
-          orderFileterData.addAll(orderItemData);
+          final orderByDateResponse = OrderByDateResponse.fromJson(responseData);
+          final orderByDateData = orderByDateResponse.data;
 
-          if (currentPage == orderbyDateData.last_page) {
+          if (orderByDateData != null) {
+            orderFilterData.addAll(orderByDateData);
+          }
+
+          nextPageUrl = orderByDateResponse.nextPageUrl;
+
+          if (currentPage == orderByDateResponse.lastPage) {
             break;
           } else {
             currentPage++;
           }
         } else {
-          throw Exception('Failed to fetch all order by date.');
+          throw Exception('Failed to fetch all orders by date.');
         }
       }
 
-      return AllOrderByDateResponse(
-        data: OrderFilterData(
-          current_page: currentPage,
-          data: orderFileterData,
-          first_page_url: 'https://mmeasyinvoice.com/api/ordersByDate?page=1',
-          from: 1,
-          last_page: currentPage,
-          last_page_url:
-          'https://mmeasyinvoice.com/api/ordersByDate?page=$currentPage',
-          links: [],
-          next_page_url: (currentPage < orderbyDateData.last_page)
-              ? 'https://mmeasyinvoice.com/api/ordersByDate?page=${currentPage + 1}'
-              : '',
-          path: 'https://mmeasyinvoice.com/api/ordersByDate',
-          per_page: orderFileterData.length,
-          prev_page_url: (currentPage > 1)
-              ? 'https://mmeasyinvoice.com/api/ordersByDate?page=${currentPage - 1}'
-              : null,
-          to: orderFileterData.length,
-          total: 0,
-        ),
+      return OrderByDateResponse(
+        currentPage: currentPage,
+        data: orderFilterData,
+        firstPageUrl: 'https://mmeasyinvoice.com/api/ordersByDate?page=1',
+        from: 1, // Always set to 1 if data is not empty
+        lastPage: currentPage,
+        lastPageUrl: 'https://mmeasyinvoice.com/api/ordersByDate?page=$currentPage',
+        links: [],
+        nextPageUrl: nextPageUrl,
+        path: 'https://mmeasyinvoice.com/api/ordersByDate',
+        perPage: orderFilterData.length,
+        prevPageUrl: (currentPage > 1) ? 'https://mmeasyinvoice.com/api/ordersByDate?page=${currentPage - 1}' : null,
+        to: 1,
+        total: 0,
+        status: null, // You can set this to null or provide the appropriate value
+        message: null, // You can set this to null or provide the appropriate value
       );
     } catch (e) {
-      throw Exception('Failed to fetch order by date response: $e');
+      throw Exception('Failed to fetch orders by date response: $e');
     }
   }
 

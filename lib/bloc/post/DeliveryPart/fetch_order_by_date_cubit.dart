@@ -17,8 +17,8 @@ class FetchOrderByDateCubit extends Cubit<FetchOrderByDateState> {
     emit(FetchOrderByDateLoading());
 
     try {
-      final List<OrderFilterItem> response = await _userRepository.allOrderByDate(orderByDateRequest);
-      emit(FetchOrderByDateSuccess(response));
+      final List<OrderFilterItem>? response = await _userRepository.allOrderByDate(orderByDateRequest);
+      emit(FetchOrderByDateSuccess(response!));
     } catch (error) {
       emit(FetchOrderByDateFail(error.toString()));
     }

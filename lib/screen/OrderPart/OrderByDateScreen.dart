@@ -5,8 +5,8 @@ import 'package:intl/intl.dart';
 import 'package:easy_invoice/bloc/post/DeliveryPart/fetch_order_by_date_cubit.dart';
 import 'package:easy_invoice/dataRequestModel/DeliveryPart/OrderByDateRequestModel.dart';
 import '../../bloc/delete/CountryPart/delete_country_cubit.dart';
+import '../../data/responsemodel/DeliveryPart/FetchAllOrderByDate.dart';
 import '../../module/module.dart';
-import '../../widget/OrderPart/OrderByDateWidget.dart';
 
 class FetchOrderByDateScreen extends StatelessWidget {
   const FetchOrderByDateScreen({Key? key}) : super(key: key);
@@ -47,28 +47,64 @@ class FetchOrderByDateScreen extends StatelessWidget {
 
 class FetchOrderByDateContent extends StatefulWidget {
   @override
-  State<FetchOrderByDateContent> createState() => _FetchOrderByDateContentState();
+  State<FetchOrderByDateContent> createState() =>
+      _FetchOrderByDateContentState();
 }
 
 class _FetchOrderByDateContentState extends State<FetchOrderByDateContent> {
-  DateTime? _selectedDate; // Add a variable to store the selected date
+  DateTime? _selectedDate;
   TextEditingController textEditingController = TextEditingController();
+
+  List<OrderFilterItem> orderFilterItem =
+      []; // Initialize an empty list for data
+
+  final List<DataColumn> defaultColumns = const [
+    DataColumn(
+      label: Text(
+        'ID',
+        style: TextStyle(fontSize: 16, color: Colors.white),
+      ),
+    ),
+    DataColumn(
+      label: Text(
+        'Name',
+        style: TextStyle(fontSize: 16, color: Colors.white),
+      ),
+    ),
+    DataColumn(
+      label: Text(
+        'Mobile',
+        style: TextStyle(fontSize: 16, color: Colors.white),
+      ),
+    ),
+    DataColumn(
+      label: Text(
+        'Delivery Company',
+        style: TextStyle(fontSize: 16, color: Colors.white),
+      ),
+    ),
+    DataColumn(
+      label: Text(
+        'Status',
+        style: TextStyle(fontSize: 16, color: Colors.white),
+      ),
+    ),
+  ];
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime picked = (await showDatePicker(
-      context: context,
-      initialDate: _selectedDate ?? DateTime.now(),
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2101),
-    )) ??
+          context: context,
+          initialDate: _selectedDate ?? DateTime.now(),
+          firstDate: DateTime(2000),
+          lastDate: DateTime(2101),
+        )) ??
         DateTime.now();
 
     if (picked != _selectedDate) {
       setState(() {
         _selectedDate = picked;
         final formattedDate = DateFormat('yyyy-MM-d').format(picked);
-        textEditingController.text =
-            formattedDate; // Set the selected date in the search bar.
+        textEditingController.text = formattedDate;
       });
     }
   }
@@ -124,20 +160,46 @@ class _FetchOrderByDateContentState extends State<FetchOrderByDateContent> {
               ],
             ),
           ),
+
           BlocBuilder<FetchOrderByDateCubit, FetchOrderByDateState>(
             builder: (context, state) {
               if (state is FetchOrderByDateLoading) {
                 return const Center(child: CircularProgressIndicator());
               } else if (state is FetchOrderByDateSuccess) {
-                return FetchOrderByDateWidget(
-                  orderFilterItem: state.fetchOrderByDate,
-                );
+                orderFilterItem= state.fetchOrderByDate;
+                if (orderFilterItem.isEmpty) {
+                  return const Center(
+                    child: Text(
+                      'No data found',
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  );
+                } else {
+                  return SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: DataTable(
+                      border: TableBorder.all(width: 0.2),
+                      headingRowColor:
+                      MaterialStateColor.resolveWith((states) => Colors.teal),
+                      columns: defaultColumns,
+                      rows: state.fetchOrderByDate.map((orderItem) {
+                        return DataRow(cells: [
+                          DataCell(Text(orderItem.id.toString())),
+                          DataCell(Text(orderItem.firstname.toString())),
+                          DataCell(Text(orderItem.mobile.toString())),
+                          DataCell(Text(orderItem.deliveryCompany.toString())),
+                          DataCell(Text(orderItem.status.toString())),
+                        ]);
+                      }).toList(),
+                    ),
+                  );
+                }
               } else if (state is FetchOrderByDateFail) {
-                return Center(child: Text('Error: ${state.error}'));
+                return Center(child: Text('${state.error}'));
               }
               return const SizedBox();
             },
-          ),
+          )
         ],
       ),
     );

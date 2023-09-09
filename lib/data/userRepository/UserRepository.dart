@@ -179,11 +179,11 @@ class UserRepository {
   }
 
   //fetch all order by date
-  Future<List<OrderFilterItem>> allOrderByDate(
+  Future<List<OrderFilterItem>?> allOrderByDate(
       OrderByDateRequest orderByDateRequest) async {
     try {
       final response = await _apiService.fetchAllOrderByDate(orderByDateRequest);
-      return response.data.data;
+      return response.data;
     } catch (error) {
       rethrow;
     }

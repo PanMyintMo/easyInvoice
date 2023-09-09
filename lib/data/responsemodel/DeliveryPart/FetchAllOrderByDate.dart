@@ -1,66 +1,61 @@
-class AllOrderByDateResponse {
-  final OrderFilterData data;
-
-  AllOrderByDateResponse({
-    required this.data,
-  });
-
-  factory AllOrderByDateResponse.fromJson(Map<String, dynamic> json) {
-    return AllOrderByDateResponse(
-      data: OrderFilterData.fromJson(json['data']),
-    );
-  }
-}
-
-class OrderFilterData {
-  final int current_page;
+class OrderByDateResponse {
+  final int currentPage;
   final List<OrderFilterItem> data;
-  final String first_page_url;
-  final int from;
-  final int last_page;
-  final String last_page_url;
+  final String firstPageUrl;
+  final int? from;
+  final int lastPage;
+  final String lastPageUrl;
   final List<PageLink> links;
-  final String next_page_url;
+  final String? nextPageUrl;
   final String path;
-  final int per_page;
-  final String? prev_page_url;
-  final int to;
+  final int perPage;
+  final String? prevPageUrl;
+  final int? to;
   final int total;
+  final int? status;
+  final String? message;
 
-  OrderFilterData({
-    required this.current_page,
+  OrderByDateResponse({
+    required this.currentPage,
     required this.data,
-    required this.first_page_url,
+    required this.firstPageUrl,
     required this.from,
-    required this.last_page,
-    required this.last_page_url,
+    required this.lastPage,
+    required this.lastPageUrl,
     required this.links,
-    required this.next_page_url,
+    required this.nextPageUrl,
     required this.path,
-    required this.per_page,
-    required this.prev_page_url,
+    required this.perPage,
+    required this.prevPageUrl,
     required this.to,
     required this.total,
+    required this.status,
+    required this.message,
   });
 
-  factory OrderFilterData.fromJson(Map<String, dynamic> json) {
-    return OrderFilterData(
-      current_page: json['current_page'],
-      data: List<OrderFilterItem>.from(json['data'].map((item) => OrderFilterItem.fromJson(item))),
-      first_page_url: json['first_page_url'],
-      from: json['from'],
-      last_page: json['last_page'],
-      last_page_url: json['last_page_url'],
-      links: List<PageLink>.from(json['links'].map((item) => PageLink.fromJson(item))),
-      next_page_url: json['next_page_url'] ?? '',
-      path: json['path'],
-      per_page: json['per_page'],
-      prev_page_url: json['prev_page_url'] ?? '',
-      to: json['to'],
-      total: json['total'],
+  factory OrderByDateResponse.fromJson(Map<String, dynamic> json) {
+    return OrderByDateResponse(
+      currentPage: json['data']['current_page'],
+      data: (json['data']['data'] as List<dynamic>?)
+          ?.map((item) => OrderFilterItem.fromJson(item))
+          .toList() ?? [],
+      firstPageUrl: json['data']['first_page_url'],
+      from: json['data']['from'],
+      lastPage: json['data']['last_page'],
+      lastPageUrl: json['data']['last_page_url'],
+      links: (json['data']['links'] as List<dynamic>?)
+          ?.map((item) => PageLink.fromJson(item))
+          .toList() ?? [],
+      nextPageUrl: json['data']['next_page_url'],
+      path: json['data']['path'],
+      perPage: json['data']['per_page'],
+      prevPageUrl: json['data']['prev_page_url'],
+      to: json['data']['to'],
+      total: json['data']['total'],
+      status: json['status'],
+      message: json['message'],
     );
   }
-
 }
 
 class PageLink {
@@ -76,7 +71,7 @@ class PageLink {
 
   factory PageLink.fromJson(Map<String, dynamic> json) {
     return PageLink(
-      url: json['url'] != null ? json['url'] : '',
+      url: json['url'],
       label: json['label'],
       active: json['active'],
     );
@@ -85,7 +80,7 @@ class PageLink {
 
 class OrderFilterItem {
   final int id;
-  final int user_id;
+  final int userId;
   final String subtotal;
   final String discount;
   final int total;
@@ -93,42 +88,72 @@ class OrderFilterItem {
   final String lastname;
   final String tax;
   final String mobile;
-  final int delivery_charge;
-  final String delivery_company;
+  final int deliveryCharge;
+  final String deliveryCompany;
   final String line1;
   final String line2;
-  final int country_id;
-  final int city_id;
-  final int township_id;
+  final int countryId;
+  final int cityId;
+  final int townshipId;
   final String zipcode;
   final String status;
-  final String? delivered_date;
-  final String? canceled_date;
-  final String created_at;
-  final String updated_at;
-  final int product_id;
+  final String? deliveredDate;
+  final String? canceledDate;
+  final String createdAt;
+  final String updatedAt;
+  final int productId;
 
   OrderFilterItem({
-    required this.id,required this.user_id,required this.city_id,required this.product_id,required this.status,
-    required this.delivery_company,required this.zipcode,required this.township_id,required this.country_id,
-    required this.line2,required this.delivery_charge,required this.mobile,
-    required this.lastname,required this.firstname,required this.tax,
-    required this.discount,required this.subtotal,required this.total,required this.delivered_date,
-    required this.line1,required this.created_at,required this.updated_at,required this.canceled_date
-
+    required this.id,
+    required this.userId,
+    required this.cityId,
+    required this.productId,
+    required this.status,
+    required this.deliveryCompany,
+    required this.zipcode,
+    required this.townshipId,
+    required this.countryId,
+    required this.line2,
+    required this.deliveryCharge,
+    required this.mobile,
+    required this.lastname,
+    required this.firstname,
+    required this.tax,
+    required this.discount,
+    required this.subtotal,
+    required this.total,
+    required this.deliveredDate,
+    required this.line1,
+    required this.createdAt,
+    required this.updatedAt,
+    required this.canceledDate,
   });
 
   factory OrderFilterItem.fromJson(Map<String, dynamic> json) {
-    return OrderFilterItem(id: json['id'], user_id: json['user_id'],
-        city_id: json['city_id'],
-        product_id: json['product_id'],
-        status: json['status'], delivery_company: json['delivery_company'],
-        zipcode: json['zipcode'], township_id: json['township_id'],
-        country_id: json['country_id'], line2: json['line2'], delivery_charge: json['delivery_charge'], mobile: json['mobile'],
-        lastname: json['lastname'], firstname: json['firstname'], tax: json['tax'], discount: json['discount'], subtotal: json['subtotal'],
-        total: json['total'], delivered_date: json['delivered_date'],
-        line1: json['line1'], created_at: json['created_at'],
-        updated_at: json['updated_at'], canceled_date: json['canceled_date']
+    return OrderFilterItem(
+      id: json['id'],
+      userId: json['user_id'],
+      cityId: json['city_id'],
+      productId: json['product_id'],
+      status: json['status'],
+      deliveryCompany: json['delivery_company'],
+      zipcode: json['zipcode'],
+      townshipId: json['township_id'],
+      countryId: json['country_id'],
+      line2: json['line2'],
+      deliveryCharge: json['delivery_charge'],
+      mobile: json['mobile'],
+      lastname: json['lastname'],
+      firstname: json['firstname'],
+      tax: json['tax'],
+      discount: json['discount'],
+      subtotal: json['subtotal'],
+      total: json['total'],
+      deliveredDate: json['delivered_date'],
+      line1: json['line1'],
+      createdAt: json['created_at'],
+      updatedAt: json['updated_at'],
+      canceledDate: json['canceled_date'],
     );
   }
 }
