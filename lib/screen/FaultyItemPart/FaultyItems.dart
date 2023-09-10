@@ -100,8 +100,11 @@ class FaultyItemDefault extends StatelessWidget {
 
                 return BlocConsumer<DeleteFaultyItemCubit, DeleteFaultyItemState>(
                   builder: (context, state) {
+                    final bool loading = state is DeleteFaultyItemLoading;
+
+
                     return FaultyItemWidget(
-                      faultyItems: faultyItems,
+                      faultyItems: faultyItems, isLoading: loading,
                     );
                   },
                   listener: (context, state) {
@@ -109,7 +112,6 @@ class FaultyItemDefault extends StatelessWidget {
 
                     } else if (state is DeleteFaultyItemSuccess) {
                       showToastMessage('Deleted Faulty Item successful.');
-
                       context.read<FetchAllFaultyItemCubit>().fetchAllFaultyItem();
                     } else if (state is DeleteFaultyItemFail) {
                       showToastMessage(
