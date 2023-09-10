@@ -16,8 +16,8 @@ class FetchAllFaultyItemCubit extends Cubit<FetchAllFaultyItemState> {
     emit(FetchAllFaultyItemLoading());
 
     try {
-      final List<FaultyItemData> response = await _userRepository.fetchAllFaultyItem();
-      emit(FetchAllFaultyItemSuccess(response));
+      final List<FaultyItemData>? response = await _userRepository.fetchAllFaultyItem();
+      emit(FetchAllFaultyItemSuccess(response!));
     } catch (error) {
       emit(FetchAllFaultyItemFail(error.toString()));
     }

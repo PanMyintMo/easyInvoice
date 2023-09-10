@@ -1,91 +1,119 @@
-import 'package:easy_invoice/bloc/delete/FaultyPart/delete_faulty_item_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'AddRequestFaultyItemScreen.dart';
 import '../../bloc/get/FaultyItemPart/fetch_all_faulty_item_cubit.dart';
-import '../../common/ToastMessage.dart';
+import '../../bloc/delete/FaultyPart/delete_faulty_item_cubit.dart';
 import '../../module/module.dart';
 import '../../widget/FaultyItemPart/FaultyItemWidget.dart';
 
-class AllFaultyItemsScreen extends StatefulWidget {
+class AllFaultyItemsScreen extends StatelessWidget {
   const AllFaultyItemsScreen({Key? key}) : super(key: key);
 
   @override
-  State<AllFaultyItemsScreen> createState() => _AllFaultyItemsScreenState();
-}
-
-class _AllFaultyItemsScreenState extends State<AllFaultyItemsScreen> {
-  @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider<FetchAllFaultyItemCubit>(
-          create: (context) {
-            final cubit = FetchAllFaultyItemCubit(
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        elevation: 0.0,
+        backgroundColor: Colors.white70,
+        iconTheme: const IconThemeData(
+          color: Colors.red, // Set the color of the navigation icon to black
+        ),
+        title: const Text(
+          'Faulty Items Screen',
+          style: TextStyle(
+            color: Colors.black54,
+            fontWeight: FontWeight.bold,
+            fontSize: 16,
+          ),
+        ),
+      ),
+      body: MultiBlocProvider(
+        providers: [
+          BlocProvider<FetchAllFaultyItemCubit>(
+            create: (context) => FetchAllFaultyItemCubit(
               getIt.call(),
-            ); // Use getIt<ApiService>() to get the ApiService instance
-            cubit.fetchAllFaultyItem();
-            return cubit;
-          },
-        ),
-        BlocProvider<DeleteFaultyItemCubit>(
-          create: (context) => DeleteFaultyItemCubit(
-            getIt.call(),
+            )..fetchAllFaultyItem(),
           ),
-        ),
-      ],
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        appBar: AppBar(
-          elevation: 0.0,
-          backgroundColor: Colors.white70,
-          iconTheme: const IconThemeData(
-            color: Colors.red, // Set the color of the navigation icon to black
-          ),
-          title: const Text(
-            'Faulty Items Screen',
-            style: TextStyle(
-              color: Colors.black54,
-              fontWeight: FontWeight.bold,
-              fontSize: 16,
+          BlocProvider<DeleteFaultyItemCubit>(
+            create: (context) => DeleteFaultyItemCubit(
+              getIt.call(),
             ),
           ),
-        ),
-        body: BlocConsumer<FetchAllFaultyItemCubit, FetchAllFaultyItemState>(
-          listener: (context, state) {
-            if (state is FetchAllFaultyItemFail) {
-              showToastMessage('Error: ${state.error}');
-            }
-          },
-          builder: (context, state) {
-            if (state is FetchAllFaultyItemLoading) {
-              return const Center(child: CircularProgressIndicator());
-            } else if (state is FetchAllFaultyItemSuccess) {
-              return BlocConsumer<DeleteFaultyItemCubit,DeleteFaultyItemState>
-                (builder: (context,delete){
-                return FaultyItemWidget(
-                   faultyItems: state
-                       .fetchAllFaultyItem, // Use state.faultyItems to pass the data to FaultyItemWidget
-                 );
-              }
-                  , listener: (context,delete){
-                if (delete is DeleteFaultyItemLoading) {
+        ],
+        child: const FaultyItemDefault(),
+      ),
+    );
+  }
+}
 
-                } else if (delete is DeleteFaultyItemSuccess) {
-                  showToastMessage(delete.deleteResponse.message);
-                  WidgetsBinding.instance.addPostFrameCallback((_) {
-                    context.read<FetchAllFaultyItemCubit>().fetchAllFaultyItem();
-                  });
-                } else if (delete is DeleteFaultyItemFail) {
-                  showToastMessage(delete.error);
+class FaultyItemDefault extends StatelessWidget {
+  const FaultyItemDefault({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      scrollDirection: Axis.vertical,
+      child: Column(
+        children: [
+          Align(
+            alignment: Alignment.topRight,
+            child: TextButton(
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const AddRequestFaultyItem(),
+                  ),
+                );
+              },
+              child: const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text(
+                  'Add New Faulty Item',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    decoration: TextDecoration.underline,
+                    color: Colors.blue,
+                  ),
+                ),
+              ),
+            ),
+          ),
+          BlocBuilder<FetchAllFaultyItemCubit, FetchAllFaultyItemState>(
+            builder: (context, state) {
+              if (state is FetchAllFaultyItemLoading) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (state is FetchAllFaultyItemSuccess) {
+                final faultyItems = state.fetchAllFaultyItem;
+
+                if (faultyItems!.isEmpty) {
+                  return const Center(
+                    child: Text("No faulty items found."),
+                  );
                 }
-              });
 
-            } else if (state is FetchAllFaultyItemFail) {
-              return Center(child: Text('Error: ${state.error}'));
-            }
-            return const SizedBox(); // Return an empty SizedBox if none of the states match
-          },
-        ),
+                return BlocBuilder<DeleteFaultyItemCubit, DeleteFaultyItemState>(
+                  builder: (context, deleteState) {
+                    if (deleteState is DeleteFaultyItemSuccess) {
+                      context.read<FetchAllFaultyItemCubit>().fetchAllFaultyItem();
+                    }
+
+                    return FaultyItemWidget(
+                      faultyItems: faultyItems,
+                    );
+                  },
+                );
+              }
+              else if (state is FetchAllFaultyItemFail) {
+                return Center(child: Text('Error: ${state.error}'));
+              }
+
+              return const Center(child: Text('No faulty item data.'));
+            },
+          ),
+        ],
       ),
     );
   }

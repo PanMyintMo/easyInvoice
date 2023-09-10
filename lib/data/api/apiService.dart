@@ -803,53 +803,54 @@ class ApiService {
   Future<AllFaultyItemsResponse> fetchAllFaultyItem() async {
     try {
       int currentPage = 1;
-      FaultyDatas faultyData;
-      List<FaultyItemData> faultyItemDatas = [];
+      List<FaultyItemData> faultyItemData = [];
+      String? nextPageUrl;
 
       while (true) {
         final response = await _dio
-            .get('https://mmeasyinvoice.com/api/faulty-item?page=$currentPage');
+            .get('https://www.mmeasyinvoice.com/api/faulty-item?page=$currentPage');
 
         if (response.statusCode == 200) {
           final dynamic responseData = response.data;
 
-          final faultyDataResponse =
-              AllFaultyItemsResponse.fromJson(responseData);
-          faultyData = faultyDataResponse.data;
-          final List<FaultyItemData> faultyItems = faultyData.data;
-          faultyItemDatas.addAll(faultyItems);
+          final faultyItemResponse = AllFaultyItemsResponse.fromJson(responseData);
+          final faultyData = faultyItemResponse.data;
 
-          if (currentPage == faultyData.last_page) {
+          if (faultyItemData != null) {
+            faultyItemData.addAll(faultyData);
+          }
+
+          nextPageUrl = faultyItemResponse.nextPageUrl;
+
+          if (currentPage == faultyItemResponse.lastPage) {
             break;
           } else {
             currentPage++;
           }
         } else {
-          throw Exception('Failed to fetch faulty items');
+          throw Exception('Failed to fetch all faulty date.');
         }
       }
 
       return AllFaultyItemsResponse(
-        data: FaultyDatas(
-          current_page: faultyData.current_page,
-          data: faultyItemDatas,
-          first_page_url: faultyData.first_page_url,
-          from: faultyData.from,
-          last_page: faultyData.last_page,
-          last_page_url: faultyData.last_page_url,
-          next_page_url: faultyData.next_page_url,
-          path: faultyData.path,
-          per_page: faultyData.per_page,
-          prev_page_url: faultyData.prev_page_url,
-          to: faultyData.to,
-          total: faultyData.total,
-          links: faultyData.links, // Adjusted 'link' to 'links'
-        ),
-        status: 200,
-        message: "Successfully retrieved",
+        currentPage: currentPage,
+        data: faultyItemData,
+        firstPageUrl: 'https://mmeasyinvoice.com/api/ordersByDate?page=1',
+        from: 1, // Always set to 1 if data is not empty
+        lastPage: currentPage,
+        lastPageUrl: 'https://mmeasyinvoice.com/api/ordersByDate?page=$currentPage',
+        links: [],
+        nextPageUrl: nextPageUrl,
+        path: 'https://mmeasyinvoice.com/api/ordersByDate',
+        perPage: faultyItemData.length,
+        prevPageUrl: (currentPage > 1) ? 'https://mmeasyinvoice.com/api/ordersByDate?page=${currentPage - 1}' : null,
+        to: 1,
+        total: 0,
+        status: null, // You can set this to null or provide the appropriate value
+        message: null, // You can set this to null or provide the appropriate value
       );
     } catch (e) {
-      throw Exception('Failed to fetch all faulty items: $e');
+      throw Exception('Failed to fetch orders by date response: $e');
     }
   }
 

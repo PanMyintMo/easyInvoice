@@ -333,10 +333,10 @@ class UserRepository {
 
 
   //fetch all faulty items
-  Future<List<FaultyItemData>> fetchAllFaultyItem() async {
+  Future<List<FaultyItemData>?> fetchAllFaultyItem() async {
     try {
       final response = await _apiService.fetchAllFaultyItem();
-      return response.data.data;
+      return response.data;
     } catch (error) {
       throw Exception('Failed to fetch faulty items: $error');
     }

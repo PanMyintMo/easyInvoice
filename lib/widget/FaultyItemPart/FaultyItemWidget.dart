@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../common/showDeleteConfirmationDialog.dart';
 import '../../data/responsemodel/FaultyItemPart/AllFaultyItems.dart';
-import '../../screen/FaultyItemPart/AddRequestFaultyItemScreen.dart';
 
 class FaultyItemWidget extends StatelessWidget {
   final List<FaultyItemData> faultyItems;
@@ -16,42 +15,18 @@ class FaultyItemWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Align(
-          alignment: Alignment.topRight,
-          child: TextButton(
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => const AddRequestFaultyItem(),
-                ),
-              );
-            },
-            child: const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Text(
-                'Add New Faulty Item',
-                style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    decoration: TextDecoration.underline,
-                    color: Colors.blue),
-              ),
-            ),
-          ),
-        ),
-        Expanded(
-          child: PaginatedDataTable(
-            columns: const [
-              DataColumn(label: Text('ID')),
-              DataColumn(label: Text('Product Name')),
-              DataColumn(label: Text('Quantity')),
-              DataColumn(label: Text('Action')),
-            ],
-            source: FaultyData(faultyItems, context),
-            horizontalMargin: 20,
-            rowsPerPage: 8,
-            columnSpacing: 30,
-          ),
+
+        PaginatedDataTable(
+          columns: const [
+            DataColumn(label: Text('ID')),
+            DataColumn(label: Text('Product Name')),
+            DataColumn(label: Text('Quantity')),
+            DataColumn(label: Text('Action')),
+          ],
+          source: FaultyData(faultyItems, context),
+          horizontalMargin: 20,
+          rowsPerPage: 8,
+          columnSpacing: 30,
         ),
       ],
     );

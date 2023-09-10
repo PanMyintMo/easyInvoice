@@ -92,8 +92,8 @@ class ApiHelper {
   static Future<List<FaultyItemData>> fetchAllFaultyItem() async {
     try {
       final response = await ApiService().fetchAllFaultyItem();
-      if (response.data.data.isNotEmpty) {
-        return response.data.data;
+      if (response.data.isNotEmpty) {
+        return response.data;
       }
     } catch (error) {
       print('Error fetching faulty item: $error');

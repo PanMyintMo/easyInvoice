@@ -14,7 +14,7 @@ class FetchAllFaultyItemLoading extends FetchAllFaultyItemState{
 }
 
 class FetchAllFaultyItemSuccess extends FetchAllFaultyItemState{
-  final List<FaultyItemData> fetchAllFaultyItem;
+  final List<FaultyItemData>? fetchAllFaultyItem;
   const FetchAllFaultyItemSuccess(this.fetchAllFaultyItem);
   @override
 
