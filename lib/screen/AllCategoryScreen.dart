@@ -62,7 +62,7 @@ class AllCategoryDetailPage extends StatelessWidget {
                   if (deleteState is DeleteCategoryLoading) {
                     // Handle delete category loading state
                   } else if (deleteState is DeleteCategorySuccess) {
-                    showToastMessage('Category deleted successfully');
+                    showToastMessage('Deleted category successful.');
                     WidgetsBinding.instance.addPostFrameCallback((_) {
                       context
                           .read<GetCategoryDetailCubit>()

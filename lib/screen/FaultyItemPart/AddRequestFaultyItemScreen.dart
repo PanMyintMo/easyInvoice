@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../common/ToastMessage.dart';
 import '../../module/module.dart';
+import 'FaultyItems.dart';
 
 class AddRequestFaultyItem extends StatefulWidget {
   const AddRequestFaultyItem({Key? key}) : super(key: key);
@@ -41,10 +42,7 @@ class _AddRequestFaultyItemState extends State<AddRequestFaultyItem> {
             } else if (state is AddRequestFaultyItemSuccess) {
               showToastMessage(state.addFaultyItemResponse.message);
               Navigator.pop(
-                  context,
-                  const AddRequestFaultyItemWidget(
-                    isLoading: false,
-                  ));
+                  context,true);
             } else if (state is AddRequestFaultyItemFail) {
               showToastMessage(state.error);
               return const AddRequestFaultyItemWidget(
