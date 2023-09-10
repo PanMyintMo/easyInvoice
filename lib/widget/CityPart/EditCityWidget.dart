@@ -40,7 +40,7 @@ class _EditCityWidgetState extends State<EditCityWidget> {
   void fetchCountyName() async {
     final country = await ApiHelper.fetchCountryName();
     setState(() {
-      this.countries = country;
+      this.countries = country!;
       country_id = widget.country_id;
     });
   }

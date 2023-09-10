@@ -38,8 +38,8 @@ class ApiHelper {
   static Future<List<City>> fetchCityName() async {
     try {
       final response = await ApiService().cities();
-      if (response.data.cities.isNotEmpty) {
-        return response.data.cities;
+      if (response.data.isNotEmpty) {
+        return response.data;
       }
     } catch (error) {
       print('Error fetching city: $error');
@@ -61,11 +61,11 @@ class ApiHelper {
   }
 
   //Fetch country Name
-  static Future<List<Country>> fetchCountryName() async {
+  static Future<List<Country>?> fetchCountryName() async {
     try {
       final response = await ApiService().country();
-      if (response.data.data.isNotEmpty) {
-        return response.data.data;
+      if (response.data.isNotEmpty) {
+        return response.data;
       }
     } catch (error) {
       print('Error fetching country: $error');

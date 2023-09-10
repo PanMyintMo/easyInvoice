@@ -40,6 +40,7 @@ class _AddNewCityState extends State<AddNewCity> {
               return const AddNewCityWidget(isLoading : true);
             } else if (state is AddCitySuccess) {
               showToastMessage(state.cityResponse.message);
+              Navigator.pop(context,true);
               return const AddNewCityWidget(isLoading : false);
             } else if (state is AddCityFail) {
               showToastMessage(state.error.toString());

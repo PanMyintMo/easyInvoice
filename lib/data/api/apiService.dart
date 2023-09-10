@@ -854,6 +854,115 @@ class ApiService {
     }
   }
 
+  //fetch all country from db
+  Future<CountryResponse> country() async {
+    try {
+      int currentPage = 1;
+      List<Country> countryData = [];
+      String? nextPageUrl;
+
+      while (true) {
+        final response = await _dio
+            .get('https://mmeasyinvoice.com/api/countries?page=$currentPage');
+
+        if (response.statusCode == 200) {
+          final dynamic responseData = response.data;
+
+          final countryResponse = CountryResponse.fromJson(responseData);
+          final countryItem = countryResponse.data;
+
+          if (countryData != null) {
+            countryData.addAll(countryItem);
+          }
+
+          nextPageUrl = countryResponse.nextPageUrl;
+
+          if (currentPage == countryResponse.lastPage) {
+            break;
+          } else {
+            currentPage++;
+          }
+        } else {
+          throw Exception('Failed to fetch all country.');
+        }
+      }
+
+      return CountryResponse(
+        currentPage: currentPage,
+        data: countryData,
+        firstPageUrl: 'https://mmeasyinvoice.com/api/countries?page=1',
+        from: 1, // Always set to 1 if data is not empty
+        lastPage: currentPage,
+        lastPageUrl: 'https://mmeasyinvoice.com/api/countries?page=$currentPage',
+        links: [],
+        nextPageUrl: nextPageUrl,
+        path: 'https://mmeasyinvoice.com/api/countries',
+        perPage: countryData.length,
+        prevPageUrl: (currentPage > 1) ? 'https://mmeasyinvoice.com/api/countries?page=${currentPage - 1}' : null,
+        to: 1,
+        total: 0,
+        status: null, // You can set this to null or provide the appropriate value
+        message: null, // You can set this to null or provide the appropriate value
+      );
+    } catch (e) {
+      throw Exception('Failed to fetch country response: $e');
+    }
+  }
+
+  //fetch all city from db
+  Future<CityResponse> cities() async {
+    try {
+      int currentPage = 1;
+      List<City> cityData = [];
+      String? nextPageUrl;
+
+      while (true) {
+        final response = await _dio
+            .get('https://mmeasyinvoice.com/api/cities?page=$currentPage');
+
+        if (response.statusCode == 200) {
+          final dynamic responseData = response.data;
+
+          final cityResponse = CityResponse.fromJson(responseData);
+          final cityItem = cityResponse.data;
+
+          if (cityData != null) {
+            cityData.addAll(cityItem);
+          }
+
+          nextPageUrl = cityResponse.nextPageUrl;
+
+          if (currentPage == cityResponse.lastPage) {
+            break;
+          } else {
+            currentPage++;
+          }
+        } else {
+          throw Exception('Failed to fetch all city.');
+        }
+      }
+
+      return CityResponse(
+        currentPage: currentPage,
+        data: cityData,
+        firstPageUrl: 'https://mmeasyinvoice.com/api/cities?page=1',
+        from: 1, // Always set to 1 if data is not empty
+        lastPage: currentPage,
+        lastPageUrl: 'https://mmeasyinvoice.com/api/cities?page=$currentPage',
+        links: [],
+        nextPageUrl: nextPageUrl,
+        path: 'https://mmeasyinvoice.com/api/cities',
+        perPage: cityData.length,
+        prevPageUrl: (currentPage > 1) ? 'https://mmeasyinvoice.com/api/cities?page=${currentPage - 1}' : null,
+        to: 1,
+        total: 0,
+        status: null, // You can set this to null or provide the appropriate value
+        message: null, // You can set this to null or provide the appropriate value
+      );
+    } catch (e) {
+      throw Exception('Failed to fetch city response: $e');
+    }
+  }
   // fetch all warehouse request from delivery man
   Future<DeliveryManResponse> fetchAllWarehouseRequest() async {
     try {
@@ -1067,9 +1176,7 @@ class ApiService {
     }
   }
 
-
-
-  // Fetch all townships from the database
+ // Fetch all townships from the database
   Future<TownshipResponse> townships() async {
     try {
       int currentPage = 1;
@@ -1128,53 +1235,7 @@ class ApiService {
     }
   }
 
-  //fetch all city from db
-  Future<CityResponse> cities() async {
-    try {
-      int currentPage = 1;
-      CityData? cityData; // Change to nullable type
-      List<City> cityItems = [];
 
-      while (true) {
-        final response = await _dio
-            .get('https://mmeasyinvoice.com/api/cities?page=$currentPage');
-
-        if (response.statusCode == 200) {
-          final dynamic responseData = response.data;
-          final cities = CityResponse.fromJson(responseData);
-          cityData = cities.data; // Update the cityData variable
-
-          final List<City> cityItem = cityData.cities;
-          cityItems.addAll(cityItem);
-
-          if (currentPage == cityData.lastPage) {
-            break;
-          } else {
-            currentPage++;
-          }
-        } else {
-          throw Exception('Failed to fetch city');
-        }
-      }
-
-      return CityResponse(
-        data: CityData(
-          currentPage: cityData.currentPage,
-          cities: cityItems,
-          firstPageUrl: 'https://mmeasyinvoice.com/api/cities?page=1',
-          lastPage: cityData.lastPage,
-          lastPageUrl:
-              'https://mmeasyinvoice.com/api/cities?page=${cityData.lastPage}',
-          links: cityData.links,
-          nextPageUrl: (currentPage < cityData.lastPage)
-              ? 'https://mmeasyinvoice.com/api/cities?page=${currentPage + 1}'
-              : null,
-        ),
-      );
-    } catch (e) {
-      throw Exception('Failed to fetch cities: $e');
-    }
-  }
 
   //fetch all warehouse product list
   Future<WarehouseResponse> fetchWarehouseProductList() async {
@@ -1195,62 +1256,6 @@ class ApiService {
   }
 
 
-  //fetch all country from db
-  Future<CountryResponse> country() async {
-    try {
-      int currentPage = 1;
-      CountryData? countryData; // Change to nullable type
-      List<Country> countryItems = [];
-
-      while (true) {
-        final response = await _dio
-            .get('https://mmeasyinvoice.com/api/countries?page=$currentPage');
-
-        if (response.statusCode == 200) {
-          final dynamic responseData = response.data;
-          final countries = CountryResponse.fromJson(responseData);
-          countryData = countries.data; // Update the cityData variable
-
-          final List<Country> countryItem = countryData.data;
-          countryItems.addAll(countryItem);
-
-          if (currentPage == countryData.lastPage) {
-            break;
-          } else {
-            currentPage++;
-          }
-        } else {
-          throw Exception('Failed to fetch country');
-        }
-      }
-
-
-      return CountryResponse(
-        data: CountryData(
-          currentPage: countryData.currentPage,
-          data: countryItems,
-          firstPageUrl: 'https://mmeasyinvoice.com/api/countries?page=1',
-          lastPage: countryData.lastPage,
-          lastPageUrl:
-              'https://mmeasyinvoice.com/api/countries?page=${countryData.lastPage}',
-          links: countryData.links,
-          nextPageUrl: (currentPage < countryData.lastPage)
-              ? 'https://mmeasyinvoice.com/api/countries?page=${currentPage + 1}'
-              : null,
-          from: 1,
-          path: '',
-          perPage: countryItems.length,
-          prevPageUrl: '',
-          to: countryItems.length,
-          total: 0,
-        ),
-        status: 200,
-        message: 'Success',
-      );
-    } catch (e) {
-      throw Exception('Failed to fetch countries: $e');
-    }
-  }
 
   //fetch all product by category Id from db
   Future<List<ProductListItem>> fetchAllProductByCateId(int id) async {
@@ -1580,9 +1585,6 @@ class ApiService {
     }
   }
 
-
-
-
   //Delete city by id
   Future<DeleteResponse> deleteCity(int id) async {
     try {
@@ -1618,8 +1620,6 @@ class ApiService {
     }
   }
 
-
-
   //Delete shopkeeper request product by id
   Future<DeleteResponse> deleteShopKeeperRequestProduct(int id) async {
     try {
@@ -1636,8 +1636,6 @@ class ApiService {
       throw Exception(error);
     }
   }
-
-
 
   //Delete township by id
   Future<DeleteResponse> deleteTownship(int id) async {
@@ -1779,7 +1777,6 @@ class ApiService {
   }
 
   // for user role
-
   Future<UserResponse> user(UserRequestModel userRequestModel) async {
     try {
       final Response response = await _dio.post(

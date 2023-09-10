@@ -41,7 +41,7 @@ class _AddNewTownshipState extends State<AddNewTownshipWidget> {
   void fetchCountyName() async {
     final country = await ApiHelper.fetchCountryName();
     setState(() {
-      this.countries = country;
+      this.countries = country!;
     });
   }
   final formKey = GlobalKey<FormState>();

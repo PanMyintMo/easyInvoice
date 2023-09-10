@@ -97,7 +97,7 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
   void fetchCountyName() async {
     final country = await ApiHelper.fetchCountryName();
     setState(() {
-      countries = country;
+      countries = country!;
     });
   }
 

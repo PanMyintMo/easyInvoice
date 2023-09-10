@@ -1,38 +1,23 @@
-import 'package:easy_invoice/bloc/get/CityPart/fetch_all_city_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
+import '../../bloc/get/CityPart/fetch_all_city_cubit.dart';
 import '../../bloc/delete/CityPart/delete_city_cubit.dart';
 import '../../common/ToastMessage.dart';
 import '../../module/module.dart';
 import '../../widget/CityPart/CitiesWidget.dart';
+import 'AddNewCity.dart';
 
 class Cities extends StatefulWidget {
-  const Cities({super.key});
+  const Cities({Key? key}) : super(key: key);
 
   @override
-  State<Cities> createState() => _CitiesState();
+  _CitiesState createState() => _CitiesState();
 }
 
 class _CitiesState extends State<Cities> {
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider<FetchAllCityCubit>(
-          create: (context) {
-            final cubit = FetchAllCityCubit(getIt
-                .call()); // Use getIt<ApiService>() to get the ApiService instance
-            cubit.fetchAllCity();
-            return cubit;
-          },
-        ),
-        BlocProvider<DeleteCityCubit>(
-          create: (context) => DeleteCityCubit(getIt
-              .call()), // Use getIt<ApiService>() to get the ApiService instance
-        ),
-      ],
-      child: Scaffold(
+    return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
           elevation: 0.0,
@@ -48,49 +33,102 @@ class _CitiesState extends State<Cities> {
                 fontSize: 16),
           ),
         ),
-        body: BlocConsumer<FetchAllCityCubit, FetchAllCityState>(
-          listener: (context, state) {
-            if (state is FetchAllCityFail) {
-              showToastMessage('Error: ${state.error}');
-            }
-          },
-          builder: (context, state) {
-            if (state is FetchAllCityLoading) {
-              return const Center(child: CircularProgressIndicator());
-            } else if (state is FetchAllCitySuccess) {
-              return BlocConsumer<DeleteCityCubit, DeleteCityState>(
-                listener: (context, deleteState) {
-                  if (deleteState is DeleteCityLoading) {
+        body: MultiBlocProvider(providers: [
+          BlocProvider<FetchAllCityCubit>(
+            create: (context) {
+              final cubit = FetchAllCityCubit(getIt
+                  .call()); // Use getIt<ApiService>() to get the ApiService instance
+              cubit.fetchAllCity();
+              return cubit;
+            },
+          ),
+          BlocProvider<DeleteCityCubit>(
+            create: (context) => DeleteCityCubit(getIt
+                .call()), // Use getIt<ApiService>() to get the ApiService instance
+          ),
+        ], child: const CityScreen()));
+  }
+}
 
-                  } else if (deleteState is DeleteCitySuccess) {
-                    showToastMessage(deleteState.deleteCityResponse.message);
-                    WidgetsBinding.instance.addPostFrameCallback((_) {
-                      context.read<FetchAllCityCubit>().fetchAllCity();
-                    });
-                  } else if (deleteState is DeleteCityFail) {
-                    showToastMessage(deleteState.error);
+class CityScreen extends StatefulWidget {
+  const CityScreen({super.key});
 
-                  }
-                },
-                builder: (context, deleteState) {
-                  final bool loading = deleteState is DeleteCityLoading;
-                  return CitiesWidget(
-                    isLoading: loading,
+  @override
+  State<CityScreen> createState() => _CityScreenState();
+}
+
+class _CityScreenState extends State<CityScreen> {
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      scrollDirection: Axis.vertical,
+      child: Column(
+        children: [
+          Align(
+            alignment: Alignment.topRight,
+            child: TextButton(
+              onPressed: () async {
+                final result = await Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const AddNewCity(),
+                  ),
+                );
+                if (result == true) {
+                  BlocProvider.of<FetchAllCityCubit>(context).fetchAllCity();
+                }
+              },
+              child: const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text(
+                  'Add New City',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    decoration: TextDecoration.underline,
+                    color: Colors.blue,
+                  ),
+                ),
+              ),
+            ),
+          ),
+          BlocBuilder<FetchAllCityCubit, FetchAllCityState>(
+            builder: (context, state) {
+              if (state is FetchAllCityLoading) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (state is FetchAllCitySuccess) {
+                final cityList = state.city;
+
+                if (cityList.isEmpty) {
+                  return const Center(
+                    child: Text("No Cities found."),
                   );
-                },
-              );
-            } else if (state is FetchAllCityFail) {
-              const CitiesWidget(
-                isLoading: false,
-              );
-              return Center(child: Text('Error: ${state.error}'));
-            }
+                }
 
-            return const CitiesWidget(
-              isLoading: false,
-            );
-          },
-        ),
+                return BlocConsumer<DeleteCityCubit, DeleteCityState>(
+                  builder: (context, deleteState) {
+                    bool loading = deleteState is DeleteCityLoading;
+
+                    return CitiesWidget(
+                      isLoading: loading,
+                    );
+                  },
+                  listener: (context, deleteState) {
+                    if (deleteState is DeleteCitySuccess) {
+                      showToastMessage('Deleted City successful.');
+                      BlocProvider.of<FetchAllCityCubit>(context)
+                          .fetchAllCity();
+                    } else if (deleteState is DeleteCityFail) {
+                      showToastMessage(
+                          'Failed to delete city: ${deleteState.error}');
+                    }
+                  },
+                );
+              } else {
+                return const SizedBox(); // Handle other states if needed
+              }
+            },
+          ),
+        ],
       ),
     );
   }

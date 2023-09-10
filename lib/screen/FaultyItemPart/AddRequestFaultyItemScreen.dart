@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../common/ToastMessage.dart';
 import '../../module/module.dart';
-import 'FaultyItems.dart';
 
 class AddRequestFaultyItem extends StatefulWidget {
   const AddRequestFaultyItem({Key? key}) : super(key: key);

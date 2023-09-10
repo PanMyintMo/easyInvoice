@@ -1,5 +1,4 @@
 import 'package:easy_invoice/bloc/delete/CountryPart/delete_country_cubit.dart';
-import 'package:easy_invoice/screen/LocationPart/AddNewCountryScreen.dart';
 import 'package:easy_invoice/screen/LocationPart/EditCountryScreen.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -30,7 +29,7 @@ class _CountryWidgetState extends State<CountryWidget> {
   Future<void> fetchCountyName() async {
     final countries = await ApiHelper.fetchCountryName();
     setState(() {
-      this.countries = countries;
+      this.countries = countries!;
     });
   }
 
@@ -38,32 +37,20 @@ class _CountryWidgetState extends State<CountryWidget> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Align(
-          alignment: Alignment.topRight,
-          child: TextButton(onPressed: () {
-            Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => const AddNewCountryScreen()));
-          }, child: const Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Text('Add New Country',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold),),
-          ),),
-        ),
-        Flexible(
-          child: SingleChildScrollView(
-            scrollDirection: Axis.vertical,
-            child: PaginatedDataTable(
-              columns: const [
-                DataColumn(label: Text('ID',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold),)),
-                DataColumn(label: Text('Name',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold))),
-                DataColumn(label: Text('Action',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold))),
-              ],
-              source: CountryData(countries,context),
-              horizontalMargin: 15,
-              rowsPerPage: 8,
-              dragStartBehavior: DragStartBehavior.start,
-              arrowHeadColor: Colors.blueAccent,
-              columnSpacing: 70,
-            ),
+        SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: PaginatedDataTable(
+            columns: const [
+              DataColumn(label: Text('ID',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold),)),
+              DataColumn(label: Text('Name',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold))),
+              DataColumn(label: Text('Action',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold))),
+            ],
+            source: CountryData(countries,context),
+            horizontalMargin: 15,
+            rowsPerPage: 8,
+            dragStartBehavior: DragStartBehavior.start,
+            arrowHeadColor: Colors.blueAccent,
+            columnSpacing: 70,
           ),
         ),
       ],

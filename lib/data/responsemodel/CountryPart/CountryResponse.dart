@@ -1,37 +1,21 @@
-class CountryResponse {
-  final int status;
-  final String message;
-  final CountryData data;
-
-  CountryResponse({
-    required this.status,
-    required this.message,
-    required this.data,
-  });
-
-  factory CountryResponse.fromJson(Map<String, dynamic> json) => CountryResponse(
-    status: json['status'],
-    message: json['message'],
-    data: CountryData.fromJson(json['data']),
-  );
-}
-
-class CountryData {
+class CountryResponse{
   final int currentPage;
   final List<Country> data;
   final String firstPageUrl;
-  final int from;
+  final int? from;
   final int lastPage;
   final String lastPageUrl;
-  final List<CountryLink> links;
+  final List<PageLink> links;
   final String? nextPageUrl;
   final String path;
   final int perPage;
   final String? prevPageUrl;
-  final int to;
+  final int? to;
   final int total;
+  final int? status;
+  final String? message;
 
-  CountryData({
+  CountryResponse ({
     required this.currentPage,
     required this.data,
     required this.firstPageUrl,
@@ -45,28 +29,56 @@ class CountryData {
     required this.prevPageUrl,
     required this.to,
     required this.total,
+    required this.status,
+    required this.message,
   });
 
-  factory CountryData.fromJson(Map<String, dynamic> json) {
-    return CountryData(
-      currentPage: json['current_page'],
-      data: List<Country>.from(json['data'].map((x) => Country.fromJson(x))),
-      firstPageUrl: json['first_page_url'],
-      from: json['from'],
-      lastPage: json['last_page'],
-      lastPageUrl: json['last_page_url'],
-      links: List<CountryLink>.from(json['links'].map((x) => CountryLink.fromJson(x))),
-      nextPageUrl: json['next_page_url'],
-      path: json['path'],
-      perPage: json['per_page'],
-      prevPageUrl: json['prev_page_url'],
-      to: json['to'],
-      total: json['total'],
+  factory CountryResponse .fromJson(Map<String, dynamic> json) {
+    return CountryResponse (
+      currentPage: json['data']['current_page'],
+      data: (json['data']['data'] as List<dynamic>?)
+          ?.map((item) => Country.fromJson(item))
+          .toList() ?? [],
+      firstPageUrl: json['data']['first_page_url'],
+      from: json['data']['from'],
+      lastPage: json['data']['last_page'],
+      lastPageUrl: json['data']['last_page_url'],
+      links: (json['data']['links'] as List<dynamic>?)
+          ?.map((item) => PageLink.fromJson(item))
+          .toList() ?? [],
+      nextPageUrl: json['data']['next_page_url'],
+      path: json['data']['path'],
+      perPage: json['data']['per_page'],
+      prevPageUrl: json['data']['prev_page_url'],
+      to: json['data']['to'],
+      total: json['data']['total'],
+      status: json['status'],
+      message: json['message'],
     );
   }
 }
 
-class Country {
+class PageLink {
+  final String? url;
+  final String label;
+  final bool active;
+
+  PageLink({
+    this.url,
+    required this.label,
+    required this.active,
+  });
+
+  factory PageLink.fromJson(Map<String, dynamic> json) {
+    return PageLink(
+      url: json['url'],
+      label: json['label'],
+      active: json['active'],
+    );
+  }
+}
+
+class Country  {
   final int id;
   final String name;
   final String createdAt;
@@ -85,22 +97,5 @@ class Country {
     createdAt: json['created_at'],
     updatedAt: json['updated_at'],
   );
-}
+  }
 
-class CountryLink {
-  final String? url;
-  final String label;
-  final bool active;
-
-  CountryLink({
-    required this.url,
-    required this.label,
-    required this.active,
-  });
-
-  factory CountryLink.fromJson(Map<String, dynamic> json) => CountryLink(
-    url: json['url'],
-    label: json['label'],
-    active: json['active'],
-  );
-}

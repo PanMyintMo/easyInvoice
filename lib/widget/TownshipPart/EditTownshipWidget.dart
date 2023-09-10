@@ -55,7 +55,7 @@ class _EditTownshipWidgetState extends State<EditTownshipWidget> {
   void fetchCountyName() async {
     final country = await ApiHelper.fetchCountryName();
     setState(() {
-      countries = country;
+      countries = country!;
     });
   }
 

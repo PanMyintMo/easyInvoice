@@ -15,8 +15,8 @@ class FetchAllCityCubit extends Cubit<FetchAllCityState> {
     emit(FetchAllCityLoading());
 
     try {
-      final List<City> response = await _userRepository.fetchCity();
-      emit(FetchAllCitySuccess(response));
+      final List<City>? response = await _userRepository.fetchCity();
+      emit(FetchAllCitySuccess(response!));
     } catch (error) {
       emit(FetchAllCityFail(error.toString()));
     }

@@ -35,6 +35,8 @@ class AddNewCountryScreen extends StatelessWidget {
               return const AddNewCountry(isLoading : true);
             } else if (state is AddRequestCountrySuccess) {
               showToastMessage(state.requestCountryResponse.message);
+              Navigator.pop(
+                  context,true);
               return const AddNewCountry(isLoading : false);
             } else if (state is AddRequestCountryFail) {
               showToastMessage(state.error);

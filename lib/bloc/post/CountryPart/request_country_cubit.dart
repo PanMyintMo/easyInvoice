@@ -14,8 +14,8 @@ class RequestCountryCubit extends Cubit<RequestCountryState> {
   Future<void> country() async {
     emit(RequestCountryLoading());
     try {
-      final List<Country> response = await _userRepository.fetchCountry();
-      emit(RequestCountrySuccess(response));
+      final List<Country>? response = await _userRepository.fetchCountry();
+      emit(RequestCountrySuccess(response!));
     } catch (error) {
       emit(RequestCountryFail(error.toString()));
     }

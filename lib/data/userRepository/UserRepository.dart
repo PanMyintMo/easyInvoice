@@ -365,10 +365,10 @@ class UserRepository {
   }
 
   //fetch city from db
-  Future<List<City>> fetchCity() async {
+  Future<List<City>?> fetchCity() async {
     try {
       final response = await _apiService.cities();
-      return response.data.cities;
+      return response.data;
     } catch (error) {
       throw Exception('Failed to fetch city: $error');
     }
@@ -385,10 +385,10 @@ class UserRepository {
   }
 
   //fetch country from db
-  Future<List<Country>> fetchCountry() async {
+  Future<List<Country>?> fetchCountry() async {
     try {
       final response = await _apiService.country();
-      return response.data.data;
+      return response.data;
     } catch (error) {
       throw Exception('Failed to fetch country: $error');
     }
@@ -520,9 +520,7 @@ class UserRepository {
       rethrow;
     }
   }
-
-
-  //to delete product item by id
+//to delete product item by id
   Future<DeleteResponse> deleteProductItem(int id) async {
     try {
       final response = await _apiService.deleteProductItem(id);

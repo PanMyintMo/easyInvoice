@@ -1,50 +1,79 @@
 class CityResponse {
+  final int currentPage;
+  final List<City> data;
+  final String firstPageUrl;
+  final int? from;
+  final int lastPage;
+  final String lastPageUrl;
+  final List<PageLink> links;
+  final String? nextPageUrl;
+  final String path;
+  final int perPage;
+  final String? prevPageUrl;
+  final int? to;
+  final int total;
+  final int? status;
+  final String? message;
 
-  final CityData data;
-
-  CityResponse({ required this.data});
+  CityResponse ({
+    required this.currentPage,
+    required this.data,
+    required this.firstPageUrl,
+    required this.from,
+    required this.lastPage,
+    required this.lastPageUrl,
+    required this.links,
+    required this.nextPageUrl,
+    required this.path,
+    required this.perPage,
+    required this.prevPageUrl,
+    required this.to,
+    required this.total,
+    required this.status,
+    required this.message,
+  });
 
   factory CityResponse.fromJson(Map<String, dynamic> json) {
-    return CityResponse(
-      data: CityData.fromJson(json['data']),
+    return CityResponse (
+      currentPage: json['data']['current_page'],
+      data: (json['data']['data'] as List<dynamic>?)
+          ?.map((item) => City.fromJson(item))
+          .toList() ?? [],
+      firstPageUrl: json['data']['first_page_url'],
+      from: json['data']['from'],
+      lastPage: json['data']['last_page'],
+      lastPageUrl: json['data']['last_page_url'],
+      links: (json['data']['links'] as List<dynamic>?)
+          ?.map((item) => PageLink.fromJson(item))
+          .toList() ?? [],
+      nextPageUrl: json['data']['next_page_url'],
+      path: json['data']['path'],
+      perPage: json['data']['per_page'],
+      prevPageUrl: json['data']['prev_page_url'],
+      to: json['data']['to'],
+      total: json['data']['total'],
+      status: json['status'],
+      message: json['message'],
     );
   }
 }
 
-class CityData {
-  final int currentPage;
-  final List<City> cities;
-  final String firstPageUrl;
-  final int lastPage;
-  final String lastPageUrl;
-  final List<CityLink> links;
-  final String? nextPageUrl;
+class PageLink {
+  final String? url;
+  final String label;
+  final bool active;
 
-  CityData({
-    required this.currentPage,
-    required this.cities,
-    required this.firstPageUrl,
-    required this.lastPage,
-    required this.lastPageUrl,
-    required this.links,
-    this.nextPageUrl,
+  PageLink({
+    this.url,
+    required this.label,
+    required this.active,
   });
 
-  factory CityData.fromJson(Map<String, dynamic> json) {
-    var citiesList = json['data'] as List;
-    List<City> cities = citiesList.map((cityJson) => City.fromJson(cityJson)).toList();
-
-    var linksList = json['links'] as List;
-    List<CityLink> links = linksList.map((linkJson) => CityLink.fromJson(linkJson)).toList();
-
-    return CityData(
-      currentPage: json['current_page'],
-      cities: cities,
-      firstPageUrl: json['first_page_url'],
-      lastPage: json['last_page'],
-      lastPageUrl: json['last_page_url'],
-      links: links,
-      nextPageUrl: json['next_page_url'],
+  factory PageLink.fromJson(Map<String, dynamic> json) {
+    return PageLink(
+      url: json['url'],
+      label: json['label'],
+      active: json['active'],
     );
   }
 }
@@ -73,24 +102,5 @@ class City {
       updatedAt: json['updated_at'],
     );
   }
-}
 
-class CityLink {
-  final String? url;
-  final String label;
-  final bool active;
-
-  CityLink({
-    this.url,
-    required this.label,
-    required this.active,
-  });
-
-  factory CityLink.fromJson(Map<String, dynamic> json) {
-    return CityLink(
-      url: json['url'],
-      label: json['label'],
-      active: json['active'],
-    );
-  }
 }
