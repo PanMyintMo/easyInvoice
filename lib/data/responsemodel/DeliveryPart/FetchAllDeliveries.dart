@@ -1,63 +1,59 @@
-class FetchAllDelivery {
-  final DeliveriesData data;
-
-  FetchAllDelivery({
-    required this.data,
-  });
-
-  factory FetchAllDelivery.fromJson(Map<String, dynamic> json) {
-    return FetchAllDelivery(
-      data: DeliveriesData.fromJson(json['data']),
-    );
-  }
-}
-
-class DeliveriesData {
-  final int current_page;
+class FetchAllDelivery  {
+  final int currentPage;
   final List<DeliveriesItem> data;
-  final String first_page_url;
-  final int from;
-  final int last_page;
-  final String last_page_url;
+  final String firstPageUrl;
+  final int? from;
+  final int lastPage;
+  final String lastPageUrl;
   final List<PageLink> links;
-  final String next_page_url;
+  final String? nextPageUrl;
   final String path;
-  final int per_page;
-  final String? prev_page_url;
-  final int to;
+  final int perPage;
+  final String? prevPageUrl;
+  final int? to;
   final int total;
+  final int? status;
+  final String? message;
 
-  DeliveriesData({
-    required this.current_page,
+  FetchAllDelivery  ({
+    required this.currentPage,
     required this.data,
-    required this.first_page_url,
+    required this.firstPageUrl,
     required this.from,
-    required this.last_page,
-    required this.last_page_url,
+    required this.lastPage,
+    required this.lastPageUrl,
     required this.links,
-    required this.next_page_url,
+    required this.nextPageUrl,
     required this.path,
-    required this.per_page,
-    required this.prev_page_url,
+    required this.perPage,
+    required this.prevPageUrl,
     required this.to,
     required this.total,
+    required this.status,
+    required this.message,
   });
 
-  factory DeliveriesData.fromJson(Map<String, dynamic> json) {
-    return DeliveriesData(
-      current_page: json['current_page'],
-      data: List<DeliveriesItem>.from(json['data'].map((item) => DeliveriesItem.fromJson(item))),
-      first_page_url: json['first_page_url'],
-      from: json['from'],
-      last_page: json['last_page'],
-      last_page_url: json['last_page_url'],
-      links: List<PageLink>.from(json['links'].map((item) => PageLink.fromJson(item))),
-      next_page_url: json['next_page_url'] ?? '',
-      path: json['path'],
-      per_page: json['per_page'],
-      prev_page_url: json['prev_page_url'] ?? '',
-      to: json['to'],
-      total: json['total'],
+  factory FetchAllDelivery .fromJson(Map<String, dynamic> json) {
+    return FetchAllDelivery  (
+      currentPage: json['data']['current_page'],
+      data: (json['data']['data'] as List<dynamic>?)
+          ?.map((item) => DeliveriesItem.fromJson(item))
+          .toList() ?? [],
+      firstPageUrl: json['data']['first_page_url'],
+      from: json['data']['from'],
+      lastPage: json['data']['last_page'],
+      lastPageUrl: json['data']['last_page_url'],
+      links: (json['data']['links'] as List<dynamic>?)
+          ?.map((item) => PageLink.fromJson(item))
+          .toList() ?? [],
+      nextPageUrl: json['data']['next_page_url'],
+      path: json['data']['path'],
+      perPage: json['data']['per_page'],
+      prevPageUrl: json['data']['prev_page_url'],
+      to: json['data']['to'],
+      total: json['data']['total'],
+      status: json['status'],
+      message: json['message'],
     );
   }
 }
@@ -75,7 +71,7 @@ class PageLink {
 
   factory PageLink.fromJson(Map<String, dynamic> json) {
     return PageLink(
-      url: json['url'] != null ? json['url'] : '',
+      url: json['url'],
       label: json['label'],
       active: json['active'],
     );
@@ -115,4 +111,5 @@ class DeliveriesItem {
       city_id: json['city_id'],
     );
   }
+
 }

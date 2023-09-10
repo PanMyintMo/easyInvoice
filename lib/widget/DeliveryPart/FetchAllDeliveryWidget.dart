@@ -4,12 +4,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../bloc/delete/DeliveryPart/delete_delivery_cubit.dart';
 import '../../common/showDeleteConfirmationDialog.dart';
 import '../../data/responsemodel/DeliveryPart/FetchAllDeliveries.dart';
-import '../../screen/DeliveryPart/AddDeliveryScreen.dart'; // Updated import
 
 class FetchAllDeliveryWidget extends StatefulWidget {
   final List<DeliveriesItem> deliveriesItem;
+  final bool isLoading;
 
-  const FetchAllDeliveryWidget({Key? key, required this.deliveriesItem})
+  const FetchAllDeliveryWidget({Key? key, required this.deliveriesItem, required this.isLoading})
       : super(key: key);
 
   @override
@@ -24,46 +24,20 @@ class _FetchAllDeliveryWidgetState extends State<FetchAllDeliveryWidget> {
       crossAxisAlignment: CrossAxisAlignment.stretch, // Make children take up full width
 
       children: [
-        Align(
-          alignment: Alignment.topRight,
-          child: TextButton(
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => const AddDeliveryScreen(), // Navigate to the AddDeliveryScreen
-                ),
-              );
-            },
-            child: const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Text(
-                'Add Delivery',
-                style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    decoration: TextDecoration.underline,
-                    color: Colors.blue),
-              ),
-            ),
-          ),
-        ),
-        const SizedBox(height: 20,),
-        Flexible(
-          child: SingleChildScrollView(
-            scrollDirection: Axis.vertical,
-            child: PaginatedDataTable(
-              columns: const [
-                DataColumn(label: Text('Cost')),
-                DataColumn(label: Text('City')),
-                DataColumn(label: Text('State')),
-                DataColumn(label: Text('Company')),
-                DataColumn(label: Text('Action')),
-              ],
-              source: DeliData(widget.deliveriesItem, context),
-              horizontalMargin: 20,
-              rowsPerPage: 8,
-              columnSpacing: 30,
-            ),
+        SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: PaginatedDataTable(
+            columns: const [
+              DataColumn(label: Text('Cost')),
+              DataColumn(label: Text('City')),
+              DataColumn(label: Text('State')),
+              DataColumn(label: Text('Company')),
+              DataColumn(label: Text('Action')),
+            ],
+            source: DeliData(widget.deliveriesItem, context),
+            horizontalMargin: 20,
+            rowsPerPage: 8,
+            columnSpacing: 30,
           ),
         ),
       ],

@@ -322,10 +322,10 @@ class UserRepository {
   }
 
   //fetch all deliveries
-  Future<List<DeliveriesItem>> fetchAllDelivery() async {
+  Future<List<DeliveriesItem>?> fetchAllDelivery() async {
     try {
       final response = await _apiService.fetchAllDelivery();
-      return response.data.data;
+      return response.data;
     } catch (error) {
       throw Exception('Failed to fetch data: $error');
     }

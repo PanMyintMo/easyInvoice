@@ -684,64 +684,61 @@ class ApiService {
       throw Exception('Failed to fetch data: $e');
     }
   }
+
 // fetch all deliveries
   Future<FetchAllDelivery> fetchAllDelivery() async {
     try {
       int currentPage = 1;
-      DeliveriesData deliveryData;
-      List<DeliveriesItem> allDeliveryItem = [];
+      List<DeliveriesItem> deliveryItemData = [];
+      String? nextPageUrl;
 
       while (true) {
         final response = await _dio
-            .get('https://mmeasyinvoice.com/api/all-deliveries?page=$currentPage');
-
+            .get('https://www.mmeasyinvoice.com/api/all-deliveries?page=$currentPage');
 
         if (response.statusCode == 200) {
           final dynamic responseData = response.data;
 
-          final deliveryDataResponse =
-          FetchAllDelivery.fromJson(responseData);
-          deliveryData = deliveryDataResponse.data;
-          final List<DeliveriesItem> deliveryItems = deliveryData.data;
-          allDeliveryItem.addAll(deliveryItems);
+          final allDeliveryResponse = FetchAllDelivery.fromJson(responseData);
+          final deliveryData = allDeliveryResponse.data;
 
-          if (currentPage == deliveryData.last_page) {
+          if (deliveryItemData != null) {
+            deliveryItemData.addAll(deliveryData);
+          }
+
+          nextPageUrl = allDeliveryResponse.nextPageUrl;
+
+          if (currentPage == allDeliveryResponse.lastPage) {
             break;
           } else {
             currentPage++;
           }
         } else {
-          throw Exception('Failed to fetch data');
+          throw Exception('Failed to fetch all faulty date.');
         }
       }
 
       return FetchAllDelivery(
-        data: DeliveriesData(
-          current_page: currentPage,
-          data: allDeliveryItem,
-          first_page_url: 'https://mmeasyinvoice.com/api/all-deliveries?page=1',
-          from: 1,
-          last_page: currentPage,
-          last_page_url:
-          'https://mmeasyinvoice.com/api/all-deliveries?page=$currentPage',
-          links: [],
-          next_page_url: (currentPage < deliveryData.last_page)
-              ? 'https://mmeasyinvoice.com/api/all-deliveries?page=${currentPage + 1}'
-              : '',
-          path: 'https://mmeasyinvoice.com/api/all-deliveries',
-          per_page: allDeliveryItem.length,
-          prev_page_url: (currentPage > 1)
-              ? 'https://mmeasyinvoice.com/api/all-deliveries?page=${currentPage - 1}'
-              : null,
-          to: allDeliveryItem.length,
-          total: 0,
-        ),
+        currentPage: currentPage,
+        data: deliveryItemData,
+        firstPageUrl: 'https://mmeasyinvoice.com/api/all-deliveries?page=1',
+        from: 1, // Always set to 1 if data is not empty
+        lastPage: currentPage,
+        lastPageUrl: 'https://mmeasyinvoice.com/api/all-deliveries?page=$currentPage',
+        links: [],
+        nextPageUrl: nextPageUrl,
+        path: 'https://mmeasyinvoice.com/api/faulty-item',
+        perPage: deliveryItemData.length,
+        prevPageUrl: (currentPage > 1) ? 'https://mmeasyinvoice.com/api/all-deliveries?page=${currentPage - 1}' : null,
+        to: 1,
+        total: 0,
+        status: null, // You can set this to null or provide the appropriate value
+        message: null, // You can set this to null or provide the appropriate value
       );
     } catch (e) {
-      throw Exception('Failed to fetch data: $e');
+      throw Exception('Failed to fetch delivery by date response: $e');
     }
   }
-
 
   //fetch all category
   Future<PaginationDataResponse> getAllCategories() async {
@@ -1233,9 +1230,6 @@ class ApiService {
   }
 
 
-
-
-
   //fetch all warehouse product list
   Future<WarehouseResponse> fetchWarehouseProductList() async {
     try {
@@ -1253,8 +1247,6 @@ class ApiService {
       throw Exception('Failed to fetch warehouse: $e');
     }
   }
-
-
 
   //fetch all product by category Id from db
   Future<List<ProductListItem>> fetchAllProductByCateId(int id) async {

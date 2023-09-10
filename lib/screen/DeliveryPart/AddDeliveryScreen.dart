@@ -35,6 +35,7 @@ class AddDeliveryScreen extends StatelessWidget {
               return const AddDeliveryWidget(isLoading: true);
             } else if (state is AddDeliverySuccess) {
               showToastMessage("Successfully delivery added.");
+              Navigator.pop(context,true);
               return const AddDeliveryWidget(isLoading: false);
             } else if (state is AddDeliveryFail) {
               showToastMessage("Failed delivery added.");

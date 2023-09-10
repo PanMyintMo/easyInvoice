@@ -16,8 +16,8 @@ class FetchAllDeliveryCubit extends Cubit<FetchAllDeliveryState> {
     emit(FetchAllDeliveryLoading());
 
     try {
-      final List<DeliveriesItem> response = await _userRepository.fetchAllDelivery();
-      emit(FetchAllDeliverySuccess(response));
+      final List<DeliveriesItem>? response = await _userRepository.fetchAllDelivery();
+      emit(FetchAllDeliverySuccess(response!));
     } catch (error) {
       emit(FetchAllDeliveryFail(error.toString()));
     }
