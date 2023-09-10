@@ -39,6 +39,7 @@ class _AddNewTownshipState extends State<AddNewTownship> {
               return const AddNewTownshipWidget(isLoading : true);
             } else if (state is AddTownshipSuccess) {
               showToastMessage(state.townshipResponse.message);
+              Navigator.pop(context,true);
               return const AddNewTownshipWidget(isLoading : false);
             } else if (state is AddTownshipFail) {
               showToastMessage(state.error.toString());

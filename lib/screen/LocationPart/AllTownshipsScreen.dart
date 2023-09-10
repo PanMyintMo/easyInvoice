@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../bloc/get/TownshipPart/fetch_all_township_cubit.dart';
 import '../../common/ToastMessage.dart';
 import '../../module/module.dart';
+import 'AddNewTownship.dart';
 class Townships extends StatefulWidget {
   const Townships({super.key});
 
@@ -15,22 +16,7 @@ class Townships extends StatefulWidget {
 class _TownshipsState extends State<Townships> {
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider<FetchAllTownshipCubit>(
-          create: (context) {
-            final cubit = FetchAllTownshipCubit(getIt
-                .call()); // Use getIt<ApiService>() to get the ApiService instance
-            cubit.fetchAllTownship();
-            return cubit;
-          },
-        ),
-        BlocProvider<TownshipDeleteCubit>(
-          create: (context) => TownshipDeleteCubit(getIt
-              .call()), // Use getIt<ApiService>() to get the ApiService instance
-        ),
-      ],
-      child: Scaffold(
+    return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
           elevation: 0.0,
@@ -39,56 +25,109 @@ class _TownshipsState extends State<Townships> {
             color: Colors.red, // Set the color of the navigation icon to black
           ),
           title: const Text(
-            'Townships Screen',
+            'Townships  Screen',
             style: TextStyle(
                 color: Colors.black54,
                 fontWeight: FontWeight.bold,
                 fontSize: 16),
           ),
         ),
-        body: BlocConsumer<FetchAllTownshipCubit, FetchAllTownshipState>(
-          listener: (context, state) {
-            if (state is FetchAllTownshipFail) {
-              showToastMessage('Error: ${state.error}');
-            }
-          },
-          builder: (context, state) {
-            if (state is FetchAllTownshipLoading) {
-              return const Center(child: CircularProgressIndicator());
-            } else if (state is FetchAllTownshipSuccess) {
-              return BlocConsumer<TownshipDeleteCubit, TownshipDeleteState>(
-                listener: (context, deleteState) {
-                  if (deleteState is DeleteTownshipLoading) {
+        body: MultiBlocProvider(providers: [
+          BlocProvider<FetchAllTownshipCubit>(
+            create: (context) {
+              final cubit = FetchAllTownshipCubit(getIt
+                  .call()); // Use getIt<ApiService>() to get the ApiService instance
+              cubit.fetchAllTownship();
+              return cubit;
+            },
+          ),
+          BlocProvider<TownshipDeleteCubit>(
+            create: (context) => TownshipDeleteCubit(getIt
+                .call()), // Use getIt<ApiService>() to get the ApiService instance
+          ),
+        ], child: const TownshipScreen()));
+  }
+}
 
-                  } else if (deleteState is DeleteTownshipSuccess) {
-                    showToastMessage(deleteState.deleteTownshipResponse.message);
-                    WidgetsBinding.instance.addPostFrameCallback((_) {
-                      context.read<FetchAllTownshipCubit>().fetchAllTownship();
-                    });
-                  } else if (deleteState is DeleteTownshipFail) {
-                    showToastMessage(deleteState.error);
+class TownshipScreen extends StatefulWidget {
+  const TownshipScreen({super.key});
 
-                  }
-                },
-                builder: (context, deleteState) {
-                  final bool loading = deleteState is DeleteTownshipLoading;
-                  return TownshipWidget(
-                    isLoading: loading,
+  @override
+  State<TownshipScreen> createState() => _TownshipScreenState();
+}
+
+class _TownshipScreenState extends State<TownshipScreen> {
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      scrollDirection: Axis.vertical,
+      child: Column(
+        children: [
+          Align(
+            alignment: Alignment.topRight,
+            child: TextButton(
+              onPressed: () async {
+                final result = await Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const AddNewTownship(),
+                  ),
+                );
+                if (result == true) {
+                  BlocProvider.of<FetchAllTownshipCubit>(context).fetchAllTownship();
+                }
+              },
+              child: const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text(
+                  'Add New Township',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    decoration: TextDecoration.underline,
+                    color: Colors.blue,
+                  ),
+                ),
+              ),
+            ),
+          ),
+          BlocBuilder<FetchAllTownshipCubit, FetchAllTownshipState>(
+            builder: (context, state) {
+              if (state is FetchAllTownshipLoading) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (state is FetchAllTownshipSuccess) {
+                final cityList = state.township;
+
+                if (cityList.isEmpty) {
+                  return const Center(
+                    child: Text("No Township found."),
                   );
-                },
-              );
-            } else if (state is FetchAllTownshipFail) {
-              const TownshipWidget(
-                isLoading: false,
-              );
-              return Center(child: Text('Error: ${state.error}'));
-            }
+                }
 
-            return const TownshipWidget(
-              isLoading: false,
-            );
-          },
-        ),
+                return BlocConsumer<TownshipDeleteCubit, TownshipDeleteState>(
+                  builder: (context, deleteState) {
+                    bool loading = deleteState is DeleteTownshipLoading;
+
+                    return TownshipWidget(
+                      isLoading: loading,
+                    );
+                  },
+                  listener: (context, deleteState) {
+                    if (deleteState is DeleteTownshipSuccess) {
+                      showToastMessage('Deleted Township successful.');
+                      BlocProvider.of<FetchAllTownshipCubit>(context)
+                          .fetchAllTownship();
+                    } else if (deleteState is DeleteTownshipFail) {
+                      showToastMessage(
+                          'Failed to delete township: ${deleteState.error}');
+                    }
+                  },
+                );
+              } else {
+                return const SizedBox(); // Handle other states if needed
+              }
+            },
+          ),
+        ],
       ),
     );
   }

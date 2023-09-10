@@ -375,10 +375,10 @@ class UserRepository {
   }
 
   //fetch townships from db
-  Future<List<Township>> fetchTownships() async {
+  Future<List<Township>?> fetchTownships() async {
     try {
       final response = await _apiService.townships();
-      return response.data.data;
+      return response.data;
     } catch (error) {
       throw Exception('Failed to fetch township: $error');
     }

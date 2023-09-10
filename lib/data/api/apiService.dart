@@ -963,6 +963,62 @@ class ApiService {
       throw Exception('Failed to fetch city response: $e');
     }
   }
+
+  // Fetch all townships from the database
+  Future<TownshipResponse> townships() async {
+    try {
+      int currentPage = 1;
+      List<Township> townshipData = [];
+      String? nextPageUrl;
+
+      while (true) {
+        final response = await _dio.post(
+            'https://www.mmeasyinvoice.com/api/townships?page=$currentPage');
+
+        if (response.statusCode == 200) {
+          final dynamic responseData = response.data;
+
+          final townshipResponse = TownshipResponse.fromJson(responseData);
+          final townshipItem = townshipResponse.data;
+
+          if (townshipData != null) {
+            townshipData.addAll(townshipItem);
+          }
+
+          nextPageUrl = townshipResponse.nextPageUrl;
+
+          if (currentPage == townshipResponse.lastPage) {
+            break;
+          } else {
+            currentPage++;
+          }
+        } else {
+          throw Exception('Failed to fetch all township.');
+        }
+      }
+
+      return TownshipResponse(
+        currentPage: currentPage,
+        data: townshipData,
+        firstPageUrl: 'https://mmeasyinvoice.com/api/townships?page=1',
+        from: 1, // Always set to 1 if data is not empty
+        lastPage: currentPage,
+        lastPageUrl: 'https://mmeasyinvoice.com/api/townships?page=$currentPage',
+        links: [],
+        nextPageUrl: nextPageUrl,
+        path: 'https://mmeasyinvoice.com/api/township',
+        perPage: townshipData.length,
+        prevPageUrl: (currentPage > 1) ? 'https://mmeasyinvoice.com/api/townships?page=${currentPage - 1}' : null,
+        to: 1,
+        total: 0,
+        status: null, // You can set this to null or provide the appropriate value
+        message: null, // You can set this to null or provide the appropriate value
+      );
+    } catch (e) {
+      throw Exception('Failed to fetch township response: $e');
+    }
+  }
+
   // fetch all warehouse request from delivery man
   Future<DeliveryManResponse> fetchAllWarehouseRequest() async {
     try {
@@ -1176,64 +1232,7 @@ class ApiService {
     }
   }
 
- // Fetch all townships from the database
-  Future<TownshipResponse> townships() async {
-    try {
-      int currentPage = 1;
-      TownshipData? townshipData;
-      List<Township> townshipItems = [];
 
-      while (true) {
-        final response = await _dio.post(
-            'https://www.mmeasyinvoice.com/api/townships?page=$currentPage');
-        if (response.statusCode == 200) {
-          final dynamic responseData = response.data;
-          final townships = TownshipResponse.fromJson(responseData);
-          townshipData = townships.data;
-
-          final List<Township> townshipItem = townshipData.data;
-          townshipItems.addAll(townshipItem);
-
-          if (currentPage == townshipData.lastPage) {
-            break;
-          } else {
-            currentPage++;
-          }
-        } else {
-          throw Exception('Failed to fetch townships');
-        }
-      }
-
-
-
-      return TownshipResponse(
-        data: TownshipData(
-          currentPage: townshipData.currentPage,
-          data: townshipItems,
-          firstPageUrl: 'https://mmeasyinvoice.com/api/townships?page=1',
-          lastPage: townshipData.lastPage,
-          lastPageUrl:
-              'https://mmeasyinvoice.com/api/townships?page=${townshipData.lastPage}',
-          links: townshipData.links,
-          nextPageUrl: (currentPage < townshipData.lastPage)
-              ? 'https://mmeasyinvoice.com/api/townships?page=${currentPage + 1}'
-              : null,
-          path: 'https://www.mmeasyinvoice.com/api/townships',
-          perPage: townshipData.perPage,
-          prevPageUrl: (currentPage > 1)
-              ? 'https://mmeasyinvoice.com/api/townships?page=${currentPage - 1}'
-              : null,
-          to: townshipData.to,
-          total: townshipData.total,
-          from: townshipData.from,
-        ),
-        status: 200,
-        message: 'All Township are Retrieved Successfully!',
-      );
-    } catch (e) {
-      throw Exception('Failed to fetch townships: $e');
-    }
-  }
 
 
 

@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../common/ApiHelper.dart';
 import '../../common/showDeleteConfirmationDialog.dart';
 import '../../data/responsemodel/TownshipsPart/AllTownshipResponse.dart';
-import '../../screen/LocationPart/AddNewTownship.dart';
 import '../../screen/LocationPart/EditTownshipScreen.dart';
 
 class TownshipWidget extends StatefulWidget {
@@ -28,7 +27,7 @@ class _TownshipWidgetState extends State<TownshipWidget> {
   Future<void> fetchTownshipName() async {
     final township = await ApiHelper.fetchTownshipName();
     setState(() {
-      this.townships = township;
+      this.townships = township!;
     });
   }
 
@@ -36,32 +35,21 @@ class _TownshipWidgetState extends State<TownshipWidget> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Align(
-          alignment: Alignment.topRight,
-          child: TextButton(onPressed: () {
-            Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => const AddNewTownship()));
-          }, child: const Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Text('Add New Township',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold),),
-          ),),
-        ),
-        Flexible(
-          child: SingleChildScrollView(
-            scrollDirection: Axis.vertical,
-            child: PaginatedDataTable(
-              columns: const [
-                DataColumn(label: Text('ID',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold),)),
-                DataColumn(label: Text('Name',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold))),
-                DataColumn(label: Text('Action',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold))),
-              ],
-              source: TownshipData(townships,context),
-              horizontalMargin: 20,
-              dragStartBehavior: DragStartBehavior.down,
-              arrowHeadColor: Colors.blueAccent,
-              rowsPerPage: 8,
-              columnSpacing: 85,
-            ),
+
+        SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: PaginatedDataTable(
+            columns: const [
+              DataColumn(label: Text('ID',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold),)),
+              DataColumn(label: Text('Name',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold))),
+              DataColumn(label: Text('Action',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold))),
+            ],
+            source: TownshipData(townships,context),
+            horizontalMargin: 20,
+            dragStartBehavior: DragStartBehavior.down,
+            arrowHeadColor: Colors.blueAccent,
+            rowsPerPage: 8,
+            columnSpacing: 85,
           ),
         ),
       ],

@@ -48,11 +48,11 @@ class ApiHelper {
   }
 
   //Fetch township Name
-  static Future<List<Township>> fetchTownshipName() async {
+  static Future<List<Township>?> fetchTownshipName() async {
     try {
       final response = await ApiService().townships();
-      if (response.data.data.isNotEmpty) {
-        return response.data.data;
+      if (response.data.isNotEmpty) {
+        return response.data;
       }
     } catch (error) {
       print('Error fetching township: $error');
