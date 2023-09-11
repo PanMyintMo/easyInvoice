@@ -1,66 +1,61 @@
 class PaginationDataResponse {
-  final PaginationData data;
+  final int currentPage;
+  final List<PaginationItem> data;
+  final String firstPageUrl;
+  final int? from;
+  final int lastPage;
+  final String lastPageUrl;
+  final List<PageLink> links;
+  final String? nextPageUrl;
+  final String path;
+  final int perPage;
+  final String? prevPageUrl;
+  final int? to;
+  final int total;
+  final int? status;
+  final String? message;
 
-  PaginationDataResponse({
+  PaginationDataResponse ({
+    required this.currentPage,
     required this.data,
+    required this.firstPageUrl,
+    required this.from,
+    required this.lastPage,
+    required this.lastPageUrl,
+    required this.links,
+    required this.nextPageUrl,
+    required this.path,
+    required this.perPage,
+    required this.prevPageUrl,
+    required this.to,
+    required this.total,
+    required this.status,
+    required this.message,
   });
 
   factory PaginationDataResponse.fromJson(Map<String, dynamic> json) {
-    return PaginationDataResponse(
-      data: PaginationData.fromJson(json['data']),
+    return PaginationDataResponse  (
+      currentPage: json['data']['current_page'],
+      data: (json['data']['data'] as List<dynamic>?)
+          ?.map((item) => PaginationItem.fromJson(item))
+          .toList() ?? [],
+      firstPageUrl: json['data']['first_page_url'],
+      from: json['data']['from'],
+      lastPage: json['data']['last_page'],
+      lastPageUrl: json['data']['last_page_url'],
+      links: (json['data']['links'] as List<dynamic>?)
+          ?.map((item) => PageLink.fromJson(item))
+          .toList() ?? [],
+      nextPageUrl: json['data']['next_page_url'],
+      path: json['data']['path'],
+      perPage: json['data']['per_page'],
+      prevPageUrl: json['data']['prev_page_url'],
+      to: json['data']['to'],
+      total: json['data']['total'],
+      status: json['status'],
+      message: json['message'],
     );
   }
-}
-
-class PaginationData {
-  final int current_page;
-  final List<PaginationItem> data;
-  final String first_page_url;
-  final int from;
-  final int last_page;
-  final String last_page_url;
-  final List<PageLink> links;
-  final String next_page_url;
-  final String path;
-  final int per_page;
-  final String? prev_page_url;
-  final int to;
-  final int total;
-
-  PaginationData({
-    required this.current_page,
-    required this.data,
-    required this.first_page_url,
-    required this.from,
-    required this.last_page,
-    required this.last_page_url,
-    required this.links,
-    required this.next_page_url,
-    required this.path,
-    required this.per_page,
-    required this.prev_page_url,
-    required this.to,
-    required this.total,
-  });
-
-  factory PaginationData.fromJson(Map<String, dynamic> json) {
-    return PaginationData(
-      current_page: json['current_page'],
-      data: List<PaginationItem>.from(json['data'].map((item) => PaginationItem.fromJson(item))),
-      first_page_url: json['first_page_url'],
-      from: json['from'],
-      last_page: json['last_page'],
-      last_page_url: json['last_page_url'],
-      links: List<PageLink>.from(json['links'].map((item) => PageLink.fromJson(item))),
-      next_page_url: json['next_page_url'] ?? '',
-      path: json['path'],
-      per_page: json['per_page'],
-      prev_page_url: json['prev_page_url'] ?? '',
-      to: json['to'],
-      total: json['total'],
-    );
-  }
-
 }
 
 class PageLink {
@@ -69,21 +64,21 @@ class PageLink {
   final bool active;
 
   PageLink({
-     this.url,
+    this.url,
     required this.label,
     required this.active,
   });
 
   factory PageLink.fromJson(Map<String, dynamic> json) {
     return PageLink(
-      url: json['url'] != null ? json['url'] : '',
+      url: json['url'],
       label: json['label'],
       active: json['active'],
     );
   }
 }
 
-class PaginationItem {
+class PaginationItem{
   final int id;
   final String name;
   final String slug;
@@ -107,4 +102,5 @@ class PaginationItem {
       updated_at: DateTime.parse(json['updated_at']),
     );
   }
+
 }

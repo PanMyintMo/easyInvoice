@@ -741,11 +741,12 @@ class ApiService {
   }
 
   //fetch all category
+
   Future<PaginationDataResponse> getAllCategories() async {
     try {
       int currentPage = 1;
-      PaginationData categoryData;
-      List<PaginationItem> allCategories = [];
+      List<PaginationItem> categoryData = [];
+      String? nextPageUrl;
 
       while (true) {
         final response = await _dio
@@ -754,48 +755,47 @@ class ApiService {
         if (response.statusCode == 200) {
           final dynamic responseData = response.data;
 
-          final categoryDataResponse =
-          PaginationDataResponse.fromJson(responseData);
-          categoryData = categoryDataResponse.data;
-          final List<PaginationItem> categories = categoryData.data;
-          allCategories.addAll(categories);
+          final cateResponse = PaginationDataResponse.fromJson(responseData);
+          final cateData = cateResponse.data;
 
-          if (currentPage == categoryData.last_page) {
+          if (categoryData != null) {
+            categoryData.addAll(cateData);
+          }
+
+          nextPageUrl = cateResponse.nextPageUrl;
+
+          if (currentPage == cateResponse.lastPage) {
             break;
           } else {
             currentPage++;
           }
         } else {
-          throw Exception('Failed to fetch categories');
+          throw Exception('Failed to fetch all category date.');
         }
       }
 
       return PaginationDataResponse(
-        data: PaginationData(
-          current_page: currentPage,
-          data: allCategories,
-          first_page_url: 'https://mmeasyinvoice.com/api/categories?page=1',
-          from: 1,
-          last_page: currentPage,
-          last_page_url:
-              'https://mmeasyinvoice.com/api/categories?page=$currentPage',
-          links: [],
-          next_page_url: (currentPage < categoryData.last_page)
-              ? 'https://mmeasyinvoice.com/api/categories?page=${currentPage + 1}'
-              : '',
-          path: 'https://mmeasyinvoice.com/api/categories',
-          per_page: allCategories.length,
-          prev_page_url: (currentPage > 1)
-              ? 'https://mmeasyinvoice.com/api/categories?page=${currentPage - 1}'
-              : null,
-          to: allCategories.length,
-          total: 0,
-        ),
+        currentPage: currentPage,
+        data: categoryData,
+        firstPageUrl: 'https://mmeasyinvoice.com/api/categories?page=1',
+        from: 1, // Always set to 1 if data is not empty
+        lastPage: currentPage,
+        lastPageUrl: 'https://mmeasyinvoice.com/api/categories?page=$currentPage',
+        links: [],
+        nextPageUrl: nextPageUrl,
+        path: 'https://mmeasyinvoice.com/api/categories',
+        perPage: categoryData.length,
+        prevPageUrl: (currentPage > 1) ? 'https://mmeasyinvoice.com/api/categories?page=${currentPage - 1}' : null,
+        to: 1,
+        total: 0,
+        status: null,
+        message: null,
       );
     } catch (e) {
-      throw Exception('Failed to fetch categories: $e');
+      throw Exception('Failed to fetch category by date response: $e');
     }
   }
+
   // fetch all faulty item
   Future<AllFaultyItemsResponse> fetchAllFaultyItem() async {
     try {
@@ -969,7 +969,7 @@ class ApiService {
       String? nextPageUrl;
 
       while (true) {
-        final response = await _dio.post(
+        final response = await _dio.get(
             'https://www.mmeasyinvoice.com/api/townships?page=$currentPage');
 
         if (response.statusCode == 200) {
@@ -1362,54 +1362,54 @@ class ApiService {
   Future<GetAllProductResponse> fetchAllProducts() async {
     try {
       int currentPage = 1;
-      ProductData? productData; // Make the productData variable nullable
-      List<ProductListItem> allProduct = [];
-      bool isLastPage = false;
+      List<ProductListItem> productData = [];
+      String? nextPageUrl;
 
-      while (!isLastPage) {
+      while (true) {
         final response = await _dio
             .get('https://mmeasyinvoice.com/api/products?page=$currentPage');
+
         if (response.statusCode == 200) {
           final dynamic responseData = response.data;
 
-          final productDataResponse =
-              GetAllProductResponse.fromJson(responseData);
-          productData = productDataResponse.data;
-          final List<ProductListItem> products = productData.data;
-          allProduct.addAll(products);
+          final productResponse = GetAllProductResponse.fromJson(responseData);
+          final productItemData = productResponse.data;
 
-          if (currentPage == productData.lastPage) {
-            isLastPage = true;
+          if (productData != null) {
+            productData.addAll(productItemData);
+          }
+
+          nextPageUrl = productResponse.nextPageUrl;
+
+          if (currentPage == productResponse.lastPage) {
+            break;
           } else {
             currentPage++;
           }
+        } else {
+          throw Exception('Failed to fetch all product date.');
         }
       }
 
       return GetAllProductResponse(
-        data: ProductData(
-          currentPage: currentPage,
-          data: allProduct,
-          firstPageUrl: 'https://mmeasyinvoice.com/api/products?page=1',
-          from: 1,
-          lastPage: currentPage,
-          lastPageUrl:
-              'https://mmeasyinvoice.com/api/products?page=$currentPage',
-          links: [],
-          nextPageUrl: (currentPage < productData!.lastPage)
-              ? 'https://mmeasyinvoice.com/api/products?page=${currentPage + 1}'
-              : '',
-          path: 'https://mmeasyinvoice.com/api/products',
-          perPage: allProduct.length,
-          prevPageUrl: (currentPage > 1)
-              ? 'https://mmeasyinvoice.com/api/products?page=${currentPage - 1}'
-              : null,
-          to: allProduct.length,
-          total: 0,
-        ),
+        currentPage: currentPage,
+        data: productData,
+        firstPageUrl: 'https://mmeasyinvoice.com/api/products?page=1',
+        from: 1, // Always set to 1 if data is not empty
+        lastPage: currentPage,
+        lastPageUrl: 'https://mmeasyinvoice.com/api/products?page=$currentPage',
+        links: [],
+        nextPageUrl: nextPageUrl,
+        path: 'https://mmeasyinvoice.com/api/products',
+        perPage: productData.length,
+        prevPageUrl: (currentPage > 1) ? 'https://mmeasyinvoice.com/api/products?page=${currentPage - 1}' : null,
+        to: 1,
+        total: 0,
+        status: null,
+        message: null,
       );
     } catch (e) {
-      throw Exception('Failed to fetch products: $e');
+      throw Exception('Failed to fetch product  response: $e');
     }
   }
 
@@ -1417,8 +1417,8 @@ class ApiService {
   Future<PaginationDataResponse> getAllSizes() async {
     try {
       int currentPage = 1;
-      PaginationData sizeData;
-      List<PaginationItem> allSizes = [];
+      List<PaginationItem> sizeData = [];
+      String? nextPageUrl;
 
       while (true) {
         final response = await _dio
@@ -1427,46 +1427,44 @@ class ApiService {
         if (response.statusCode == 200) {
           final dynamic responseData = response.data;
 
-          final sizeDataResponse = PaginationDataResponse.fromJson(responseData);
+          final sizeResponse = PaginationDataResponse.fromJson(responseData);
+          final sizeItemData = sizeResponse.data;
 
-          sizeData = sizeDataResponse.data;
-          final List<PaginationItem> sizes = sizeData.data;
-          allSizes.addAll(sizes);
+          if (sizeData != null) {
+            sizeData.addAll(sizeItemData);
+          }
 
-          if (currentPage == sizeData.last_page) {
+          nextPageUrl = sizeResponse.nextPageUrl;
+
+          if (currentPage == sizeResponse.lastPage) {
             break;
           } else {
             currentPage++;
           }
         } else {
-          throw Exception('Failed to fetch all sizes');
+          throw Exception('Failed to fetch all sizes date.');
         }
       }
 
       return PaginationDataResponse(
-        data: PaginationData(
-          current_page: currentPage,
-          data: allSizes,
-          first_page_url: 'https://mmeasyinvoice.com/api/sizes?page=1',
-          from: 1,
-          last_page: currentPage,
-          last_page_url:
-              'https://mmeasyinvoice.com/api/sizes?page=$currentPage',
-          links: [],
-          next_page_url: (currentPage < sizeData.last_page)
-              ? 'https://mmeasyinvoice.com/api/sizes?page=${currentPage + 1}'
-              : '',
-          path: 'https://mmeasyinvoice.com/api/sizes',
-          per_page: allSizes.length,
-          prev_page_url: (currentPage > 1)
-              ? 'https://mmeasyinvoice.com/api/sizes?page=${currentPage - 1}'
-              : null,
-          to: allSizes.length,
-          total: 0,
-        ),
+        currentPage: currentPage,
+        data: sizeData,
+        firstPageUrl: 'https://mmeasyinvoice.com/api/sizes?page=1',
+        from: 1, // Always set to 1 if data is not empty
+        lastPage: currentPage,
+        lastPageUrl: 'https://mmeasyinvoice.com/api/sizes?page=$currentPage',
+        links: [],
+        nextPageUrl: nextPageUrl,
+        path: 'https://mmeasyinvoice.com/api/sizes',
+        perPage: sizeData.length,
+        prevPageUrl: (currentPage > 1) ? 'https://mmeasyinvoice.com/api/sizes?page=${currentPage - 1}' : null,
+        to: 1,
+        total: 0,
+        status: null,
+        message: null,
       );
     } catch (e) {
-      throw Exception('Failed to fetch sizes: $e');
+      throw Exception('Failed to fetch sizes  response: $e');
     }
   }
 

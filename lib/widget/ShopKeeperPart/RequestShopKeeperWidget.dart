@@ -37,7 +37,7 @@ class _RequestShopKeeperWidgetState extends State<RequestShopKeeperWidget> {
   Future<void> fetchCategoriesName() async {
     final categories = await ApiHelper.fetchCategoriesName();
     setState(() {
-      this.categories = categories;
+      this.categories = categories!;
     });
   }
 

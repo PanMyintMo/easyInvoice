@@ -14,8 +14,8 @@ class GetCategoryDetailCubit extends Cubit<GetCategoryDetailState> {
     emit(GetCategoryDetailLoading());
 
     try {
-      final List<PaginationItem> response = await _userRepository.getCategory();
-      emit(GetCategoryDetailSuccess(response));
+      final List<PaginationItem>? response = await _userRepository.getCategory();
+      emit(GetCategoryDetailSuccess(response!));
     } catch (error) {
       emit(GetCategoryDetailFail(error.toString()));
     }

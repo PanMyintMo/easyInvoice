@@ -1,12 +1,21 @@
-import 'package:easy_invoice/bloc/get/ProductPart/get_all_product_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:easy_invoice/bloc/get/ProductPart/get_all_product_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import '../common/CustomButtom.dart';
-import '../network/SharedPreferenceHelper.dart';
 import '../screen/ProductDetailScreen.dart';
+import '../network/SharedPreferenceHelper.dart';
+import 'package:easy_invoice/data/responsemodel/common/ProductListItemResponse.dart';
 
 class AllProductWidget extends StatefulWidget {
+  final bool isLoading;
+  final List<ProductListItem> products;
+
+  const AllProductWidget({
+    Key? key,
+    required this.isLoading,
+    required this.products,
+  }) : super(key: key);
+
   @override
   State<AllProductWidget> createState() => _AllProductWidgetState();
 }
@@ -32,148 +41,91 @@ class _AllProductWidgetState extends State<AllProductWidget> {
   }
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<GetAllProductCubit, GetAllProductState>(
-      builder: (context, state) {
-        if (state is GetAllProductSuccess) {
-          if (state.products.isEmpty) {
-            return const Center(
-              child: Text(
-                'No more products',
-                style: TextStyle(fontSize: 16),
-              ),
-            );
-          } else {
-            return Scaffold(
-              appBar: AppBar(
-                backgroundColor: Colors.white,
-                leading: IconButton(
-                  icon: const Icon(
-                    Icons.arrow_back_ios,
-                    color: Colors.redAccent,
+
+    return ListView.builder(
+      itemCount: widget.products.length,
+      itemBuilder: (BuildContext context, int index) {
+        final product = widget.products[index];
+        return Card(
+          color: Colors.white70,
+          elevation: 3,
+          margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+          child: InkWell(
+            onTap: () async {
+              final result = await Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ProductDetailScreen(products: product),
+                ),
+              );
+              if (result != null) {
+                context.read<GetAllProductCubit>().getAllProduct();
+              }
+            },
+            child: Container(
+              padding: const EdgeInsets.all(12),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+
+                children: [
+                  Icon(
+                    Icons.production_quantity_limits_outlined,
+                    color: Colors.grey.shade300,
+                    size: 50.0,
                   ),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                ),
-                title: const Text(
-                  'All Product Screen',
-                  style: TextStyle(
-                      color: Colors.black54, fontWeight: FontWeight.bold, fontSize: 16),
-                ),
-                actions: [
-                  IconButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    icon: const Icon(
-                      Icons.search,
-                      color: Colors.red,
-                      size: 20,
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Product name: ${product.name}',
+                          maxLines: 3,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 10,),
+                        Text('Category Id: ${product.category_id}'),
+                        const SizedBox(height: 10,),
+                        Text('Stock: ${product.stockStatus}'),
+                        const SizedBox(height: 10,),
+                        Text('Product Id: ${product.id}'),
+
+                      ],
                     ),
-                  )
+                  ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Text('Date: ${product.createdAt.substring(0, 10)}'),
+                  const SizedBox(height: 16,),
+                  Center(
+                    child: (utype == 'ADM') ? CustomButton(
+                      label: 'View Detail Product',
+                      onPressed: () async {
+                        var result = await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ProductDetailScreen(products: product),
+                          ),
+                        );
+                        if (result != null) {
+                          context.read<GetAllProductCubit>().getAllProduct();
+                        }
+                      },
+                    ) : null,
+                  ),
+                  ]
+              )
                 ],
               ),
-              body: ListView.builder(
-                itemCount: state.products.length,
-                itemBuilder: (BuildContext context, int index) {
-                  final product = state.products[index];
-                  return GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ProductDetailScreen(products: product),
-                        ),
-                      );
-                    },
-                    child: Container(
-                      color: Colors.white,
-                      width: double.infinity,
-                      margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
-                      padding: const EdgeInsets.all(12),
-                      height: 160,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Icon(
-                            Icons.production_quantity_limits_outlined,
-                            color: Colors.grey.shade300,
-                            size: 50.0,
-                          ),
-                          const SizedBox(width: 10),
-                          Flexible(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Flexible(
-                                  child: Text(
-                                    'Product name: ${product.name}',
-                                    maxLines: 3,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                                  ),
-                                ),
-                                Flexible(
-                                  child: Text('Category Id: ${product.category_id}'),
-                                ),
-                                Flexible(
-                                  child: Text('Stock: ${product.stockStatus}'),
-                                ),
-                                Flexible(
-                                  child: Text('Product Id: ${product.id}'),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              Text('Date: ${product.createdAt.substring(0, 10)}'),
-                              Expanded(
-                                child: Center(
-
-                                  child: (utype == 'ADM') ? CustomButton(
-                                    label: 'View Detail Product',
-                                    onPressed: () async {
-                                      var result = await Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => ProductDetailScreen(products: product),
-                                        ),
-                                      );
-                                      if (result != null) {
-                                        context.read<GetAllProductCubit>().getAllProduct();
-                                      }
-                                    },
-                                  ) : null,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                },
-              ),
-            );
-          }
-        } else if (state is GetAllProductLoading) {
-          return const Scaffold(
-            body: Center(
-              child: CircularProgressIndicator(),
             ),
-          );
-        } else if (state is GetAllProductFail) {
-          return Scaffold(
-            body: Center(
-              child: Text('Error: ${state.error}'),
-            ),
-          );
-        } else {
-          return const SizedBox(); // Return an empty widget if none of the states match
-        }
+          ),
+        );
       },
     );
   }

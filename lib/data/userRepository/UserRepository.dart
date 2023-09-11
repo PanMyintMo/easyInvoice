@@ -302,10 +302,10 @@ class UserRepository {
   }
 
   //fetch all categories from db
-  Future<List<PaginationItem>> getCategory() async {
+  Future<List<PaginationItem>?> getCategory() async {
     try {
       final response = await _apiService.getAllCategories();
-      return response.data.data;
+      return response.data;
     } catch (error) {
       throw Exception('Failed to fetch category: $error');
     }
@@ -395,20 +395,20 @@ class UserRepository {
   }
 
   //fetch all products
-  Future<List<ProductListItem>> fetchAllProduct() async {
+  Future<List<ProductListItem>?> fetchAllProduct() async {
     try {
       final response = await _apiService.fetchAllProducts();
-      return response.data.data;
+      return response.data;
     } catch (error) {
       throw Exception('Failed to get products: $error');
     }
   }
 
   //fetch all sizes
-  Future<List<PaginationItem>> getSizes() async {
+  Future<List<PaginationItem>?> getSizes() async {
     try {
       final response = await _apiService.getAllSizes();
-      return response.data.data;
+      return response.data;
     } catch (error) {
       rethrow;
     }

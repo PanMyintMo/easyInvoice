@@ -6,19 +6,20 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import '../common/ToastMessage.dart';
+import '../common/showDeleteConfirmationDialog.dart';
 import '../data/responsemodel/GetAllPagnitaionDataResponse.dart';
 import '../screen/UpdateCategoryScreen.dart';
 
 class AllCategoryPageWidget extends StatefulWidget {
   final List<PaginationItem> categories;
   final bool isLoading;
-  final String message;
+
 
   const AllCategoryPageWidget({
     Key? key,
     required this.categories,
     required this.isLoading,
-    required this.message,
+
   }) : super(key: key);
 
   @override
@@ -49,36 +50,36 @@ class _AllCategoryPageWidgetState extends State<AllCategoryPageWidget> {
       child: Column(
           children: [
 
-            Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Align(
-                alignment: Alignment.topRight,
-                child: Container(
-                  width: 250,
-                  padding: const EdgeInsets.symmetric(horizontal: 40),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey),
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Icon(Icons.search),
-                      SizedBox(width: 5),
-                      Expanded(
-                        child: TextField(
-                          decoration: InputDecoration(
-                            hintText: 'Enter your search',
-                            border: InputBorder.none,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(height: 16),
+            // Padding(
+            //   padding: const EdgeInsets.all(12.0),
+            //   child: Align(
+            //     alignment: Alignment.topRight,
+            //     child: Container(
+            //       width: 250,
+            //       padding: const EdgeInsets.symmetric(horizontal: 40),
+            //       decoration: BoxDecoration(
+            //         border: Border.all(color: Colors.grey),
+            //         borderRadius: BorderRadius.circular(5),
+            //       ),
+            //       child: const Row(
+            //         mainAxisAlignment: MainAxisAlignment.end,
+            //         children: [
+            //           Icon(Icons.search),
+            //           SizedBox(width: 5),
+            //           Expanded(
+            //             child: TextField(
+            //               decoration: InputDecoration(
+            //                 hintText: 'Enter your search',
+            //                 border: InputBorder.none,
+            //               ),
+            //             ),
+            //           ),
+            //         ],
+            //       ),
+            //     ),
+            //   ),
+            // ),
+            // const SizedBox(height: 16),
             Stack(
               children: [
                 SingleChildScrollView(
@@ -88,7 +89,7 @@ class _AllCategoryPageWidgetState extends State<AllCategoryPageWidget> {
                     scrollDirection: Axis.horizontal,
                     child: DataTable(
                       headingRowColor: MaterialStateColor.resolveWith((states) => Colors.teal),
-                      columnSpacing: 7.0,
+
                       border: TableBorder.all(width: 0.2),
                       columns: const [
                         DataColumn(
@@ -159,12 +160,10 @@ class _AllCategoryPageWidgetState extends State<AllCategoryPageWidget> {
                             DataCell(
                               GestureDetector(
                                 onTap: () {
-                                  showDeleteConfirmationDialog(
-                                    context,
-                                    category,
-                                    context.read<DeleteCategoryCubit>(),
-                                  );
-                                },
+                                  showDeleteConfirmationDialogs(context,"Are you sure you want to delete this category?",(){
+                                    context.read<DeleteCategoryCubit>().deleteCategory(category.id);
+                                  });
+                                  },
                                 child: const Icon(
                                   Icons.delete_forever,
                                   color: Colors.red,
@@ -196,34 +195,3 @@ class _AllCategoryPageWidgetState extends State<AllCategoryPageWidget> {
   }
 }
 
-void showDeleteConfirmationDialog(
-    BuildContext context,
-    PaginationItem item,
-    DeleteCategoryCubit deleteCategoryCubit,
-    ) {
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: const Text('Confirmation'),
-        content: const Text('Are you sure you want to delete this item?'),
-        actions: [
-          TextButton(
-            onPressed: () {
-              // Delete Action
-              deleteCategoryCubit.deleteCategory(item.id);
-              Navigator.pop(context);
-            },
-            child: const Text('Delete'),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            child: const Text('Cancel'),
-          ),
-        ],
-      );
-    },
-  );
-}

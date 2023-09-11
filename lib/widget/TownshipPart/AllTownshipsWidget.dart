@@ -27,7 +27,7 @@ class _TownshipWidgetState extends State<TownshipWidget> {
   Future<void> fetchTownshipName() async {
     final township = await ApiHelper.fetchTownshipName();
     setState(() {
-      this.townships = township!;
+      this.townships = township;
     });
   }
 

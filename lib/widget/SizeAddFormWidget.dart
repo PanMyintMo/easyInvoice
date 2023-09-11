@@ -7,10 +7,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SizeAddFormWidget extends StatefulWidget {
   final bool isLoading; // Add the isLoading property
-  final String message;
+
 
   const SizeAddFormWidget(
-      {Key? key, required this.isLoading, required this.message})
+      {Key? key, required this.isLoading})
       : super(key: key);
 
   @override
@@ -40,7 +40,18 @@ class _SizeAddFormWidgetState extends State<SizeAddFormWidget> {
       create: (context) => AddCategoryCubit(getIt.call()),
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Size'),
+          elevation: 0.0,
+          backgroundColor: Colors.white70,
+          iconTheme: const IconThemeData(
+            color: Colors.red, // Set the color of the navigation icon to black
+          ),
+          title: const Text(
+            'Sizes Add Screen',
+            style: TextStyle(
+                color: Colors.black54,
+                fontWeight: FontWeight.bold,
+                fontSize: 16),
+          ),
         ),
         body: Center(
           child: SizedBox(
@@ -103,7 +114,7 @@ class _SizeAddFormWidgetState extends State<SizeAddFormWidget> {
                     ),
 
                   //show success or failure message base on the message
-                  if (widget.message.isNotEmpty)
+                  /*if (widget.message.isNotEmpty)
                     Positioned(
                       left: MediaQuery.of(context).size.height * 0.5 + 60,
                       child: Text(
@@ -114,7 +125,7 @@ class _SizeAddFormWidgetState extends State<SizeAddFormWidget> {
                                 ? Colors.green
                                 : Colors.red),
                       ),
-                    )
+                    )*/
                 ])
               ],
             ),

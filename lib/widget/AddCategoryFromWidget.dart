@@ -6,10 +6,9 @@ import 'package:easy_invoice/dataRequestModel/AddCategoryRequestModel.dart';
 
 class AddCategoryFromWidget extends StatefulWidget {
   final bool isLoading; // Add the isLoading property
-  final String message;
 
   const AddCategoryFromWidget(
-      {Key? key, required this.isLoading, required this.message})
+      {Key? key, required this.isLoading,})
       : super(key: key);
 
   @override
@@ -98,19 +97,19 @@ class _AddCategoryFromWidgetState extends State<AddCategoryFromWidget> {
                       child: CircularProgressIndicator(),
                     ),
 
-                  //show success or failure message base on the message
-                  if (widget.message.isNotEmpty)
-                    Positioned(
-                      left: MediaQuery.of(context).size.height * 0.5 + 60,
-                      child: Text(
-                        widget.message,
-                        style: TextStyle(
-                            fontSize: 18,
-                            color: widget.message.startsWith('Success')
-                                ? Colors.green
-                                : Colors.red),
-                      ),
-                    )
+                  // //show success or failure message base on the message
+                  // if (widget.message.isNotEmpty)
+                  //   Positioned(
+                  //     left: MediaQuery.of(context).size.height * 0.5 + 60,
+                  //     child: Text(
+                  //       widget.message,
+                  //       style: TextStyle(
+                  //           fontSize: 18,
+                  //           color: widget.message.startsWith('Success')
+                  //               ? Colors.green
+                  //               : Colors.red),
+                  //     ),
+                  //   )
                 ])
               ],
             ),

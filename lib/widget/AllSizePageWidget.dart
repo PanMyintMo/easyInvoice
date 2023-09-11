@@ -14,12 +14,11 @@ class AllSizePageWidget extends StatelessWidget {
   final List<PaginationItem> sizes;
   final bool isLoading;
 
-  final String message;
 
   const AllSizePageWidget({Key? key,
     required this.sizes,
     required this.isLoading,
-    required this.message})
+    })
       : super(key: key);
 
   @override
@@ -28,7 +27,7 @@ class AllSizePageWidget extends StatelessWidget {
         create: (context) => GetAllSizeCubit(getIt.call()),
         child: Column(
             children: [
-              Padding(
+            /*  Padding(
               padding: const EdgeInsets.all(8.0),
               child: Align(
                 alignment: Alignment.topRight,
@@ -53,7 +52,7 @@ class AllSizePageWidget extends StatelessWidget {
               ),
             ),
 
-              const SizedBox(height: 16,),
+              const SizedBox(height: 16,),*/
               Stack(
                 children: [
                   SingleChildScrollView(

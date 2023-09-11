@@ -12,10 +12,9 @@ import '../data/responsemodel/GetAllPagnitaionDataResponse.dart';
 
 class AddProductWidget extends StatefulWidget {
   final bool isLoading; // Add the isLoading property
-  final String message;
 
   const AddProductWidget(
-      {Key? key, required this.isLoading, required this.message})
+      {Key? key, required this.isLoading,})
       : super(key: key);
 
   @override
@@ -53,14 +52,14 @@ class _AddProductWidgetState extends State<AddProductWidget> {
   Future<void> fetchSizeName() async {
   final sizeIdList = await ApiHelper.fetchSizeName();
   setState(() {
-    this.sizeIdList = sizeIdList;
+    this.sizeIdList = sizeIdList!;
   });
   }
 
 void fetchCategoriesName() async {
  final categories = await ApiHelper.fetchCategoriesName();
  setState(() {
-   this.categories = categories;
+   this.categories = categories!;
  });
 
   }

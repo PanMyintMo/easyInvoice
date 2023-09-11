@@ -4,6 +4,8 @@ import 'package:easy_invoice/widget/SizeAddFormWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../common/ToastMessage.dart';
+
 class SizeAddScreen extends StatefulWidget {
   const SizeAddScreen({Key? key}) : super(key: key);
 
@@ -21,23 +23,23 @@ class _SizeAddScreenState extends State<SizeAddScreen> {
           builder: (context, state) {
             if (state is AddSizeLoading) {
               return const SizeAddFormWidget(
-                isLoading: true,
-                message: '',
-              );
+                isLoading: true,);
             } else if (state is AddSizeSuccess) {
-              return SizeAddFormWidget(
+              showToastMessage(state.addSizeResponse.message);
+              Navigator.pop(context,true);
+              return const SizeAddFormWidget(
                 isLoading: false,
-                message: state.addSizeResponse.message,
+
               );
             } else if (state is AddSizeFail) {
-              return SizeAddFormWidget(
+              showToastMessage(state.error.toString());
+              return const SizeAddFormWidget(
                 isLoading: false,
-                message: state.error,
               );
             }
             return const SizeAddFormWidget(
               isLoading: false,
-              message: '',
+
             );
           },
         ),

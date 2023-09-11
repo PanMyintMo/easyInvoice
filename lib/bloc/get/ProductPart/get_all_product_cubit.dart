@@ -14,8 +14,8 @@ class GetAllProductCubit extends Cubit<GetAllProductState> {
     emit(GetAllProductLoading());
 
     try {
-      final List<ProductListItem> response = await _userRepository.fetchAllProduct();
-      emit(GetAllProductSuccess(response));
+      final List<ProductListItem>? response = await _userRepository.fetchAllProduct();
+      emit(GetAllProductSuccess(response!));
     } catch (error) {
       emit(GetAllProductFail(error.toString()));
     }

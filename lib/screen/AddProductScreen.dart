@@ -1,4 +1,5 @@
 import 'package:easy_invoice/bloc/post/ProductPart/add_product_cubit.dart';
+import 'package:easy_invoice/common/ToastMessage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -32,22 +33,24 @@ class _AddProductScreenState extends State<AddProductScreen> {
             if (state is AddProductLoading) {
               return const AddProductWidget(
                  isLoading: true,
-                 message: '',
+
               );
             } else if (state is AddProductSuccess) {
-              return AddProductWidget(
+              showToastMessage(state.addProductResponse.message);
+              Navigator.pop(context,true);
+              return const AddProductWidget(
                 isLoading: false,
-                message: state.addProductResponse.message,
+
               );
             } else if (state is AddProductFail) {
-              return AddProductWidget(
+              return const AddProductWidget(
                 isLoading: false,
-                message: state.error,
+
               );
             }
             return const AddProductWidget(
                isLoading: false,
-               message: '',
+
             );
           },
         ),

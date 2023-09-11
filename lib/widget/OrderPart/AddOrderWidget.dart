@@ -90,7 +90,7 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
   void fetchProductListItem() async {
     final products = await ApiHelper.fetchAllProductItem();
     setState(() {
-      this.products = products;
+      this.products = products!;
     });
   }
 

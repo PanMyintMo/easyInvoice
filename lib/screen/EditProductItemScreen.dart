@@ -85,9 +85,9 @@ class _EditProductItemScreenState extends State<EditProductItemScreen> {
   Future<void> fetchSizeName() async {
     try {
       final response = await ApiService().getAllSizes();
-      if (response.data.data.isNotEmpty) {
+      if (response.data.isNotEmpty) {
         setState(() {
-          sizes = response.data.data;
+          sizes = response.data;
         });
       }
     } catch (error) {
@@ -98,9 +98,9 @@ class _EditProductItemScreenState extends State<EditProductItemScreen> {
   Future<void> fetchCategoriesName() async {
     try {
       final response = await ApiService().getAllCategories();
-      if (response.data.data.isNotEmpty) {
+      if (response.data.isNotEmpty) {
         setState(() {
-          categories = response.data.data;
+          categories = response.data;
         });
       }
     } catch (error) {

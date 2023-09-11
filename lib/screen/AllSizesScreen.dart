@@ -1,5 +1,4 @@
 import 'package:easy_invoice/bloc/delete/delete_size_cubit.dart';
-import 'package:easy_invoice/bloc/edit/edit_size_cubit.dart';
 import 'package:easy_invoice/bloc/get/SizePart/get_all_size_cubit.dart';
 import 'package:easy_invoice/module/module.dart';
 import 'package:easy_invoice/widget/AllSizePageWidget.dart';
@@ -7,96 +6,128 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../common/ToastMessage.dart';
+import 'SizeAddScreen.dart';
 
 class AllSizesScreen extends StatelessWidget {
   const AllSizesScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider<GetAllSizeCubit>(
-          create: (context) {
-            final cubit = GetAllSizeCubit(getIt.call()); // Use getIt<ApiService>() to get the ApiService instance
-            cubit.getAllSizes(); // call category detail
-            return cubit;
-          },
-        ),
-        BlocProvider<DeleteSizeCubit>(
-          create: (context) => DeleteSizeCubit(getIt.call()), // Use getIt<ApiService>() to get the ApiService instance
-        ),
-        BlocProvider<EditSizeCubit>(
-          create: (context) => EditSizeCubit(getIt.call()), // Use getIt<ApiService>() to get the ApiService instance
-        ),
-      ],
-      child: Scaffold(
-          appBar: AppBar(
-            elevation: 0.0,
-            backgroundColor: Colors.white24,
-            iconTheme: const IconThemeData(
-              color: Colors.red, // Set the color of the navigation icon to black
-            ),
-            title: const Text(
-              'All Size',
-              style: TextStyle(
+    return Scaffold(
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          elevation: 0.0,
+          backgroundColor: Colors.white70,
+          iconTheme: const IconThemeData(
+            color: Colors.red, // Set the color of the navigation icon to black
+          ),
+          title: const Text(
+            'All Sizes  Screen',
+            style: TextStyle(
                 color: Colors.black54,
                 fontWeight: FontWeight.bold,
-                fontSize: 16,
+                fontSize: 16),
+          ),
+        ),
+        body: MultiBlocProvider(providers: [
+          BlocProvider<GetAllSizeCubit>(
+            create: (context) {
+              final cubit = GetAllSizeCubit(getIt
+                  .call()); // Use getIt<ApiService>() to get the ApiService instance
+              cubit.getAllSizes();
+              return cubit;
+            },
+          ),
+          BlocProvider<DeleteSizeCubit>(
+            create: (context) => DeleteSizeCubit(getIt
+                .call()), // Use getIt<ApiService>() to get the ApiService instance
+          ),
+        ], child: const SizeScreen()));
+  }
+
+}
+class SizeScreen extends StatefulWidget {
+  const SizeScreen({super.key});
+
+  @override
+  State<SizeScreen> createState() => _SizeScreenState();
+}
+
+class _SizeScreenState extends State<SizeScreen> {
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      scrollDirection: Axis.vertical,
+      child: Column(
+        children: [
+          Align(
+            alignment: Alignment.topRight,
+            child: TextButton(
+              onPressed: () async {
+                final result = await Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const SizeAddScreen(),
+                  ),
+                );
+                if (result == true) {
+                  BlocProvider.of<GetAllSizeCubit>(context).getAllSizes();
+                }
+              },
+              child: const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text(
+                  'Add New Size',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    decoration: TextDecoration.underline,
+                    color: Colors.blue,
+                  ),
+                ),
               ),
             ),
           ),
-        body: BlocConsumer<GetAllSizeCubit, GetAllSizeState>(
-          listener: (context, state) {
-            if (state is GetAllSizeFail) {
-              showToastMessage('Error: ${state.error}');
-            }
-          },
-          builder: (context, state) {
-            if (state is GetAllSizeLoading) {
-              return const Center(child: CircularProgressIndicator());
-            } else if (state is GetAllSizeSuccess) {
-              return BlocConsumer<DeleteSizeCubit, DeleteSizeState>(
-                listener: (context, deleteState) {
-                  if (deleteState is DeleteSizeLoading) {
-                    // Handle delete category loading state
-                  } else if (deleteState is DeleteSizeSuccess) {
-                    showToastMessage('Size deleted successfully');
-                    WidgetsBinding.instance.addPostFrameCallback((_) {
-                      context
-                          .read<GetAllSizeCubit>()
-                          .getAllSizes();
-                    });
-                  } else if (deleteState is DeleteSizeFail) {
-                    showToastMessage(
-                        'Failed to delete size: ${deleteState.error}');
-                  }
-                },
-                builder: (context, deleteState) {
-                  final bool loading = deleteState is DeleteSizeLoading;
-                  final String message = deleteState is DeleteSizeFail
-                      ? deleteState.error
-                      : '';
+          BlocBuilder<GetAllSizeCubit, GetAllSizeState>(
+            builder: (context, state) {
+              if (state is GetAllSizeLoading) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (state is GetAllSizeSuccess) {
+                final sizes = state.getAllSize;
 
-                  return AllSizePageWidget(
-                    sizes: state.getAllSize,
-                    isLoading: loading,
-                    message: message,
+                if (sizes.isEmpty) {
+                  return const Center(
+                    child: Text("No Size Data found."),
                   );
-                },
-              );
-            } else if (state is GetAllSizeFail) {
-              return Center(child: Text('Error: ${state.error}'));
-            }
+                }
 
-            return const AllSizePageWidget(
-              sizes: [],
-              isLoading: false,
-              message: '',
-            );
-          },
-        ),
+                return BlocConsumer<DeleteSizeCubit, DeleteSizeState>(
+                  builder: (context, deleteState) {
+                    bool loading = deleteState is DeleteSizeLoading;
+
+                    return AllSizePageWidget(
+                      sizes: state.getAllSize,
+                      isLoading: loading,
+
+                    );
+                  },
+                  listener: (context, deleteState) {
+                    if (deleteState is DeleteSizeSuccess) {
+                      showToastMessage('Deleted size successful.');
+                      BlocProvider.of<GetAllSizeCubit>(context)
+                          .getAllSizes();
+                    } else if (deleteState is DeleteSizeFail) {
+                      showToastMessage(
+                          'Failed to delete size: ${deleteState.error}');
+                    }
+                  },
+                );
+              } else {
+                return const SizedBox(); // Handle other states if needed
+              }
+            },
+          ),
+        ],
       ),
     );
   }
-
 }

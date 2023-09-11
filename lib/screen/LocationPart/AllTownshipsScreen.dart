@@ -95,9 +95,9 @@ class _TownshipScreenState extends State<TownshipScreen> {
               if (state is FetchAllTownshipLoading) {
                 return const Center(child: CircularProgressIndicator());
               } else if (state is FetchAllTownshipSuccess) {
-                final cityList = state.township;
+                final township = state.township;
 
-                if (cityList.isEmpty) {
+                if (township.isEmpty) {
                   return const Center(
                     child: Text("No Township found."),
                   );

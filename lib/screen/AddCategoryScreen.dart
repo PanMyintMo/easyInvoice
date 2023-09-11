@@ -1,4 +1,5 @@
 import 'package:easy_invoice/bloc/post/CategoryPart/add_category_cubit.dart';
+import 'package:easy_invoice/common/ToastMessage.dart';
 import 'package:easy_invoice/module/module.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -31,22 +32,26 @@ class _CategoryScreenState extends State<CategoryScreen> {
             if (state is AddCategoryLoading) {
               return const AddCategoryFromWidget(
                 isLoading: true,
-                message: '',
+
               );
             } else if (state is AddCategorySuccess) {
-              return AddCategoryFromWidget(
+              showToastMessage(state.addCategoryResponse.message);
+              Navigator.pop(context,true);
+
+              return const AddCategoryFromWidget(
                 isLoading: false,
-                message: state.addCategoryResponse.message,
+
               );
+
             } else if (state is AddCategoryFail) {
-              return AddCategoryFromWidget(
+              return const AddCategoryFromWidget(
                 isLoading: false,
-                message: state.error,
+
               );
             }
             return const AddCategoryFromWidget(
               isLoading: false,
-              message: '',
+
             );
           },
         ),

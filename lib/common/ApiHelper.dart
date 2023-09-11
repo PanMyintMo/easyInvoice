@@ -9,11 +9,11 @@ import '../data/responsemodel/common/ProductListItemResponse.dart';
 
 class ApiHelper {
   //By using static , you can call directly apiHelper.fetchCategoryName like that
-  static Future<List<PaginationItem>> fetchCategoriesName() async {
+  static Future<List<PaginationItem>?> fetchCategoriesName() async {
     try {
       final response = await ApiService().getAllCategories();
-      if (response.data.data.isNotEmpty) {
-        return response.data.data;
+      if (response.data.isNotEmpty) {
+        return response.data;
       }
     } catch (error) {
       print('Error fetching categories: $error');
@@ -22,11 +22,11 @@ class ApiHelper {
   }
 
   //Fetch size Name
-  static Future<List<PaginationItem>> fetchSizeName() async {
+  static Future<List<PaginationItem>?> fetchSizeName() async {
     try {
       final response = await ApiService().getAllSizes();
-      if (response.data.data.isNotEmpty) {
-        return response.data.data;
+      if (response.data.isNotEmpty) {
+        return response.data;
       }
     } catch (error) {
       print('Error fetching sizes: $error');
@@ -48,7 +48,7 @@ class ApiHelper {
   }
 
   //Fetch township Name
-  static Future<List<Township>?> fetchTownshipName() async {
+  static Future<List<Township>> fetchTownshipName() async {
     try {
       final response = await ApiService().townships();
       if (response.data.isNotEmpty) {
@@ -75,11 +75,11 @@ class ApiHelper {
 
   //fetch all product
 
-  static Future<List<ProductListItem>> fetchAllProductItem() async {
+  static Future<List<ProductListItem>?> fetchAllProductItem() async {
     try {
       final response = await ApiService().fetchAllProducts();
-      if (response.data.data.isNotEmpty) {
-        return response.data.data;
+      if (response.data.isNotEmpty) {
+        return response.data;
       }
     } catch (error) {
       print('Error fetching product: $error');

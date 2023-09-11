@@ -1,11 +1,11 @@
 import 'package:easy_invoice/bloc/delete/delete_category_cubit.dart';
-import 'package:easy_invoice/bloc/edit/edit_category_cubit.dart';
 import 'package:easy_invoice/bloc/get/CategoryPart/get_category_detail_cubit.dart';
 import 'package:easy_invoice/module/module.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../common/ToastMessage.dart';
 import '../widget/AllCategoryPageWidget.dart';
+import 'AddCategoryScreen.dart';
 
 
 class AllCategoryDetailPage extends StatelessWidget {
@@ -13,91 +13,122 @@ class AllCategoryDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider<GetCategoryDetailCubit>(
-          create: (context) {
-            final cubit = GetCategoryDetailCubit(getIt.call()); // Use getIt<ApiService>() to get the ApiService instance
-            cubit.getCategoryDetail(); // call category detail
-            return cubit;
-          },
-        ),
-        BlocProvider<DeleteCategoryCubit>(
-          create: (context) => DeleteCategoryCubit(getIt.call()), // Use getIt<ApiService>() to get the ApiService instance
-        ),
-        BlocProvider<EditCategoryCubit>(
-          create: (context) => EditCategoryCubit(getIt.call()), // Use getIt<ApiService>() to get the ApiService instance
-        ),
-      ],
-      child: Scaffold(
+    return Scaffold(
+        backgroundColor: Colors.white,
         appBar: AppBar(
           elevation: 0.0,
-          backgroundColor: Colors.white24,
+          backgroundColor: Colors.white70,
           iconTheme: const IconThemeData(
             color: Colors.red, // Set the color of the navigation icon to black
           ),
           title: const Text(
-            'All Category',
+            'All Category  Screen',
             style: TextStyle(
-              color: Colors.black54,
-              fontWeight: FontWeight.bold,
-              fontSize: 16,
-            ),
+                color: Colors.black54,
+                fontWeight: FontWeight.bold,
+                fontSize: 16),
           ),
         ),
+        body: MultiBlocProvider(providers: [
+          BlocProvider<GetCategoryDetailCubit>(
+            create: (context) {
+              final cubit = GetCategoryDetailCubit(getIt
+                  .call()); // Use getIt<ApiService>() to get the ApiService instance
+              cubit.getCategoryDetail();
+              return cubit;
+            },
+          ),
+          BlocProvider<DeleteCategoryCubit>(
+            create: (context) => DeleteCategoryCubit(getIt
+                .call()), // Use getIt<ApiService>() to get the ApiService instance
+          ),
+        ], child: const AllCategoryScreen()));
+  }
+}
 
+class AllCategoryScreen extends StatefulWidget {
+  const AllCategoryScreen({super.key});
 
-        body: BlocConsumer<GetCategoryDetailCubit, GetCategoryDetailState>(
-          listener: (context, state) {
-            if (state is GetCategoryDetailFail) {
-              showToastMessage('Error: ${state.error}');
-            }
-          },
-          builder: (context, state) {
-            if (state is GetCategoryDetailLoading) {
-              return const Center(child: CircularProgressIndicator());
-            } else if (state is GetCategoryDetailSuccess) {
-              return BlocConsumer<DeleteCategoryCubit, DeleteCategoryState>(
-                listener: (context, deleteState) {
-                  if (deleteState is DeleteCategoryLoading) {
-                    // Handle delete category loading state
-                  } else if (deleteState is DeleteCategorySuccess) {
-                    showToastMessage('Deleted category successful.');
-                    WidgetsBinding.instance.addPostFrameCallback((_) {
-                      context
-                          .read<GetCategoryDetailCubit>()
-                          .getCategoryDetail();
-                    });
-                  } else if (deleteState is DeleteCategoryFail) {
-                    showToastMessage(
-                        'Failed to delete category: ${deleteState.error}');
-                  }
-                },
-                builder: (context, deleteState) {
-                  final bool loading = deleteState is DeleteCategoryLoading;
-                  final String message = deleteState is DeleteCategoryFail
-                      ? deleteState.error
-                      : '';
+  @override
+  State<AllCategoryScreen> createState() => _AllCategoryScreenState();
+}
 
-                  return AllCategoryPageWidget(
-                    categories: state.getAllCategoryDetail,
-                    isLoading: loading,
-                    message: message,
+class _AllCategoryScreenState extends State<AllCategoryScreen> {
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      scrollDirection: Axis.vertical,
+      child: Column(
+        children: [
+          Align(
+            alignment: Alignment.topRight,
+            child: TextButton(
+              onPressed: () async {
+                final result = await Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const CategoryScreen(),
+                  ),
+                );
+                if (result == true) {
+                  BlocProvider.of<GetCategoryDetailCubit>(context).getCategoryDetail();
+                }
+              },
+              child: const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text(
+                  'Add New Category',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    decoration: TextDecoration.underline,
+                    color: Colors.blue,
+                  ),
+                ),
+              ),
+            ),
+          ),
+          BlocBuilder<GetCategoryDetailCubit, GetCategoryDetailState>(
+            builder: (context, state) {
+              if (state is GetCategoryDetailLoading) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (state is GetCategoryDetailSuccess) {
+                final category = state.getAllCategoryDetail;
+
+                if (category.isEmpty) {
+                  return const Center(
+                    child: Text("No Category Data found."),
                   );
-                },
-              );
-            } else if (state is GetCategoryDetailFail) {
-              return Center(child: Text('Error: ${state.error}'));
-            }
+                }
 
-            return const AllCategoryPageWidget(
-              categories: [],
-              isLoading: false,
-              message: '',
-            );
-          },
-        ),
+                return BlocConsumer<DeleteCategoryCubit, DeleteCategoryState>(
+                  builder: (context, deleteState) {
+                    bool loading = deleteState is DeleteCategoryLoading;
+
+                    return AllCategoryPageWidget(
+                      categories: state.getAllCategoryDetail,
+                      isLoading: loading,
+
+                    );
+                  },
+                  listener: (context, deleteState) {
+                    if (deleteState is DeleteCategorySuccess) {
+                      showToastMessage('Deleted category successful.');
+                      BlocProvider.of<GetCategoryDetailCubit>(context)
+                          .getCategoryDetail();
+                    } else if (deleteState is DeleteCategoryFail) {
+                      showToastMessage(
+                          'Failed to delete category: ${deleteState.error}');
+                    }
+                  },
+                );
+              } else {
+                return const SizedBox(); // Handle other states if needed
+              }
+            },
+          ),
+        ],
       ),
     );
   }
 }
+

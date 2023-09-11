@@ -175,7 +175,7 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const CategoryScreen()),
+                              builder: (context) => const AllCategoryDetailPage()),
                         );
                       },
                       onClickedItem: () {
@@ -183,12 +183,12 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
                           context,
                           MaterialPageRoute(
                               builder: (context) =>
-                                  const AllCategoryDetailPage()),
+                                  const CategoryScreen()),
                         );
                       },
                       listData: [],
-                      txtTwo: 'All Category',
-                      txtOne: 'Add Category',
+                      txtTwo: 'Add Category',
+                      txtOne: 'All Category',
                     ),
                   const SizedBox(height: 16),
                   if (utype == 'ADM')

@@ -62,7 +62,7 @@ class _EditShopKeeperWidgetState extends State<EditShopKeeperWidget> {
   Future<void> fetchCategoriesName() async {
     final categories = await ApiHelper.fetchCategoriesName();
     setState(() {
-      this.categories = categories;
+      this.categories = categories!;
     });
   }
 
