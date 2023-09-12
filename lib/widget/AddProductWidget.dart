@@ -13,9 +13,10 @@ import '../data/responsemodel/GetAllPagnitaionDataResponse.dart';
 class AddProductWidget extends StatefulWidget {
   final bool isLoading; // Add the isLoading property
 
-  const AddProductWidget(
-      {Key? key, required this.isLoading,})
-      : super(key: key);
+  const AddProductWidget({
+    Key? key,
+    required this.isLoading,
+  }) : super(key: key);
 
   @override
   State<AddProductWidget> createState() => _AddProductWidgetState();
@@ -34,10 +35,9 @@ class _AddProductWidgetState extends State<AddProductWidget> {
   var description = TextEditingController();
 
   String category_id = 'Select Category';
-  String sizeId='Select Size';
+  String sizeId = 'Select Size';
   List<PaginationItem> categories = [];
   List<PaginationItem> sizeIdList = [];
-
 
   @override
   void initState() {
@@ -50,18 +50,17 @@ class _AddProductWidgetState extends State<AddProductWidget> {
   }
 
   Future<void> fetchSizeName() async {
-  final sizeIdList = await ApiHelper.fetchSizeName();
-  setState(() {
-    this.sizeIdList = sizeIdList!;
-  });
+    final sizeIdList = await ApiHelper.fetchSizeName();
+    setState(() {
+      this.sizeIdList = sizeIdList!;
+    });
   }
 
-void fetchCategoriesName() async {
- final categories = await ApiHelper.fetchCategoriesName();
- setState(() {
-   this.categories = categories!;
- });
-
+  void fetchCategoriesName() async {
+    final categories = await ApiHelper.fetchCategoriesName();
+    setState(() {
+      this.categories = categories!;
+    });
   }
 
   File? image;
@@ -155,7 +154,7 @@ void fetchCategoriesName() async {
                                 if (value == 'Select Category') {
                                   setState(() {
                                     category_id = value!;
-                                   // print('$category_id');
+                                    // print('$category_id');
                                   });
                                   showDialog(
                                     context: context,
@@ -270,19 +269,13 @@ void fetchCategoriesName() async {
                           ),
                           Row(
                             children: [
-                              buildProductContainerForm(
-                                  'Product Name',
-                                  TextInputType.name,
-                                  name,
-                                  validateField),
+                              buildProductContainerForm('Product Name',
+                                  TextInputType.name, name, validateField),
                               const SizedBox(
                                 width: 10,
                               ),
-                              buildProductContainerForm(
-                                  'Slug',
-                                  TextInputType.name,
-                                  slug,
-                                  validateField),
+                              buildProductContainerForm('Slug',
+                                  TextInputType.name, slug, validateField),
                             ],
                           ),
                         ],
@@ -304,11 +297,8 @@ void fetchCategoriesName() async {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           buildProductContainerText("Sale Price"),
-                          buildProductContainerForm(
-                              'Sale Price',
-                              TextInputType.number,
-                              sale_price,
-                              validateField),
+                          buildProductContainerForm('Sale Price',
+                              TextInputType.number, sale_price, validateField),
                         ],
                       ),
                       const SizedBox(height: 30),
@@ -328,8 +318,8 @@ void fetchCategoriesName() async {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           buildProductContainerText("SKU"),
-                          buildProductContainerForm('SKU', TextInputType.text,
-                              SKU, validateField),
+                          buildProductContainerForm(
+                              'SKU', TextInputType.text, SKU, validateField),
                         ],
                       ),
                       const SizedBox(height: 30),
@@ -337,11 +327,8 @@ void fetchCategoriesName() async {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           buildProductContainerText("Quantity"),
-                          buildProductContainerForm(
-                              'Quantity',
-                              TextInputType.number,
-                              quantity,
-                              validateField),
+                          buildProductContainerForm('Quantity',
+                              TextInputType.number, quantity, validateField),
                         ],
                       ),
                       const SizedBox(height: 30),
@@ -491,11 +478,9 @@ void fetchCategoriesName() async {
           buying_price: buying_price.text,
           SKU: SKU.text,
           quantity: quantity.text,
-          newimage: '',
+          newimage: image,
           category_id: category_id,
           size_id: sizeId));
-
-
     } catch (e) {
 
     }

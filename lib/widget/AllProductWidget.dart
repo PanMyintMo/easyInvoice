@@ -68,7 +68,14 @@ class _AllProductWidgetState extends State<AllProductWidget> {
                 mainAxisAlignment: MainAxisAlignment.start,
 
                 children: [
-                  Icon(
+                  product.image != null
+                      ? Image.network(
+                    product.url!,
+                    width: 100.0,
+                    height: 100.0,
+                    // You can add other image properties here
+                  )
+                      : Icon(
                     Icons.production_quantity_limits_outlined,
                     color: Colors.grey.shade300,
                     size: 50.0,

@@ -535,7 +535,7 @@ class ApiService {
     try {
       final Response response = await _dio.post(
           'https://mmeasyinvoice.com/api/add-product',
-          data: addProductRequestModel.toJson());
+          data: addProductRequestModel.toFormData());
 
       if (response.statusCode == 200) {
         final ProductResponse addProductResponseData =

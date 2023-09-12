@@ -1,3 +1,7 @@
+import 'dart:io';
+
+import 'package:dio/dio.dart';
+
 class AddProductRequestModel{
   String name;
   String slug;
@@ -8,7 +12,7 @@ class AddProductRequestModel{
   String buying_price;
   String SKU;
   String quantity;
-  String? newimage;
+  File? newimage;
   String category_id;
   String size_id;
 
@@ -18,21 +22,41 @@ class AddProductRequestModel{
   required this.sale_price,required this.buying_price,
   required this.SKU,required this.quantity,required this.newimage,required this.category_id,required this.size_id});
 
-
-  Map<String,dynamic> toJson() {
-    return {
+  FormData toFormData()  {
+    var map = {
       'name' : name,
       'slug' : slug,
-      "short_description" : short_description,
-      "description" : description,
-      "regular_price" : regular_price,
-      "sale_price" : sale_price,
-      "buying_price" : buying_price,
-      "SKU" : SKU,
-      "quantity" : quantity,
-      "newimage" : newimage,
-      "category_id" : category_id,
-      "size_id" : size_id
+      'short_description' : short_description,
+      'description' : description,
+      'regular_price' : regular_price,
+      'sale_price' : sale_price,
+      'buying_price' : buying_price,
+      'SKU' : SKU,
+      'quantity' : quantity,
+      'newimage' : [MultipartFile.fromFileSync(newimage!.path,filename: newimage?.path.split('/').last)],
+      'category_id' : category_id,
+      'size_id' : size_id
     };
-}
+    return FormData.fromMap(map);
+  }
+
+
+
+
+//   Map<String,dynamic> toJson() {
+//     return {
+//       'name' : name,
+//       'slug' : slug,
+//       "short_description" : short_description,
+//       "description" : description,
+//       "regular_price" : regular_price,
+//       "sale_price" : sale_price,
+//       "buying_price" : buying_price,
+//       "SKU" : SKU,
+//       "quantity" : quantity,
+//       "newimage" : newimage,
+//       "category_id" : category_id,
+//       "size_id" : size_id
+//     };
+// }
 }

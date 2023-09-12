@@ -16,7 +16,6 @@ class CompanyProfileResponse {
 
 class CompanyProfileData {
   final int user_id;
-
   final String? url;
 
   CompanyProfileData(
