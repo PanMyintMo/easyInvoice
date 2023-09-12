@@ -164,12 +164,10 @@ class _AddDeliveryWidgetState extends State<AddDeliveryWidget> {
               const Expanded(child: Text('Choose Delivery')),
               Expanded(
                 child: DropdownButton<String>(
+                  hint: const Text('Select Company Name'),
                   value: select_company,
                   items: [
-                    const DropdownMenuItem(
-                      value: null, // Set initial value to null
-                      child: Text('Select Company Name'),
-                    ),
+
                     ...deliveryCompanyName.map((deliveryCompanyName) {
                       return DropdownMenuItem<String>(
                         value: deliveryCompanyName.id.toString(),
@@ -182,7 +180,7 @@ class _AddDeliveryWidgetState extends State<AddDeliveryWidget> {
                       select_company = value; // Update the selected city
                     });
                   },
-                  hint: const Text('Select Company Name'),
+
                   underline: const SizedBox(),
                   borderRadius: BorderRadius.circular(10),
                   icon: const Icon(Icons.arrow_drop_down),
@@ -205,10 +203,7 @@ class _AddDeliveryWidgetState extends State<AddDeliveryWidget> {
                 child: DropdownButton<String>(
                   value: select_city,
                   items: [
-                    const DropdownMenuItem(
-                      value: null, // Set initial value to null
-                      child: Text('Select City Name'),
-                    ),
+
                     ...cities.map((cities) {
                       return DropdownMenuItem<String>(
                         value: cities.id.toString(),
@@ -245,12 +240,10 @@ class _AddDeliveryWidgetState extends State<AddDeliveryWidget> {
               const Expanded(child: Text('Choose Township')),
               Expanded(
                 child: DropdownButton<String>(
+                  hint: const Text('Select Township Name'),
+
                   value: hasTownshipForSelectedCity ? select_township : null,
                   items: [
-                    const DropdownMenuItem(
-                      value: null, // Set initial value to null
-                      child: Text('Select Township'),
-                    ),
                     if (hasTownshipForSelectedCity)
                       ...townships.map((township) {
                         return DropdownMenuItem<String>(
@@ -264,7 +257,6 @@ class _AddDeliveryWidgetState extends State<AddDeliveryWidget> {
                         select_township = value;
                       });
                     },
-                  hint: const Text('Select Township Name'),
                   underline: const SizedBox(),
                   borderRadius: BorderRadius.circular(10),
                   icon: const Icon(Icons.arrow_drop_down),
@@ -357,6 +349,4 @@ class _AddDeliveryWidgetState extends State<AddDeliveryWidget> {
       );
     }
   }
-
-
 }

@@ -51,7 +51,9 @@ class ShopData extends DataTableSource {
       DataCell(Text(shopItem.id.toString())),
       DataCell(Text(shopItem.product_name.toString())),
       DataCell(Text(shopItem.quantity.toString())),
-      DataCell(ElevatedButton(onPressed: (){}, child: Text(shopItem.status.capitalizeFirst.toString()))),
+      DataCell(ElevatedButton(onPressed: (){
+
+      }, child: Text(shopItem.status.capitalizeFirst.toString()))),
     ]);
   }
 

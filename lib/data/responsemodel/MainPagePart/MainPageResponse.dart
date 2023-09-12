@@ -23,7 +23,9 @@ class OrderApiResponse {
 
   factory OrderApiResponse.fromJson(Map<String, dynamic> json) {
     return OrderApiResponse(
-      data: (json['data'] as List).map((item) => OrderData.fromJson(item)).toList(),
+      data: (json['data'] as List)
+          .map((item) => OrderData.fromJson(item))
+          .toList(),
       totalProfit: json['totalProfit'],
       totalSales: json['totalSales'],
       totalRevenue: json['totalRevenue'],
@@ -39,22 +41,14 @@ class OrderApiResponse {
 class OrderData {
   final int id;
   final int userId;
+  final int customer_id;
   final String subtotal;
   final String discount;
   final String tax;
   final int total;
-  final String firstname;
-  final String lastname;
-  final String mobile;
-  final String email;
   final int deliveryCharge;
   final String deliveryCompany;
-  final String line1;
-  final String line2;
-  final int countryId;
-  final int cityId;
-  final int townshipId;
-  final String zipcode;
+
   final String status;
   final int productId;
 
@@ -65,20 +59,10 @@ class OrderData {
     required this.discount,
     required this.tax,
     required this.total,
-    required this.firstname,
-    required this.lastname,
-    required this.mobile,
-    required this.email,
+    required this.customer_id,
     required this.deliveryCharge,
     required this.deliveryCompany,
-    required this.line1,
-    required this.line2,
-    required this.countryId,
-    required this.cityId,
-    required this.townshipId,
-    required this.zipcode,
     required this.status,
-
     required this.productId,
   });
 
@@ -90,18 +74,9 @@ class OrderData {
       discount: json['discount'],
       tax: json['tax'],
       total: json['total'],
-      firstname: json['firstname'],
-      lastname: json['lastname'],
-      mobile: json['mobile'],
-      email: json['email'],
+      customer_id: json['customer_id'],
       deliveryCharge: json['delivery_charge'],
       deliveryCompany: json['delivery_company'],
-      line1: json['line1'],
-      line2: json['line2'],
-      countryId: json['country_id'],
-      cityId: json['city_id'],
-      townshipId: json['township_id'],
-      zipcode: json['zipcode'],
       status: json['status'],
       productId: json['product_id'],
     );

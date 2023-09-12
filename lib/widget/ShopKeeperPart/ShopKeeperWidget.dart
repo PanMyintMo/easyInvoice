@@ -2,6 +2,7 @@ import 'package:easy_invoice/bloc/delete/ShopKeeperPart/delete_shop_keeper_produ
 import 'package:easy_invoice/screen/shopkeeperPart/DeliverWarehouseToShopkeeperScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../bloc/get/ShopKeeperPart/shop_keeper_request_cubit.dart';
 import '../../common/showDeleteConfirmationDialog.dart';
 import '../../data/responsemodel/ShopKeeperResponsePart/ShopKeeperRequestResponse.dart';
 import '../../screen/shopkeeperPart/EditShopKeeperScreen.dart';
@@ -31,13 +32,18 @@ class _ShopKeeperWidgetState extends State<ShopKeeperWidget> {
                 children: [
                   Expanded(
                     child: TextButton(
-                      onPressed: () {
-                        Navigator.push(
+                      onPressed: () async{
+                        final result=await Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) =>
                                   const RequestShopKeeperScreen()),
                         );
+                        if(result == true){
+                          BlocProvider.of<ShopKeeperRequestCubit>(context).shopkeeperRequestList();
+
+                        }
+
                       },
                       child: const Text('Request Products',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold),),
                     ),

@@ -1,3 +1,5 @@
+import 'package:easy_invoice/bloc/delete/CityPart/delete_street_cubit.dart';
+import 'package:easy_invoice/bloc/delete/CityPart/delete_ward_cubit.dart';
 import 'package:easy_invoice/bloc/delete/ShopKeeperPart/delete_shop_keeper_product_request_cubit.dart';
 import 'package:easy_invoice/bloc/delete/delete_category_cubit.dart';
 import 'package:easy_invoice/bloc/delete/delete_size_cubit.dart';
@@ -7,12 +9,14 @@ import 'package:easy_invoice/bloc/edit/edit_product_item_cubit.dart';
 import 'package:easy_invoice/bloc/edit/edit_size_cubit.dart';
 import 'package:easy_invoice/bloc/edit/edit_user_role_cubit.dart';
 import 'package:easy_invoice/bloc/get/CityPart/fetch_all_city_cubit.dart';
+import 'package:easy_invoice/bloc/get/CityPart/fetch_all_street_cubit.dart';
 import 'package:easy_invoice/bloc/get/MainPagePart/order_filter_by_date_cubit.dart';
 import 'package:easy_invoice/bloc/get/ProductPart/get_all_product_cubit.dart';
 import 'package:easy_invoice/bloc/get/ShopKeeperPart/shop_product_list_cubit.dart';
 import 'package:easy_invoice/bloc/get/SizePart/get_all_size_cubit.dart';
 import 'package:easy_invoice/bloc/get/UserRolePart/get_all_user_role_cubit.dart';
 import 'package:easy_invoice/bloc/get/CategoryPart/get_category_detail_cubit.dart';
+import 'package:easy_invoice/bloc/post/CityPart/add_street_cubit.dart';
 import 'package:easy_invoice/bloc/post/DeliveryPart/add_delivery_cubit.dart';
 import 'package:easy_invoice/bloc/post/DeliveryPart/fetch_order_by_date_cubit.dart';
 import 'package:easy_invoice/bloc/post/FaultyItemPart/add_request_faulty_item_cubit.dart';
@@ -37,6 +41,7 @@ import '../bloc/delete/delete_product_item_cubit.dart';
 import '../bloc/delete/delete_user_role_cubit.dart';
 import '../bloc/edit/CityPart/edit_city_cubit.dart';
 import '../bloc/edit/TownshipPart/edit_township_cubit.dart';
+import '../bloc/get/CityPart/fetch_all_ward_cubit.dart';
 import '../bloc/get/CompanyProfile/company_profile_cubit.dart';
 import '../bloc/get/DeliveryManPart/fetch_all_delivery_cubit.dart';
 import '../bloc/get/DeliveryManPart/fetch_all_warehouse_request_cubit.dart';
@@ -154,7 +159,15 @@ void locator() {
   FetchAllTownshipCubit(getIt.get<UserRepository>());
   getIt.registerLazySingleton(() => fetchAllTownshipCubit);
 
+  //fetch all ward
+  FetchAllWardCubit fetchAllWardCubit =
+  FetchAllWardCubit(getIt.get<UserRepository>());
+  getIt.registerLazySingleton(() => fetchAllWardCubit);
 
+  //fetch all street
+  FetchAllStreetCubit fetchAllStreetCubit =
+  FetchAllStreetCubit(getIt.get<UserRepository>());
+  getIt.registerLazySingleton(() => fetchAllStreetCubit);
   //fetch all country
   RequestCountryCubit requestCountryCubit =
       RequestCountryCubit(getIt.get<UserRepository>());
@@ -198,6 +211,14 @@ void locator() {
   //to delete city
   DeleteCityCubit deleteCityCubit = DeleteCityCubit(getIt.call());
   getIt.registerLazySingleton(() => deleteCityCubit);
+
+  //to delete ward
+  DeleteWardCubit deleteWardCubit = DeleteWardCubit(getIt.call());
+  getIt.registerLazySingleton(() => deleteWardCubit);
+
+  //to delete street
+  DeleteStreetCubit deleteStreetCubit = DeleteStreetCubit(getIt.call());
+  getIt.registerLazySingleton(() => deleteStreetCubit);
 
   //to delete shopkeeper request product
   DeleteShopKeeperProductRequestCubit deleteShopKeeperProductRequestCubit = DeleteShopKeeperProductRequestCubit(getIt.call());
@@ -293,6 +314,11 @@ void locator() {
   EditUserRoleCubit editUserRoleCubit =
       EditUserRoleCubit(getIt.get<UserRepository>());
   getIt.registerLazySingleton(() => editUserRoleCubit);
+
+  //to add street
+  AddStreetCubit addStreetCubit =
+  AddStreetCubit(getIt.get<UserRepository>());
+  getIt.registerLazySingleton(() => addStreetCubit);
 
   //to delete user role
   DeleteUserRoleCubit deleteUserRoleCubit = DeleteUserRoleCubit(getIt.call());

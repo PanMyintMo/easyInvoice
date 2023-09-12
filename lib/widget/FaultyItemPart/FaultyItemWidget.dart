@@ -78,7 +78,7 @@ class FaultyData extends DataTableSource {
                     MaterialPageRoute(
                         builder: (context) => UpdateFaultyItemScreen(
                               quantity: faultyItem.quantity,
-                              id: faultyItem.id,
+                              id: faultyItem.id, category_id: faultyItem.productListData.category_id, product_id: faultyItem.product_id,
                             )));
               },
             ),

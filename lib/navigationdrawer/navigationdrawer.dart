@@ -17,6 +17,8 @@ import '../screen/DeliveryPart/AllDeliveryScreen.dart';
 import '../screen/FaultyItemPart/AddRequestFaultyItemScreen.dart';
 import '../screen/LocationPart/AllTownshipsScreen.dart';
 import '../screen/LocationPart/CityScreen.dart';
+import '../screen/LocationPart/StreetScreen.dart';
+import '../screen/LocationPart/Wards.dart';
 import '../screen/OrderPart/OrderByDateScreen.dart';
 import '../screen/ProductInvoicePart/ProductInvoiceScreen.dart';
 import '../screen/SizeAddScreen.dart';
@@ -324,7 +326,15 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
                         viewTownships: () {
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (context) => const Townships()));
-                        })
+                        }, viewWards: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => const Wards()));
+                    }, viewStreets: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => const StreetScreen()));
+                    }),
+
+
                 ],
               ),
             ),
@@ -479,7 +489,9 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
       required List<Widget> listData,
       required VoidCallback viewCountries,
       required VoidCallback viewCities,
-      required VoidCallback viewTownships}) {
+      required VoidCallback viewTownships,
+      required VoidCallback viewWards,
+      required VoidCallback viewStreets}) {
     const color = Colors.black;
 
     return ExpansionTile(
@@ -531,6 +543,32 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
               onTap: viewTownships,
               child: const Text(
                 'View Townships',
+                style: TextStyle(color: color),
+              ),
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(left: 50),
+          child: ListTile(
+            leading: const Icon(Icons.accessibility),
+            title: GestureDetector(
+              onTap: viewWards,
+              child: const Text(
+                'View Wards',
+                style: TextStyle(color: color),
+              ),
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(left: 50),
+          child: ListTile(
+            leading: const Icon(Icons.accessibility),
+            title: GestureDetector(
+              onTap: viewStreets,
+              child: const Text(
+                'View Street',
                 style: TextStyle(color: color),
               ),
             ),

@@ -89,6 +89,7 @@ class DeliData extends DataTableSource {
                           .deleteDelivery(deliveriesItem.id);
                     });
               },
+
             ),
           ],
         ),

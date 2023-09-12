@@ -24,7 +24,7 @@ class _WarehouseTableWidgetState extends State<WarehouseTableWidget> {
                 child: TextButton(onPressed: (){
                   Navigator.push(context, MaterialPageRoute(builder: (context) => const ShopKeeperRequestListScreen()));
                 },
-                    child: const Text("Requesting Products",style: TextStyle(decoration: TextDecoration.underline,color: Colors.blue,fontSize: 20),)),
+                    child: const Text("Requesting Products",style: TextStyle(decoration: TextDecoration.underline,color: Colors.blue,fontSize: 16),)),
               ),
               const SizedBox(height: 16,),
               SingleChildScrollView(

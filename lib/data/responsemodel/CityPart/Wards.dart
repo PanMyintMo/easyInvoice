@@ -1,8 +1,6 @@
-import '../ShopKeeperResponsePart/ShopKeeperRequestResponse.dart';
-
-class AllFaultyItemsResponse  {
+class WardResponse {
   final int currentPage;
-  final List<FaultyItemData> data;
+  final List<Ward> data;
   final String firstPageUrl;
   final int? from;
   final int lastPage;
@@ -17,7 +15,7 @@ class AllFaultyItemsResponse  {
   final int? status;
   final String? message;
 
-  AllFaultyItemsResponse ({
+  WardResponse ({
     required this.currentPage,
     required this.data,
     required this.firstPageUrl,
@@ -35,11 +33,11 @@ class AllFaultyItemsResponse  {
     required this.message,
   });
 
-  factory AllFaultyItemsResponse .fromJson(Map<String, dynamic> json) {
-    return AllFaultyItemsResponse (
+  factory WardResponse.fromJson(Map<String, dynamic> json) {
+    return WardResponse (
       currentPage: json['data']['current_page'],
       data: (json['data']['data'] as List<dynamic>?)
-          ?.map((item) => FaultyItemData.fromJson(item))
+          ?.map((item) => Ward.fromJson(item))
           .toList() ?? [],
       firstPageUrl: json['data']['first_page_url'],
       from: json['data']['from'],
@@ -80,37 +78,28 @@ class PageLink {
   }
 }
 
-class FaultyItemData  {
+class Ward {
   final int id;
-  final int quantity;
-  final int product_id;
+  final int state_id;
+  final String ward_name;
   final String created_at;
-  final String updated_at;
-  final String product_name;
-  final Product productListData;
+  final String? updated_at;
 
-
-  FaultyItemData({
+  Ward({
     required this.id,
-    required this.quantity,
+    required this.state_id,
+    required this.ward_name,
     required this.created_at,
-    required this.updated_at,
-    required this.product_id,
-    required this.product_name,
-    required this.productListData
+    this.updated_at,
   });
 
-  factory FaultyItemData.fromJson(Map<String, dynamic> json) {
-    return FaultyItemData(
-        id: json['id'],
-        quantity: json['quantity'],
-        product_id: json['product_id'],
-        created_at: json['created_at'],
-        updated_at: json['updated_at'],
-        product_name: json['product_name'],
-      productListData: Product.fromJson(json['product'])
+  factory Ward.fromJson(Map<String, dynamic> json) {
+    return Ward(
+      id: json['id'],
+      state_id: json['state_id'],
+      ward_name: json['ward_name'],
+      created_at: json['created_at'],
+      updated_at: json['updated_at'],
     );
   }
 }
-
-

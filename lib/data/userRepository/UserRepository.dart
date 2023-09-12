@@ -12,6 +12,8 @@ import '../../dataRequestModel/AddCategoryRequestModel.dart';
 import '../../dataRequestModel/AddProductRequestModel.dart';
 import '../../dataRequestModel/AddSizeRequestModel.dart';
 import '../../dataRequestModel/CityPart/AddCity.dart';
+import '../../dataRequestModel/CityPart/AddStreetRequestModel.dart';
+import '../../dataRequestModel/CityPart/AddWardRequestModel.dart';
 import '../../dataRequestModel/CityPart/EditCity.dart';
 import '../../dataRequestModel/CountryPart/AddCountry.dart';
 import '../../dataRequestModel/CountryPart/EditCountry.dart';
@@ -30,7 +32,11 @@ import '../../dataRequestModel/TownshipPart/AddTownship.dart';
 import '../../dataRequestModel/TownshipPart/EditTownship.dart';
 import '../responsemodel/AddCategoryResponseModel.dart';
 import '../responsemodel/CityPart/AddCityResponse.dart';
+import '../responsemodel/CityPart/AddStreetResponse.dart';
+import '../responsemodel/CityPart/AddWardResponse.dart';
 import '../responsemodel/CityPart/Cities.dart';
+import '../responsemodel/CityPart/Street.dart';
+import '../responsemodel/CityPart/Wards.dart';
 import '../responsemodel/DeliveryPart/FetchAllDeliveries.dart';
 import '../responsemodel/DeliveryPart/FetchAllOrderByDate.dart';
 import '../responsemodel/ShopKeeperResponsePart/DeliveredWarehouseRequest.dart';
@@ -374,6 +380,26 @@ class UserRepository {
     }
   }
 
+  //fetch ward from db
+  Future<List<Ward>?> fetchWard() async {
+    try {
+      final response = await _apiService.wards();
+      return response.data;
+    } catch (error) {
+      throw Exception('Failed to fetch ward: $error');
+    }
+  }
+
+  //fetch street from db
+  Future<List<Street>?> fetchStreet() async {
+    try {
+      final response = await _apiService.streets();
+      return response.data;
+    } catch (error) {
+      throw Exception('Failed to fetch street: $error');
+    }
+  }
+
   //fetch townships from db
   Future<List<Township>?> fetchTownships() async {
     try {
@@ -467,6 +493,25 @@ class UserRepository {
     }
   }
 
+  //to delete street by id
+  Future<DeleteResponse> deleteStreet(int id) async {
+    try {
+      final response = await _apiService.deleteStreet(id);
+      return response;
+    } catch (error) {
+      rethrow;
+    }
+  }
+
+  //to delete ward by id
+  Future<DeleteResponse> deleteWard(int id) async {
+    try {
+      final response = await _apiService.deleteWard(id);
+      return response;
+    } catch (error) {
+      rethrow;
+    }
+  }
   //to delete shopkeeper product request by id
   Future<DeleteResponse> deleteShopKeeperRequestProduct(int id) async {
     try {
@@ -623,6 +668,27 @@ class UserRepository {
   Future<UserResponse> user(UserRequestModel userRequestModel) async {
     try {
       final response = await _apiService.user(userRequestModel);
+      return response;
+    } catch (error) {
+      rethrow;
+    }
+  }
+
+
+  // add ward
+  Future<AddWardResponse> addWard(AddWardRequestModel addWardRequestModel) async {
+    try {
+      final response = await _apiService.addWard(addWardRequestModel);
+      return response;
+    } catch (error) {
+      rethrow;
+    }
+  }
+
+  // add street
+  Future<AddStreetResponse> addStreet(AddStreetRequestModel addStreetRequestModel) async {
+    try {
+      final response = await _apiService.addStreet(addStreetRequestModel);
       return response;
     } catch (error) {
       rethrow;

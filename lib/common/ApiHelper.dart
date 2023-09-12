@@ -1,6 +1,7 @@
 import 'package:easy_invoice/data/responsemodel/CityPart/Cities.dart';
 
 import '../data/api/apiService.dart';
+import '../data/responsemodel/CityPart/Wards.dart';
 import '../data/responsemodel/CountryPart/CountryResponse.dart';
 import '../data/responsemodel/FaultyItemPart/AllFaultyItems.dart';
 import '../data/responsemodel/GetAllPagnitaionDataResponse.dart';
@@ -72,6 +73,21 @@ class ApiHelper {
     }
     return []; // Return an empty list if the request fails
   }
+
+  //Fetch ward Name
+  static Future<List<Ward>?> fetchWardName() async {
+    try {
+      final response = await ApiService().wards();
+      if (response.data.isNotEmpty) {
+        return response.data;
+      }
+    } catch (error) {
+      print('Error fetching wards: $error');
+    }
+    return []; // Return an empty list if the request fails
+  }
+
+
 
   //fetch all product
 

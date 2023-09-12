@@ -9,8 +9,10 @@ import '../../module/module.dart';
 class UpdateFaultyItemScreen extends StatefulWidget {
   final int quantity;
   final int id;
+  final int category_id;
+  final int product_id;
 
-  const UpdateFaultyItemScreen({super.key, required this.quantity, required this.id});
+  const UpdateFaultyItemScreen({super.key, required this.quantity, required this.id, required this.category_id, required this.product_id});
 
   @override
   State<UpdateFaultyItemScreen> createState() => _UpdateFaultyItemScreenState();
@@ -44,13 +46,13 @@ class _UpdateFaultyItemScreenState extends State<UpdateFaultyItemScreen> {
             }
             else if (state is  UpdateFaultySuccess) {
               showToastMessage(state.response.message.toString());
-              return  UpdateFaultyWidget( quantity: widget.quantity, id:widget.id, );
+              return  UpdateFaultyWidget( quantity: widget.quantity, id:widget.id, category_id: widget.category_id.toString(), product_id: widget.product_id.toString(), );
             }
             else if (state is UpdateFaultyFail) {
               showToastMessage(state.error);
-              return  UpdateFaultyWidget( quantity: widget.quantity, id: widget.id,);
+              return  UpdateFaultyWidget( quantity: widget.quantity, id: widget.id, category_id: widget.category_id.toString(), product_id: widget.product_id.toString());
             }
-            return  UpdateFaultyWidget(quantity: widget.quantity,id: widget.id,);
+            return  UpdateFaultyWidget(quantity: widget.quantity,id: widget.id, category_id: widget.category_id.toString(), product_id: widget.product_id.toString(),);
           },
         ),
       ),

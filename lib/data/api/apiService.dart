@@ -12,6 +12,8 @@ import '../../dataRequestModel/AddCategoryRequestModel.dart';
 import '../../dataRequestModel/AddProductRequestModel.dart';
 import '../../dataRequestModel/AddSizeRequestModel.dart';
 import '../../dataRequestModel/CityPart/AddCity.dart';
+import '../../dataRequestModel/CityPart/AddStreetRequestModel.dart';
+import '../../dataRequestModel/CityPart/AddWardRequestModel.dart';
 import '../../dataRequestModel/CityPart/EditCity.dart';
 import '../../dataRequestModel/CountryPart/AddCountry.dart';
 import '../../dataRequestModel/CountryPart/EditCountry.dart';
@@ -35,7 +37,11 @@ import '../../dataRequestModel/TownshipPart/AddTownship.dart';
 import '../../dataRequestModel/TownshipPart/EditTownship.dart';
 import '../responsemodel/AddCategoryResponseModel.dart';
 import '../responsemodel/CityPart/AddCityResponse.dart';
+import '../responsemodel/CityPart/AddStreetResponse.dart';
+import '../responsemodel/CityPart/AddWardResponse.dart';
 import '../responsemodel/CityPart/Cities.dart';
+import '../responsemodel/CityPart/Street.dart';
+import '../responsemodel/CityPart/Wards.dart';
 import '../responsemodel/DeliveryPart/FetchAllDeliveries.dart';
 import '../responsemodel/DeliveryPart/FetchAllOrderByDate.dart';
 import '../responsemodel/ShopKeeperResponsePart/DeliveredWarehouseRequest.dart';
@@ -961,6 +967,117 @@ class ApiService {
     }
   }
 
+  //fetch all ward from db
+  Future<WardResponse> wards() async {
+    try {
+      int currentPage = 1;
+      List<Ward> wrapData = [];
+      String? nextPageUrl;
+
+      while (true) {
+        final response = await _dio
+            .get('https://mmeasyinvoice.com/api/wards?page=$currentPage');
+
+
+        if (response.statusCode == 200) {
+          final dynamic responseData = response.data;
+
+          final wardResponse = WardResponse.fromJson(responseData);
+          final wrapItem = wardResponse.data;
+
+          if (wrapData != null) {
+            wrapData.addAll(wrapItem);
+          }
+
+          nextPageUrl = wardResponse.nextPageUrl;
+
+          if (currentPage == wardResponse.lastPage) {
+            break;
+          } else {
+            currentPage++;
+          }
+        } else {
+          throw Exception('Failed to fetch all wards.');
+        }
+      }
+
+      return WardResponse(
+        currentPage: currentPage,
+        data: wrapData,
+        firstPageUrl: 'https://mmeasyinvoice.com/api/wards?page=1',
+        from: 1, // Always set to 1 if data is not empty
+        lastPage: currentPage,
+        lastPageUrl: 'https://mmeasyinvoice.com/api/wards?page=$currentPage',
+        links: [],
+        nextPageUrl: nextPageUrl,
+        path: 'https://mmeasyinvoice.com/api/wards',
+        perPage: wrapData.length,
+        prevPageUrl: (currentPage > 1) ? 'https://mmeasyinvoice.com/api/wards?page=${currentPage - 1}' : null,
+        to: 1,
+        total: 0,
+        status: null, // You can set this to null or provide the appropriate value
+        message: null, // You can set this to null or provide the appropriate value
+      );
+    } catch (e) {
+      throw Exception('Failed to fetch wards response: $e');
+    }
+  }
+
+  //fetch all street from db
+  Future<StreetResponse> streets() async {
+    try {
+      int currentPage = 1;
+      List<Street> streetData = [];
+      String? nextPageUrl;
+
+      while (true) {
+        final response = await _dio
+            .get('https://mmeasyinvoice.com/api/streets?page=$currentPage');
+
+
+        if (response.statusCode == 200) {
+          final dynamic responseData = response.data;
+
+          final streetResponse = StreetResponse.fromJson(responseData);
+          final streetItem = streetResponse.data;
+
+          if (streetData != null) {
+            streetData.addAll(streetItem);
+          }
+
+          nextPageUrl = streetResponse.nextPageUrl;
+
+          if (currentPage == streetResponse.lastPage) {
+            break;
+          } else {
+            currentPage++;
+          }
+        } else {
+          throw Exception('Failed to fetch all wards.');
+        }
+      }
+
+      return StreetResponse(
+        currentPage: currentPage,
+        data: streetData,
+        firstPageUrl: 'https://mmeasyinvoice.com/api/streets?page=1',
+        from: 1, // Always set to 1 if data is not empty
+        lastPage: currentPage,
+        lastPageUrl: 'https://mmeasyinvoice.com/api/streets?page=$currentPage',
+        links: [],
+        nextPageUrl: nextPageUrl,
+        path: 'https://mmeasyinvoice.com/api/streets',
+        perPage: streetData.length,
+        prevPageUrl: (currentPage > 1) ? 'https://mmeasyinvoice.com/api/streets?page=${currentPage - 1}' : null,
+        to: 1,
+        total: 0,
+        status: null, // You can set this to null or provide the appropriate value
+        message: null, // You can set this to null or provide the appropriate value
+      );
+    } catch (e) {
+      throw Exception('Failed to fetch streets response: $e');
+    }
+  }
   // Fetch all townships from the database
   Future<TownshipResponse> townships() async {
     try {
@@ -1472,52 +1589,54 @@ class ApiService {
   Future<UserRoleResponse> getAllUserRole() async {
     try {
       int currentPage = 1;
-      List<UserData> allUser = [];
-      UserRoleResponse userRoleResponse;
+      List<UserData> userData = [];
+      String? nextPageUrl;
+
       while (true) {
         final response = await _dio
             .get('https://mmeasyinvoice.com/api/users?page=$currentPage');
 
         if (response.statusCode == 200) {
           final dynamic responseData = response.data;
-          userRoleResponse = UserRoleResponse.fromJson(responseData);
-          allUser.addAll(userRoleResponse.data);
 
-          if (currentPage == userRoleResponse.lastPage) {
+          final userResponse = UserRoleResponse.fromJson(responseData);
+          final usersItem = userResponse.data;
+
+          if (userData != null) {
+            userData.addAll(usersItem);
+          }
+
+          nextPageUrl = userResponse.nextPageUrl;
+
+          if (currentPage == userResponse.lastPage) {
             break;
           } else {
             currentPage++;
           }
         } else {
-          throw Exception('Failed to fetch all users');
+          throw Exception('Failed to fetch all user.');
         }
       }
 
       return UserRoleResponse(
         currentPage: currentPage,
-        data: allUser,
+        data: userData,
         firstPageUrl: 'https://mmeasyinvoice.com/api/users?page=1',
-        from: 1,
+        from: 1, // Always set to 1 if data is not empty
         lastPage: currentPage,
         lastPageUrl: 'https://mmeasyinvoice.com/api/users?page=$currentPage',
         links: [],
-        nextPageUrl: (currentPage < userRoleResponse.lastPage)
-            ? 'https://mmeasyinvoice.com/api/users?page=${currentPage + 1}'
-            : '',
-        path: 'https://mmeasyinvoice.com/api/users',
-        perPage: allUser.length,
-        prevPageUrl: (currentPage > 1)
-            ? 'https://mmeasyinvoice.com/api/users?page=${currentPage - 1}'
-            : null,
-        to: allUser.length,
+        nextPageUrl: nextPageUrl,
+        path: 'https://mmeasyinvoice.com/api/products',
+        perPage: userData.length,
+        prevPageUrl: (currentPage > 1) ? 'https://mmeasyinvoice.com/api/users?page=${currentPage - 1}' : null,
+        to: 1,
         total: 0,
-        // You can set the correct value for the total number of users
-        status: 200,
-        // Set the appropriate status code
-        message: 'Success', // Set the appropriate message
+        status: null,
+        message: null,
       );
     } catch (e) {
-      throw Exception('Failed to fetch user roles: $e');
+      throw Exception('Failed to fetch all user response: $e');
     }
   }
 
@@ -1583,6 +1702,40 @@ class ApiService {
         DeleteResponse deleteCity =
             DeleteResponse.fromJson(response.data);
         return deleteCity;
+      } else {
+        throw Exception('Something wrong!');
+      }
+    } catch (error) {
+      throw Exception(error);
+    }
+  }
+
+  //Delete street by id
+  Future<DeleteResponse> deleteStreet(int id) async {
+    try {
+      final response =
+      await _dio.post('https://mmeasyinvoice.com/api/delete-street/$id');
+      if (response.statusCode == 200) {
+        DeleteResponse deleteStreet =
+        DeleteResponse.fromJson(response.data);
+        return deleteStreet;
+      } else {
+        throw Exception('Something wrong!');
+      }
+    } catch (error) {
+      throw Exception(error);
+    }
+  }
+
+  //Delete ward by id
+  Future<DeleteResponse> deleteWard(int id) async {
+    try {
+      final response =
+      await _dio.post('https://mmeasyinvoice.com/api/delete-ward/$id');
+      if (response.statusCode == 200) {
+        DeleteResponse deleteWard =
+        DeleteResponse.fromJson(response.data);
+        return deleteWard;
       } else {
         throw Exception('Something wrong!');
       }
@@ -1765,7 +1918,7 @@ class ApiService {
     }
   }
 
-  // for user role
+  // for add user role
   Future<UserResponse> user(UserRequestModel userRequestModel) async {
     try {
       final Response response = await _dio.post(
@@ -1810,6 +1963,54 @@ class ApiService {
     } catch (error) {
       throw DioError(
         requestOptions: RequestOptions(path: '/api/edit-user'),
+        error: error,
+      );
+    }
+  }
+
+  // for add ward
+  Future<AddWardResponse> addWard(AddWardRequestModel addWardRequestModel) async {
+    try {
+      final Response response = await _dio.post(
+        'https://mmeasyinvoice.com/api/add-ward',
+        data: addWardRequestModel.toJson(),
+      );
+      if (response.statusCode == 200) {
+        final AddWardResponse data = AddWardResponse.fromJson(response.data);
+        return data;
+      } else {
+        throw DioError(
+          requestOptions: RequestOptions(path: '/api/add-ward'),
+          response: response,
+        );
+      }
+    } catch (error) {
+      throw DioError(
+        requestOptions: RequestOptions(path: '/api/add-ward'),
+        error: error,
+      );
+    }
+  }
+
+// for add street
+  Future<AddStreetResponse> addStreet(AddStreetRequestModel addStreetRequestModel) async {
+    try {
+      final Response response = await _dio.post(
+        'https://mmeasyinvoice.com/api/add-street',
+        data: addStreetRequestModel.toJson(),
+      );
+      if (response.statusCode == 200) {
+        final AddStreetResponse data = AddStreetResponse.fromJson(response.data);
+        return data;
+      } else {
+        throw DioError(
+          requestOptions: RequestOptions(path: '/api/add-street'),
+          response: response,
+        );
+      }
+    } catch (error) {
+      throw DioError(
+        requestOptions: RequestOptions(path: '/api/add-street'),
         error: error,
       );
     }

@@ -42,6 +42,7 @@ class _RequestShopKeeperScreenState extends State<RequestShopKeeperScreen> {
             }
             else if (state is  AddRequestProductShopKeeperSuccess) {
               showToastMessage('Shopkeeper request product successfully.');
+              Navigator.pop(context,true);
               return const RequestShopKeeperWidget(isLoading: false);
             }
             else if (state is AddRequestProductShopKeeperFail) {

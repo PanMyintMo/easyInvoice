@@ -11,7 +11,7 @@ class WarehouseResponse {
 
   factory WarehouseResponse.fromJson(Map<String, dynamic> json) {
     return WarehouseResponse(
-      data: (json['data'] as List).map((item) => WarehouseData.fromJson(item)).toList(),
+      data: (json['data'] as List<dynamic>?)?.map((item) => WarehouseData.fromJson(item)).toList() ?? [],
       status: json['status'],
       message: json['message'],
     );

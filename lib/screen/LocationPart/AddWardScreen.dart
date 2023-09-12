@@ -1,18 +1,18 @@
-import 'package:easy_invoice/bloc/post/CityPart/add_city_cubit.dart';
+import 'package:easy_invoice/bloc/post/CityPart/add_ward_cubit.dart';
+import 'package:easy_invoice/widget/CityPart/AddWardWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../common/ToastMessage.dart';
 import '../../module/module.dart';
-import '../../widget/CityPart/AddNewCityWidget.dart';
 
-class AddNewCity extends StatelessWidget {
-  const AddNewCity({super.key});
+class AddWardScreen extends StatelessWidget {
+  const AddWardScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => AddCityCubit(getIt.call()),
+      create: (context) => AddWardCubit(getIt.call()),
       child: Scaffold(
         appBar: AppBar(
           elevation: 0.0,
@@ -21,7 +21,7 @@ class AddNewCity extends StatelessWidget {
             color: Colors.red, // Set the color of the navigation icon to black
           ),
           title: const Text(
-            'Add New City',
+            'Add Ward Screen',
             style: TextStyle(
               color: Colors.black54,
               fontWeight: FontWeight.bold,
@@ -29,19 +29,19 @@ class AddNewCity extends StatelessWidget {
             ),
           ),
         ),
-        body: BlocBuilder<AddCityCubit, AddCityState>(
+        body: BlocBuilder<AddWardCubit, AddWardState>(
           builder: (context, state) {
-            if (state is AddCityLoading) {
-              return const AddNewCityWidget(isLoading : true);
-            } else if (state is AddCitySuccess) {
-              showToastMessage(state.cityResponse.message);
+            if (state is AddWardLoading) {
+              return const AddWardWidget(isLoading : true);
+            } else if (state is AddWardSuccess) {
+              showToastMessage(state.addWardResponse.message);
               Navigator.pop(context,true);
-              return const AddNewCityWidget(isLoading : false);
-            } else if (state is AddCityFail) {
+              return const AddWardWidget(isLoading : false);
+            } else if (state is AddWardFail) {
               showToastMessage(state.error.toString());
-              return const AddNewCityWidget(isLoading : false);
+              return const AddWardWidget(isLoading : false);
             }
-            return const AddNewCityWidget(isLoading : false);
+            return const AddWardWidget(isLoading : false);
           },
         ), // Remove the const from here
       ),
