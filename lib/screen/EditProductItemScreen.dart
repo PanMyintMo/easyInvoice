@@ -22,6 +22,7 @@ class EditProductItemScreen extends StatefulWidget {
   final int size_id;
   final String newimage;
 
+
   const EditProductItemScreen({
     Key? key,
     required this.name,
@@ -60,6 +61,7 @@ class _EditProductItemScreenState extends State<EditProductItemScreen> {
   List<PaginationItem> categories = [];
   List<PaginationItem> sizes = [];
   bool isLoading = false;
+   late Widget networkImage;
 
   @override
   void initState() {
@@ -80,6 +82,23 @@ class _EditProductItemScreenState extends State<EditProductItemScreen> {
     name.addListener(_updateSlugField);
     fetchCategoriesName();
     fetchSizeName();
+
+    if (widget.newimage.isNotEmpty) {
+      networkImage = Image.network(
+        widget.newimage,
+        width: 200,
+        height: 200,
+        fit: BoxFit.cover,
+      );
+    }
+    else{
+      networkImage = Image.asset(
+        'assets/profits.png', // Replace with the path to your default image
+        width: 200,
+        height: 200,
+        fit: BoxFit.cover,
+      );
+    }
   }
 
   Future<void> fetchSizeName() async {
@@ -273,14 +292,10 @@ class _EditProductItemScreenState extends State<EditProductItemScreen> {
                         ],
                       ),
                       const SizedBox(height: 10),
-                      SizedBox(
+                    SizedBox(
                         height: 250,
                         width: 200,
-                        child: Image.asset(
-                          'assets/profits.png',
-                          width: 200,
-                          height: 200,
-                        ),
+                        child: networkImage
                       ),
                       const SizedBox(height: 10),
                       ElevatedButton(

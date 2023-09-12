@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:easy_invoice/bloc/get/ProductPart/get_all_product_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 import '../common/CustomButtom.dart';
 import '../screen/ProductDetailScreen.dart';
 import '../network/SharedPreferenceHelper.dart';
@@ -55,7 +56,7 @@ class _AllProductWidgetState extends State<AllProductWidget> {
               final result = await Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => ProductDetailScreen(products: product),
+                  builder: (context) => ProductDetailScreen( product: product,),
                 ),
               );
               if (result != null) {
@@ -73,7 +74,6 @@ class _AllProductWidgetState extends State<AllProductWidget> {
                     product.url!,
                     width: 100.0,
                     height: 100.0,
-                    // You can add other image properties here
                   )
                       : Icon(
                     Icons.production_quantity_limits_outlined,
@@ -113,17 +113,14 @@ class _AllProductWidgetState extends State<AllProductWidget> {
                   Center(
                     child: (utype == 'ADM') ? CustomButton(
                       label: 'View Detail Product',
-                      onPressed: () async {
-                        var result = await Navigator.push(
+                      onPressed: ()  {
+                        Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => ProductDetailScreen(products: product),
+                            builder: (context) => ProductDetailScreen(product: product),
                           ),
                         );
-                        if (result != null) {
-                          context.read<GetAllProductCubit>().getAllProduct();
-                        }
-                      },
+                        },
                     ) : null,
                   ),
                   ]
@@ -137,3 +134,4 @@ class _AllProductWidgetState extends State<AllProductWidget> {
     );
   }
 }
+
