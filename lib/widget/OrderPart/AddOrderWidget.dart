@@ -73,6 +73,9 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
   final TextEditingController available_quantity = TextEditingController();
   final TextEditingController quantity = TextEditingController();
   final TextEditingController total = TextEditingController();
+  final TextEditingController block_no = TextEditingController();
+  final TextEditingController floor = TextEditingController();
+
 
   bool hasCitiesForSelectedCountry = true;
   bool hasTownshipForSelectedCity = true;
@@ -218,6 +221,8 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
     available_quantity.dispose();
     quantity.dispose();
     total.dispose();
+    block_no.dispose();
+    floor.dispose();
     super.dispose();
   }
 
@@ -500,9 +505,21 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
               SizedBox(
                 width: double.infinity,
                 child: buildProductContainerForm(
-                  'Postcode',
+                  'Bock Number',
                   TextInputType.number,
-                  zipcode,
+                  block_no,
+                  validateField,
+                ),
+              ),
+              const SizedBox(
+                height: 18,
+              ),
+              SizedBox(
+                width: double.infinity,
+                child: buildProductContainerForm(
+                  'Floor',
+                  TextInputType.number,
+                  floor,
                   validateField,
                 ),
               ),
@@ -609,7 +626,7 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
               SizedBox(
                 width: double.infinity,
                 child: chooseItemIdForm(DropdownButton(
-                  hint: Text("Select Product"),
+                  hint: const Text("Select Product"),
                   value: select_product,
                   items: [
                     ...products.map((product) {
@@ -866,9 +883,9 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
                                 quantity: quantity.text,
                                 user_id: userId.toString(),
                                 selectedWard: select_ward.toString(),
-                                selectedStreet: '',
-                                block_no: '',
-                                floor: ''));
+                                selectedStreet: select_street.toString(),
+                                block_no: block_no.text.toString(),
+                                floor: floor.text.toString()));
                       },
                       child: const Text('Place Order Now')))
             ],

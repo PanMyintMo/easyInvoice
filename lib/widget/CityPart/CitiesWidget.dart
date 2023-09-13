@@ -1,42 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import '../../bloc/delete/CityPart/delete_city_cubit.dart';
-import '../../common/ApiHelper.dart';
 import '../../common/showDeleteConfirmationDialog.dart';
 import '../../data/responsemodel/CityPart/Cities.dart';
 import '../../screen/LocationPart/EditCityScreen.dart';
 
-class CitiesWidget extends StatefulWidget {
+class CitiesWidget extends StatelessWidget {
   final bool isLoading;
-  const CitiesWidget({super.key, required this.isLoading});
-
-  @override
-  State<CitiesWidget> createState() => _CitiesWidgetState();
-}
-
-class _CitiesWidgetState extends State<CitiesWidget> {
-
-  List<City> cities = [];
-  @override
-  void initState() {
-    super.initState();
-    fetchCityName();
-  }
-
-
-  Future<void> fetchCityName() async {
-    final cities = await ApiHelper.fetchCityName();
-    setState(() {
-      this.cities = cities;
-    });
-  }
+  final List<City> cities;
+  const CitiesWidget({super.key, required this.isLoading, required this.cities});
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-
         SingleChildScrollView(
           scrollDirection: Axis.vertical,
           child: PaginatedDataTable(

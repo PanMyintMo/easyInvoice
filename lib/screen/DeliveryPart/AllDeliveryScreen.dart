@@ -8,51 +8,49 @@ import '../../module/module.dart';
 import '../../widget/DeliveryPart/FetchAllDeliveryWidget.dart';
 import 'AddDeliveryScreen.dart';
 
-class AllDeliveryScreen extends StatefulWidget {
-  const AllDeliveryScreen({super.key});
+class AllDeliveryScreen extends StatelessWidget {
+  const AllDeliveryScreen({Key? key}) : super(key: key);
 
-  @override
-  State<AllDeliveryScreen> createState() => _AllDeliveryScreenState();
-}
-
-class _AllDeliveryScreenState extends State<AllDeliveryScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.white,
-        appBar: AppBar(
-          elevation: 0.0,
-          backgroundColor: Colors.white70,
-          iconTheme: const IconThemeData(
-            color: Colors.red, // Set the color of the navigation icon to black
-          ),
-          title: const Text(
-            'All Delivery Screen',
-            style: TextStyle(
-                color: Colors.black54,
-                fontWeight: FontWeight.bold,
-                fontSize: 16),
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        elevation: 0.0,
+        backgroundColor: Colors.white70,
+        iconTheme: const IconThemeData(
+          color: Colors.red, // Set the color of the navigation icon to black
+        ),
+        title: const Text(
+          'All Delivery Screen',
+          style: TextStyle(
+            color: Colors.black54,
+            fontWeight: FontWeight.bold,
+            fontSize: 16,
           ),
         ),
-        body: MultiBlocProvider(providers: [
+      ),
+      body: MultiBlocProvider(
+        providers: [
           BlocProvider<FetchAllDeliveryCubit>(
             create: (context) {
-              final cubit = FetchAllDeliveryCubit(getIt
-                  .call()); // Use getIt<ApiService>() to get the ApiService instance
+              final cubit = FetchAllDeliveryCubit(getIt.call());
               cubit.fetchAllDelivery();
               return cubit;
             },
           ),
           BlocProvider<DeleteDeliveryCubit>(
-            create: (context) => DeleteDeliveryCubit(getIt
-                .call()), // Use getIt<ApiService>() to get the ApiService instance
+            create: (context) => DeleteDeliveryCubit(getIt.call()),
           ),
-        ], child: const DeliveryScreen()));
+        ],
+        child: const DeliveryScreen(),
+      ),
+    );
   }
 }
 
 class DeliveryScreen extends StatefulWidget {
-  const DeliveryScreen({super.key});
+  const DeliveryScreen({Key? key}) : super(key: key);
 
   @override
   State<DeliveryScreen> createState() => _DeliveryScreenState();
@@ -61,47 +59,47 @@ class DeliveryScreen extends StatefulWidget {
 class _DeliveryScreenState extends State<DeliveryScreen> {
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      scrollDirection: Axis.vertical,
-      child: Column(
-        children: [
-          Align(
-            alignment: Alignment.topRight,
-            child: TextButton(
-              onPressed: () async {
-                final result = await Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => const AddDeliveryScreen(),
-                  ),
-                );
-                if (result == true) {
-                  BlocProvider.of<FetchAllDeliveryCubit>(context).fetchAllDelivery();
-                }
-              },
-              child: const Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Text(
-                  'Add New Delivery',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    decoration: TextDecoration.underline,
-                    color: Colors.blue,
-                  ),
+    return Column(
+      children: [
+        Align(
+          alignment: Alignment.topRight,
+          child: TextButton(
+            onPressed: () async {
+              final result = await Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => const AddDeliveryScreen(),
+                ),
+              );
+              if (result == true) {
+                BlocProvider.of<FetchAllDeliveryCubit>(context)
+                    .fetchAllDelivery();
+              }
+            },
+            child: const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Text(
+                'Add New Delivery',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  decoration: TextDecoration.underline,
+                  color: Colors.blue,
                 ),
               ),
             ),
           ),
-          BlocBuilder<FetchAllDeliveryCubit, FetchAllDeliveryState>(
+        ),
+        Expanded(
+          child: BlocBuilder<FetchAllDeliveryCubit, FetchAllDeliveryState>(
             builder: (context, state) {
               if (state is FetchAllDeliveryLoading) {
                 return const Center(child: CircularProgressIndicator());
               } else if (state is FetchAllDeliverySuccess) {
-                final delivery = state.deliveryItemData;
+                final deliveryItem = state.deliveryItemData;
 
-                if (delivery.isEmpty) {
+                if (deliveryItem.isEmpty) {
                   return const Center(
-                    child: Text("No Delivery found."),
+                    child: Text("No Data found."),
                   );
                 }
 
@@ -110,7 +108,8 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
                     bool loading = deleteState is DeleteDeliveryLoading;
 
                     return FetchAllDeliveryWidget(
-                      deliveriesItem: state.deliveryItemData,isLoading: loading,
+                      isLoading: loading,
+                      deliveriesItem: state.deliveryItemData,
                     );
                   },
                   listener: (context, deleteState) {
@@ -120,7 +119,8 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
                           .fetchAllDelivery();
                     } else if (deleteState is DeleteDeliveryFail) {
                       showToastMessage(
-                          'Failed to delete delivery: ${deleteState.error}');
+                        'Failed to delete delivery: ${deleteState.error}',
+                      );
                     }
                   },
                 );
@@ -129,8 +129,8 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
               }
             },
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

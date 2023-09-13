@@ -109,7 +109,7 @@ class _CityScreenState extends State<CityScreen> {
                     bool loading = deleteState is DeleteCityLoading;
 
                     return CitiesWidget(
-                      isLoading: loading,
+                      isLoading: loading,cities : state.city
                     );
                   },
                   listener: (context, deleteState) {

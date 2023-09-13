@@ -41,27 +41,16 @@ class _AddNewCityWidgetState extends State<AddNewCityWidget> {
         Form(
           key: formKey,
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Container(
-                padding: const EdgeInsets.all(16),
-                child: TextField(
-                  controller: nameController, // Use the TextEditingController
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Add City Name',
-                  ),
-                ),
-              ),
               Container(
                 width: double.infinity,
                 padding: const EdgeInsets.all(16.0),
                 child: DropdownButtonFormField<String>(
+                  hint: const Text("Select Country Name"),
                   value: selectedCountryId,
                   items: [
-                    const DropdownMenuItem<String>(
-                      value: null,
-                      child: Text('Select Country Name'),
-                    ),
+
                     ...countries.map((country) {
                       return DropdownMenuItem<String>(
                         value: country.id.toString(),
@@ -82,6 +71,17 @@ class _AddNewCityWidgetState extends State<AddNewCityWidget> {
                   ),
                 ),
               ),
+              Container(
+                padding: const EdgeInsets.all(16),
+                child: TextField(
+                  controller: nameController, // Use the TextEditingController
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Add City Name',
+                  ),
+                ),
+              ),
+
               TextButton(
                 onPressed: () {
                   if (formKey.currentState!.validate()) {

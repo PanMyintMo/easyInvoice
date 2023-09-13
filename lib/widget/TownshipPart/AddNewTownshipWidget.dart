@@ -52,43 +52,16 @@ class _AddNewTownshipState extends State<AddNewTownshipWidget> {
         Form(
           key: formKey,
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Container(
-                alignment: Alignment.center,
-                padding: const EdgeInsets.all(16),
-                child: TextFormField(
-                  validator: (value){
-                    if(value == null || value.isEmpty){
-                      return 'Township name cannot be empty';
-                    }
-                    return null;
-                  },
-                  initialValue: name, // Set the initial value from the variable
-                  onChanged: (value) {
-                    setState(() {
-                      name = value; // Update the name variable when the field changes
-                    });
-                  },
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                    labelText: 'Township Name',
-                    hintText: 'Township Name',
-                  ),
-                ),
-              ),
               Container(
                 width: double.infinity,
                 padding: const EdgeInsets.all(16.0),
                 child: chooseItemIdForm(
                   DropdownButton<String>(
+                    hint: const Text("Select Country"),
                     value: select_country,
                     items: [
-                      const DropdownMenuItem(
-                        value: null, // Set initial value to null
-                        child: Text('Select Country Name'),
-                      ),
                       ...countries.map((country) {
                         return DropdownMenuItem<String>(
                           value: country.id.toString(),
@@ -119,12 +92,10 @@ class _AddNewTownshipState extends State<AddNewTownshipWidget> {
                 padding: const EdgeInsets.all(16.0),
                 child: chooseItemIdForm(
                   DropdownButton<String>(
+                    hint: const Text("Select City"),
                     value: select_city,
                     items: [
-                      const DropdownMenuItem(
-                        value: null, // Set initial value to null
-                        child: Text('Select City Name'),
-                      ),
+
                       ...cities.map((city) {
                         return DropdownMenuItem<String>(
                           value: city.id.toString(),
@@ -150,6 +121,32 @@ class _AddNewTownshipState extends State<AddNewTownshipWidget> {
                   ),
                 ),
               ),
+              Container(
+                alignment: Alignment.center,
+                padding: const EdgeInsets.all(16),
+                child: TextFormField(
+                  validator: (value){
+                    if(value == null || value.isEmpty){
+                      return 'Township name cannot be empty';
+                    }
+                    return null;
+                  },
+                  initialValue: name, // Set the initial value from the variable
+                  onChanged: (value) {
+                    setState(() {
+                      name = value; // Update the name variable when the field changes
+                    });
+                  },
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    labelText: 'Township Name',
+                    hintText: 'Township Name',
+                  ),
+                ),
+              ),
+
               TextButton(
                 onPressed: () {
                   if (formKey.currentState!.validate()) {

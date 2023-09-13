@@ -5,7 +5,7 @@ import '../../bloc/delete/DeliveryPart/delete_delivery_cubit.dart';
 import '../../common/showDeleteConfirmationDialog.dart';
 import '../../data/responsemodel/DeliveryPart/FetchAllDeliveries.dart';
 
-class FetchAllDeliveryWidget extends StatefulWidget {
+class FetchAllDeliveryWidget extends StatelessWidget {
   final List<DeliveriesItem> deliveriesItem;
   final bool isLoading;
 
@@ -13,34 +13,22 @@ class FetchAllDeliveryWidget extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<FetchAllDeliveryWidget> createState() => _FetchAllDeliveryWidgetState();
-}
-
-class _FetchAllDeliveryWidgetState extends State<FetchAllDeliveryWidget> {
-  @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      crossAxisAlignment: CrossAxisAlignment.stretch, // Make children take up full width
-
-      children: [
-        SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          child: PaginatedDataTable(
-            columns: const [
-              DataColumn(label: Text('Cost')),
-              DataColumn(label: Text('City')),
-              DataColumn(label: Text('State')),
-              DataColumn(label: Text('Company')),
-              DataColumn(label: Text('Action')),
-            ],
-            source: DeliData(widget.deliveriesItem, context),
-            horizontalMargin: 20,
-            rowsPerPage: 8,
-            columnSpacing: 30,
-          ),
-        ),
-      ],
+    return SingleChildScrollView(
+      scrollDirection: Axis.vertical,
+      child: PaginatedDataTable(
+        columns: const [
+          DataColumn(label: Text('Cost')),
+          DataColumn(label: Text('City')),
+          DataColumn(label: Text('State')),
+          DataColumn(label: Text('Company')),
+          DataColumn(label: Text('Action')),
+        ],
+        source: DeliData(deliveriesItem, context),
+        horizontalMargin: 20,
+        rowsPerPage: 8,
+        columnSpacing: 30,
+      ),
     );
   }
 }
@@ -62,34 +50,24 @@ class DeliData extends DataTableSource {
     return DataRow(cells: [
       DataCell(Text(deliveriesItem.basic_cost.toString())),
       DataCell(Text(deliveriesItem.city_id.toString())),
-      DataCell(Text(deliveriesItem.state.toString())),
+      DataCell(Text(deliveriesItem.township_name.toString())),
       DataCell(Text(deliveriesItem.company_id.toString())),
       DataCell(
         Row(
           children: [
             IconButton(
-              icon: const Icon(Icons.edit, color: Colors.green),
-              onPressed: () {
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(
-                //     builder: (context) => EditDeliveryScreen(deliveriesItem), // Navigate to the EditDeliveryScreen with the selected delivery item
-                //   ),
-                // );
-              },
-            ),
-            IconButton(
               icon: const Icon(Icons.delete, color: Colors.red),
               onPressed: () {
-                showDeleteConfirmationDialogs(
-                    context, "Are you sure you want to delete  this delivery item?",
-                        () {
-                      context
-                          .read<DeleteDeliveryCubit>()
-                          .deleteDelivery(deliveriesItem.id);
-                    });
+                // showDeleteConfirmationDialogs(
+                //   context,
+                //   "Are you sure you want to delete this delivery item?",
+                //       () {
+                //     context
+                //         .read<DeleteDeliveryCubit>()
+                //         .deleteDelivery(deliveriesItem);
+                //   },
+                // );
               },
-
             ),
           ],
         ),
@@ -106,3 +84,4 @@ class DeliData extends DataTableSource {
   @override
   int get selectedRowCount => 0;
 }
+

@@ -1,4 +1,4 @@
-class FetchAllDelivery  {
+class FetchAllDelivery {
   final int currentPage;
   final List<DeliveriesItem> data;
   final String firstPageUrl;
@@ -15,7 +15,7 @@ class FetchAllDelivery  {
   final int? status;
   final String? message;
 
-  FetchAllDelivery  ({
+  FetchAllDelivery({
     required this.currentPage,
     required this.data,
     required this.firstPageUrl,
@@ -33,19 +33,21 @@ class FetchAllDelivery  {
     required this.message,
   });
 
-  factory FetchAllDelivery .fromJson(Map<String, dynamic> json) {
-    return FetchAllDelivery  (
+  factory FetchAllDelivery.fromJson(Map<String, dynamic> json) {
+    return FetchAllDelivery(
       currentPage: json['data']['current_page'],
       data: (json['data']['data'] as List<dynamic>?)
-          ?.map((item) => DeliveriesItem.fromJson(item))
-          .toList() ?? [],
+              ?.map((item) => DeliveriesItem.fromJson(item))
+              .toList() ??
+          [],
       firstPageUrl: json['data']['first_page_url'],
       from: json['data']['from'],
       lastPage: json['data']['last_page'],
       lastPageUrl: json['data']['last_page_url'],
       links: (json['data']['links'] as List<dynamic>?)
-          ?.map((item) => PageLink.fromJson(item))
-          .toList() ?? [],
+              ?.map((item) => PageLink.fromJson(item))
+              .toList() ??
+          [],
       nextPageUrl: json['data']['next_page_url'],
       path: json['data']['path'],
       perPage: json['data']['per_page'],
@@ -79,37 +81,55 @@ class PageLink {
 }
 
 class DeliveriesItem {
-  final int id;
+  final int company_id;
   final DateTime? start_date;
   final DateTime? end_date;
-  final String state;
   final int basic_cost;
   final String waiting_time;
-  final int company_id;
-  final String city_id;
+  final String company_type;
+  final String? country_name;
+  final int country_id; // Change to int
+  final int? township_id;
+  final String? township_name;
+  final int? city_id;
+  final String? city_name;
 
   DeliveriesItem({
-    required this.id,
+    required this.company_id,
     required this.start_date,
     required this.end_date,
-    required this.state,
     required this.basic_cost,
     required this.waiting_time,
-    required this.company_id,
-    required this.city_id,
+    this.city_id,
+    required this.country_id, // Change to int
+    this.township_id,
+    this.city_name,
+    required this.company_type,
+    this.country_name,
+    this.township_name,
   });
 
   factory DeliveriesItem.fromJson(Map<String, dynamic> json) {
     return DeliveriesItem(
-      id: json['id'],
-      start_date: json['start_date'],
-      end_date: json['end_date'],
-      state: json['state'],
+
+      start_date: json['start_date'] != null
+          ? DateTime.parse(json['start_date'])
+          : null,
+      end_date: json['end_date'] != null
+          ? DateTime.parse(json['end_date'])
+          : null,
+
       basic_cost: json['basic_cost'],
       waiting_time: json['waiting_time'],
       company_id: json['company_id'],
       city_id: json['city_id'],
+      country_id: json['country_id'],
+      township_id: json['township_id'],
+      city_name: json['city_name'],
+      company_type: json['company_type'],
+      country_name: json['country_name'],
+      township_name: json['township_name'],
     );
   }
-
 }
+

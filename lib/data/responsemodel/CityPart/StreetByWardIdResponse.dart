@@ -1,9 +1,8 @@
-
 import 'Street.dart';
 
 class StreetByWardIdResponse {
   final List<Street> data;
-  final String status;
+  final int status;
   final String message;
 
   StreetByWardIdResponse({

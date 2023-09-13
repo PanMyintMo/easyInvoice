@@ -458,10 +458,10 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
       ),
       children: [
         ListTile(
-          leading: (txtOne.isNotEmpty)
+          /*leading: (txtOne.isNotEmpty)
               ? const Icon(Icons.production_quantity_limits)
-              : null,
-          title: GestureDetector(
+              : null,*/
+          subtitle: GestureDetector(
             onTap: onClicked,
             child: Text(
               txtOne,
@@ -470,8 +470,8 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
           ),
         ),
         ListTile(
-          leading: (txtTwo.isNotEmpty) ? const Icon(Icons.add) : null,
-          title: GestureDetector(
+        //  leading: (txtTwo.isNotEmpty) ? const Icon(Icons.add) : null,
+          subtitle: GestureDetector(
             onTap: onClickedItem,
             child: Text(
               txtTwo,
@@ -512,8 +512,8 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
         Padding(
           padding: const EdgeInsets.only(left: 50),
           child: ListTile(
-            leading: const Icon(Icons.add),
-            title: GestureDetector(
+
+            subtitle: GestureDetector(
               onTap: viewCountries,
               child: const Text(
                 'View Countries',
@@ -523,10 +523,9 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.only(left: 50),
+         padding: const EdgeInsets.only(left: 50),
           child: ListTile(
-            leading: const Icon(Icons.accessibility),
-            title: GestureDetector(
+            subtitle: GestureDetector(
               onTap: viewCities,
               child: const Text(
                 'View Cities',
@@ -538,8 +537,7 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
         Padding(
           padding: const EdgeInsets.only(left: 50),
           child: ListTile(
-            leading: const Icon(Icons.accessibility),
-            title: GestureDetector(
+            subtitle: GestureDetector(
               onTap: viewTownships,
               child: const Text(
                 'View Townships',
@@ -551,8 +549,7 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
         Padding(
           padding: const EdgeInsets.only(left: 50),
           child: ListTile(
-            leading: const Icon(Icons.accessibility),
-            title: GestureDetector(
+            subtitle: GestureDetector(
               onTap: viewWards,
               child: const Text(
                 'View Wards',
@@ -564,8 +561,7 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
         Padding(
           padding: const EdgeInsets.only(left: 50),
           child: ListTile(
-            leading: const Icon(Icons.accessibility),
-            title: GestureDetector(
+            subtitle: GestureDetector(
               onTap: viewStreets,
               child: const Text(
                 'View Street',

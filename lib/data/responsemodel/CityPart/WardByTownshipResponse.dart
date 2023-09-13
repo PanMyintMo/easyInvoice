@@ -1,9 +1,7 @@
-
-
 import '../common/WardResponse.dart';
 class WardByTownshipResponse {
   final List<Ward> data;
-  final String status;
+  final int status;
   final String message;
 
   WardByTownshipResponse({
