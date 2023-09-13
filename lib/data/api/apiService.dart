@@ -41,6 +41,8 @@ import '../responsemodel/CityPart/AddStreetResponse.dart';
 import '../responsemodel/CityPart/AddWardResponse.dart';
 import '../responsemodel/CityPart/Cities.dart';
 import '../responsemodel/CityPart/Street.dart';
+import '../responsemodel/CityPart/StreetByWardIdResponse.dart';
+import '../responsemodel/CityPart/WardByTownshipResponse.dart';
 import '../responsemodel/CityPart/Wards.dart';
 import '../responsemodel/DeliveryPart/FetchAllDeliveries.dart';
 import '../responsemodel/DeliveryPart/FetchAllOrderByDate.dart';
@@ -81,6 +83,7 @@ import '../responsemodel/TownshipsPart/TownshipByCityIdResponse.dart';
 import '../responsemodel/UserRoleResponse.dart';
 import '../responsemodel/WarehousePart/WarehouseResponse.dart';
 import '../responsemodel/common/ProductListItemResponse.dart';
+import '../responsemodel/common/WardResponse.dart';
 
 class ApiService {
   final Dio _dio = Dio();
@@ -1456,6 +1459,43 @@ class ApiService {
       throw Exception('Failed to fetch delivery company name: $e');
     }
   }
+
+  //fetch all ward by township Id
+  Future<List<Ward>> fetchWardByTownship(int id) async {
+    try {
+      final response = await _dio.get('https://mmeasyinvoice.com/api/wards-by-townshipid/$id');
+print("Fetch Ward By Township response are $response");
+
+      if (response.statusCode == 200) {
+        final responseData = response.data;
+        final wardByTownshipResponse = WardByTownshipResponse.fromJson(responseData);
+        return wardByTownshipResponse.data;
+      } else {
+        throw Exception('Invalid data format for ward by township id field');
+      }
+    } catch (e) {
+      throw Exception('Failed to fetch ward by township id : $e');
+    }
+  }
+
+//fetch all street by ward Id
+  Future<StreetByWardIdResponse> fetchStreetByWardId(int id) async {
+    try {
+      final response = await _dio
+          .get('https://mmeasyinvoice.com/api/streets-by-wardid/$id');
+      if (response.statusCode == 200) {
+        final responseData = response.data;
+        final streetByWardIdResponse =
+        StreetByWardIdResponse.fromJson(responseData);
+        return streetByWardIdResponse;
+      } else {
+        throw Exception('Invalid data format for ward by ward id field');
+      }
+    } catch (e) {
+      throw Exception('Failed to fetch street by ward id : $e');
+    }
+  }
+
 
   //fetch all company name by township Id
   Future<List<CompanyData>> fetchAllCompanyByTownshipId(int id) async {

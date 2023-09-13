@@ -3,6 +3,7 @@ import 'package:easy_invoice/data/responsemodel/CityPart/Wards.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../common/showDeleteConfirmationDialog.dart';
+import '../../data/responsemodel/common/WardResponse.dart';
 
 
 class WardsWidget extends StatelessWidget {

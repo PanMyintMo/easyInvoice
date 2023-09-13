@@ -6,10 +6,12 @@ import '../../bloc/post/DeliveryPart/add_order_cubit.dart';
 import '../../common/FormValidator.dart';
 import '../../common/ThemeHelperUserClass.dart';
 import '../../data/responsemodel/CityPart/FetchCityByCountryId.dart';
+import '../../data/responsemodel/CityPart/Street.dart';
 import '../../data/responsemodel/CountryPart/CountryResponse.dart';
 import '../../data/responsemodel/DeliveryPart/DeliCompanyNameByTownshipId.dart';
 import '../../data/responsemodel/TownshipsPart/TownshipByCityIdResponse.dart';
 import '../../data/responsemodel/common/ProductListItemResponse.dart';
+import '../../data/responsemodel/common/WardResponse.dart';
 import '../../dataRequestModel/DeliveryPart/AddOrderRequestModel.dart';
 import '../../dataRequestModel/DeliveryPart/ChangeOrderProductQty.dart';
 import '../../dataRequestModel/DeliveryPart/ChooseProductForOrderRequestModel.dart';
@@ -40,10 +42,14 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
   double? salePrice = 0.0;
   int? productQuality = 0;
   String? select_township;
+  String? select_ward;
   List<String> companyName = [];
   String? select_city;
+  String? select_street;
   late String city_id;
   late String township_id;
+  String? ward_id;
+  late String street_id;
   String waitingTime = '';
   double basicCost = 0;
   List<int>? companyId = [];
@@ -53,6 +59,8 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
 
   List<CityByCountryIdData> cities = [];
   List<TownshipByCityIdData> townships = [];
+  List<Ward> wards = [];
+  List<Street> streets = [];
 
   final TextEditingController firstname = TextEditingController();
   final TextEditingController lastname = TextEditingController();
@@ -116,7 +124,6 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
   void changeOrderQty(ChangeOrderProductQtyRequest orderProductRequest) async {
     try {
       final response = await ApiService().changeOrderQty(orderProductRequest);
-
       setState(() {
         productQuality = response.availableQuantity;
         totalQty = response.total;
@@ -166,6 +173,26 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
         hasTownshipForSelectedCity = false;
       });
     }
+  }
+
+  void fetchWardByTownshipId(int id) async {
+    final response = await ApiHelper.fetchWardByTownshipId(id);
+    setState(() {
+      wards = response;
+      if (response.isNotEmpty) {
+        ward_id = null; // Reset ward_id to default 'Select Ward'
+      }
+    });
+  }
+
+  void fetchStreetByWardId(int id) async {
+    final response = await ApiHelper.fetchStreetByWardId(id);
+    setState(() {
+      streets = response;
+      if (response.isNotEmpty) {
+        street_id = 'Select Street'; // Reset street_id to default 'Select City'
+      }
+    });
   }
 
   void fetchDeliCompanyNameByTownshipId(int id) async {
@@ -287,12 +314,9 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
               SizedBox(
                 width: double.infinity,
                 child: chooseItemIdForm(DropdownButton(
+                  hint:const Text("Select Country"),
                   value: select_country,
                   items: [
-                    const DropdownMenuItem(
-                      value: null, // Set initial value to null
-                      child: Text('Select Country Name'),
-                    ),
                     ...countries.map((country) {
                       return DropdownMenuItem<String>(
                         value: country.id.toString(),
@@ -330,12 +354,9 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
               SizedBox(
                 width: double.infinity,
                 child: chooseItemIdForm(DropdownButton(
+                  hint: const Text("Select City Name"),
                   value: hasCitiesForSelectedCountry ? select_city : null,
                   items: [
-                    const DropdownMenuItem(
-                      value: null, // Set initial value to null
-                      child: Text('Select City Name'),
-                    ),
                     if (hasCitiesForSelectedCountry)
                       ...cities.map((city) {
                         return DropdownMenuItem<String>(
@@ -374,12 +395,9 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
               SizedBox(
                 width: double.infinity,
                 child: chooseItemIdForm(DropdownButton(
+                  hint: const Text("Select Township"),
                   value: hasTownshipForSelectedCity ? select_township : null,
                   items: [
-                    const DropdownMenuItem(
-                      value: null, // Set initial value to null
-                      child: Text('Select Township Name'),
-                    ),
                     if (hasTownshipForSelectedCity)
                       ...townships.map((township) {
                         return DropdownMenuItem<String>(
@@ -393,6 +411,75 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
                       select_township = value;
                       int townshipId = int.parse(value!);
                       fetchDeliCompanyNameByTownshipId(townshipId);
+                      fetchWardByTownshipId(townshipId);
+                    });
+                  },
+                  underline: const SizedBox(),
+                  borderRadius: BorderRadius.circular(10),
+                  icon: const Icon(Icons.arrow_drop_down),
+                  iconSize: 24,
+                  isExpanded: true,
+                  dropdownColor: Colors.white,
+                  style: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 16,
+                  ),
+                )),
+              ),
+              const SizedBox(
+                height: 18,
+              ),
+              SizedBox(
+                width: double.infinity,
+                child: chooseItemIdForm(DropdownButton(
+                  hint: const Text("Select Ward"),
+                  value: select_ward,
+                  items: [
+                    ...wards.map((ward) {
+                      return DropdownMenuItem(
+                        value: ward.id.toString(),
+                        child: Text(ward.ward_name),
+                      );
+                    }).toList(),
+                  ],
+                  onChanged: (value) {
+                    setState(() {
+                      select_ward = value;
+                      int wardId = int.parse(value!);
+                      fetchStreetByWardId(wardId);
+                    });
+                  },
+                  underline: const SizedBox(),
+                  borderRadius: BorderRadius.circular(10),
+                  icon: const Icon(Icons.arrow_drop_down),
+                  iconSize: 24,
+                  isExpanded: true,
+                  dropdownColor: Colors.white,
+                  style: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 16,
+                  ),
+                )),
+              ),
+              const SizedBox(
+                height: 18,
+              ),
+              SizedBox(
+                width: double.infinity,
+                child: chooseItemIdForm(DropdownButton(
+                  hint: const Text("Select Street"),
+                  value: select_street,
+                  items: [
+                    ...streets.map((street) {
+                      return DropdownMenuItem<String>(
+                        value: street.id.toString(),
+                        child: Text(street.street_name),
+                      );
+                    }).toList(),
+                  ],
+                  onChanged: (value) {
+                    setState(() {
+                      select_street = value;
                     });
                   },
                   underline: const SizedBox(),
@@ -522,12 +609,9 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
               SizedBox(
                 width: double.infinity,
                 child: chooseItemIdForm(DropdownButton(
+                  hint: Text("Select Product"),
                   value: select_product,
                   items: [
-                    const DropdownMenuItem(
-                      value: null, // Set initial value to null
-                      child: Text('Select Product Name'),
-                    ),
                     ...products.map((product) {
                       return DropdownMenuItem<String>(
                         value: product.id.toString(),
@@ -780,7 +864,11 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
                                 product_id: product_id,
                                 price: salePrice.toString(),
                                 quantity: quantity.text,
-                                user_id: userId.toString()));
+                                user_id: userId.toString(),
+                                selectedWard: select_ward.toString(),
+                                selectedStreet: '',
+                                block_no: '',
+                                floor: ''));
                       },
                       child: const Text('Place Order Now')))
             ],

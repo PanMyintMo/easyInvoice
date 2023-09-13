@@ -1,12 +1,14 @@
 import 'package:easy_invoice/data/responsemodel/CityPart/Cities.dart';
 
 import '../data/api/apiService.dart';
+import '../data/responsemodel/CityPart/Street.dart';
 import '../data/responsemodel/CityPart/Wards.dart';
 import '../data/responsemodel/CountryPart/CountryResponse.dart';
 import '../data/responsemodel/FaultyItemPart/AllFaultyItems.dart';
 import '../data/responsemodel/GetAllPagnitaionDataResponse.dart';
 import '../data/responsemodel/TownshipsPart/AllTownshipResponse.dart';
 import '../data/responsemodel/common/ProductListItemResponse.dart';
+import '../data/responsemodel/common/WardResponse.dart';
 
 class ApiHelper {
   //By using static , you can call directly apiHelper.fetchCategoryName like that
@@ -87,7 +89,33 @@ class ApiHelper {
     return []; // Return an empty list if the request fails
   }
 
-
+  //fetch ward by township id
+  static Future<List<Ward>> fetchWardByTownshipId(int id) async{
+    try{
+      final response= await ApiService().fetchWardByTownship(id);
+      if(response.isNotEmpty){
+        return response;
+      }
+      print("Ward list are ${response}");
+    }
+    catch(error){
+      print('Error is $error');
+    }
+    return [];
+  }
+  //fetch street by ward id
+  static Future<List<Street>> fetchStreetByWardId(int id) async{
+    try{
+      final response= await ApiService().fetchStreetByWardId(id);
+      if(response.data.isNotEmpty){
+        return response.data;
+      }
+    }
+    catch(error){
+      print('Error is $error');
+    }
+    return [];
+  }
 
   //fetch all product
 

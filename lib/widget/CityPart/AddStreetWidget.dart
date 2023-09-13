@@ -11,6 +11,7 @@ import '../../data/responsemodel/CityPart/FetchCityByCountryId.dart';
 import '../../data/responsemodel/CityPart/Wards.dart';
 import '../../data/responsemodel/CountryPart/CountryResponse.dart';
 import '../../data/responsemodel/TownshipsPart/TownshipByCityIdResponse.dart';
+import '../../data/responsemodel/common/WardResponse.dart';
 class AddStreetWidget extends StatefulWidget {
   final bool isLoading;
   const AddStreetWidget({super.key, required this.isLoading});

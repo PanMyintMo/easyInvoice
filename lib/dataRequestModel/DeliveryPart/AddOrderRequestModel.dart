@@ -8,6 +8,10 @@ class AddOrderRequestModel {
   final String selectedCountry;
   final String selectedCity;
   final String selectedTownship;
+  final String selectedWard;
+  final String selectedStreet;
+  final String block_no;
+  final String floor;
   final String zipcode;
   final String mode;
   final String delivery;
@@ -27,6 +31,10 @@ class AddOrderRequestModel {
       required this.selectedCountry,
       required this.selectedTownship,
       required this.selectedCity,
+      required this.selectedWard,
+      required this.selectedStreet,
+      required this.block_no,
+      required this.floor,
       required this.zipcode,
       required this.mode,
       required this.delivery,

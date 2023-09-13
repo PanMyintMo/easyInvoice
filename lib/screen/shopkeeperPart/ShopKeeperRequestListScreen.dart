@@ -19,22 +19,7 @@ class _ShopKeeperRequestListScreenState
     extends State<ShopKeeperRequestListScreen> {
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider<ShopKeeperRequestCubit>(
-          create: (context) {
-            final cubit = ShopKeeperRequestCubit(getIt
-                .call()); // Use getIt<ApiService>() to get the ApiService instance
-            cubit.shopkeeperRequestList();
-            return cubit;
-          },
-        ),
-        BlocProvider<TownshipDeleteCubit>(
-          create: (context) => TownshipDeleteCubit(getIt
-              .call()), // Use getIt<ApiService>() to get the ApiService instance
-        ),
-      ],
-      child: Scaffold(
+    return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
           elevation: 0.0,
@@ -50,52 +35,74 @@ class _ShopKeeperRequestListScreenState
                 fontSize: 16),
           ),
         ),
-        body: BlocConsumer<ShopKeeperRequestCubit, ShopKeeperRequestState>(
-          listener: (context, state) {
-            if (state is ShopKeeperRequestFail) {
-              showToastMessage('Error: ${state.error}');
-            }
-          },
+        body: MultiBlocProvider(providers: [
+          BlocProvider<ShopKeeperRequestCubit>(
+            create: (context) {
+              final cubit = ShopKeeperRequestCubit(getIt
+                  .call()); // Use getIt<ApiService>() to get the ApiService instance
+              cubit.shopkeeperRequestList();
+              return cubit;
+            },
+          ),
+          BlocProvider<TownshipDeleteCubit>(
+            create: (context) => TownshipDeleteCubit(getIt
+                .call()), // Use getIt<ApiService>() to get the ApiService instance
+          ),
+        ], child: const RequestProductScreen()));
+  }
+}
+
+class RequestProductScreen extends StatefulWidget {
+  const RequestProductScreen({super.key});
+
+  @override
+  State<RequestProductScreen> createState() => _RequestProductScreenState();
+}
+
+class _RequestProductScreenState extends State<RequestProductScreen> {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        BlocBuilder<ShopKeeperRequestCubit, ShopKeeperRequestState>(
           builder: (context, state) {
             if (state is ShopKeeperRequestLoading) {
               return const Center(child: CircularProgressIndicator());
             } else if (state is ShopKeeperRequestSuccess) {
+              final shopData = state.shopRequestData;
+
+              if (shopData.isEmpty) {
+                return const Center(
+                  child: Text("No Data found."),
+                );
+              }
+
               return BlocConsumer<TownshipDeleteCubit, TownshipDeleteState>(
-                listener: (context, deleteState) {
-                  if (deleteState is DeleteTownshipLoading) {
-                  } else if (deleteState is DeleteTownshipSuccess) {
-                    showToastMessage(
-                        deleteState.deleteTownshipResponse.message);
-                    WidgetsBinding.instance.addPostFrameCallback((_) {
-                      context
-                          .read<ShopKeeperRequestCubit>()
-                          .shopkeeperRequestList();
-                    });
-                  } else if (deleteState is DeleteTownshipFail) {
-                    showToastMessage(deleteState.error);
-                  }
-                },
                 builder: (context, deleteState) {
-                  final bool loading = deleteState is DeleteTownshipLoading;
+                  bool loading = deleteState is DeleteTownshipLoading;
+
                   return ShopKeeperRequestListWidget(
                     isLoading: loading,
                     shopData: state.shopRequestData,
                   );
                 },
+                listener: (context, deleteState) {
+                  if (deleteState is DeleteTownshipSuccess) {
+                    showToastMessage('Deleted City successful.');
+                    BlocProvider.of<ShopKeeperRequestCubit>(context)
+                        .shopkeeperRequestList();
+                  } else if (deleteState is DeleteTownshipFail) {
+                    showToastMessage(
+                        'Failed to delete city: ${deleteState.error}');
+                  }
+                },
               );
-            } else if (state is ShopKeeperRequestFail) {
-              const ShopKeeperRequestListWidget(
-                isLoading: false,
-                shopData: [],
-              );
-              return Center(child: Text('Error: ${state.error}'));
+            } else {
+              return const SizedBox(); // Handle other states if needed
             }
-
-            return const ShopKeeperRequestListWidget(
-                isLoading: false, shopData: []);
           },
         ),
-      ),
+      ],
     );
   }
 }

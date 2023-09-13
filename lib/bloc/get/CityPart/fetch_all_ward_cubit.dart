@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
 import '../../../data/responsemodel/CityPart/Wards.dart';
+import '../../../data/responsemodel/common/WardResponse.dart';
 import '../../../data/userRepository/UserRepository.dart';
 
 part 'fetch_all_ward_state.dart';

@@ -36,6 +36,7 @@ import '../responsemodel/CityPart/AddStreetResponse.dart';
 import '../responsemodel/CityPart/AddWardResponse.dart';
 import '../responsemodel/CityPart/Cities.dart';
 import '../responsemodel/CityPart/Street.dart';
+import '../responsemodel/CityPart/WardByTownshipResponse.dart';
 import '../responsemodel/CityPart/Wards.dart';
 import '../responsemodel/DeliveryPart/FetchAllDeliveries.dart';
 import '../responsemodel/DeliveryPart/FetchAllOrderByDate.dart';
@@ -68,6 +69,7 @@ import '../responsemodel/common/UpdateResponse.dart';
 import '../responsemodel/UserRoleResponse.dart';
 import '../responsemodel/WarehousePart/WarehouseResponse.dart';
 import '../responsemodel/common/ProductListItemResponse.dart';
+import '../responsemodel/common/WardResponse.dart';
 
 class UserRepository {
   final ApiService _apiService;
@@ -674,6 +676,17 @@ class UserRepository {
     }
   }
 
+
+  // fetch ward by township id
+
+  // Future<List<Ward>> fetchWardByTownship(int id) async {
+  //   try {
+  //     final response = await _apiService.fetchWardByTownship(id);
+  //     return response;
+  //   } catch (error) {
+  //     rethrow;
+  //   }
+  // }
 
   // add ward
   Future<AddWardResponse> addWard(AddWardRequestModel addWardRequestModel) async {

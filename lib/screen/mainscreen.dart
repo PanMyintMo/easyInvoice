@@ -33,64 +33,7 @@ class _MainPageState extends State<MainPageScreen> {
     "lastmonth"
   ];
 
-/*
-  final List<DataColumn> defaultColumns = const [
-    DataColumn(
-      label: Text(
-        'Order ID',
-        style: TextStyle(fontSize: 16, color: Colors.white),
-      ),
-    ),
-    DataColumn(
-      label: Text(
-        'Customer Name',
-        style: TextStyle(fontSize: 16, color: Colors.white),
-      ),
-    ),
-    DataColumn(
-      label: Text(
-        'Item Name',
-        style: TextStyle(fontSize: 16, color: Colors.white),
-      ),
-    ),
-    DataColumn(
-      label: Text(
-        'QUANTITY',
-        style: TextStyle(fontSize: 16, color: Colors.white),
-      ),
-    ),
-    DataColumn(
-      label: Text(
-        'Total',
-        style: TextStyle(fontSize: 16, color: Colors.white),
-      ),
-    ),
-    DataColumn(
-      label: Text(
-        'SUBTOTAL	',
-        style: TextStyle(fontSize: 16, color: Colors.white),
-      ),
-    ),
-    DataColumn(
-      label: Text(
-        'MOBILE',
-        style: TextStyle(fontSize: 16, color: Colors.white),
-      ),
-    ),
-    DataColumn(
-      label: Text(
-        'STATUS',
-        style: TextStyle(fontSize: 16, color: Colors.white),
-      ),
-    ),
-    DataColumn(
-      label: Text(
-        'ORDER DATE',
-        style: TextStyle(fontSize: 16, color: Colors.white),
-      ),
-    ),
-  ];
-*/
+
 
   @override
   void initState() {
@@ -156,29 +99,6 @@ class _MainPageState extends State<MainPageScreen> {
     if (dropDownValue == 'All Orders') {
     mainPageResponse = state.selectedResponse;
 
-/*
-    return SingleChildScrollView(
-    scrollDirection: Axis.vertical,
-    child: SingleChildScrollView(
-    scrollDirection: Axis.horizontal,
-    child:DataTable(
-      columns: defaultColumns,
-      rows: mainPageResponse?.data.map((item) {
-        return DataRow(
-          cells: [
-            DataCell(Text(item.id.toString())),
-            DataCell(Text(item.firstname)),
-            DataCell(Text(item.lastname)),
-            DataCell(Text(item.)),
-            DataCell(Text(item.status)),
-          ],
-        );
-      }).toList() ?? [], // Ensure you handle the case when mainPageResponse.data is null
-    )
-
-    ),
-    ) ;
-*/
 
 
     } else if (dropDownValue == 'Daily Orders') {

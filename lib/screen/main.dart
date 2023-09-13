@@ -9,7 +9,6 @@ import 'Login&Register/Login.dart';
 import 'Login&Register/Register.dart';
 import 'mainscreen.dart';
 
-
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   locator();
