@@ -41,22 +41,4 @@ class AddProductRequestModel{
   }
 
 
-
-
-//   Map<String,dynamic> toJson() {
-//     return {
-//       'name' : name,
-//       'slug' : slug,
-//       "short_description" : short_description,
-//       "description" : description,
-//       "regular_price" : regular_price,
-//       "sale_price" : sale_price,
-//       "buying_price" : buying_price,
-//       "SKU" : SKU,
-//       "quantity" : quantity,
-//       "newimage" : newimage,
-//       "category_id" : category_id,
-//       "size_id" : size_id
-//     };
-// }
 }

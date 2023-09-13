@@ -1923,7 +1923,7 @@ class ApiService {
     try {
       final Response response = await _dio.post(
         'https://mmeasyinvoice.com/api/add-user',
-        data: userRequestModel.toJson(),
+        data: userRequestModel.toFormData(),
       );
       if (response.statusCode == 200) {
         final UserResponse data = UserResponse.fromJson(response.data);

@@ -1,9 +1,13 @@
+import 'dart:io';
+
+import 'package:dio/dio.dart';
+
 class UserRequestModel {
   String name;
   String email;
   String password;
   String utpye;
-  String newimage;
+  File? newimage;
 
   UserRequestModel(
       {required this.name,
@@ -12,13 +16,14 @@ class UserRequestModel {
       required this.utpye,
       required this.newimage});
 
-  Map<String, dynamic> toJson() {
-    return {
-      'name': name,
-      'email': email,
-      'password': password,
-      'utype': utpye,
-      'newimage': newimage
+  FormData toFormData()  {
+    var map = {
+      'name' : name,
+      'email' : email,
+      'password' : password,
+      'utype' : utpye,
+      'newimage' : [MultipartFile.fromFileSync(newimage!.path,filename: newimage?.path.split('/').last)],
     };
+    return FormData.fromMap(map);
   }
 }

@@ -204,9 +204,7 @@ class _UserWidgetState extends State<UserWidget> {
                                       email: email.text,
                                       password: password.text,
                                       utpye: selectedUserRole!,
-                                      newimage: image != null
-                                          ? image!.path
-                                          : 'assets/userprofile.png',
+                                      newimage : image
                                     ),
                                   )
                                       .then((result) {
