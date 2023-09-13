@@ -88,7 +88,7 @@ class _EditProductItemScreenState extends State<EditProductItemScreen> {
         widget.newimage,
         width: 200,
         height: 200,
-        fit: BoxFit.cover,
+        fit: BoxFit.scaleDown,
       );
     }
     else{

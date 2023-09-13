@@ -90,7 +90,7 @@ class _ProductInvoiceWidgetState extends State<ProductInvoiceWidget> {
             final updatedItem = widget.invoiceData[updatedItemIndex];
             updatedItem.quantity = int.parse(request.quantity);
             updatedItem.total =
-                (double.parse(updatedItem.salePrice) * updatedItem.quantity)
+                (double.parse(updatedItem.sale_price) * updatedItem.quantity)
                     .toInt();
             widget.invoiceData[updatedItemIndex] = updatedItem;
           }
@@ -186,7 +186,7 @@ class _ProductInvoiceWidgetState extends State<ProductInvoiceWidget> {
                   rows: widget.invoiceData.map((item) {
                     return DataRow(
                       cells: [
-                        DataCell(Text(item.productName)),
+                        DataCell(Text(item.product_name)),
                         DataCell(
                           Container(
                             alignment: Alignment.topCenter,
@@ -231,7 +231,7 @@ class _ProductInvoiceWidgetState extends State<ProductInvoiceWidget> {
                             ),
                           ),
                         ),
-                        DataCell(Text(item.salePrice)),
+                        DataCell(Text(item.sale_price)),
                         DataCell(
                           Text(
                             item.total.toString(),

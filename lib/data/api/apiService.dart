@@ -448,7 +448,7 @@ class ApiService {
     }
   }
 
-  // product invoice
+  // product invoice for barcode scan
   Future<ProductInvoiceResponse> productInvoice(
       ProductInvoiceRequest productInvoiceRequest) async {
     try {
@@ -471,7 +471,7 @@ class ApiService {
       }
     } catch (error) {
       throw DioError(
-        requestOptions: RequestOptions(path: '/api/add-order'),
+        requestOptions: RequestOptions(path: '/api/barcodescan'),
         error: error,
       );
     }

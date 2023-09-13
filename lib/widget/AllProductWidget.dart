@@ -48,7 +48,7 @@ class _AllProductWidgetState extends State<AllProductWidget> {
       itemBuilder: (BuildContext context, int index) {
         final product = widget.products[index];
         return Card(
-          color: Colors.white70,
+          color: Colors.white,
           elevation: 3,
           margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
           child: InkWell(
@@ -74,6 +74,7 @@ class _AllProductWidgetState extends State<AllProductWidget> {
                     product.url!,
                     width: 100.0,
                     height: 100.0,
+                    fit: BoxFit.scaleDown,
                   )
                       : Icon(
                     Icons.production_quantity_limits_outlined,

@@ -39,26 +39,26 @@ class _ProductInvoiceScreenState extends State<ProductInvoiceScreen> {
         ),
         body: BlocConsumer<ProductInvoiceCubit, ProductInvoiceState>(
             listener: (context, state) {
-          // if (state is ProductInvoiceSuccess) {
-          //   setState(() {
-          //     invoiceData = state.productInvoiceResponse;
-          //   });
-          // } else if (state is ProductInvoiceFail) {
 
-              if (state is ProductInvoiceFail) {
+          if (state is ProductInvoiceFail) {
             showToastMessage(state.error);
           }
         }, builder: (context, state) {
           if (state is ProductInvoiceLoading) {
-            return const ProductInvoiceWidget(isLoading: true, invoiceData: []);
-          }
-          else if(state is ProductInvoiceSuccess){
+            return const CircularProgressIndicator();
+          } else if (state is ProductInvoiceSuccess) {
+            final invoice = state.productInvoiceResponse;
+            if (invoice.isEmpty) {
+              return const Center(
+                child: Text("Out of stock."),
+              );
+            }
+
             return ProductInvoiceWidget(
               isLoading: false,
               invoiceData: state.productInvoiceResponse,
             );
-          }
-          else {
+          } else {
             return const ProductInvoiceWidget(
               isLoading: false,
               invoiceData: [],

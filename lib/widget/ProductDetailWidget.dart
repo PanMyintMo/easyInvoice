@@ -228,7 +228,8 @@ class ProductDetailWidget extends StatelessWidget {
                     ? Image.network(
                         products.url!,
                         width: MediaQuery.of(context).size.width,
-                        height: 100.0,
+                        height: 150.0,
+                  fit: BoxFit.scaleDown,
                       )
                     : const SizedBox(
                         height: 150,
