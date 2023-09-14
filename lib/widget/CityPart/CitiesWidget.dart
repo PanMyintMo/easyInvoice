@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../bloc/delete/CityPart/delete_city_cubit.dart';
+import '../../bloc/get/CityPart/fetch_all_city_cubit.dart';
 import '../../common/showDeleteConfirmationDialog.dart';
 import '../../data/responsemodel/CityPart/Cities.dart';
 import '../../screen/LocationPart/EditCityScreen.dart';
@@ -53,10 +54,16 @@ class CityData extends DataTableSource {
         children: [
           IconButton(
             icon: const Icon(Icons.edit,color: Colors.green,),
-            onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) =>
+            onPressed: () async{
+             final result=await Navigator.push(context, MaterialPageRoute(builder: (context) =>
                    EditCityScreen(country_id: city.countryId.toString(),name: city.name,id: city.id,)));
-            },
+
+             if (result == true) {
+               BlocProvider.of<FetchAllCityCubit>(context).fetchAllCity();
+             }
+
+
+             },
           ),
           IconButton(
             icon: const Icon(Icons.delete,color: Colors.red,),

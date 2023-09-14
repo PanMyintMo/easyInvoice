@@ -40,9 +40,9 @@ import '../bloc/delete/FaultyPart/delete_faulty_item_cubit.dart';
 import '../bloc/delete/delete_product_item_cubit.dart';
 import '../bloc/delete/delete_user_role_cubit.dart';
 import '../bloc/edit/CityPart/edit_city_cubit.dart';
+import '../bloc/edit/CityPart/edit_ward_cubit.dart';
 import '../bloc/edit/TownshipPart/edit_township_cubit.dart';
 import '../bloc/get/CityPart/fetch_all_ward_cubit.dart';
-import '../bloc/get/CityPart/fetch_ward_by_township_cubit.dart';
 import '../bloc/get/CompanyProfile/company_profile_cubit.dart';
 import '../bloc/get/DeliveryManPart/fetch_all_delivery_cubit.dart';
 import '../bloc/get/DeliveryManPart/fetch_all_warehouse_request_cubit.dart';
@@ -77,14 +77,14 @@ void locator() {
   getIt.registerLazySingleton(() => signupCubit);
 
   //for edit company profile
-  EditCompanyProfileCubit editCompanyProfileCubit = EditCompanyProfileCubit(getIt.get<UserRepository>());
+  EditCompanyProfileCubit editCompanyProfileCubit =
+      EditCompanyProfileCubit(getIt.get<UserRepository>());
   getIt.registerLazySingleton(() => editCompanyProfileCubit);
 
-
   //for company profile
-  CompanyProfileCubit companyProfileCubit = CompanyProfileCubit(getIt.get<UserRepository>());
+  CompanyProfileCubit companyProfileCubit =
+      CompanyProfileCubit(getIt.get<UserRepository>());
   getIt.registerLazySingleton(() => companyProfileCubit);
-
 
   //to add category to db
   AddCategoryCubit addCategoryCubit =
@@ -103,7 +103,7 @@ void locator() {
 
   //to add request faulty item
   AddRequestFaultyItemCubit addRequestFaultyItemCubit =
-  AddRequestFaultyItemCubit(getIt.get<UserRepository>());
+      AddRequestFaultyItemCubit(getIt.get<UserRepository>());
   getIt.registerLazySingleton(() => addRequestFaultyItemCubit);
 
   //to add product to shopkeeper request
@@ -118,36 +118,32 @@ void locator() {
 
   //fetch all order by date
   FetchOrderByDateCubit fetchOrderByDateCubit =
-  FetchOrderByDateCubit(getIt.get<UserRepository>());
+      FetchOrderByDateCubit(getIt.get<UserRepository>());
   getIt.registerLazySingleton(() => fetchOrderByDateCubit);
-
 
   //Delivered Warehouse Request
   DeliverWarehouseRequestCubit deliveryWarehouseRequestCubit =
-  DeliverWarehouseRequestCubit(getIt.get<UserRepository>());
+      DeliverWarehouseRequestCubit(getIt.get<UserRepository>());
   getIt.registerLazySingleton(() => deliveryWarehouseRequestCubit);
 
   //fetch all faulty items
   FetchAllFaultyItemCubit fetchAllFaultyItemCubit =
-  FetchAllFaultyItemCubit(getIt.get<UserRepository>());
+      FetchAllFaultyItemCubit(getIt.get<UserRepository>());
   getIt.registerLazySingleton(() => fetchAllFaultyItemCubit);
-
 
   //fetch all delivery
   FetchAllDeliveryCubit fetchAllDeliveryCubit =
-  FetchAllDeliveryCubit(getIt.get<UserRepository>());
+      FetchAllDeliveryCubit(getIt.get<UserRepository>());
   getIt.registerLazySingleton(() => fetchAllDeliveryCubit);
-
 
   //fetch all warehouse request for deliver man
   FetchAllWarehouseRequestCubit fetchAllWarehouseRequestCubit =
-  FetchAllWarehouseRequestCubit(getIt.get<UserRepository>());
+      FetchAllWarehouseRequestCubit(getIt.get<UserRepository>());
   getIt.registerLazySingleton(() => fetchAllWarehouseRequestCubit);
-
 
   //update shopkeeper
   UpdateShopKeeperCubit updateShopKeeperCubit =
-  UpdateShopKeeperCubit(getIt.get<UserRepository>());
+      UpdateShopKeeperCubit(getIt.get<UserRepository>());
   getIt.registerLazySingleton(() => updateShopKeeperCubit);
 
   //fetch all city
@@ -157,17 +153,17 @@ void locator() {
 
   //fetch all township
   FetchAllTownshipCubit fetchAllTownshipCubit =
-  FetchAllTownshipCubit(getIt.get<UserRepository>());
+      FetchAllTownshipCubit(getIt.get<UserRepository>());
   getIt.registerLazySingleton(() => fetchAllTownshipCubit);
 
   //fetch all ward
   FetchAllWardCubit fetchAllWardCubit =
-  FetchAllWardCubit(getIt.get<UserRepository>());
+      FetchAllWardCubit(getIt.get<UserRepository>());
   getIt.registerLazySingleton(() => fetchAllWardCubit);
 
   //fetch all street
   FetchAllStreetCubit fetchAllStreetCubit =
-  FetchAllStreetCubit(getIt.get<UserRepository>());
+      FetchAllStreetCubit(getIt.get<UserRepository>());
   getIt.registerLazySingleton(() => fetchAllStreetCubit);
   //fetch all country
   RequestCountryCubit requestCountryCubit =
@@ -179,14 +175,14 @@ void locator() {
   getIt.registerLazySingleton(() => addCityCubit);
 
   //add all township
-  AddTownshipCubit addTownshipCubit = AddTownshipCubit(getIt.get<UserRepository>());
+  AddTownshipCubit addTownshipCubit =
+      AddTownshipCubit(getIt.get<UserRepository>());
   getIt.registerLazySingleton(() => addTownshipCubit);
 
   //get all product
   GetAllProductCubit getAllProductCubit =
       GetAllProductCubit(getIt.get<UserRepository>());
   getIt.registerLazySingleton(() => getAllProductCubit);
-
 
   //get all size
   GetAllSizeCubit getAllSizeCubit =
@@ -202,7 +198,8 @@ void locator() {
   getIt.registerLazySingleton(() => deleteCountryCubit);
 
   //to delete faulty item
-  DeleteFaultyItemCubit deleteFaultyItemCubit = DeleteFaultyItemCubit(getIt.call());
+  DeleteFaultyItemCubit deleteFaultyItemCubit =
+      DeleteFaultyItemCubit(getIt.call());
   getIt.registerLazySingleton(() => deleteFaultyItemCubit);
 
   //to delete delivery
@@ -222,9 +219,9 @@ void locator() {
   getIt.registerLazySingleton(() => deleteStreetCubit);
 
   //to delete shopkeeper request product
-  DeleteShopKeeperProductRequestCubit deleteShopKeeperProductRequestCubit = DeleteShopKeeperProductRequestCubit(getIt.call());
+  DeleteShopKeeperProductRequestCubit deleteShopKeeperProductRequestCubit =
+      DeleteShopKeeperProductRequestCubit(getIt.call());
   getIt.registerLazySingleton(() => deleteShopKeeperProductRequestCubit);
-
 
   //to delete product item
   DeleteProductItemCubit productDeleteCubit =
@@ -247,11 +244,9 @@ void locator() {
   EditCityCubit editCityCubit = EditCityCubit(getIt.call());
   getIt.registerLazySingleton(() => editCityCubit);
 
-
   //to update faulty
   UpdateFaultyCubit editCubit = UpdateFaultyCubit(getIt.call());
   getIt.registerLazySingleton(() => editCubit);
-
 
   //to update township by id
   EditTownshipCubit editTownshipCubit = EditTownshipCubit(getIt.call());
@@ -264,26 +259,30 @@ void locator() {
 
   //to fetch shop all product list item
   ShopProductListCubit shopProductListCubit =
-  ShopProductListCubit(getIt.call());
+      ShopProductListCubit(getIt.call());
   getIt.registerLazySingleton(() => shopProductListCubit);
 
   //fetch warehouse product list
   WarehouseProductListCubit warehouseProductListCubit =
-  WarehouseProductListCubit(getIt.call());
+      WarehouseProductListCubit(getIt.call());
   getIt.registerLazySingleton(() => warehouseProductListCubit);
 
   //to update size
   EditSizeCubit editSizeCubit = EditSizeCubit(getIt.call());
   getIt.registerLazySingleton(() => editSizeCubit);
 
+//to update ward
+  EditWardCubit editWardCubit = EditWardCubit(getIt.call());
+  getIt.registerLazySingleton(() => editWardCubit);
 
   //shopkeeper request list
-  ShopKeeperRequestCubit shopKeeperRequestCubit = ShopKeeperRequestCubit(getIt.call());
+  ShopKeeperRequestCubit shopKeeperRequestCubit =
+      ShopKeeperRequestCubit(getIt.call());
   getIt.registerLazySingleton(() => shopKeeperRequestCubit);
 
   //fetch order filter by date
   OrderFilterByDateCubit orderFilterByDate =
-  OrderFilterByDateCubit(getIt.call());
+      OrderFilterByDateCubit(getIt.call());
   getIt.registerLazySingleton(() => orderFilterByDate);
 
   //add size to db
@@ -294,23 +293,19 @@ void locator() {
       AddUserRoleCubit(getIt.get<UserRepository>());
   getIt.registerLazySingleton(() => addUserRoleCubit);
 
-
   //to add order
-  AddOrderCubit addOrderCubit =
-  AddOrderCubit(getIt.get<UserRepository>());
+  AddOrderCubit addOrderCubit = AddOrderCubit(getIt.get<UserRepository>());
   getIt.registerLazySingleton(() => addOrderCubit);
 
   //product invoice
   ProductInvoiceCubit productInvoice =
-  ProductInvoiceCubit(getIt.get<UserRepository>());
+      ProductInvoiceCubit(getIt.get<UserRepository>());
   getIt.registerLazySingleton(() => productInvoice);
-
 
   //to get all user role
   GetAllUserRoleCubit getAllUserRoleCubit =
       GetAllUserRoleCubit(getIt.get<UserRepository>());
   getIt.registerLazySingleton(() => getAllUserRoleCubit);
-
 
   // //to get all ward by township id
   // FetchWardByTownshipCubit fetchWardByTownshipCubit =
@@ -323,8 +318,7 @@ void locator() {
   getIt.registerLazySingleton(() => editUserRoleCubit);
 
   //to add street
-  AddStreetCubit addStreetCubit =
-  AddStreetCubit(getIt.get<UserRepository>());
+  AddStreetCubit addStreetCubit = AddStreetCubit(getIt.get<UserRepository>());
   getIt.registerLazySingleton(() => addStreetCubit);
 
   //to delete user role

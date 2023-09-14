@@ -229,669 +229,693 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
   @override
   Widget build(BuildContext context) {
     final _formKey = GlobalKey<FormState>();
-    return SingleChildScrollView(
-      child: Form(
-        key: _formKey,
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Align(
-                  alignment: Alignment.topRight,
-                  child: TextButton(
-                      onPressed: () {},
-                      child: const Text(
-                        'All Order',
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold),
-                      ))),
-              const SizedBox(height: 18.0),
-              const Text(
-                'Billing Address',
-                style: TextStyle(fontSize: 18, color: Colors.pink),
-              ),
-              const SizedBox(height: 18.0),
-              Row(
-                children: [
-                  buildProductContainerForm('First Name', TextInputType.name,
-                      firstname, validateField),
-                  const SizedBox(width: 10.0),
-                  buildProductContainerForm(
-                    'Last Name',
-                    TextInputType.name,
-                    lastname,
-                    validateField,
-                  ),
-                ],
-              ),
-              const SizedBox(height: 18.0),
-              SizedBox(
-                width: double.infinity,
-                child: buildProductContainerForm(
-                  'Phone no',
-                  TextInputType.phone,
-                  mobile,
-                  validateField,
-                ),
-              ),
-              const SizedBox(height: 18.0),
-              SizedBox(
-                width: double.infinity,
-                child: buildProductContainerForm(
-                  'Email',
-                  TextInputType.emailAddress,
-                  email,
-                  validateField,
-                ),
-              ),
-              const SizedBox(
-                height: 18,
-              ),
-              Row(
-                children: [
-                  buildProductContainerForm(
-                    'Line 1',
-                    TextInputType.phone,
-                    line1,
-                    validateField,
-                  ),
-                  const SizedBox(width: 10.0),
-                  buildProductContainerForm(
-                    'Line 2',
-                    TextInputType.phone,
-                    line2,
-                    validateField,
-                  ),
-                ],
-              ),
-              const SizedBox(
-                height: 18,
-              ),
-              const Text(
-                "Country",
-                style: TextStyle(fontSize: 18, color: Colors.pink),
-              ),
-              const SizedBox(
-                height: 18,
-              ),
-              SizedBox(
-                width: double.infinity,
-                child: chooseItemIdForm(DropdownButton(
-                  hint:const Text("Select Country"),
-                  value: select_country,
-                  items: [
-                    ...countries.map((country) {
-                      return DropdownMenuItem<String>(
-                        value: country.id.toString(),
-                        child: Text(country.name),
-                      );
-                    }).toList(),
-                  ],
-                  onChanged: (value) {
-                    setState(() {
-                      select_country = value;
-                      int countryId = int.parse(value!);
-                      fetchCitiesByCountryId(countryId);
-                    });
-                  },
-                  underline: const SizedBox(),
-                  borderRadius: BorderRadius.circular(10),
-                  icon: const Icon(Icons.arrow_drop_down),
-                  iconSize: 24,
-                  isExpanded: true,
-                  dropdownColor: Colors.white,
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 16,
-                  ),
-                )),
-              ),
-              const SizedBox(
-                height: 18,
-              ),
-              const Text("City",
-                  style: TextStyle(fontSize: 18, color: Colors.pink)),
-              const SizedBox(
-                height: 18,
-              ),
-              SizedBox(
-                width: double.infinity,
-                child: chooseItemIdForm(DropdownButton(
-                  hint: const Text("Select City Name"),
-                  value: hasCitiesForSelectedCountry ? select_city : null,
-                  items: [
-                    if (hasCitiesForSelectedCountry)
-                      ...cities.map((city) {
-                        return DropdownMenuItem<String>(
-                          value: city.id.toString(),
-                          child: Text(city.name),
-                        );
-                      }).toList(),
-                  ],
-                  onChanged: (value) {
-                    setState(() {
-                      select_city = value;
-                      int cityId = int.parse(value!);
-                      fetchTownshipByCityId(cityId);
-                    });
-                  },
-                  underline: const SizedBox(),
-                  borderRadius: BorderRadius.circular(10),
-                  icon: const Icon(Icons.arrow_drop_down),
-                  iconSize: 24,
-                  isExpanded: true,
-                  dropdownColor: Colors.white,
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 16,
-                  ),
-                )),
-              ),
-              const SizedBox(
-                height: 18,
-              ),
-              const Text("Township",
-                  style: TextStyle(fontSize: 18, color: Colors.pink)),
-              const SizedBox(
-                height: 18,
-              ),
-              SizedBox(
-                width: double.infinity,
-                child: chooseItemIdForm(DropdownButton(
-                  hint: const Text("Select Township"),
-                  value: hasTownshipForSelectedCity ? select_township : null,
-                  items: [
-                    if (hasTownshipForSelectedCity)
-                      ...townships.map((township) {
-                        return DropdownMenuItem<String>(
-                          value: township.id.toString(),
-                          child: Text(township.name),
-                        );
-                      }).toList(),
-                  ],
-                  onChanged: (value) {
-                    setState(() {
-                      select_township = value;
-                      int townshipId = int.parse(value!);
-                      fetchDeliCompanyNameByTownshipId(townshipId);
-                      fetchWardByTownshipId(townshipId);
-                    });
-                  },
-                  underline: const SizedBox(),
-                  borderRadius: BorderRadius.circular(10),
-                  icon: const Icon(Icons.arrow_drop_down),
-                  iconSize: 24,
-                  isExpanded: true,
-                  dropdownColor: Colors.white,
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 16,
-                  ),
-                )),
-              ),
-              const SizedBox(
-                height: 18,
-              ),
-              SizedBox(
-                width: double.infinity,
-                child: chooseItemIdForm(DropdownButton(
-                  hint: const Text("Select Ward"),
-                  value: select_ward,
-                  items: [
-                    ...wards.map((ward) {
-                      return DropdownMenuItem(
-                        value: ward.id.toString(),
-                        child: Text(ward.ward_name),
-                      );
-                    }).toList(),
-                  ],
-                  onChanged: (value) {
-                    setState(() {
-                      select_ward = value;
-                      int wardId = int.parse(value!);
-                      fetchStreetByWardId(wardId);
-                    });
-                  },
-                  underline: const SizedBox(),
-                  borderRadius: BorderRadius.circular(10),
-                  icon: const Icon(Icons.arrow_drop_down),
-                  iconSize: 24,
-                  isExpanded: true,
-                  dropdownColor: Colors.white,
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 16,
-                  ),
-                )),
-              ),
-              const SizedBox(
-                height: 18,
-              ),
-              SizedBox(
-                width: double.infinity,
-                child: chooseItemIdForm(DropdownButton(
-                  hint: const Text("Select Street"),
-                  value: select_street,
-                  items: [
-                    ...streets.map((street) {
-                      return DropdownMenuItem<String>(
-                        value: street.id.toString(),
-                        child: Text(street.street_name),
-                      );
-                    }).toList(),
-                  ],
-                  onChanged: (value) {
-                    setState(() {
-                      select_street = value;
-                    });
-                  },
-                  underline: const SizedBox(),
-                  borderRadius: BorderRadius.circular(10),
-                  icon: const Icon(Icons.arrow_drop_down),
-                  iconSize: 24,
-                  isExpanded: true,
-                  dropdownColor: Colors.white,
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 16,
-                  ),
-                )),
-              ),
-              const SizedBox(
-                height: 18,
-              ),
-              SizedBox(
-                width: double.infinity,
-                child: buildProductContainerForm(
-                  'Bock Number',
-                  TextInputType.number,
-                  block_no,
-                  validateField,
-                ),
-              ),
-              const SizedBox(
-                height: 18,
-              ),
-              SizedBox(
-                width: double.infinity,
-                child: buildProductContainerForm(
-                  'Floor',
-                  TextInputType.number,
-                  floor,
-                  validateField,
-                ),
-              ),
-              const SizedBox(
-                height: 18,
-              ),
-              Column(
+    return Stack(
+      children: [
+        SingleChildScrollView(
+          child: Form(
+            key: _formKey,
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Align(
+                      alignment: Alignment.topRight,
+                      child: TextButton(
+                          onPressed: () {},
+                          child: const Text(
+                            'All Order',
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold),
+                          ))),
+                  const SizedBox(height: 18.0),
                   const Text(
-                    'Choose Delivery service :',
-                    style: TextStyle(color: Colors.pink, fontSize: 18),
+                    'Billing Address',
+                    style: TextStyle(fontSize: 18, color: Colors.pink),
+                  ),
+                  const SizedBox(height: 18.0),
+                  Row(
+                    children: [
+                      buildProductContainerForm('First Name', TextInputType.name,
+                          firstname, validateField),
+                      const SizedBox(width: 10.0),
+                      buildProductContainerForm(
+                        'Last Name',
+                        TextInputType.name,
+                        lastname,
+                        validateField,
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 18.0),
+                  SizedBox(
+                    width: double.infinity,
+                    child: buildProductContainerForm(
+                      'Phone no',
+                      TextInputType.phone,
+                      mobile,
+                      validateField,
+                    ),
+                  ),
+                  const SizedBox(height: 18.0),
+                  SizedBox(
+                    width: double.infinity,
+                    child: buildProductContainerForm(
+                      'Email',
+                      TextInputType.emailAddress,
+                      email,
+                      validateField,
+                    ),
                   ),
                   const SizedBox(
                     height: 18,
                   ),
-                  if (select_township != null && companyData.isNotEmpty)
-                    ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: companyData.length,
-                        itemBuilder: (context, index) {
-                          var companyName = companyData[index].companyType.name;
-                          var id = companyData[index].companyType.id;
-
-                          return RadioListTile(
-                              dense: true,
-                              activeColor: Colors.pink,
-                              title: Text(
-                                "Service :$companyName",
-                                style: const TextStyle(color: Colors.black),
-                              ),
-                              value: id,
-                              groupValue: serviceId,
-                              onChanged: (value) {
-                                setState(() {
-                                  serviceId = value as int;
-                                  if (companyData[index].companyId ==
-                                      companyData[index].companyType.id) {
-                                    isVisible = true;
-                                    waitingTime =
-                                        companyData[index].waitingTime;
-                                    basicCost = companyData[index].basicCost;
-                                    url = companyData[index].companyType.url;
-                                    cname = companyData[index].companyType.name;
-                                  } else {
-                                    url = '';
-                                  }
-                                });
-                              });
-                        }),
+                  Row(
+                    children: [
+                      buildProductContainerForm(
+                        'Line 1',
+                        TextInputType.phone,
+                        line1,
+                        validateField,
+                      ),
+                      const SizedBox(width: 10.0),
+                      buildProductContainerForm(
+                        'Line 2',
+                        TextInputType.phone,
+                        line2,
+                        validateField,
+                      ),
+                    ],
+                  ),
                   const SizedBox(
                     height: 18,
                   ),
-                  Visibility(
-                    visible: isVisible,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Waiting time is : $waitingTime",
-                          style: const TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(
-                          height: 18,
-                        ),
-                        Text(
-                          "Basic Cost is : $basicCost",
-                          style: const TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(
-                          height: 18,
-                        ),
-                        Text(
-                          "Company Name is : $cname",
-                          style: const TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(
-                          height: 18,
-                        ),
-                        if (url.isNotEmpty)
-                          Image.network(
-                            url,
-                            width: double.infinity,
-                            height: 150,
-                          )
+                  const Text(
+                    "Country",
+                    style: TextStyle(fontSize: 18, color: Colors.pink),
+                  ),
+                  const SizedBox(
+                    height: 18,
+                  ),
+                  SizedBox(
+                    width: double.infinity,
+                    child: chooseItemIdForm(DropdownButton(
+                      hint:const Text("Select Country"),
+                      value: select_country,
+                      items: [
+                        ...countries.map((country) {
+                          return DropdownMenuItem<String>(
+                            value: country.id.toString(),
+                            child: Text(country.name),
+                          );
+                        }).toList(),
                       ],
-                    ),
-                  )
-                ],
-              ),
-              const SizedBox(
-                height: 18,
-              ),
-              const Text("Product Name",
-                  style: TextStyle(fontSize: 18, color: Colors.pink)),
-              const SizedBox(
-                height: 18,
-              ),
-              SizedBox(
-                width: double.infinity,
-                child: chooseItemIdForm(DropdownButton(
-                  hint: const Text("Select Product"),
-                  value: select_product,
-                  items: [
-                    ...products.map((product) {
-                      return DropdownMenuItem<String>(
-                        value: product.id.toString(),
-                        child: Text(product.name),
-                      );
-                    }).toList(),
-                  ],
-                  onChanged: (value) {
-                    setState(() {
-                      select_product = value;
-                      product_id =
-                          select_product!; // Assign selected value to product_id
-                      chooseProductOrderById(
-                          ChooseProductOrderRequest(product_id: product_id));
-                    });
-                  },
-                  underline: const SizedBox(),
-                  borderRadius: BorderRadius.circular(10),
-                  icon: const Icon(Icons.arrow_drop_down),
-                  iconSize: 24,
-                  isExpanded: true,
-                  dropdownColor: Colors.white,
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 16,
-                  ),
-                )),
-              ),
-              const SizedBox(
-                height: 18,
-              ),
-              Row(
-                children: [
-                  buildProductContainerText("Sale Price"),
-                  buildProductContainerText("Available Quantity"),
-                ],
-              ),
-              const SizedBox(
-                height: 18,
-              ),
-              Row(
-                children: [
-                  Expanded(
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      alignment: Alignment.centerLeft,
-                      width: 200,
-                      height: 50,
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.black54, width: 0.3),
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(10.0)),
+                      onChanged: (value) {
+                        setState(() {
+                          select_country = value;
+                          int countryId = int.parse(value!);
+                          fetchCitiesByCountryId(countryId);
+                        });
+                      },
+                      underline: const SizedBox(),
+                      borderRadius: BorderRadius.circular(10),
+                      icon: const Icon(Icons.arrow_drop_down),
+                      iconSize: 24,
+                      isExpanded: true,
+                      dropdownColor: Colors.white,
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 16,
                       ),
-                      child: Text("$salePrice"),
+                    )),
+                  ),
+                  const SizedBox(
+                    height: 18,
+                  ),
+                  const Text("City",
+                      style: TextStyle(fontSize: 18, color: Colors.pink)),
+                  const SizedBox(
+                    height: 18,
+                  ),
+                  SizedBox(
+                    width: double.infinity,
+                    child: chooseItemIdForm(DropdownButton(
+                      hint: const Text("Select City Name"),
+                      value: hasCitiesForSelectedCountry ? select_city : null,
+                      items: [
+                        if (hasCitiesForSelectedCountry)
+                          ...cities.map((city) {
+                            return DropdownMenuItem<String>(
+                              value: city.id.toString(),
+                              child: Text(city.name),
+                            );
+                          }).toList(),
+                      ],
+                      onChanged: (value) {
+                        setState(() {
+                          select_city = value;
+                          int cityId = int.parse(value!);
+                          fetchTownshipByCityId(cityId);
+                        });
+                      },
+                      underline: const SizedBox(),
+                      borderRadius: BorderRadius.circular(10),
+                      icon: const Icon(Icons.arrow_drop_down),
+                      iconSize: 24,
+                      isExpanded: true,
+                      dropdownColor: Colors.white,
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 16,
+                      ),
+                    )),
+                  ),
+                  const SizedBox(
+                    height: 18,
+                  ),
+                  const Text("Township",
+                      style: TextStyle(fontSize: 18, color: Colors.pink)),
+                  const SizedBox(
+                    height: 18,
+                  ),
+                  SizedBox(
+                    width: double.infinity,
+                    child: chooseItemIdForm(DropdownButton(
+                      hint: const Text("Select Township"),
+                      value: hasTownshipForSelectedCity ? select_township : null,
+                      items: [
+                        if (hasTownshipForSelectedCity)
+                          ...townships.map((township) {
+                            return DropdownMenuItem<String>(
+                              value: township.id.toString(),
+                              child: Text(township.name),
+                            );
+                          }).toList(),
+                      ],
+                      onChanged: (value) {
+                        setState(() {
+                          select_township = value;
+                          int townshipId = int.parse(value!);
+                          fetchDeliCompanyNameByTownshipId(townshipId);
+                          fetchWardByTownshipId(townshipId);
+                        });
+                      },
+                      underline: const SizedBox(),
+                      borderRadius: BorderRadius.circular(10),
+                      icon: const Icon(Icons.arrow_drop_down),
+                      iconSize: 24,
+                      isExpanded: true,
+                      dropdownColor: Colors.white,
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 16,
+                      ),
+                    )),
+                  ),
+                  const SizedBox(
+                    height: 18,
+                  ),
+                  SizedBox(
+                    width: double.infinity,
+                    child: chooseItemIdForm(DropdownButton(
+                      hint: const Text("Select Ward"),
+                      value: select_ward,
+                      items: [
+                        ...wards.map((ward) {
+                          return DropdownMenuItem(
+                            value: ward.id.toString(),
+                            child: Text(ward.ward_name),
+                          );
+                        }).toList(),
+                      ],
+                      onChanged: (value) {
+                        setState(() {
+                          select_ward = value;
+                          int wardId = int.parse(value!);
+                          fetchStreetByWardId(wardId);
+                        });
+                      },
+                      underline: const SizedBox(),
+                      borderRadius: BorderRadius.circular(10),
+                      icon: const Icon(Icons.arrow_drop_down),
+                      iconSize: 24,
+                      isExpanded: true,
+                      dropdownColor: Colors.white,
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 16,
+                      ),
+                    )),
+                  ),
+                  const SizedBox(
+                    height: 18,
+                  ),
+                  SizedBox(
+                    width: double.infinity,
+                    child: chooseItemIdForm(DropdownButton(
+                      hint: const Text("Select Street"),
+                      value: select_street,
+                      items: [
+                        ...streets.map((street) {
+                          return DropdownMenuItem<String>(
+                            value: street.id.toString(),
+                            child: Text(street.street_name),
+                          );
+                        }).toList(),
+                      ],
+                      onChanged: (value) {
+                        setState(() {
+                          select_street = value;
+                        });
+                      },
+                      underline: const SizedBox(),
+                      borderRadius: BorderRadius.circular(10),
+                      icon: const Icon(Icons.arrow_drop_down),
+                      iconSize: 24,
+                      isExpanded: true,
+                      dropdownColor: Colors.white,
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 16,
+                      ),
+                    )),
+                  ),
+                  const SizedBox(
+                    height: 18,
+                  ),
+                  SizedBox(
+                    width: double.infinity,
+                    child: buildProductContainerForm(
+                      'Block Number',
+                      TextInputType.text,
+                      block_no,
+                      validateField,
                     ),
                   ),
                   const SizedBox(
-                    width: 10,
+                    height: 18,
                   ),
-                  Expanded(
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      alignment: Alignment.centerLeft,
-                      width: 200,
-                      height: 50,
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.black54, width: 0.3),
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(10.0)),
-                      ),
-                      child: Text("$productQuality"),
+                  SizedBox(
+                    width: double.infinity,
+                    child: buildProductContainerForm(
+                      'Floor',
+                      TextInputType.text,
+                      floor,
+                      validateField,
                     ),
                   ),
-                ],
-              ),
-              const SizedBox(
-                height: 18,
-              ),
-              Row(
-                children: [
+                  const SizedBox(
+                    height: 18,
+                  ),
+                  SizedBox(
+                    width: double.infinity,
+                    child: buildProductContainerForm(
+                      'Zip code',
+                      TextInputType.text,
+                      zipcode,
+                      validateField,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 18,
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Choose Delivery service :',
+                        style: TextStyle(color: Colors.pink, fontSize: 18),
+                      ),
+                      const SizedBox(
+                        height: 18,
+                      ),
+                      if (select_township != null && companyData.isNotEmpty)
+                        ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: companyData.length,
+                            itemBuilder: (context, index) {
+                              var companyName = companyData[index].companyType.name;
+                              var id = companyData[index].companyType.id;
+
+                              return RadioListTile(
+                                  dense: true,
+                                  activeColor: Colors.pink,
+                                  title: Text(
+                                    "Service :$companyName",
+                                    style: const TextStyle(color: Colors.black),
+                                  ),
+                                  value: id,
+                                  groupValue: serviceId,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      serviceId = value as int;
+                                      if (companyData[index].companyId ==
+                                          companyData[index].companyType.id) {
+                                        isVisible = true;
+                                        waitingTime =
+                                            companyData[index].waitingTime;
+                                        basicCost = companyData[index].basicCost;
+                                        url = companyData[index].companyType.url;
+                                        cname = companyData[index].companyType.name;
+                                      } else {
+                                        url = '';
+                                      }
+                                    });
+                                  });
+                            }),
+                      const SizedBox(
+                        height: 18,
+                      ),
+                      Visibility(
+                        visible: isVisible,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Waiting time is : $waitingTime",
+                              style: const TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.bold),
+                            ),
+                            const SizedBox(
+                              height: 18,
+                            ),
+                            Text(
+                              "Basic Cost is : $basicCost",
+                              style: const TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.bold),
+                            ),
+                            const SizedBox(
+                              height: 18,
+                            ),
+                            Text(
+                              "Company Name is : $cname",
+                              style: const TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.bold),
+                            ),
+                            const SizedBox(
+                              height: 18,
+                            ),
+                            if (url.isNotEmpty)
+                              Image.network(
+                                url,
+                                width: double.infinity,
+                                height: 150,
+                              )
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 18,
+                  ),
+                  const Text("Product Name",
+                      style: TextStyle(fontSize: 18, color: Colors.pink)),
+                  const SizedBox(
+                    height: 18,
+                  ),
+                  SizedBox(
+                    width: double.infinity,
+                    child: chooseItemIdForm(DropdownButton(
+                      hint: const Text("Select Product"),
+                      value: select_product,
+                      items: [
+                        ...products.map((product) {
+                          return DropdownMenuItem<String>(
+                            value: product.id.toString(),
+                            child: Text(product.name),
+                          );
+                        }).toList(),
+                      ],
+                      onChanged: (value) {
+                        setState(() {
+                          select_product = value;
+                          product_id =
+                              select_product!; // Assign selected value to product_id
+                          chooseProductOrderById(
+                              ChooseProductOrderRequest(product_id: product_id));
+                        });
+                      },
+                      underline: const SizedBox(),
+                      borderRadius: BorderRadius.circular(10),
+                      icon: const Icon(Icons.arrow_drop_down),
+                      iconSize: 24,
+                      isExpanded: true,
+                      dropdownColor: Colors.white,
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 16,
+                      ),
+                    )),
+                  ),
+                  const SizedBox(
+                    height: 18,
+                  ),
+                  Row(
+                    children: [
+                      buildProductContainerText("Sale Price"),
+                      buildProductContainerText("Available Quantity"),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 18,
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          alignment: Alignment.centerLeft,
+                          width: 200,
+                          height: 50,
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.black54, width: 0.3),
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(10.0)),
+                          ),
+                          child: Text("$salePrice"),
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Expanded(
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          alignment: Alignment.centerLeft,
+                          width: 200,
+                          height: 50,
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.black54, width: 0.3),
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(10.0)),
+                          ),
+                          child: Text("$productQuality"),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 18,
+                  ),
+                  Row(
+                    children: [
+                      const Text(
+                        "Quantity",
+                        style: TextStyle(fontSize: 18, color: Colors.black),
+                      ),
+                      const SizedBox(
+                        width: 25,
+                      ),
+                      Expanded(
+                        child: TextFormField(
+                          textAlign: TextAlign.center,
+                          controller: quantity,
+                          onChanged: (val) {
+                            if (val.isNotEmpty) {
+                              int enteredQuantity = int.tryParse(val) ?? 0;
+                              if (enteredQuantity > productQuality!) {
+                                setState(() {
+                                  totalQty = 0;
+                                  errorText =
+                                      'Quality can not be greater than available quanity!';
+                                });
+                              } else {
+                                setState(() {
+                                  totalQty = 0;
+                                  errorText = null;
+                                });
+                                changeOrderQty(ChangeOrderProductQtyRequest(
+                                  selectedProductId: product_id,
+                                  selectedProductQuantity:
+                                      productQuality.toString(),
+                                  quantity: val.toString(),
+                                  sale_price: salePrice.toString(),
+                                ));
+                              }
+                            } else {
+                              setState(() {
+                                totalQty = 0;
+                                errorText = null;
+                                changeOrderQty(ChangeOrderProductQtyRequest(
+                                  selectedProductId: product_id,
+                                  selectedProductQuantity:
+                                      productQuality.toString(),
+                                  quantity: val.toString(),
+                                  sale_price: salePrice.toString(),
+                                ));
+                              });
+                            }
+                          },
+                          keyboardType: TextInputType.number,
+                          validator: validateField,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide:
+                                  const BorderSide(color: Colors.blue, width: 1.0),
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                            fillColor: Colors.grey,
+                            errorText: errorText, // Display the error message
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 18,
+                  ),
+                  Row(
+                    children: [
+                      const Text(
+                        "Total",
+                        style: TextStyle(fontSize: 18, color: Colors.black),
+                      ),
+                      const SizedBox(
+                        width: 50,
+                      ),
+                      Expanded(
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          alignment: Alignment.center,
+                          width: 200,
+                          height: 50,
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.black54, width: 0.3),
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(10.0)),
+                          ),
+                          child: Text("$totalQty"),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 18,
+                  ),
                   const Text(
-                    "Quantity",
+                    'Payment Method',
                     style: TextStyle(fontSize: 18, color: Colors.black),
                   ),
                   const SizedBox(
-                    width: 25,
+                    height: 18,
                   ),
-                  Expanded(
-                    child: TextFormField(
-                      textAlign: TextAlign.center,
-                      controller: quantity,
-                      onChanged: (val) {
-                        if (val.isNotEmpty) {
-                          int enteredQuantity = int.tryParse(val) ?? 0;
-                          if (enteredQuantity > productQuality!) {
+                  Row(
+                    children: [
+                      Expanded(
+                        child: RadioListTile(
+                          title: const Text('Cash'),
+                          activeColor: Colors.pink,
+                          value: "cod",
+                          dense: true,
+                          groupValue: payment,
+                          onChanged: (value) {
                             setState(() {
-                              totalQty = 0;
-                              errorText =
-                                  'Quality can not be greater than available quanity!';
+                              payment = value as String;
                             });
-                          } else {
+                          },
+                        ),
+                      ),
+                      Expanded(
+                        child: RadioListTile(
+                          title: const Text('KPay'),
+                          value: "Kpay",
+                          dense: true,
+                          activeColor: Colors.pink,
+                          groupValue: payment,
+                          onChanged: (value) {
                             setState(() {
-                              totalQty = 0;
-                              errorText = null;
+                              payment = value as String;
                             });
-                            changeOrderQty(ChangeOrderProductQtyRequest(
-                              selectedProductId: product_id,
-                              selectedProductQuantity:
-                                  productQuality.toString(),
-                              quantity: val.toString(),
-                              sale_price: salePrice.toString(),
-                            ));
-                          }
-                        } else {
-                          setState(() {
-                            totalQty = 0;
-                            errorText = null;
-                            changeOrderQty(ChangeOrderProductQtyRequest(
-                              selectedProductId: product_id,
-                              selectedProductQuantity:
-                                  productQuality.toString(),
-                              quantity: val.toString(),
-                              sale_price: salePrice.toString(),
-                            ));
-                          });
-                        }
-                      },
-                      keyboardType: TextInputType.number,
-                      validator: validateField,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10.0),
+                          },
                         ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide:
-                              const BorderSide(color: Colors.blue, width: 1.0),
-                          borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      Expanded(
+                        child: RadioListTile(
+                          title: const Text('WavePay'),
+                          value: "wavepay",
+                          dense: true,
+                          activeColor: Colors.pink,
+                          groupValue: payment,
+                          onChanged: (value) {
+                            setState(() {
+                              payment = value as String;
+                            });
+                          },
                         ),
-                        fillColor: Colors.grey,
-                        errorText: errorText, // Display the error message
-                      ),
-                    ),
+                      )
+                    ],
                   ),
+                  const SizedBox(height: 18),
+                  Center(
+                      child: ElevatedButton(
+                          onPressed: () {
+                            if (_formKey.currentState!.validate()) {}
+                            context.read<AddOrderCubit>().addOrder(
+                                AddOrderRequestModel(
+                                    firstname: firstname.text.toString(),
+                                    lastname: lastname.text.toString(),
+                                    email: email.text.toString(),
+                                    mobile: mobile.text.toString(),
+                                    line1: line1.text.toString(),
+                                    line2: line2.text.toString(),
+                                    selectedCountry: select_country.toString(),
+                                    selectedTownship: select_township.toString(),
+                                    selectedCity: select_city.toString(),
+                                    zipcode: zipcode.text.toString(),
+                                    mode: payment.toString(),
+                                    delivery: serviceId.toString(),
+                                    user_sign: '',
+                                    product_id: product_id.toString(),
+                                    price: salePrice.toString(),
+                                    quantity: quantity.text.toString(),
+                                    user_id: userId.toString(),
+                                    selectedWard: select_ward.toString(),
+                                    selectedStreet: select_street.toString(),
+                                    block_no: block_no.text.toString(),
+                                    floor: floor.text.toString()));
+                          },
+                          child: const Text('Place Order Now')))
                 ],
               ),
-              const SizedBox(
-                height: 18,
-              ),
-              Row(
-                children: [
-                  const Text(
-                    "Total",
-                    style: TextStyle(fontSize: 18, color: Colors.black),
-                  ),
-                  const SizedBox(
-                    width: 50,
-                  ),
-                  Expanded(
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      alignment: Alignment.center,
-                      width: 200,
-                      height: 50,
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.black54, width: 0.3),
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(10.0)),
-                      ),
-                      child: Text("$totalQty"),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(
-                height: 18,
-              ),
-              const Text(
-                'Payment Method',
-                style: TextStyle(fontSize: 18, color: Colors.black),
-              ),
-              const SizedBox(
-                height: 18,
-              ),
-              Row(
-                children: [
-                  Expanded(
-                    child: RadioListTile(
-                      title: const Text('Cash'),
-                      activeColor: Colors.pink,
-                      value: "cod",
-                      dense: true,
-                      groupValue: payment,
-                      onChanged: (value) {
-                        setState(() {
-                          payment = value as String;
-                        });
-                      },
-                    ),
-                  ),
-                  Expanded(
-                    child: RadioListTile(
-                      title: const Text('KPay'),
-                      value: "Kpay",
-                      dense: true,
-                      activeColor: Colors.pink,
-                      groupValue: payment,
-                      onChanged: (value) {
-                        setState(() {
-                          payment = value as String;
-                        });
-                      },
-                    ),
-                  ),
-                  Expanded(
-                    child: RadioListTile(
-                      title: const Text('WavePay'),
-                      value: "wavepay",
-                      dense: true,
-                      activeColor: Colors.pink,
-                      groupValue: payment,
-                      onChanged: (value) {
-                        setState(() {
-                          payment = value as String;
-                        });
-                      },
-                    ),
-                  )
-                ],
-              ),
-              const SizedBox(height: 18),
-              Center(
-                  child: ElevatedButton(
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {}
-                        context.read<AddOrderCubit>().addOrder(
-                            AddOrderRequestModel(
-                                firstname: firstname.text,
-                                lastname: lastname.text,
-                                email: email.text,
-                                mobile: mobile.text,
-                                line1: line1.text,
-                                line2: line2.text,
-                                selectedCountry: select_country.toString(),
-                                selectedTownship: select_township.toString(),
-                                selectedCity: select_city.toString(),
-                                zipcode: zipcode.text,
-                                mode: payment,
-                                delivery: serviceId.toString(),
-                                user_sign: '',
-                                product_id: product_id,
-                                price: salePrice.toString(),
-                                quantity: quantity.text,
-                                user_id: userId.toString(),
-                                selectedWard: select_ward.toString(),
-                                selectedStreet: select_street.toString(),
-                                block_no: block_no.text.toString(),
-                                floor: floor.text.toString()));
-                      },
-                      child: const Text('Place Order Now')))
-            ],
+            ),
           ),
         ),
-      ),
+        if(widget.isLoading)
+          Container(
+            color: Colors.black54,
+            child: const Center(
+              child: CircularProgressIndicator(),
+            ),
+          ),
+
+      ],
     );
   }
 }

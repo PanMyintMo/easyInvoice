@@ -35,9 +35,8 @@ import '../responsemodel/CityPart/AddCityResponse.dart';
 import '../responsemodel/CityPart/AddStreetResponse.dart';
 import '../responsemodel/CityPart/AddWardResponse.dart';
 import '../responsemodel/CityPart/Cities.dart';
+import '../responsemodel/CityPart/EditWardResponse.dart';
 import '../responsemodel/CityPart/Street.dart';
-import '../responsemodel/CityPart/WardByTownshipResponse.dart';
-import '../responsemodel/CityPart/Wards.dart';
 import '../responsemodel/DeliveryPart/FetchAllDeliveries.dart';
 import '../responsemodel/DeliveryPart/FetchAllOrderByDate.dart';
 import '../responsemodel/ShopKeeperResponsePart/DeliveredWarehouseRequest.dart';
@@ -130,7 +129,7 @@ class UserRepository {
   }
 
   //For add order
-  Future<AddOrderResponse> addOrder(
+  Future<OrderResponse> addOrder(
       AddOrderRequestModel addOrderRequest) async {
     try {
       final response = await _apiService.addOrder(addOrderRequest);
@@ -539,7 +538,7 @@ class UserRepository {
   Future<AddDeliveryResponse> addDelivery(
       AddDeliveryRequestModel addDeliveryRequestModel) async {
     try {
-      final response = await _apiService.AddDelivery(addDeliveryRequestModel);
+      final response = await _apiService.addDelivery(addDeliveryRequestModel);
       return response;
     } catch (e) {
       rethrow;
@@ -626,6 +625,16 @@ class UserRepository {
   Future<EditCityResponse> updateCity(int id, EditCity editCity) async {
     try {
       final response = await _apiService.editCity(id, editCity);
+      return response;
+    } catch (error) {
+      rethrow;
+    }
+  }
+
+  // update ward by id
+  Future<EditWardResponse> updateWard(int id, AddWardRequestModel updateWardRequestModel) async {
+    try {
+      final response = await _apiService.editWard(id, updateWardRequestModel);
       return response;
     } catch (error) {
       rethrow;

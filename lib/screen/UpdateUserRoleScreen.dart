@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:easy_invoice/bloc/edit/edit_user_role_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -30,6 +32,8 @@ class UpdateUserRoleScreen extends StatefulWidget {
 }
 
 class _UpdateUserRoleScreenState extends State<UpdateUserRoleScreen> {
+  File? newImage; // Store the selected new image here
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider<EditUserRoleCubit>(
@@ -37,7 +41,7 @@ class _UpdateUserRoleScreenState extends State<UpdateUserRoleScreen> {
       child: BlocConsumer<EditUserRoleCubit, EditUserRoleState>(
         listener: (context, state) {
           if (state is EditUserRoleLoading) {
-            // Show a loading indicator or disable the save button if necessary
+            // Handle loading state if needed
           } else if (state is EditUserRoleSuccess) {
             showToastMessage('User account updated successfully.',
                 duration: 3000);
@@ -75,7 +79,6 @@ class _UpdateUserRoleScreenState extends State<UpdateUserRoleScreen> {
                   style: TextStyle(fontSize: 16, color: Colors.white),
                 ),
               ),
-
             ),
             body: EditUserRoleWidget(
               id: widget.id,
@@ -83,7 +86,7 @@ class _UpdateUserRoleScreenState extends State<UpdateUserRoleScreen> {
               email: widget.email,
               password: widget.password,
               utype: widget.utype,
-              newimage: widget.newimage,
+              newimage: newImage, // Pass the selected new image
               onSave: () {
                 // Trigger the edit user role functionality
                 context.read<EditUserRoleCubit>().editUserRole(
@@ -92,11 +95,11 @@ class _UpdateUserRoleScreenState extends State<UpdateUserRoleScreen> {
                     email: widget.email,
                     password: widget.password,
                     utype: widget.utype,
-                    newimage: widget.newimage ?? '',
+                    newimage: newImage, // Pass the selected new image
                   ),
                   widget.id,
                 );
-                },
+              },
             ),
           );
         },

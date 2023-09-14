@@ -44,25 +44,30 @@ class AddOrderRequestModel {
       required this.quantity,
       required this.user_id});
 
-  Map<String, dynamic> toJson() {
+  Map<String,dynamic> toJson() {
     return {
-      'firstname': firstname,
-      'lastname': lastname,
-      'email': email,
-      'mobile': mobile,
-      'line1': line1,
-      'line2': line2,
-      'selectedCountry': selectedCountry,
-      'selectedCity': selectedCity,
-      'selectedTownship': selectedTownship,
-      'zipcode': zipcode,
-      'mode': mode,
-      'delivery': delivery,
-      'user_sign': user_sign,
-      'product_id': product_id,
-      'price': price,
-      'quantity': quantity,
-      'user_id': user_id
+      'firstname' : firstname,
+      'lastname' : lastname,
+      'email' : email,
+      'mobile' : mobile,
+      'line1' : line1,
+      'line2' : line2,
+      'selectedCountry' : selectedCountry,
+      'selectedTownship' : selectedTownship,
+      'selectedCity' : selectedCity,
+      'selectedWard' : selectedWard,
+      'selectedStreet' : selectedStreet,
+      'block_no' : block_no,
+      'floor' : floor,
+      'zipcode' : zipcode,
+      'mode' : mode,
+      'delivery' : delivery,
+      'user_sign' : user_sign,
+      'product_id' : product_id,
+      'price' : price,
+      'quantity' : quantity,
+      'user_id' : user_id
+
     };
   }
 }

@@ -3,10 +3,12 @@ import 'package:easy_invoice/bloc/edit/edit_user_role_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+
 import '../common/FormValidator.dart';
 import '../common/HeaderWidget.dart';
 import '../common/ThemeHelperUserClass.dart';
 import '../dataRequestModel/EditUserRoleRequestModel.dart';
+
 
 class EditUserRoleWidget extends StatefulWidget {
   final int id;
@@ -14,7 +16,7 @@ class EditUserRoleWidget extends StatefulWidget {
   final String email;
   final String password;
   final String utype;
-  final String? newimage;
+  final File? newimage;
   final Function()? onSave;
 
   const EditUserRoleWidget({
@@ -37,13 +39,12 @@ class _EditUserRoleWidgetState extends State<EditUserRoleWidget> {
   late TextEditingController email;
   late TextEditingController password;
   late String utype;
-  late String? newimage;
+
   final _formKey = GlobalKey<FormState>();
-  File? image; // Assuming you have a variable to store the selected image path
+  File? image; // Variable to store the selected image
   String? selectedUserRole;
 
   bool isSaving = false;
-
 
   @override
   void initState() {
@@ -52,13 +53,8 @@ class _EditUserRoleWidgetState extends State<EditUserRoleWidget> {
     email = TextEditingController(text: widget.email);
     password = TextEditingController(text: widget.password);
     utype = widget.utype;
-    selectedUserRole =
-    utype.isNotEmpty ? getDropdownValueFromUtype(utype) : null;
-    if (widget.newimage != null && widget.newimage!.isNotEmpty) {
-      newimage = widget.newimage!;
-    } else {
-      newimage = null;
-    }
+    selectedUserRole = utype.isNotEmpty ? getDropdownValueFromUtype(utype) : null;
+    image = widget.newimage; // Initialize the image variable
   }
 
   Future<void> _chooseProfilePicture() async {
@@ -67,12 +63,10 @@ class _EditUserRoleWidgetState extends State<EditUserRoleWidget> {
     if (pickedFile != null) {
       final file = File(pickedFile.path);
       setState(() {
-        image = file;
-        newimage = null;
+        image = file; // Update the image variable
       });
     }
   }
-
 
   String? getUtypeFromDropdownValue(String value) {
     if (value == "User") {
@@ -111,7 +105,7 @@ class _EditUserRoleWidgetState extends State<EditUserRoleWidget> {
       "Admin",
       "Warehouse",
       "Delivery",
-      "ShopKeeper"
+      "ShopKeeper",
     ];
 
     return Stack(
@@ -137,8 +131,7 @@ class _EditUserRoleWidgetState extends State<EditUserRoleWidget> {
                       Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(100),
-                          border:
-                          Border.all(color: Colors.white24),
+                          border: Border.all(color: Colors.white24),
                           color: Colors.white,
                           boxShadow: const [
                             BoxShadow(
@@ -152,21 +145,7 @@ class _EditUserRoleWidgetState extends State<EditUserRoleWidget> {
                           borderRadius: BorderRadius.circular(100),
                           child: Stack(
                             children: [
-                              if (newimage != null && newimage!.isNotEmpty)
-                                Image.network(
-                                  newimage!, // Display image from network URL
-                                  width: 130,
-                                  height: 130,
-                                  fit: BoxFit.cover,
-                                  errorBuilder: (context, error, stackTrace) {
-                                    return Icon(
-                                      Icons.person,
-                                      color: Colors.grey.shade300,
-                                      size: 130.0,
-                                    );
-                                  },
-                                )
-                              else if (image != null)
+                              if (image != null)
                                 Image.file(
                                   image!, // Display image from local file path
                                   width: 130,
@@ -189,7 +168,8 @@ class _EditUserRoleWidgetState extends State<EditUserRoleWidget> {
                             ],
                           ),
                         ),
-                      ), Positioned(
+                      ),
+                      Positioned(
                         bottom: 0,
                         right: 0,
                         child: Container(
@@ -214,7 +194,6 @@ class _EditUserRoleWidgetState extends State<EditUserRoleWidget> {
                     ],
                   ),
                 ),
-
               ],
             ),
             const SizedBox(
@@ -319,7 +298,7 @@ class _EditUserRoleWidgetState extends State<EditUserRoleWidget> {
                                   email: email.text,
                                   password: password.text,
                                   utype: utype,
-                                  newimage: '',
+                                  newimage: image, // You might need to handle this
                                 ),
                                 widget.id,
                               )

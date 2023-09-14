@@ -1,8 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
-import '../../bloc/delete/DeliveryPart/delete_delivery_cubit.dart';
-import '../../common/showDeleteConfirmationDialog.dart';
 import '../../data/responsemodel/DeliveryPart/FetchAllDeliveries.dart';
 
 class FetchAllDeliveryWidget extends StatelessWidget {

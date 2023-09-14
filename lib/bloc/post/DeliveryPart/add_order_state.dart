@@ -14,7 +14,7 @@ class AddOrderLoading extends AddOrderState {
 }
 
 class AddOrderSuccess extends AddOrderState {
-  final AddOrderResponse addOrderResponse;
+  final OrderResponse addOrderResponse;
   const AddOrderSuccess(this.addOrderResponse);
   @override
   List<Object?> get props => [addOrderResponse];

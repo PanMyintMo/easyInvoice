@@ -23,10 +23,11 @@ class AddOrderScreen extends StatelessWidget {
               fontSize: 16)),),
         body: BlocBuilder<AddOrderCubit, AddOrderState>(
           builder: (context, state) {
-            if (state is AddOrderLoading) {
-              return const AddOrderWidget(
-                isLoading: true,
+            final loading = state is AddOrderLoading;
 
+            if (state is AddOrderLoading) {
+              return  AddOrderWidget(
+                isLoading: loading,
               );
             } else if (state is AddOrderSuccess) {
               showToastMessage(state.addOrderResponse.message);
@@ -39,6 +40,7 @@ class AddOrderScreen extends StatelessWidget {
                 isLoading: false,
               );
             }
+
             return const AddOrderWidget(
               isLoading: false,
             );

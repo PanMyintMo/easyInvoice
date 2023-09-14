@@ -1,20 +1,24 @@
+import 'dart:io';
+
+import 'package:dio/dio.dart';
+
 class EditUserRoleRequestModel{
   String name;
   String email;
   String password;
   String utype;
-  String newimage;
-
+  File? newimage;
   EditUserRoleRequestModel({required this.name,required this.email,required this.password,required this.utype, required this.newimage});
 
-  Map<String,dynamic> toJson(){
-    return {
+  FormData toFormData()  {
+    var map = {
       'name' : name,
       'email' : email,
       'password' : password,
       'utype' : utype,
-      'newimage' : newimage
+      'newimage' : [MultipartFile.fromFileSync(newimage!.path,filename: newimage?.path.split('/').last)],
     };
+    return FormData.fromMap(map);
   }
 
 }

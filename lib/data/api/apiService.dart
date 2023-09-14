@@ -40,6 +40,7 @@ import '../responsemodel/CityPart/AddCityResponse.dart';
 import '../responsemodel/CityPart/AddStreetResponse.dart';
 import '../responsemodel/CityPart/AddWardResponse.dart';
 import '../responsemodel/CityPart/Cities.dart';
+import '../responsemodel/CityPart/EditWardResponse.dart';
 import '../responsemodel/CityPart/Street.dart';
 import '../responsemodel/CityPart/StreetByWardIdResponse.dart';
 import '../responsemodel/CityPart/WardByTownshipResponse.dart';
@@ -105,13 +106,12 @@ class ApiService {
         final RegisterResponse data = RegisterResponse.fromJson(response.data);
         return data;
       } else {
-        throw DioError(
-            requestOptions: RequestOptions(path: '/api/register'),
-            response: response);
+        throw Exception('Failed to fetch data');
+
       }
     } catch (error) {
-      throw DioError(
-          requestOptions: RequestOptions(path: '/api/register'), error: error);
+      throw Exception('Failed to fetch data');
+
     }
   }
 
@@ -125,16 +125,12 @@ class ApiService {
         final LoginResponse data = LoginResponse.fromJson(response.data);
         return data;
       } else {
-        throw DioError(
-          requestOptions: RequestOptions(path: '/api/login'),
-          response: response,
-        );
+        throw Exception('Failed to fetch data');
+
       }
     } catch (error) {
-      throw DioError(
-        requestOptions: RequestOptions(path: '/api/login'),
-        error: error,
-      );
+      throw Exception('Failed to fetch data');
+
     }
   }
 
@@ -149,16 +145,12 @@ class ApiService {
         final CompanyProfileResponse data = CompanyProfileResponse.fromJson(response.data);
         return data;
       } else {
-        throw DioError(
-          requestOptions: RequestOptions(path: '/api/profile'),
-          response: response,
-        );
+        throw Exception('Failed to fetch data');
+
       }
     } catch (error) {
-      throw DioError(
-        requestOptions: RequestOptions(path: '/api/profile'),
-        error: error,
-      );
+      throw Exception('Failed to fetch data');
+
     }
   }
 
@@ -170,23 +162,19 @@ class ApiService {
         'https://mmeasyinvoice.com/api/edit-profile/$id',
         data: editProfileRequestModel.toFormData(),
       );
-      print("Update company profile status code is ${response.statusCode}");
+      //print("Update company profile status code is ${response.statusCode}");
       if (response.statusCode == 200) {
         final EditCompanyProfileResponse data = EditCompanyProfileResponse.fromJson(response.data);
         return data;
       } else {
 
-        throw DioError(
-          requestOptions: RequestOptions(path: '/api/edit-profile'),
-          response: response,
-        );
+        throw Exception('Failed to fetch data');
+
       }
     } catch (error) {
-      print("response error is $error");
-      throw DioError(
-        requestOptions: RequestOptions(path: '/api/edit-profile'),
-        error: error,
-      );
+
+      throw Exception('Failed to fetch data');
+
 
     }
   }
@@ -206,16 +194,12 @@ class ApiService {
             AddFaultyItemResponse.fromJson(response.data);
         return data;
       } else {
-        throw DioError(
-          requestOptions: RequestOptions(path: '/api/add-faulty-item'),
-          response: response,
-        );
+        throw Exception('Failed to fetch data');
+
       }
     } catch (error) {
-      throw DioError(
-        requestOptions: RequestOptions(path: '/api/add-faulty-item'),
-        error: error,
-      );
+      throw Exception('Failed to fetch data');
+
     }
   }
 
@@ -231,16 +215,12 @@ class ApiService {
             RequestCountryResponse.fromJson(response.data);
         return data;
       } else {
-        throw DioError(
-          requestOptions: RequestOptions(path: '/api/add-country'),
-          response: response,
-        );
+        throw Exception('Failed to fetch data');
+
       }
     } catch (error) {
-      throw DioError(
-        requestOptions: RequestOptions(path: '/api/add-country'),
-        error: error,
-      );
+      throw Exception('Failed to fetch data');
+
     }
   }
 
@@ -257,16 +237,12 @@ class ApiService {
             EditCountryResponse.fromJson(response.data);
         return data;
       } else {
-        throw DioError(
-          requestOptions: RequestOptions(path: '/api/eidt-country'),
-          response: response,
-        );
+        throw Exception('Failed to fetch data');
+
       }
     } catch (error) {
-      throw DioError(
-        requestOptions: RequestOptions(path: '/api/edit-country'),
-        error: error,
-      );
+      throw Exception('Failed to fetch data');
+
     }
   }
 
@@ -281,18 +257,36 @@ class ApiService {
         final EditCityResponse data = EditCityResponse.fromJson(response.data);
         return data;
       } else {
-        throw DioError(
-          requestOptions: RequestOptions(path: '/api/edit-city'),
-          response: response,
-        );
+        throw Exception('Failed to fetch data');
+
       }
     } catch (error) {
-      throw DioError(
-        requestOptions: RequestOptions(path: '/api/edit-city'),
-        error: error,
-      );
+      throw Exception('Failed to fetch data');
+
     }
   }
+
+  //edit Ward response
+  Future<EditWardResponse> editWard(int id, AddWardRequestModel editWardRequestModel) async {
+    try {
+      final Response response = await _dio.post(
+        'https://mmeasyinvoice.com/api/edit-ward/$id',
+        data: editWardRequestModel.toJson(),
+      );
+      if (response.statusCode == 200) {
+        final EditWardResponse data = EditWardResponse.fromJson(response.data);
+        return data;
+      } else {
+        throw Exception('Failed to fetch data');
+
+      }
+    } catch (error) {
+      throw Exception('Failed to fetch data');
+
+    }
+  }
+
+
 
   //edit township response
   Future<EditTownshipResponse> editTownship(
@@ -307,16 +301,12 @@ class ApiService {
             EditTownshipResponse.fromJson(response.data);
         return data;
       } else {
-        throw DioError(
-          requestOptions: RequestOptions(path: '/api/edit-township'),
-          response: response,
-        );
+        throw Exception('Failed to fetch data');
+
       }
     } catch (error) {
-      throw DioError(
-        requestOptions: RequestOptions(path: '/api/edit-township'),
-        error: error,
-      );
+      throw Exception('Failed to fetch data');
+
     }
   }
 
@@ -331,16 +321,12 @@ class ApiService {
         final AddCityResponse data = AddCityResponse.fromJson(response.data);
         return data;
       } else {
-        throw DioError(
-          requestOptions: RequestOptions(path: '/api/add-city'),
-          response: response,
-        );
+        throw Exception('Failed to fetch data');
+
       }
     } catch (error) {
-      throw DioError(
-        requestOptions: RequestOptions(path: '/api/add-city'),
-        error: error,
-      );
+      throw Exception('Failed to fetch data');
+
     }
   }
 
@@ -358,16 +344,12 @@ class ApiService {
         ChooseProductOrderResponse.fromJson(response.data);
         return data;
       } else {
-        throw DioError(
-          requestOptions: RequestOptions(path: '/api/chooseProduct'),
-          response: response,
-        );
+        throw Exception('Failed to fetch data');
+
       }
     } catch (error) {
-      throw DioError(
-        requestOptions: RequestOptions(path: '/api/chooseProduct'),
-        error: error,
-      );
+      throw Exception('Failed to fetch data');
+
     }
   }
 
@@ -383,21 +365,17 @@ class ApiService {
             AddTownshipResponse.fromJson(response.data);
         return data;
       } else {
-        throw DioError(
-          requestOptions: RequestOptions(path: '/api/add-township'),
-          response: response,
-        );
+        throw Exception('Failed to fetch data');
+
       }
     } catch (error) {
-      throw DioError(
-        requestOptions: RequestOptions(path: '/api/add-township'),
-        error: error,
-      );
+      throw Exception('Failed to fetch data');
+
     }
   }
 
   // add delivery company name
-  Future<AddDeliveryResponse> AddDelivery(
+  Future<AddDeliveryResponse> addDelivery(
       AddDeliveryRequestModel addDeliveryRequestModel) async {
     try {
       final Response response = await _dio.post(
@@ -409,16 +387,12 @@ class ApiService {
             AddDeliveryResponse.fromJson(response.data);
         return data;
       } else {
-        throw DioError(
-          requestOptions: RequestOptions(path: '/api/add-delivery-companyname'),
-          response: response,
-        );
+        throw Exception('Failed to fetch data');
+
       }
     } catch (error) {
-      throw DioError(
-        requestOptions: RequestOptions(path: '/api/add-delivery-companyname'),
-        error: error,
-      );
+      throw Exception('Failed to fetch data');
+
     }
   }
 
@@ -438,16 +412,12 @@ class ApiService {
         ChangeOrderQtyResponse.fromJson(response.data);
         return data;
       } else {
-        throw DioError(
-          requestOptions: RequestOptions(path: '/api/changeOrderProductQty'),
-          response: response,
-        );
+        throw Exception('Failed to fetch data');
+
       }
     } catch (error) {
-      throw DioError(
-        requestOptions: RequestOptions(path: '/api/changeOrderProductQty'),
-        error: error,
-      );
+      throw Exception('Failed to fetch data');
+
     }
   }
 
@@ -467,42 +437,37 @@ class ApiService {
       }
 
       else {
-        throw DioError(
-          requestOptions: RequestOptions(path: '/api/barcodescan'),
-          response: response,
-        );
+        throw Exception('Failed to fetch data');
+
       }
     } catch (error) {
-      throw DioError(
-        requestOptions: RequestOptions(path: '/api/barcodescan'),
-        error: error,
-      );
+      throw Exception('Failed to fetch data');
+
     }
   }
 
   // add order
-  Future<AddOrderResponse> addOrder(
+  Future<OrderResponse> addOrder(
       AddOrderRequestModel addOrderRequest) async {
     try {
       final Response response = await _dio.post(
-        'https://mmeasyinvoice.com/api/add-order',
+        'https://www.mmeasyinvoice.com/api/add-order',
         data: addOrderRequest.toJson(),
       );
+      print("order response are :${response}");
+
       if (response.statusCode == 200) {
-        final AddOrderResponse data =
-        AddOrderResponse.fromJson(response.data);
+        final OrderResponse data =
+        OrderResponse.fromJson(response.data);
         return data;
-      } else {
-        throw DioError(
-          requestOptions: RequestOptions(path: '/api/add-order'),
-          response: response,
-        );
+      }
+      else {
+        throw Exception('Failed to fetch data');
+
       }
     } catch (error) {
-      throw DioError(
-        requestOptions: RequestOptions(path: '/api/add-order'),
-        error: error,
-      );
+      throw Exception('Failed to fetch data $error');
+
     }
   }
 
@@ -519,16 +484,12 @@ class ApiService {
             AddCategoryResponse.fromJson(response.data);
         return addCategoryResponseData;
       } else {
-        throw DioError(
-          requestOptions: RequestOptions(path: '/api/add-category'),
-          response: response,
-        );
+        throw Exception('Failed to fetch data');
+
       }
     } catch (error) {
-      throw DioError(
-        requestOptions: RequestOptions(path: '/api/add-category'),
-        error: error,
-      );
+      throw Exception('Failed to fetch data');
+
     }
   }
 
@@ -545,16 +506,12 @@ class ApiService {
             ProductResponse.fromJson(response.data);
         return addProductResponseData;
       } else {
-        throw DioError(
-          requestOptions: RequestOptions(path: '/api/add-product'),
-          response: response,
-        );
+        throw Exception('Failed to fetch data');
+
       }
     } catch (error) {
-      throw DioError(
-        requestOptions: RequestOptions(path: '/api/add-product'),
-        error: error,
-      );
+      throw Exception('Failed to fetch data');
+
     }
   }
 
@@ -571,16 +528,12 @@ class ApiService {
             AddShopKeeperResponse.fromJson(response.data);
         return addShopKeeperResponse;
       } else {
-        throw DioError(
-          requestOptions: RequestOptions(path: '/api/add-shopkeeper'),
-          response: response,
-        );
+        throw Exception('Failed to fetch data');
+
       }
     } catch (error) {
-      throw DioError(
-        requestOptions: RequestOptions(path: '/api/add-shopkeeper'),
-        error: error,
-      );
+      throw Exception('Failed to fetch data');
+
     }
   }
 
@@ -597,16 +550,12 @@ class ApiService {
         EditResponse.fromJson(response.data);
         return updateShopKeeperResponse;
       } else {
-        throw DioError(
-          requestOptions: RequestOptions(path: '/api/edit-shopkeeper/$id'),
-          response: response,
-        );
+        throw Exception('Failed to fetch data');
+
       }
     } catch (error) {
-      throw DioError(
-        requestOptions: RequestOptions(path: '/api/edit-shopkeeper/$id'),
-        error: error,
-      );
+      throw Exception('Failed to fetch data');
+
     }
   }
 
@@ -624,16 +573,12 @@ class ApiService {
         EditResponse.fromJson(response.data);
         return updateFaultyResponse;
       } else {
-        throw DioError(
-          requestOptions: RequestOptions(path: '/api/edit-faulty-item/$id'),
-          response: response,
-        );
+        throw Exception('Failed to fetch data');
+
       }
     } catch (error) {
-      throw DioError(
-        requestOptions: RequestOptions(path: '/api/edit-faulty-item/$id'),
-        error: error,
-      );
+      throw Exception('Failed to fetch data');
+
     }
   }
 //Receive product form delivery man
@@ -711,9 +656,7 @@ class ApiService {
           final allDeliveryResponse = FetchAllDelivery.fromJson(responseData);
           final deliveryData = allDeliveryResponse.data;
 
-          if (deliveryItemData != null) {
-            deliveryItemData.addAll(deliveryData);
-          }
+          deliveryItemData.addAll(deliveryData);
 
           nextPageUrl = allDeliveryResponse.nextPageUrl;
 
@@ -767,9 +710,7 @@ class ApiService {
           final cateResponse = PaginationDataResponse.fromJson(responseData);
           final cateData = cateResponse.data;
 
-          if (categoryData != null) {
-            categoryData.addAll(cateData);
-          }
+          categoryData.addAll(cateData);
 
           nextPageUrl = cateResponse.nextPageUrl;
 
@@ -822,9 +763,7 @@ class ApiService {
           final faultyItemResponse = AllFaultyItemsResponse.fromJson(responseData);
           final faultyData = faultyItemResponse.data;
 
-          if (faultyItemData != null) {
-            faultyItemData.addAll(faultyData);
-          }
+          faultyItemData.addAll(faultyData);
 
           nextPageUrl = faultyItemResponse.nextPageUrl;
 
@@ -877,9 +816,7 @@ class ApiService {
           final countryResponse = CountryResponse.fromJson(responseData);
           final countryItem = countryResponse.data;
 
-          if (countryData != null) {
-            countryData.addAll(countryItem);
-          }
+          countryData.addAll(countryItem);
 
           nextPageUrl = countryResponse.nextPageUrl;
 
@@ -932,9 +869,7 @@ class ApiService {
           final cityResponse = CityResponse.fromJson(responseData);
           final cityItem = cityResponse.data;
 
-          if (cityData != null) {
-            cityData.addAll(cityItem);
-          }
+          cityData.addAll(cityItem);
 
           nextPageUrl = cityResponse.nextPageUrl;
 
@@ -988,9 +923,7 @@ class ApiService {
           final wardResponse = WardResponse.fromJson(responseData);
           final wrapItem = wardResponse.data;
 
-          if (wrapData != null) {
-            wrapData.addAll(wrapItem);
-          }
+          wrapData.addAll(wrapItem);
 
           nextPageUrl = wardResponse.nextPageUrl;
 
@@ -1044,9 +977,7 @@ class ApiService {
           final streetResponse = StreetResponse.fromJson(responseData);
           final streetItem = streetResponse.data;
 
-          if (streetData != null) {
-            streetData.addAll(streetItem);
-          }
+          streetData.addAll(streetItem);
 
           nextPageUrl = streetResponse.nextPageUrl;
 
@@ -1098,9 +1029,7 @@ class ApiService {
           final townshipResponse = TownshipResponse.fromJson(responseData);
           final townshipItem = townshipResponse.data;
 
-          if (townshipData != null) {
-            townshipData.addAll(townshipItem);
-          }
+          townshipData.addAll(townshipItem);
 
           nextPageUrl = townshipResponse.nextPageUrl;
 
@@ -1203,18 +1132,13 @@ class ApiService {
         OrderApiResponse.fromJson(response.data);
         return orderApiResponse;
       } else {
-        throw DioError(
-          requestOptions: RequestOptions(path: '/api/filter-orders/$filterType'),
-          response: response,
-        );
+        throw Exception('Failed to fetch data');
+
       }
     } catch (error) {
 
-      throw DioError(
-        requestOptions: RequestOptions(path: '/api/filter-orders/$filterType'),
-        error: error,
+      throw Exception('Failed to fetch data');
 
-      );
     }
   }
 
@@ -1293,9 +1217,9 @@ class ApiService {
           final orderByDateResponse = OrderByDateResponse.fromJson(responseData);
           final orderByDateData = orderByDateResponse.data;
 
-          if (orderByDateData != null) {
+
             orderFilterData.addAll(orderByDateData);
-          }
+
 
           nextPageUrl = orderByDateResponse.nextPageUrl;
 
@@ -1464,7 +1388,7 @@ class ApiService {
   Future<List<Ward>> fetchWardByTownship(int id) async {
     try {
       final response = await _dio.get('https://mmeasyinvoice.com/api/wards-by-townshipid/$id');
-      print("Fetch Ward By Township response are $response");
+      //print("Fetch Ward By Township response are $response");
 
       if (response.statusCode == 200) {
         final responseData = response.data;
@@ -1532,9 +1456,7 @@ class ApiService {
           final productResponse = GetAllProductResponse.fromJson(responseData);
           final productItemData = productResponse.data;
 
-          if (productData != null) {
-            productData.addAll(productItemData);
-          }
+          productData.addAll(productItemData);
 
           nextPageUrl = productResponse.nextPageUrl;
 
@@ -1587,9 +1509,7 @@ class ApiService {
           final sizeResponse = PaginationDataResponse.fromJson(responseData);
           final sizeItemData = sizeResponse.data;
 
-          if (sizeData != null) {
-            sizeData.addAll(sizeItemData);
-          }
+          sizeData.addAll(sizeItemData);
 
           nextPageUrl = sizeResponse.nextPageUrl;
 
@@ -1642,9 +1562,9 @@ class ApiService {
           final userResponse = UserRoleResponse.fromJson(responseData);
           final usersItem = userResponse.data;
 
-          if (userData != null) {
+
             userData.addAll(usersItem);
-          }
+
 
           nextPageUrl = userResponse.nextPageUrl;
 
@@ -1719,7 +1639,7 @@ class ApiService {
     try {
       final response =
       await _dio.post('https://mmeasyinvoice.com/api/delete-faulty-item/$id');
-    print("$response");
+    //print("$response");
 
       if (response.statusCode == 200) {
         DeleteResponse deleteFaulty =
@@ -1945,16 +1865,12 @@ class ApiService {
             AddSizeResponse.fromJson(response.data);
         return addSizeResponse;
       } else {
-        throw DioError(
-          requestOptions: RequestOptions(path: '/api/add-size'),
-          response: response,
-        );
+        throw Exception('Failed to fetch data');
+
       }
     } catch (error) {
-      throw DioError(
-        requestOptions: RequestOptions(path: '/api/add-size'),
-        error: error,
-      );
+      throw Exception('Failed to fetch data');
+
     }
   }
 
@@ -1969,16 +1885,12 @@ class ApiService {
         final UserResponse data = UserResponse.fromJson(response.data);
         return data;
       } else {
-        throw DioError(
-          requestOptions: RequestOptions(path: '/api/add-user'),
-          response: response,
-        );
+        throw Exception('Failed to fetch data');
+
       }
     } catch (error) {
-      throw DioError(
-        requestOptions: RequestOptions(path: '/api/add-user'),
-        error: error,
-      );
+      throw Exception('Failed to fetch data');
+
     }
   }
 
@@ -1988,23 +1900,19 @@ class ApiService {
     try {
       final Response response = await _dio.post(
         'https://mmeasyinvoice.com/api/edit-user/$id',
-        data: editUserRoleRequestModel.toJson(),
+        data: editUserRoleRequestModel.toFormData(),
       );
       if (response.statusCode == 200) {
         final EditUserRoleResponse data =
             EditUserRoleResponse.fromJson(response.data);
         return data;
       } else {
-        throw DioError(
-          requestOptions: RequestOptions(path: '/api/edit-user'),
-          response: response,
-        );
+        throw Exception('Failed to fetch data');
+
       }
     } catch (error) {
-      throw DioError(
-        requestOptions: RequestOptions(path: '/api/edit-user'),
-        error: error,
-      );
+      throw Exception('Failed to fetch data');
+
     }
   }
 
@@ -2019,16 +1927,11 @@ class ApiService {
         final AddWardResponse data = AddWardResponse.fromJson(response.data);
         return data;
       } else {
-        throw DioError(
-          requestOptions: RequestOptions(path: '/api/add-ward'),
-          response: response,
-        );
+        throw Exception('Failed to fetch data');
       }
     } catch (error) {
-      throw DioError(
-        requestOptions: RequestOptions(path: '/api/add-ward'),
-        error: error,
-      );
+      throw Exception('Failed to fetch data');
+
     }
   }
 
@@ -2043,16 +1946,12 @@ class ApiService {
         final AddStreetResponse data = AddStreetResponse.fromJson(response.data);
         return data;
       } else {
-        throw DioError(
-          requestOptions: RequestOptions(path: '/api/add-street'),
-          response: response,
-        );
+        throw Exception('Failed to fetch data');
+
       }
     } catch (error) {
-      throw DioError(
-        requestOptions: RequestOptions(path: '/api/add-street'),
-        error: error,
-      );
+      throw Exception('Failed to fetch data');
+
     }
   }
 

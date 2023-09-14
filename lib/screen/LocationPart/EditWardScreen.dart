@@ -1,26 +1,26 @@
+import 'package:easy_invoice/bloc/edit/CityPart/edit_ward_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import '../../bloc/edit/CityPart/edit_city_cubit.dart';
 import '../../common/ToastMessage.dart';
 import '../../module/module.dart';
-import '../../widget/CityPart/EditCityWidget.dart';
+import '../../widget/CityPart/EditWardWidget.dart';
 
-class EditCityScreen extends StatelessWidget {
-  final String country_id;
-  final String name;
-  final int id;
+class EditWardScreen extends StatelessWidget {
+  final String state_id;
+  final String ward_name;
 
-  const EditCityScreen(
+
+  const EditWardScreen(
       {super.key,
-      required this.country_id,
-      required this.name,
-      required this.id});
+      required this.state_id,
+      required this.ward_name,
+     });
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => EditCityCubit(getIt.call()),
+      create: (context) => EditWardCubit(getIt.call()),
       child: Scaffold(
         appBar: AppBar(
           elevation: 0.0,
@@ -29,40 +29,39 @@ class EditCityScreen extends StatelessWidget {
             color: Colors.red, // Set the color of the navigation icon to black
           ),
           title: const Text(
-            'Edit City Screen',
+            'Edit Ward Screen',
             style: TextStyle(
                 color: Colors.black54,
                 fontWeight: FontWeight.bold,
                 fontSize: 16),
           ),
         ),
-        body: BlocBuilder<EditCityCubit, EditCityState>(
+        body: BlocBuilder<EditWardCubit, EditWardState>(
           builder: (context, state) {
-            if (state is EditCityLoading) {
-              return EditCityWidget(
-                name: name,
+            if (state is EditWardLoading) {
+              return EditWardWidget(
+                ward_name: ward_name,
                 isLoading: true,
-                country_id: country_id,
-                id: id,
+                state_id: state_id,
               );
             } else if (state is EditCitySuccess) {
-              showToastMessage("City updated successfully.");
+              showToastMessage("Ward updated successfully.");
               Navigator.pop(context, true);
             } else if (state is EditCityFail) {
-              showToastMessage("City updated fail.");
-              return EditCityWidget(
-                name: name,
+              showToastMessage("Ward updated fail.");
+              return EditWardWidget(
+                ward_name: ward_name,
                 isLoading: false,
-                country_id: country_id,
-                id: id,
+                state_id: state_id,
+
               );
             }
 
-            return EditCityWidget(
-              name: name,
+            return EditWardWidget(
+              ward_name: ward_name,
               isLoading: false,
-              country_id: country_id,
-              id: id,
+              state_id: state_id,
+
             );
           },
         ),

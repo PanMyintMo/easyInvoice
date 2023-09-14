@@ -1,10 +1,10 @@
 import 'package:easy_invoice/bloc/delete/CityPart/delete_ward_cubit.dart';
-import 'package:easy_invoice/data/responsemodel/CityPart/Wards.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../bloc/get/CityPart/fetch_all_ward_cubit.dart';
 import '../../common/showDeleteConfirmationDialog.dart';
 import '../../data/responsemodel/common/WardResponse.dart';
-
+import '../../screen/LocationPart/EditWardScreen.dart';
 
 class WardsWidget extends StatelessWidget {
   final bool isLoading;
@@ -76,17 +76,19 @@ class WardData extends DataTableSource {
                 Icons.edit,
                 color: Colors.green,
               ),
-              onPressed: () {
-                // Navigator.push(
-                //   context,
-                  // MaterialPageRoute(
-                  //   builder: (context) => EditCityScreen(
-                  //     country_id: wards.state_id.toString(),
-                  //     name: streets.street_name,
-                  //     id: streets.id,
-                  //   ),
-                  // ),
-               // );
+              onPressed: () async {
+                final result = await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => EditWardScreen(
+                        state_id: wards.state_id.toString(),
+                        ward_name: wards.ward_name),
+                  ),
+                );
+
+                if (result == true) {
+                  BlocProvider.of<FetchAllWardCubit>(context).fetchAllWard();
+                }
               },
             ),
             IconButton(
@@ -98,7 +100,7 @@ class WardData extends DataTableSource {
                 showDeleteConfirmationDialogs(
                   context,
                   "Are you sure you want to delete this street?",
-                      () {
+                  () {
                     context.read<DeleteWardCubit>().deleteWard(wards.id);
                   },
                 );
