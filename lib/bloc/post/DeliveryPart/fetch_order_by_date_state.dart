@@ -14,7 +14,7 @@ class FetchOrderByDateLoading extends FetchOrderByDateState{
 }
 
 class FetchOrderByDateSuccess extends FetchOrderByDateState{
-  final List<OrderFilterItem> fetchOrderByDate;
+  final List<OrderDatas> fetchOrderByDate;
   const FetchOrderByDateSuccess(this.fetchOrderByDate);
   @override
 

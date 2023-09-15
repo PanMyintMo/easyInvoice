@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-
 import 'package:easy_invoice/bloc/post/DeliveryPart/fetch_order_by_date_cubit.dart';
 import 'package:easy_invoice/dataRequestModel/DeliveryPart/OrderByDateRequestModel.dart';
 import '../../bloc/delete/CountryPart/delete_country_cubit.dart';
-import '../../data/responsemodel/DeliveryPart/FetchAllOrderByDate.dart';
+import '../../data/responsemodel/MainPagePart/MainPageResponse.dart';
 import '../../module/module.dart';
 
 class FetchOrderByDateScreen extends StatelessWidget {
@@ -55,7 +54,7 @@ class _FetchOrderByDateContentState extends State<FetchOrderByDateContent> {
   DateTime? _selectedDate;
   TextEditingController textEditingController = TextEditingController();
 
-  List<OrderFilterItem> orderFilterItem =
+  List<OrderDatas> orderFilterItem =
       []; // Initialize an empty list for data
 
   final List<DataColumn> defaultColumns = const [
@@ -148,7 +147,7 @@ class _FetchOrderByDateContentState extends State<FetchOrderByDateContent> {
                     BlocProvider.of<FetchOrderByDateCubit>(context)
                         .orderFilterByDate(
                       OrderByDateRequest(
-                        date: textEditingController.text.toString(),
+                       start_date: textEditingController.text.toString(),
                       ),
                     );
                   },
@@ -184,10 +183,10 @@ class _FetchOrderByDateContentState extends State<FetchOrderByDateContent> {
                       columns: defaultColumns,
                       rows: state.fetchOrderByDate.map((orderItem) {
                         return DataRow(cells: [
-                          DataCell(Text(orderItem.id.toString())),
+                          DataCell(Text(orderItem.order_id.toString())),
                           DataCell(Text(orderItem.firstname.toString())),
                           DataCell(Text(orderItem.mobile.toString())),
-                          DataCell(Text(orderItem.deliveryCompany.toString())),
+                          DataCell(Text(orderItem.delivery_company.toString())),
                           DataCell(Text(orderItem.status.toString())),
                         ]);
                       }).toList(),

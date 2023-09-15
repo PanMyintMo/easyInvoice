@@ -1,7 +1,6 @@
 class DeliveryManResponse {
   final DeliveryData data;
 
-
   DeliveryManResponse({
     required this.data,
   });

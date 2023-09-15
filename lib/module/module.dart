@@ -44,6 +44,7 @@ import '../bloc/delete/delete_user_role_cubit.dart';
 import '../bloc/edit/CityPart/edit_city_cubit.dart';
 import '../bloc/edit/CityPart/edit_ward_cubit.dart';
 import '../bloc/edit/TownshipPart/edit_township_cubit.dart';
+import '../bloc/edit/statusChange/shopkeeper_status_cubit.dart';
 import '../bloc/get/CityPart/fetch_all_ward_cubit.dart';
 import '../bloc/get/CompanyProfile/company_profile_cubit.dart';
 import '../bloc/get/DeliveryManPart/fetch_all_delivery_cubit.dart';
@@ -198,6 +199,11 @@ void locator() {
 //to delivery man status change
   DeliveryManStatusCubit deliveryManStatusCubit = DeliveryManStatusCubit(getIt.call());
   getIt.registerLazySingleton(() => deliveryManStatusCubit);
+
+
+  //to shopkeeper status change
+  ShopkeeperStatusCubit shopkeeperStatusCubit = ShopkeeperStatusCubit(getIt.call());
+  getIt.registerLazySingleton(() => shopkeeperStatusCubit);
 
   //to delete category
   DeleteCategoryCubit categoryDeleteCubit = DeleteCategoryCubit(getIt.call());

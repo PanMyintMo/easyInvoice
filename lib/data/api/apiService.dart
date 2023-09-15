@@ -1205,7 +1205,8 @@ class ApiService {
   Future<OrderByDateResponse> fetchAllOrderByDate(OrderByDateRequest orderByDateRequestModel) async {
     try {
       int currentPage = 1;
-      List<OrderFilterItem> orderFilterData = [];
+      List<OrderDatas> orderFilterData= [];
+
       String? nextPageUrl;
 
       while (true) {
@@ -1627,6 +1628,23 @@ class ApiService {
       if (response.statusCode == 200) {
         DeleteResponse deliverStatus = DeleteResponse.fromJson(response.data);
         return deliverStatus;
+      } else {
+        throw Exception('Something wrong!');
+      }
+    } catch (error) {
+      throw Exception(error);
+    }
+  }
+
+//shopKeeper  status change
+
+  Future<DeleteResponse> shopKeeperStatus(int id) async {
+    try {
+      final response =
+      await _dio.post('https://mmeasyinvoice.com/api/shopkeeper-update-status/$id');
+      if (response.statusCode == 200) {
+        DeleteResponse shopkeeperStatus = DeleteResponse.fromJson(response.data);
+        return shopkeeperStatus;
       } else {
         throw Exception('Something wrong!');
       }

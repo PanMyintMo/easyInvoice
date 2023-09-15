@@ -1,5 +1,5 @@
 class OrderApiResponse {
-  final List<OrderData> data;
+  final List<OrderDatas> data;
   final int totalProfit;
   final int totalSales;
   final String totalRevenue;
@@ -24,7 +24,7 @@ class OrderApiResponse {
   factory OrderApiResponse.fromJson(Map<String, dynamic> json) {
     return OrderApiResponse(
       data: (json['data'] as List)
-          .map((item) => OrderData.fromJson(item))
+          .map((item) => OrderDatas.fromJson(item))
           .toList(),
       totalProfit: json['totalProfit'],
       totalSales: json['totalSales'],
@@ -38,7 +38,7 @@ class OrderApiResponse {
   }
 }
 
-class OrderData {
+class OrderDatas {
   final int order_id;
   final int user_id;
   final int customer_id;
@@ -87,7 +87,7 @@ class OrderData {
   final String country_name;
 
 
-  OrderData({
+  OrderDatas({
    required this.order_id,required this.user_id,
     required this.quantity,required this.price,
     required this.product_id, required this.zipcode,required this.floor,
@@ -106,8 +106,8 @@ class OrderData {
 
   });
 
-  factory OrderData.fromJson(Map<String, dynamic> json) {
-    return OrderData(
+  factory OrderDatas.fromJson(Map<String, dynamic> json) {
+    return OrderDatas(
       order_id: json['order_id'],
       user_id: json['user_id'],
       quantity: json['quantity'],

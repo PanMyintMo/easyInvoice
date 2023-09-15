@@ -38,7 +38,6 @@ import '../responsemodel/CityPart/Cities.dart';
 import '../responsemodel/CityPart/EditWardResponse.dart';
 import '../responsemodel/CityPart/Street.dart';
 import '../responsemodel/DeliveryPart/FetchAllDeliveries.dart';
-import '../responsemodel/DeliveryPart/FetchAllOrderByDate.dart';
 import '../responsemodel/ShopKeeperResponsePart/DeliveredWarehouseRequest.dart';
 import '../responsemodel/common/DeleteResponse.dart';
 import '../responsemodel/CityPart/EditCityResponse.dart';
@@ -186,7 +185,7 @@ class UserRepository {
   }
 
   //fetch all order by date
-  Future<List<OrderFilterItem>?> allOrderByDate(
+  Future<List<OrderDatas>?> allOrderByDate(
       OrderByDateRequest orderByDateRequest) async {
     try {
       final response = await _apiService.fetchAllOrderByDate(orderByDateRequest);
@@ -462,7 +461,16 @@ class UserRepository {
     }
   }
 
+  //shopkeeper status change by id
 
+  Future<DeleteResponse> shopkeeperStatus(int id) async {
+    try {
+      final response = await _apiService.shopKeeperStatus(id);
+      return response;
+    } catch (error) {
+      rethrow;
+    }
+  }
 
 //to delete category by id
 

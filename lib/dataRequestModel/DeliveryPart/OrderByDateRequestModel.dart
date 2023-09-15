@@ -1,8 +1,8 @@
 class OrderByDateRequest{
-  final String date;
-  OrderByDateRequest({required this.date});
+  final String start_date;
+  OrderByDateRequest({required this.start_date});
 
   Map<String,dynamic> toJson(){
-    return {'date': date};
+    return {'start_date': start_date};
   }
 }
