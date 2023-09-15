@@ -51,11 +51,12 @@ class FetchOrderByDateContent extends StatefulWidget {
 }
 
 class _FetchOrderByDateContentState extends State<FetchOrderByDateContent> {
-  DateTime? _selectedDate;
-  TextEditingController textEditingController = TextEditingController();
+  DateTime? _startDate;
+  DateTime? _endDate;
+  TextEditingController startDateController  = TextEditingController();
+  TextEditingController endDateController  = TextEditingController();
 
-  List<OrderDatas> orderFilterItem =
-      []; // Initialize an empty list for data
+  List<OrderDatas> orderFilterItem = [];
 
   final List<DataColumn> defaultColumns = const [
     DataColumn(
@@ -90,23 +91,56 @@ class _FetchOrderByDateContentState extends State<FetchOrderByDateContent> {
     ),
   ];
 
-  Future<void> _selectDate(BuildContext context) async {
-    final DateTime picked = (await showDatePicker(
-          context: context,
-          initialDate: _selectedDate ?? DateTime.now(),
-          firstDate: DateTime(2000),
-          lastDate: DateTime(2101),
-        )) ??
-        DateTime.now();
+  Future<void> _selectStartDate(BuildContext context) async {
+    final DateTime now = DateTime.now();
+    DateTime picked = (await showDatePicker(
+      context: context,
+      initialDate: _startDate ?? now,
+      firstDate: DateTime(2000),
+      lastDate: now,
+    )) ?? (_startDate ?? now);
 
-    if (picked != _selectedDate) {
-      setState(() {
-        _selectedDate = picked;
-        final formattedDate = DateFormat('yyyy-MM-d').format(picked);
-        textEditingController.text = formattedDate;
-      });
+    // Ensure that the picked date is not after today
+    if (picked.isAfter(now)) {
+      picked = now;
     }
+
+    setState(() {
+      _startDate = picked;
+      final formattedDate = DateFormat('yyyy/MM/d').format(picked);
+      startDateController.text = formattedDate;
+    });
   }
+
+  Future<void> _selectEndDate(BuildContext context) async {
+    final DateTime now = DateTime.now();
+    DateTime picked = (await showDatePicker(
+      context: context,
+      initialDate: _endDate ?? now,
+      firstDate: DateTime(2000),
+      lastDate: now,
+    )) ?? (_endDate ?? now);
+
+    // Ensure that the picked date is not after today
+    if (picked.isAfter(now)) {
+      picked = now;
+    }
+
+    setState(() {
+      _endDate = picked;
+      final formattedDate = DateFormat('yyyy/MM/d').format(picked);
+      endDateController.text = formattedDate;
+    });
+  }
+
+
+  bool isDateValid() {
+    if (_startDate != null && _endDate != null) {
+      return _startDate!.isBefore(_endDate!);
+    }
+    return false; // Return false if both dates are not selected
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -117,55 +151,99 @@ class _FetchOrderByDateContentState extends State<FetchOrderByDateContent> {
             padding: const EdgeInsets.all(12.0),
             child: Row(
               children: [
-                const Text(
-                  "Select Date:",
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      const Text(
+                        "Start Date:",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      TextFormField(
+                        controller: startDateController,
+                        decoration: const InputDecoration(
+                          hintText: 'Start Date',
+                          suffixIcon: Icon(Icons.date_range),
+                          border: OutlineInputBorder(),
+                          labelText: 'Start Date',
+                        ),
+                        readOnly: true,
+                        onTap: () async {
+                          _selectStartDate(context);
+                        },
+                      ),
+                    ],
+                  ),
                 ),
                 const SizedBox(
                   width: 10,
                 ),
                 Expanded(
-                  child: TextFormField(
-                    controller: textEditingController,
-                    decoration: const InputDecoration(
-                      hintText: 'Date',
-                      suffixIcon: Icon(Icons.date_range),
-                      border: OutlineInputBorder(),
-                      labelText: 'Date',
-                    ),
-                    readOnly: true,
-                    onTap: () async {
-                      _selectDate(context);
-                    },
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      const Text("End Date",
+                          style: TextStyle(fontWeight: FontWeight.bold)),
+                      const SizedBox(height: 10),
+                      TextFormField(
+                        controller: endDateController,
+                        decoration: const InputDecoration(
+                          hintText: 'End Date',
+                          suffixIcon: Icon(Icons.date_range),
+                          border: OutlineInputBorder(),
+                          labelText: 'End Date',
+                        ),
+                        readOnly: true,
+                        onTap: () async {
+                          _selectEndDate(context);
+                        },
+                      ),
+                    ],
                   ),
-                ),
-                const SizedBox(
-                  width: 10,
                 ),
                 TextButton(
                   onPressed: () {
-                    BlocProvider.of<FetchOrderByDateCubit>(context)
-                        .orderFilterByDate(
-                      OrderByDateRequest(
-                       start_date: textEditingController.text.toString(),
-                      ),
-                    );
+                    if (isDateValid()) {
+                      BlocProvider.of<FetchOrderByDateCubit>(context)
+                          .orderFilterByDate(
+                        OrderByDateRequest(
+                          start_date: DateFormat('yyyy/MM/d')
+                              .format(_startDate ?? DateTime.now()),
+                          end_date: DateFormat('yyyy/MM/d')
+                              .format(_endDate ?? DateTime.now()),
+                        ),
+                      );
+                    } else {
+                      // Show an error message here, for example, using a Snackbar
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('End date should be after the start date.'),
+                        ),
+                      );
+                    }
                   },
                   child: const Text(
                     'Search',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
                   ),
-                ),
+                )
+
+
               ],
             ),
           ),
-
           BlocBuilder<FetchOrderByDateCubit, FetchOrderByDateState>(
             builder: (context, state) {
               if (state is FetchOrderByDateLoading) {
                 return const Center(child: CircularProgressIndicator());
               } else if (state is FetchOrderByDateSuccess) {
-                orderFilterItem= state.fetchOrderByDate;
+                orderFilterItem = state.fetchOrderByDate;
                 if (orderFilterItem.isEmpty) {
                   return const Center(
                     child: Text(
@@ -178,15 +256,16 @@ class _FetchOrderByDateContentState extends State<FetchOrderByDateContent> {
                     scrollDirection: Axis.horizontal,
                     child: DataTable(
                       border: TableBorder.all(width: 0.2),
-                      headingRowColor:
-                      MaterialStateColor.resolveWith((states) => Colors.teal),
+                      headingRowColor: MaterialStateColor.resolveWith(
+                              (states) => Colors.teal),
                       columns: defaultColumns,
                       rows: state.fetchOrderByDate.map((orderItem) {
                         return DataRow(cells: [
                           DataCell(Text(orderItem.order_id.toString())),
                           DataCell(Text(orderItem.firstname.toString())),
                           DataCell(Text(orderItem.mobile.toString())),
-                          DataCell(Text(orderItem.delivery_company.toString())),
+                          DataCell(
+                              Text(orderItem.delivery_company.toString())),
                           DataCell(Text(orderItem.status.toString())),
                         ]);
                       }).toList(),
