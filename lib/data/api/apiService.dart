@@ -454,7 +454,7 @@ class ApiService {
         'https://www.mmeasyinvoice.com/api/add-order',
         data: addOrderRequest.toJson(),
       );
-      print("order response are :${response}");
+      //print("order response are :${response}");
 
       if (response.statusCode == 200) {
         final OrderResponse data =
@@ -1599,6 +1599,42 @@ class ApiService {
       throw Exception('Failed to fetch all user response: $e');
     }
   }
+
+  //warehouse manager status change
+
+  Future<DeleteResponse> warehouseManagerStatus(int id) async {
+    try {
+      final response =
+      await _dio.post('https://mmeasyinvoice.com/api/warehouse-manager-update-status/$id');
+      if (response.statusCode == 200) {
+        DeleteResponse deleteCategory = DeleteResponse.fromJson(response.data);
+        return deleteCategory;
+      } else {
+        throw Exception('Something wrong!');
+      }
+    } catch (error) {
+      throw Exception(error);
+    }
+  }
+
+
+  //Delivery man status change
+
+  Future<DeleteResponse> deliveryManStatus(int id) async {
+    try {
+      final response =
+      await _dio.post('https://mmeasyinvoice.com/api/delivery-man-update-status/$id');
+      if (response.statusCode == 200) {
+        DeleteResponse deliverStatus = DeleteResponse.fromJson(response.data);
+        return deliverStatus;
+      } else {
+        throw Exception('Something wrong!');
+      }
+    } catch (error) {
+      throw Exception(error);
+    }
+  }
+
 
   //Delete category by id
 

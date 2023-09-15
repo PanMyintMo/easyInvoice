@@ -1,7 +1,7 @@
+import 'package:easy_invoice/bloc/edit/statusChange/warehouse_manager_status_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../bloc/delete/TownshipPart/township_delete_cubit.dart';
 import '../../bloc/get/ShopKeeperPart/shop_keeper_request_cubit.dart';
 import '../../common/ToastMessage.dart';
 import '../../module/module.dart';
@@ -44,8 +44,8 @@ class _ShopKeeperRequestListScreenState
               return cubit;
             },
           ),
-          BlocProvider<TownshipDeleteCubit>(
-            create: (context) => TownshipDeleteCubit(getIt
+          BlocProvider<WarehouseManagerStatusCubit>(
+            create: (context) => WarehouseManagerStatusCubit(getIt
                 .call()), // Use getIt<ApiService>() to get the ApiService instance
           ),
         ], child: const RequestProductScreen()));
@@ -77,9 +77,9 @@ class _RequestProductScreenState extends State<RequestProductScreen> {
                 );
               }
 
-              return BlocConsumer<TownshipDeleteCubit, TownshipDeleteState>(
+              return BlocConsumer<WarehouseManagerStatusCubit, WarehouseManagerStatusState>(
                 builder: (context, deleteState) {
-                  bool loading = deleteState is DeleteTownshipLoading;
+                  bool loading = deleteState is WarehouseManagerStatusLoading;
 
                   return ShopKeeperRequestListWidget(
                     isLoading: loading,
@@ -87,13 +87,13 @@ class _RequestProductScreenState extends State<RequestProductScreen> {
                   );
                 },
                 listener: (context, deleteState) {
-                  if (deleteState is DeleteTownshipSuccess) {
-                    showToastMessage('Deleted City successful.');
+                  if (deleteState is WarehouseManagerStatusSuccess) {
+                    showToastMessage('Successful.');
                     BlocProvider.of<ShopKeeperRequestCubit>(context)
                         .shopkeeperRequestList();
-                  } else if (deleteState is DeleteTownshipFail) {
+                  } else if (deleteState is WarehouseManagerStatusFail) {
                     showToastMessage(
-                        'Failed to delete city: ${deleteState.error}');
+                        'Failed to : ${deleteState.error}');
                   }
                 },
               );

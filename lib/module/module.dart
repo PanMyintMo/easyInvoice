@@ -8,6 +8,8 @@ import 'package:easy_invoice/bloc/edit/edit_category_cubit.dart';
 import 'package:easy_invoice/bloc/edit/edit_product_item_cubit.dart';
 import 'package:easy_invoice/bloc/edit/edit_size_cubit.dart';
 import 'package:easy_invoice/bloc/edit/edit_user_role_cubit.dart';
+import 'package:easy_invoice/bloc/edit/statusChange/delivery_man_status_cubit.dart';
+import 'package:easy_invoice/bloc/edit/statusChange/warehouse_manager_status_cubit.dart';
 import 'package:easy_invoice/bloc/get/CityPart/fetch_all_city_cubit.dart';
 import 'package:easy_invoice/bloc/get/CityPart/fetch_all_street_cubit.dart';
 import 'package:easy_invoice/bloc/get/MainPagePart/order_filter_by_date_cubit.dart';
@@ -188,6 +190,14 @@ void locator() {
   GetAllSizeCubit getAllSizeCubit =
       GetAllSizeCubit(getIt.get<UserRepository>());
   getIt.registerLazySingleton(() => getAllSizeCubit);
+
+  //to warehouse manager status change
+  WarehouseManagerStatusCubit warehouseManagerStatusCubit = WarehouseManagerStatusCubit(getIt.call());
+  getIt.registerLazySingleton(() => warehouseManagerStatusCubit);
+
+//to delivery man status change
+  DeliveryManStatusCubit deliveryManStatusCubit = DeliveryManStatusCubit(getIt.call());
+  getIt.registerLazySingleton(() => deliveryManStatusCubit);
 
   //to delete category
   DeleteCategoryCubit categoryDeleteCubit = DeleteCategoryCubit(getIt.call());

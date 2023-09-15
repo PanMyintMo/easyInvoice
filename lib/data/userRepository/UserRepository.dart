@@ -441,6 +441,29 @@ class UserRepository {
     }
   }
 
+  //warehouse manager status change by id
+
+  Future<DeleteResponse> warehouseManagerStatus(int id) async {
+    try {
+      final response = await _apiService.warehouseManagerStatus(id);
+      return response;
+    } catch (error) {
+      rethrow;
+    }
+  }
+  //delivery man status change by id
+
+  Future<DeleteResponse> deliveryManStatus(int id) async {
+    try {
+      final response = await _apiService.deliveryManStatus(id);
+      return response;
+    } catch (error) {
+      rethrow;
+    }
+  }
+
+
+
 //to delete category by id
 
   Future<DeleteResponse> deleteCategory(int id) async {
