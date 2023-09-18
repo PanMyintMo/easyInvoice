@@ -47,6 +47,7 @@ import '../responsemodel/CityPart/WardByTownshipResponse.dart';
 import '../responsemodel/CityPart/Wards.dart';
 import '../responsemodel/DeliveryPart/FetchAllDeliveries.dart';
 import '../responsemodel/DeliveryPart/FetchAllOrderByDate.dart';
+import '../responsemodel/DeliveryPart/OrderDetailResponse.dart';
 import '../responsemodel/ShopKeeperResponsePart/DeliveredWarehouseRequest.dart';
 import '../responsemodel/common/DeleteResponse.dart';
 import '../responsemodel/CityPart/EditCityResponse.dart';
@@ -1142,6 +1143,29 @@ class ApiService {
     }
   }
 
+  //fetch all order detail
+  Future<OrderDetailResponse> fetchOrderDetail(int id) async {
+    try {
+      final Response response = await _dio.get(
+        'https://mmeasyinvoice.com/api/orderdetails/$id',
+      );
+
+      print("Order detail response are : $response");
+      if (response.statusCode == 200) {
+        final OrderDetailResponse orderApiResponse =
+        OrderDetailResponse.fromJson(response.data);
+        return orderApiResponse;
+      } else {
+        throw Exception('Failed to fetch data');
+
+      }
+    } catch (error) {
+
+      throw Exception('Failed to fetch data');
+
+    }
+  }
+
 
   //fetch all shop product list
   Future<ShopProductListResponse> shopProductList() async {
@@ -1201,6 +1225,9 @@ class ApiService {
   }
 
 
+
+
+
   // fetch all order by date
   Future<OrderByDateResponse> fetchAllOrderByDate(OrderByDateRequest orderByDateRequestModel) async {
     try {
@@ -1219,7 +1246,7 @@ class ApiService {
           final orderByDateData = orderByDateResponse.data;
 
 
-            orderFilterData.addAll(orderByDateData);
+          orderFilterData.addAll(orderByDateData);
 
 
           nextPageUrl = orderByDateResponse.nextPageUrl;
@@ -1255,6 +1282,8 @@ class ApiService {
       throw Exception('Failed to fetch orders by date response: $e');
     }
   }
+
+
 
   //shopkeeper request list
   Future<ShopKeeperRequestResponse> shopKeeperRequestList() async {

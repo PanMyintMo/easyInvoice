@@ -48,6 +48,7 @@ import '../bloc/edit/statusChange/shopkeeper_status_cubit.dart';
 import '../bloc/get/CityPart/fetch_all_ward_cubit.dart';
 import '../bloc/get/CompanyProfile/company_profile_cubit.dart';
 import '../bloc/get/DeliveryManPart/fetch_all_delivery_cubit.dart';
+import '../bloc/get/DeliveryManPart/fetch_all_order_detail_cubit.dart';
 import '../bloc/get/DeliveryManPart/fetch_all_warehouse_request_cubit.dart';
 import '../bloc/get/FaultyItemPart/fetch_all_faulty_item_cubit.dart';
 import '../bloc/get/ShopKeeperPart/deliver_warehouse_request_cubit.dart';
@@ -123,6 +124,13 @@ void locator() {
   FetchOrderByDateCubit fetchOrderByDateCubit =
       FetchOrderByDateCubit(getIt.get<UserRepository>());
   getIt.registerLazySingleton(() => fetchOrderByDateCubit);
+
+
+
+  //fetch all order details
+  FetchAllOrderDetailCubit fetchAllOrderDetailCubit =
+  FetchAllOrderDetailCubit(getIt.get<UserRepository>());
+  getIt.registerLazySingleton(() => fetchAllOrderDetailCubit);
 
   //Delivered Warehouse Request
   DeliverWarehouseRequestCubit deliveryWarehouseRequestCubit =

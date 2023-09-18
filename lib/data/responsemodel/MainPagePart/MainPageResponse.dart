@@ -1,11 +1,11 @@
 class OrderApiResponse {
-  final List<OrderDatas> data;
-  final int totalProfit;
-  final int totalSales;
-  final String totalRevenue;
-  final int shopKeeper;
-  final int totalWareHouseQuantity;
-  final String totalFaultyItem;
+  final List<OrderDatas>? data;
+  final int? totalProfit;
+  final int? totalSales;
+  final String? totalRevenue;
+  final int? shopKeeper;
+  final int? totalWareHouseQuantity;
+  final String? totalFaultyItem;
   final int status;
   final String message;
 
@@ -23,15 +23,14 @@ class OrderApiResponse {
 
   factory OrderApiResponse.fromJson(Map<String, dynamic> json) {
     return OrderApiResponse(
-      data: (json['data'] as List)
-          .map((item) => OrderDatas.fromJson(item))
-          .toList(),
-      totalProfit: json['totalProfit'],
-      totalSales: json['totalSales'],
-      totalRevenue: json['totalRevenue'],
-      shopKeeper: json['shopKeeper'],
-      totalWareHouseQuantity: json['totalWareHouseQuantity'],
-      totalFaultyItem: json['totalFaultyItem'],
+      data: (json['data'] as List<dynamic>?)?.map((item) =>
+          OrderDatas.fromJson(item)).toList() ?? [],
+      totalProfit: json['totalProfit'] ?? 0,
+      totalSales: json['totalSales'] ?? 0,
+      totalRevenue: json['totalRevenue'] ?? '',
+      shopKeeper: json['shopKeeper'] ?? 0,
+      totalWareHouseQuantity: json['totalWareHouseQuantity'] ?? 0,
+      totalFaultyItem: json['totalFaultyItem'] ?? '',
       status: json['status'],
       message: json['message'],
     );
@@ -51,6 +50,7 @@ class OrderDatas {
   final String delivery_company;
   final String status;
   final int product_id;
+  final String? product_url;
   final String price;
   final int quantity;
   final int orderitem_id;
@@ -90,7 +90,8 @@ class OrderDatas {
   OrderDatas({
    required this.order_id,required this.user_id,
     required this.quantity,required this.price,
-    required this.product_id, required this.zipcode,required this.floor,
+    required this.product_id, required this.product_url,
+    required this.zipcode,required this.floor,
     required this.block_no,required this.line2,required this.line1,
     required this.mobile,required this.lastname,required this.firstname,
     required this.country_id,required this.ward_name,required this.country_name,
@@ -113,6 +114,7 @@ class OrderDatas {
       quantity: json['quantity'],
       price: json['price'],
       product_id: json['product_id'],
+      product_url: json['product_url'] ?? '',
       zipcode: json['zipcode'],
       floor: json['floor'],
       block_no: json['block_no'],
