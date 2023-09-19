@@ -49,7 +49,7 @@ class _LoginState extends State<Login> {
               sessionManager.setUserName(name);
               sessionManager.setEmail(email);
               sessionManager.setUserType(utype);
-              sessionManager.setId(id!);
+              sessionManager.setId(id);
 
               // Navigate to the user profile page after the current frame is completed
               WidgetsBinding.instance.addPostFrameCallback((_) {

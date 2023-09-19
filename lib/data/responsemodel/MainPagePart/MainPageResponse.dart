@@ -79,6 +79,7 @@ class OrderDatas {
   final String floor;
   final String zipcode;
   final int ward_id;
+  final int state_id;
   final String ward_name;
   final int city_id;
   final String state_name;
@@ -92,9 +93,12 @@ class OrderDatas {
     required this.quantity,required this.price,
     required this.product_id, required this.product_url,
     required this.zipcode,required this.floor,
-    required this.block_no,required this.line2,required this.line1,
+    required this.state_id,
+    required this.block_no,required this.line2,
+    required this.line1,
     required this.mobile,required this.lastname,required this.firstname,
-    required this.country_id,required this.ward_name,required this.country_name,
+    required this.country_id,required this.ward_name,
+    required this.country_name,
     required this.city_name,required this.ward_id,required this.street_id,required this.email,
     required this.sale_price,required this.category_id,required this.SKU,required this.buying_price,
     required this.regular_price,required this.short_description,required this.slug,
@@ -113,6 +117,7 @@ class OrderDatas {
       user_id: json['user_id'],
       quantity: json['quantity'],
       price: json['price'],
+      state_id: json['state_id'],
       product_id: json['product_id'],
       product_url: json['product_url'] ?? '',
       zipcode: json['zipcode'],

@@ -33,24 +33,24 @@ class CardView extends StatelessWidget {
                 Text("$id"),
               ],
             ),
-            SizedBox(height : 16),
+            const SizedBox(height : 16),
             Row(
               children: [
                 const Expanded(child: Text("Order Date:")),
                 Text("$str1"),
               ],
             ),
-            SizedBox(height : 16),
+            const SizedBox(height : 16),
             Row(
               children: [
-                Expanded(child: Text("Status:")),
+                const Expanded(child: Text("Status:")),
                 Text("$str2"),
               ],
             ),
-            SizedBox(height : 16),
+            const SizedBox(height : 16),
             Row(
               children: [
-                Expanded(child: Text("Delivery Date:")),
+                const Expanded(child: Text("Delivery Date:")),
                 Text("$str3"),
               ],
             ),

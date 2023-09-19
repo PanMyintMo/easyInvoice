@@ -19,6 +19,7 @@ import '../../dataRequestModel/CountryPart/AddCountry.dart';
 import '../../dataRequestModel/CountryPart/EditCountry.dart';
 import '../../dataRequestModel/DeliveryPart/AddDeliveryCompanyNameRequestModel.dart';
 import '../../dataRequestModel/DeliveryPart/AddOrderRequestModel.dart';
+import '../../dataRequestModel/DeliveryPart/EditOrderDetailRequestModel.dart';
 import '../../dataRequestModel/DeliveryPart/OrderByDateRequestModel.dart';
 import '../../dataRequestModel/DeliveryPart/ProductInvoiceRequest.dart';
 import '../../dataRequestModel/EditCategoryModel.dart';
@@ -37,6 +38,7 @@ import '../responsemodel/CityPart/AddWardResponse.dart';
 import '../responsemodel/CityPart/Cities.dart';
 import '../responsemodel/CityPart/EditWardResponse.dart';
 import '../responsemodel/CityPart/Street.dart';
+import '../responsemodel/DeliveryPart/EditOrderDetailResponse.dart';
 import '../responsemodel/DeliveryPart/FetchAllDeliveries.dart';
 import '../responsemodel/DeliveryPart/OrderDetailResponse.dart';
 import '../responsemodel/ShopKeeperResponsePart/DeliveredWarehouseRequest.dart';
@@ -216,6 +218,15 @@ class UserRepository {
     }
   }
 
+//edit order detail
+  Future<EditOrderData> editOrderDetail(int id,EditOrderDetailRequestModel editOrderDetailRequestModel) async {
+    try {
+      final response = await _apiService.editOrderDetail(id,editOrderDetailRequestModel);
+      return response;
+    } catch (error) {
+      rethrow;
+    }
+  }
 
 
   //request for add  township

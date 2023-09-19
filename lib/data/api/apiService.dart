@@ -21,6 +21,7 @@ import '../../dataRequestModel/DeliveryPart/AddDeliveryCompanyNameRequestModel.d
 import '../../dataRequestModel/DeliveryPart/AddOrderRequestModel.dart';
 import '../../dataRequestModel/DeliveryPart/ChangeOrderProductQty.dart';
 import '../../dataRequestModel/DeliveryPart/ChooseProductForOrderRequestModel.dart';
+import '../../dataRequestModel/DeliveryPart/EditOrderDetailRequestModel.dart';
 import '../../dataRequestModel/DeliveryPart/OrderByDateRequestModel.dart';
 import '../../dataRequestModel/DeliveryPart/ProductInvoiceRequest.dart';
 import '../../dataRequestModel/DeliveryPart/UpdateQuantityInBarcodeRequest.dart';
@@ -45,6 +46,7 @@ import '../responsemodel/CityPart/Street.dart';
 import '../responsemodel/CityPart/StreetByWardIdResponse.dart';
 import '../responsemodel/CityPart/WardByTownshipResponse.dart';
 import '../responsemodel/CityPart/Wards.dart';
+import '../responsemodel/DeliveryPart/EditOrderDetailResponse.dart';
 import '../responsemodel/DeliveryPart/FetchAllDeliveries.dart';
 import '../responsemodel/DeliveryPart/FetchAllOrderByDate.dart';
 import '../responsemodel/DeliveryPart/OrderDetailResponse.dart';
@@ -1166,7 +1168,28 @@ class ApiService {
     }
   }
 
+  //fetch edit order detail response
+  Future<EditOrderData> editOrderDetail(int id,EditOrderDetailRequestModel editOrderDetailRequestModel) async {
+    try {
+      final Response response = await _dio.post(
+        'https://mmeasyinvoice.com/api/edit-order/$id',data: editOrderDetailRequestModel.toJson()
+      );
 
+      print("Update Order detail response are : $response");
+      if (response.statusCode == 200) {
+        final EditOrderData orderApiResponse =
+        EditOrderData.fromJson(response.data);
+        return orderApiResponse;
+      } else {
+        throw Exception('Failed to fetch data');
+
+      }
+    } catch (error) {
+
+      throw Exception('Failed to fetch data');
+
+    }
+  }
   //fetch all shop product list
   Future<ShopProductListResponse> shopProductList() async {
     try {

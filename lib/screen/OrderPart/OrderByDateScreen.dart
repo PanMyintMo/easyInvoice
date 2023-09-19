@@ -7,6 +7,7 @@ import 'package:easy_invoice/dataRequestModel/DeliveryPart/OrderByDateRequestMod
 import '../../bloc/delete/CountryPart/delete_country_cubit.dart';
 import '../../data/responsemodel/MainPagePart/MainPageResponse.dart';
 import '../../module/module.dart';
+import 'EditOrderScreen.dart';
 
 class FetchOrderByDateScreen extends StatelessWidget {
   const FetchOrderByDateScreen({Key? key}) : super(key: key);
@@ -212,6 +213,9 @@ class _FetchOrderByDateContentState extends State<FetchOrderByDateContent> {
                     ],
                   ),
                 ),
+                const SizedBox(
+                  width: 10,
+                ),
                 TextButton(
                   onPressed: () {
                     if (isDateValid()) {
@@ -234,15 +238,18 @@ class _FetchOrderByDateContentState extends State<FetchOrderByDateContent> {
                       );
                     }
                   },
-                  child: const Text(
-                    'Search',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
+
+                  child: const Center(
+                    child:  Text(
+                      'Search',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                      textAlign: TextAlign.center,
                     ),
                   ),
                 )
-
 
               ],
             ),
@@ -294,12 +301,12 @@ class _FetchOrderByDateContentState extends State<FetchOrderByDateContent> {
                                           ),
                                         );
                                       } else if (newAction == 'Edit Order') {
-                                        // Navigator.push(
-                                        //   context,
-                                        //   MaterialPageRoute(
-                                        //     builder: (context) => EditOrderScreen(order_id: orderItem.order_id), // Replace with your edit screen
-                                        //   ),
-                                        // );
+                                         Navigator.push(
+                                        context,
+                                          MaterialPageRoute(
+                                             builder: (context) => EditOrderScreen(order_id: orderItem.order_id), // Replace with your edit screen
+                                         ),
+                                        );
                                       } else if (newAction == 'Delete Order') {
 
                                       }

@@ -3,6 +3,7 @@ import 'package:easy_invoice/bloc/delete/CityPart/delete_ward_cubit.dart';
 import 'package:easy_invoice/bloc/delete/ShopKeeperPart/delete_shop_keeper_product_request_cubit.dart';
 import 'package:easy_invoice/bloc/delete/delete_category_cubit.dart';
 import 'package:easy_invoice/bloc/delete/delete_size_cubit.dart';
+import 'package:easy_invoice/bloc/edit/CityPart/edit_order_detail_cubit.dart';
 import 'package:easy_invoice/bloc/edit/FaultyPart/update_faulty_cubit.dart';
 import 'package:easy_invoice/bloc/edit/edit_category_cubit.dart';
 import 'package:easy_invoice/bloc/edit/edit_product_item_cubit.dart';
@@ -131,6 +132,14 @@ void locator() {
   FetchAllOrderDetailCubit fetchAllOrderDetailCubit =
   FetchAllOrderDetailCubit(getIt.get<UserRepository>());
   getIt.registerLazySingleton(() => fetchAllOrderDetailCubit);
+
+
+
+  //edit order details
+  EditOrderDetailCubit editOrderDetailCubit =
+  EditOrderDetailCubit(getIt.get<UserRepository>());
+  getIt.registerLazySingleton(() => editOrderDetailCubit);
+
 
   //Delivered Warehouse Request
   DeliverWarehouseRequestCubit deliveryWarehouseRequestCubit =

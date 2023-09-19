@@ -19,12 +19,14 @@ class ProductCardView extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(10), // Add padding for spacing
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+         crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
 
           Image.network(
             imageUrl ?? '', // Use imageUrl and provide a default value ('' in this case)
-            height: 100, // Adjust the height as needed
+            height: 100,
+            fit: BoxFit.fitWidth,
+            scale: 1.0,// Adjust the height as needed
             width: double.infinity, // Adjust the width as needed
           ),
             const SizedBox(height : 16),

@@ -1,7 +1,10 @@
 import 'package:easy_invoice/screen/WarehousePart/WareHouseTableScreen.dart';
 import 'package:easy_invoice/screen/shopkeeperPart/ShopKeeperProductTableScreen.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import '../bloc/get/MainPagePart/order_filter_by_date_cubit.dart';
 import '../bloc/get/WarehousePart/warehouse_product_list_cubit.dart';
 import '../common/ThemeHelperUserClass.dart';
@@ -12,6 +15,7 @@ import '../navigationdrawer/navigationdrawer.dart';
 import 'package:easy_invoice/network/SharedPreferenceHelper.dart';
 
 import 'FaultyItemPart/FaultyItems.dart';
+import 'Login&Register/Login.dart';
 
 class MainPageScreen extends StatefulWidget {
   const MainPageScreen({Key? key}) : super(key: key);
@@ -287,7 +291,7 @@ class _MainPageState extends State<MainPageScreen> {
                               ),
                               const Text("Warehouse Data",
                                   style: TextStyle(
-                                      color: Colors.blueAccent,
+                                      color: Colors.red,
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold)),
                               const SizedBox(
@@ -365,7 +369,7 @@ class _MainPageState extends State<MainPageScreen> {
                               const Text(
                                 "All Order",
                                 style: TextStyle(
-                                    color: Colors.blueAccent,
+                                    color: Colors.red,
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold),
                               ),
@@ -455,47 +459,51 @@ class _MainPageState extends State<MainPageScreen> {
       elevation: 0.0,
       backgroundColor: Colors.white70,
       iconTheme: const IconThemeData(
-        color: Colors.red, // Set the color of the navigation icon to black
+        color: Colors.black, // Set the color of the navigation icon to black
       ),
       title: const Text(
         'Dashboard',
-        style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+        style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
       ),
       actions: [
-        // IconButton(
-        //   onPressed: () {},
-        //   icon: const Icon(
-        //     Icons.search,
-        //     color: Colors.red,
-        //     size: 20,
-        //   ),
-        // ),
-
         Row(
           children: [
-            Padding(
-              padding: const EdgeInsets.only(right: 5),
-              child: Text(
-                username.toString(),
-                style: const TextStyle(
-                    fontWeight: FontWeight.bold, color: Colors.black),
-              ),
+            Text(
+              username!.split(" ").first.toString(),
+              style: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black),
             ),
-
-
-            // IconButton(
-            //   onPressed: () {},
-            //   icon: url!.isNotEmpty
-            //       ? CircleAvatar(
-            //           backgroundImage: NetworkImage(url!),
-            //           radius: 20,
-            //         )
-            //       : const Icon(
-            //           Icons.account_circle_rounded,
-            //           color: Colors.red,
-            //           size: 20,
-            //         ),
-            // )
+            const SizedBox(
+              width: 4,
+            ),
+            GestureDetector(
+              child: const Icon(
+                CupertinoIcons.chevron_down,
+                size: 12,
+                color: Colors.black,
+              ),
+              onTap: () {
+                _showPopupMenu(context); // Show the popup menu
+              },
+            ),
+            const SizedBox(
+              width: 4,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(right: 12.0),
+              child: url != null && url!.isNotEmpty
+                  ? CircleAvatar(
+                      radius: 20,
+                      backgroundImage: NetworkImage(url!),
+                    )
+                  : const Icon(
+                      Icons.account_circle_rounded,
+                      size: 37,
+                      color: Colors.black,
+                    ),
+            )
           ],
         ),
       ],
@@ -507,11 +515,12 @@ class _MainPageState extends State<MainPageScreen> {
       elevation: 0.0,
       backgroundColor: Colors.white70,
       iconTheme: const IconThemeData(
-        color: Colors.red, // Set the color of the navigation icon to black
+        color:
+            Colors.blueAccent, // Set the color of the navigation icon to black
       ),
       title: const Text(
         'Easy Invoice',
-        style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+        style: TextStyle(color: Colors.blueAccent, fontWeight: FontWeight.bold),
       ),
       actions: [
         IconButton(
@@ -524,6 +533,64 @@ class _MainPageState extends State<MainPageScreen> {
         ),
       ],
     );
+  }
+
+  void _showPopupMenu(BuildContext context) async{
+  await showMenu(
+        context: context,
+        position: const RelativeRect.fromLTRB(5, 70, 0, 10),
+        items: [
+          PopupMenuItem(
+            child: const ListTile(
+              leading: Icon(Icons.settings),
+              title: Text('Setting'),
+            ),
+            onTap: () {},
+          ),
+          PopupMenuItem(
+            child: const ListTile(
+              leading: Icon(Icons.exit_to_app),
+              title: Text('Logout'),
+            ),
+            onTap: () {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: const Text("LOGOUT"),
+                    content: const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 15.0),
+                      child: Text("Are you sure you want to Logout?"),
+                    ),
+                    actions: <Widget>[
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.of(context).pop(); // Close the dialog
+                          // Handle logout here
+                          Get.offAll(() =>
+                              const Login()); // Navigate to the login screen
+                          SessionManager()
+                              .removeAuthToken(); // Remove the authentication token
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.redAccent,
+                          side: BorderSide.none,
+                        ),
+                        child: const Text("Yes"),
+                      ),
+                      OutlinedButton(
+                        onPressed: () {
+                          Navigator.of(context).pop(); // Close the dialog
+                        },
+                        child: const Text("No"),
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
+          )
+        ]);
   }
 }
 
@@ -547,6 +614,7 @@ Widget _buildCardView(String image, String cardText, String profileText,
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         GestureDetector(
@@ -572,6 +640,8 @@ Widget _buildCardView(String image, String cardText, String profileText,
                           ),
                         ),
                         Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
                               profileText,

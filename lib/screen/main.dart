@@ -24,17 +24,9 @@ class MyApp extends StatelessWidget {
       create: (BuildContext context) => getIt.get<SignUpCubit>(),
       child: GetMaterialApp(
         debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          primarySwatch: Colors.pink,
-          appBarTheme: const AppBarTheme(
-            backgroundColor: Colors.redAccent,
-            iconTheme: IconThemeData(color: Colors.white),
-            actionsIconTheme: IconThemeData(color: Colors.white),
-            centerTitle: false,
-            elevation: 0,
-            titleTextStyle: TextStyle(color: Colors.white, fontSize: 24),
-          ),
-        ),
+        theme: ThemeData.light(),
+        darkTheme: ThemeData.dark(),
+        themeMode: ThemeMode.system,
         getPages: [
           GetPage(name: "/", page: () => const SplashScreen()),
           GetPage(name: "/login", page: () => const Login()),

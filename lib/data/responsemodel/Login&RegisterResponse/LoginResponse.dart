@@ -1,5 +1,5 @@
 class LoginResponse {
-  int? id;
+  int id;
   String name;
   String email;
   DateTime? emailVerifiedAt;
@@ -11,7 +11,7 @@ class LoginResponse {
   String token;
 
   LoginResponse({
-    this.id,
+    required this.id,
     required this.name,
     required this.email,
     this.emailVerifiedAt,
@@ -26,7 +26,7 @@ class LoginResponse {
   factory LoginResponse.fromJson(Map<String, dynamic> data) {
     final dataJson = data['data'] as Map<String, dynamic>;
     return LoginResponse(
-      id: dataJson['id'] as int?,
+      id: dataJson['id'],
       name: dataJson['name'] as String,
       email: dataJson['email'] as String,
       emailVerifiedAt: dataJson['email_verified_at'] != null

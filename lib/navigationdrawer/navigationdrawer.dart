@@ -100,27 +100,27 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
         child: Column(
           children: [
             CircleAvatar(
-              radius: 30,
+              radius: 40,
               backgroundImage: url.isNotEmpty ? NetworkImage(url) : null,
               child: url.isEmpty
-                  ? const Icon(Icons.account_circle_rounded, size: 60)
+                  ? const Icon(Icons.account_circle_rounded, size: 80)
                   : null,
             ),
-            const SizedBox(width: 10),
+            const SizedBox(height: 16),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Center(
                   child: Text(
                     username ?? '',
-                    style: const TextStyle(fontSize: 20, color: Colors.black),
+                    style:  TextStyle(fontSize: 20, color: Colors.blue[400]),
                   ),
                 ),
                 const SizedBox(height: 4),
                 Center(
                   child: Text(
                     email ?? '',
-                    style: const TextStyle(fontSize: 14, color: Colors.black),
+                    style:  TextStyle(fontSize: 14, color: Colors.blue[400]),
                   ),
                 ),
               ],
@@ -132,21 +132,21 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
   }
 
   Widget buildSearchField() {
-    const color = Colors.black;
+    var color = Colors.blue[300];
 
     return TextField(
-      style: const TextStyle(color: color),
+      style:  TextStyle(color: color),
       decoration: InputDecoration(
         contentPadding:
             const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
         hintText: 'Search',
-        hintStyle: const TextStyle(color: color),
-        prefixIcon: const Icon(Icons.search, color: color),
+        hintStyle:  TextStyle(color: color),
+        prefixIcon:  Icon(Icons.search, color: color),
         filled: true,
         fillColor: Colors.white12,
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(5),
-          borderSide: BorderSide(color: color.withOpacity(0.7)),
+          borderSide: BorderSide(color: color!.withOpacity(0.7)),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(5),

@@ -2,7 +2,6 @@ import 'package:easy_invoice/data/responsemodel/CityPart/Cities.dart';
 
 import '../data/api/apiService.dart';
 import '../data/responsemodel/CityPart/Street.dart';
-import '../data/responsemodel/CityPart/Wards.dart';
 import '../data/responsemodel/CountryPart/CountryResponse.dart';
 import '../data/responsemodel/FaultyItemPart/AllFaultyItems.dart';
 import '../data/responsemodel/GetAllPagnitaionDataResponse.dart';
