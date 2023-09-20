@@ -21,6 +21,7 @@ import 'package:easy_invoice/bloc/get/UserRolePart/get_all_user_role_cubit.dart'
 import 'package:easy_invoice/bloc/get/CategoryPart/get_category_detail_cubit.dart';
 import 'package:easy_invoice/bloc/post/CityPart/add_street_cubit.dart';
 import 'package:easy_invoice/bloc/post/DeliveryPart/add_delivery_cubit.dart';
+import 'package:easy_invoice/bloc/post/DeliveryPart/change_order_status_cubit.dart';
 import 'package:easy_invoice/bloc/post/DeliveryPart/fetch_order_by_date_cubit.dart';
 import 'package:easy_invoice/bloc/post/FaultyItemPart/add_request_faulty_item_cubit.dart';
 import 'package:easy_invoice/bloc/post/Login&Register/edit_company_profile_cubit.dart';
@@ -133,6 +134,10 @@ void locator() {
   FetchAllOrderDetailCubit(getIt.get<UserRepository>());
   getIt.registerLazySingleton(() => fetchAllOrderDetailCubit);
 
+//change order status
+  ChangeOrderStatusCubit changeOrderStatusCubit =
+  ChangeOrderStatusCubit(getIt.get<UserRepository>());
+  getIt.registerLazySingleton(() => changeOrderStatusCubit);
 
 
   //edit order details

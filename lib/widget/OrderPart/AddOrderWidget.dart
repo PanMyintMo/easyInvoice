@@ -133,7 +133,7 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
         message = response.message;
       });
     } catch (e) {
-      print("Change order error is $e");
+     // print("Change order error is $e");
     }
   }
 
@@ -741,14 +741,15 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
                                 setState(() {
                                   totalQty = 0;
                                   errorText =
-                                      'Quality can not be greater than available quanity!';
+                                      'Quality can not be greater than available quantity!';
                                 });
                               } else {
                                 setState(() {
                                   totalQty = 0;
                                   errorText = null;
                                 });
-                                changeOrderQty(ChangeOrderProductQtyRequest(
+                                changeOrderQty(
+                                    ChangeOrderProductQtyRequest(
                                   selectedProductId: product_id,
                                   selectedProductQuantity:
                                       productQuality.toString(),

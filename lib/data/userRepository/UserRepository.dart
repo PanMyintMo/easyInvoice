@@ -19,6 +19,7 @@ import '../../dataRequestModel/CountryPart/AddCountry.dart';
 import '../../dataRequestModel/CountryPart/EditCountry.dart';
 import '../../dataRequestModel/DeliveryPart/AddDeliveryCompanyNameRequestModel.dart';
 import '../../dataRequestModel/DeliveryPart/AddOrderRequestModel.dart';
+import '../../dataRequestModel/DeliveryPart/ChangeOrderStatusRequestModel.dart';
 import '../../dataRequestModel/DeliveryPart/EditOrderDetailRequestModel.dart';
 import '../../dataRequestModel/DeliveryPart/OrderByDateRequestModel.dart';
 import '../../dataRequestModel/DeliveryPart/ProductInvoiceRequest.dart';
@@ -202,6 +203,16 @@ class UserRepository {
   Future<AddCityResponse> addCity(AddCity addCity) async {
     try {
       final response = await _apiService.requestCity(addCity);
+      return response;
+    } catch (error) {
+      rethrow;
+    }
+  }
+
+  //change Order Status
+  Future<DeleteResponse> changeOrderStatus(ChangeOrderStatusRequestModel changeOrderStatusRequestModel) async {
+    try {
+      final response = await _apiService.changeOrderStatus(changeOrderStatusRequestModel);
       return response;
     } catch (error) {
       rethrow;

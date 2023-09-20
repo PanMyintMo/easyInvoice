@@ -5,12 +5,14 @@ import 'package:flutter/material.dart';
 import '../../common/FormValidator.dart';
 import '../../common/ThemeHelperUserClass.dart';
 import '../../data/responsemodel/CityPart/FetchCityByCountryId.dart';
+import '../../data/responsemodel/CityPart/Street.dart';
 import '../../data/responsemodel/CountryPart/CountryResponse.dart';
+import '../../data/responsemodel/DeliveryPart/DeliCompanyNameByTownshipId.dart';
 import '../../data/responsemodel/MainPagePart/MainPageResponse.dart';
+import '../../data/responsemodel/common/WardResponse.dart';
 
 class EditOrderWidget extends StatefulWidget {
   final bool isLoading;
-
   final OrderDatas orderDetailResponse;
 
   const EditOrderWidget({
@@ -27,9 +29,23 @@ class _EditOrderWidgetState extends State<EditOrderWidget> {
   List<Country> countries = [];
   List<CityByCountryIdData> cities = [];
   List<TownshipByCityIdData> townships = [];
+  List<Ward> wards = [];
+  List<Street> streets = [];
+  List<CompanyData> companyData = [];
   String? selectedCountryId; // Use the country ID for initial selection
   String? selectedCityId; // Use the country ID for initial selection
+  String? selectStreetId; // Use the country ID for initial selection
   String? selectedTownshipId; // Use the country ID for initial selection
+  String? selectWardId; // Use the country ID for initial selection
+  String? selectDeliveryCompanyId;
+  int serviceId = 0;
+  String waitingTime = '';
+  double basicCost = 0;
+  List<int>? companyId = [];
+  String cname = '';
+  bool isVisible = false;
+  String url = '';
+
 
   var firstname = TextEditingController();
   var lastname = TextEditingController();
@@ -38,6 +54,7 @@ class _EditOrderWidgetState extends State<EditOrderWidget> {
   var line1 = TextEditingController();
   var line2 = TextEditingController();
   var zipcode = TextEditingController();
+  var description = TextEditingController();
   var sale_price = TextEditingController();
   var available_quantity = TextEditingController();
   var quantity = TextEditingController();
@@ -58,6 +75,8 @@ class _EditOrderWidgetState extends State<EditOrderWidget> {
     line1 = TextEditingController(text: widget.orderDetailResponse.line1);
     line2 = TextEditingController(text: widget.orderDetailResponse.line2);
     zipcode = TextEditingController(text: widget.orderDetailResponse.zipcode);
+    description = TextEditingController(
+        text: widget.orderDetailResponse.short_description);
     sale_price =
         TextEditingController(text: widget.orderDetailResponse.sale_price);
     available_quantity = TextEditingController(
@@ -87,7 +106,7 @@ class _EditOrderWidgetState extends State<EditOrderWidget> {
 
     if (cities.isNotEmpty) {
       final matchingCity = cities.firstWhere(
-            (city) => city.id == widget.orderDetailResponse.city_id,
+        (city) => city.id == widget.orderDetailResponse.city_id,
       );
       selectedCityId = matchingCity.id.toString();
     }
@@ -103,17 +122,57 @@ class _EditOrderWidgetState extends State<EditOrderWidget> {
 
     if (townships.isNotEmpty) {
       final matchingTownship = townships.firstWhere(
-            (township) => township.id == widget.orderDetailResponse.state_id,
+        (township) => township.id == widget.orderDetailResponse.state_id,
       );
       selectedTownshipId = matchingTownship.id.toString();
     }
     setState(() {
       selectedTownshipId = selectedTownshipId;
-
     });
+    fetchWardByTownshipId(int.parse(selectedTownshipId!));
+    fetchDeliCompanyNameByTownshipId(int.parse(selectedTownshipId!));
   }
 
+  void fetchDeliCompanyNameByTownshipId(int id) async {
+    final response = await ApiService().fetchAllCompanyByTownshipId(id);
+    if (response.isNotEmpty) {
+      final matchingDeliveryCompany = response.firstWhere(
+          (company) => company.id == widget.orderDetailResponse.add_type);
 
+      selectDeliveryCompanyId = matchingDeliveryCompany.id.toString();
+    }
+    setState(() {
+      selectDeliveryCompanyId = selectDeliveryCompanyId;
+    });
+    //fetchStreetByWardId(int.parse(selectWardId!));
+  }
+
+  void fetchWardByTownshipId(int id) async {
+    wards = await ApiHelper.fetchWardByTownshipId(id);
+    if (wards.isNotEmpty) {
+      final matchingWard = wards
+          .firstWhere((ward) => ward.id == widget.orderDetailResponse.ward_id);
+
+      selectWardId = matchingWard.id.toString();
+    }
+    setState(() {
+      selectWardId = selectWardId;
+    });
+    fetchStreetByWardId(int.parse(selectWardId!));
+  }
+
+  void fetchStreetByWardId(int id) async {
+    streets = await ApiHelper.fetchStreetByWardId(id);
+
+    if (streets.isNotEmpty) {
+      final matchingStreet = streets.firstWhere(
+          (street) => street.id == widget.orderDetailResponse.street_id);
+      selectStreetId = matchingStreet.id.toString();
+    }
+    setState(() {
+      selectStreetId = selectStreetId;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -253,8 +312,8 @@ class _EditOrderWidgetState extends State<EditOrderWidget> {
                     onChanged: (value) {
                       setState(() {
                         selectedCityId = value;
-                         int cityId = int.parse(value!);
-                          fetchTownshipByCityId(cityId);
+                        int cityId = int.parse(value!);
+                        fetchTownshipByCityId(cityId);
                       });
                     },
                     underline: const SizedBox(),
@@ -293,8 +352,8 @@ class _EditOrderWidgetState extends State<EditOrderWidget> {
                     onChanged: (value) {
                       setState(() {
                         selectedTownshipId = value;
-                        // fetchDeliCompanyNameByTownshipId(townshipId);
-                        //  fetchWardByTownshipId(townshipId);
+                        fetchDeliCompanyNameByTownshipId(int.parse(selectedTownshipId!));
+                        fetchWardByTownshipId(int.parse(selectedTownshipId!));
                       });
                     },
                     underline: const SizedBox(),
@@ -312,71 +371,71 @@ class _EditOrderWidgetState extends State<EditOrderWidget> {
                 const SizedBox(
                   height: 18,
                 ),
-                // SizedBox(
-                //   width: double.infinity,
-                //   child: chooseItemIdForm(DropdownButton(
-                //     hint: const Text("Select Ward"),
-                //     value: select_ward,
-                //     items: [
-                //       ...wards.map((ward) {
-                //         return DropdownMenuItem(
-                //           value: ward.id.toString(),
-                //           child: Text(ward.ward_name),
-                //         );
-                //       }).toList(),
-                //     ],
-                //     onChanged: (value) {
-                //       setState(() {
-                //         select_ward = value;
-                //         int wardId = int.parse(value!);
-                //         fetchStreetByWardId(wardId);
-                //       });
-                //     },
-                //     underline: const SizedBox(),
-                //     borderRadius: BorderRadius.circular(10),
-                //     icon: const Icon(Icons.arrow_drop_down),
-                //     iconSize: 24,
-                //     isExpanded: true,
-                //     dropdownColor: Colors.white,
-                //     style: const TextStyle(
-                //       color: Colors.black,
-                //       fontSize: 16,
-                //     ),
-                //   )),
-                // ),
+                SizedBox(
+                  width: double.infinity,
+                  child: chooseItemIdForm(DropdownButton(
+                    hint: const Text("Select Ward"),
+                    value: selectWardId,
+                    items: [
+                      ...wards.map((ward) {
+                        return DropdownMenuItem(
+                          value: ward.id.toString(),
+                          child: Text(ward.ward_name),
+                        );
+                      }).toList(),
+                    ],
+                    onChanged: (value) {
+                      setState(() {
+                        selectWardId = value;
+                        int wardId = int.parse(value!);
+                        fetchStreetByWardId(wardId);
+                      });
+                    },
+                    underline: const SizedBox(),
+                    borderRadius: BorderRadius.circular(10),
+                    icon: const Icon(Icons.arrow_drop_down),
+                    iconSize: 24,
+                    isExpanded: true,
+                    dropdownColor: Colors.white,
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 16,
+                    ),
+                  )),
+                ),
                 const SizedBox(
                   height: 18,
                 ),
-                // SizedBox(
-                //   width: double.infinity,
-                //   child: chooseItemIdForm(DropdownButton(
-                //     hint: const Text("Select Street"),
-                //     value: select_street,
-                //     items: [
-                //       ...streets.map((street) {
-                //         return DropdownMenuItem<String>(
-                //           value: street.id.toString(),
-                //           child: Text(street.street_name),
-                //         );
-                //       }).toList(),
-                //     ],
-                //     onChanged: (value) {
-                //       setState(() {
-                //         select_street = value;
-                //       });
-                //     },
-                //     underline: const SizedBox(),
-                //     borderRadius: BorderRadius.circular(10),
-                //     icon: const Icon(Icons.arrow_drop_down),
-                //     iconSize: 24,
-                //     isExpanded: true,
-                //     dropdownColor: Colors.white,
-                //     style: const TextStyle(
-                //       color: Colors.black,
-                //       fontSize: 16,
-                //     ),
-                //   )),
-                // ),
+                SizedBox(
+                  width: double.infinity,
+                  child: chooseItemIdForm(DropdownButton(
+                    hint: const Text("Select Street"),
+                    value: selectStreetId,
+                    items: [
+                      ...streets.map((street) {
+                        return DropdownMenuItem<String>(
+                          value: street.id.toString(),
+                          child: Text(street.street_name),
+                        );
+                      }).toList(),
+                    ],
+                    onChanged: (value) {
+                      setState(() {
+                        selectStreetId = value;
+                      });
+                    },
+                    underline: const SizedBox(),
+                    borderRadius: BorderRadius.circular(10),
+                    icon: const Icon(Icons.arrow_drop_down),
+                    iconSize: 24,
+                    isExpanded: true,
+                    dropdownColor: Colors.white,
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 16,
+                    ),
+                  )),
+                ),
                 const SizedBox(
                   height: 18,
                 ),
@@ -416,7 +475,18 @@ class _EditOrderWidgetState extends State<EditOrderWidget> {
                 const SizedBox(
                   height: 18,
                 ),
-
+                SizedBox(
+                  width: double.infinity,
+                  child: buildProductContainerForm(
+                    widget.orderDetailResponse.short_description,
+                    TextInputType.text,
+                    description,
+                    validateField,
+                  ),
+                ),
+                const SizedBox(
+                  height: 18,
+                ),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -428,84 +498,90 @@ class _EditOrderWidgetState extends State<EditOrderWidget> {
                     const SizedBox(
                       height: 18,
                     ),
-                    // if (select_township != null && companyData.isNotEmpty)
-                    //   ListView.builder(
-                    //       shrinkWrap: true,
-                    //       itemCount: companyData.length,
-                    //       itemBuilder: (context, index) {
-                    //         var companyName = companyData[index].companyType.name;
-                    //         var id = companyData[index].companyType.id;
-                    //
-                    //         return RadioListTile(
-                    //             dense: true,
-                    //             activeColor: Colors.pink,
-                    //             title: Text(
-                    //               "Service :$companyName",
-                    //               style: const TextStyle(color: Colors.black),
-                    //             ),
-                    //             value: id,
-                    //             groupValue: serviceId,
-                    //             onChanged: (value) {
-                    //               setState(() {
-                    //                 serviceId = value as int;
-                    //                 if (companyData[index].companyId ==
-                    //                     companyData[index].companyType.id) {
-                    //                   isVisible = true;
-                    //                   waitingTime =
-                    //                       companyData[index].waitingTime;
-                    //                   basicCost = companyData[index].basicCost;
-                    //                   url = companyData[index].companyType.url;
-                    //                   cname = companyData[index].companyType.name;
-                    //                 } else {
-                    //                   url = '';
-                    //                 }
-                    //               });
-                    //             });
-                    //       }),
+                    ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: companyData.length,
+                      itemBuilder: (context, index) {
+                        var companyName = companyData[index].companyType.name;
+                        var id = companyData[index].companyType.id;
+
+                        return RadioListTile(
+                          dense: true,
+                          activeColor: Colors.pink,
+                          title: Text(
+                            "Service : $companyName",
+                            style: const TextStyle(color: Colors.black),
+                          ),
+                          value: id,
+                          groupValue: serviceId,
+                          onChanged: (value) {
+                            setState(() {
+                              serviceId = value as int;
+                              if (companyData[index].companyId == id) {
+                                isVisible = true;
+                                waitingTime = companyData[index].waitingTime;
+                                basicCost = companyData[index].basicCost;
+                                url = companyData[index].companyType.url;
+                                cname = companyName;
+                              } else {
+                                isVisible = false; // Hide the details if no service is selected
+                              }
+                            });
+                          },
+                        );
+                      },
+                    ),
                     const SizedBox(
                       height: 18,
                     ),
-                    // Visibility(
-                    //   visible: isVisible,
-                    //   child: Column(
-                    //     crossAxisAlignment: CrossAxisAlignment.start,
-                    //     mainAxisAlignment: MainAxisAlignment.start,
-                    //     children: [
-                    //       Text(
-                    //         "Waiting time is : $waitingTime",
-                    //         style: const TextStyle(
-                    //             fontSize: 16, fontWeight: FontWeight.bold),
-                    //       ),
-                    //       const SizedBox(
-                    //         height: 18,
-                    //       ),
-                    //       Text(
-                    //         "Basic Cost is : $basicCost",
-                    //         style: const TextStyle(
-                    //             fontSize: 16, fontWeight: FontWeight.bold),
-                    //       ),
-                    //       const SizedBox(
-                    //         height: 18,
-                    //       ),
-                    //       Text(
-                    //         "Company Name is : $cname",
-                    //         style: const TextStyle(
-                    //             fontSize: 16, fontWeight: FontWeight.bold),
-                    //       ),
-                    //       const SizedBox(
-                    //         height: 18,
-                    //       ),
-                    //       if (url.isNotEmpty)
-                    //         Image.network(
-                    //           url,
-                    //           width: double.infinity,
-                    //           height: 150,
-                    //         )
-                    //     ],
-                    //   ),
-                    // )
+                    Visibility(
+                      visible: isVisible,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Waiting time is: $waitingTime",
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 18,
+                          ),
+                          Text(
+                            "Basic Cost is: $basicCost",
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 18,
+                          ),
+                          Text(
+                            "Company Name is: $cname",
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 18,
+                          ),
+                          if (url.isNotEmpty)
+                            Image.network(
+                              url,
+                              width: double.infinity,
+                              height: 150,
+                            )
+                        ],
+                      ),
+                    )
                   ],
                 ),
+
                 const SizedBox(
                   height: 18,
                 ),

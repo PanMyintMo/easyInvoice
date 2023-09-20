@@ -1,3 +1,4 @@
+import 'package:easy_invoice/screen/SettingScreen.dart';
 import 'package:easy_invoice/screen/WarehousePart/WareHouseTableScreen.dart';
 import 'package:easy_invoice/screen/shopkeeperPart/ShopKeeperProductTableScreen.dart';
 import 'package:flutter/cupertino.dart';
@@ -485,9 +486,72 @@ class _MainPageState extends State<MainPageScreen> {
                 color: Colors.black,
               ),
               onTap: () {
-                _showPopupMenu(context); // Show the popup menu
+                // Show the popup menu
+                showMenu<int>(
+                  context: context,
+                  position: const RelativeRect.fromLTRB(5, 70, 0, 10),
+                  items: [
+                    const PopupMenuItem<int>(
+                      value: 0,
+                      child: ListTile(
+                        leading: Icon(Icons.settings), // Icon for Setting
+                        title: Text("Setting"),
+                      ),
+                    ),
+                    const PopupMenuItem<int>(
+                      value: 1,
+                      child: ListTile(
+                        leading: Icon(Icons.logout), // Icon for Logout
+                        title: Text("Logout"),
+                      ),
+                    ),
+                  ],
+                ).then((value) {
+
+                  if (value == 0) {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) =>
+                    const SettingScreen()));
+                  } else if (value == 1) {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: const Text("LOGOUT"),
+                          content: const Padding(
+                            padding: EdgeInsets.symmetric(vertical: 15.0),
+                            child: Text("Are you sure you want to Logout?"),
+                          ),
+                          actions: <Widget>[
+                            ElevatedButton(
+                              onPressed: () {
+                                Navigator.of(context).pop(); // Close the dialog
+                                // Handle logout here
+                                Get.offAll(() =>
+                                const Login()); // Navigate to the login screen
+                                SessionManager()
+                                    .removeAuthToken(); // Remove the authentication token
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.redAccent,
+                                side: BorderSide.none,
+                              ),
+                              child: const Text("Yes"),
+                            ),
+                            OutlinedButton(
+                              onPressed: () {
+                                Navigator.of(context).pop(); // Close the dialog
+                              },
+                              child: const Text("No"),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  }
+                });
               },
             ),
+
             const SizedBox(
               width: 4,
             ),
@@ -535,63 +599,6 @@ class _MainPageState extends State<MainPageScreen> {
     );
   }
 
-  void _showPopupMenu(BuildContext context) async{
-  await showMenu(
-        context: context,
-        position: const RelativeRect.fromLTRB(5, 70, 0, 10),
-        items: [
-          PopupMenuItem(
-            child: const ListTile(
-              leading: Icon(Icons.settings),
-              title: Text('Setting'),
-            ),
-            onTap: () {},
-          ),
-          PopupMenuItem(
-            child: const ListTile(
-              leading: Icon(Icons.exit_to_app),
-              title: Text('Logout'),
-            ),
-            onTap: () {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    title: const Text("LOGOUT"),
-                    content: const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 15.0),
-                      child: Text("Are you sure you want to Logout?"),
-                    ),
-                    actions: <Widget>[
-                      ElevatedButton(
-                        onPressed: () {
-                          Navigator.of(context).pop(); // Close the dialog
-                          // Handle logout here
-                          Get.offAll(() =>
-                              const Login()); // Navigate to the login screen
-                          SessionManager()
-                              .removeAuthToken(); // Remove the authentication token
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.redAccent,
-                          side: BorderSide.none,
-                        ),
-                        child: const Text("Yes"),
-                      ),
-                      OutlinedButton(
-                        onPressed: () {
-                          Navigator.of(context).pop(); // Close the dialog
-                        },
-                        child: const Text("No"),
-                      ),
-                    ],
-                  );
-                },
-              );
-            },
-          )
-        ]);
-  }
 }
 
 Widget _buildCardView(String image, String cardText, String profileText,
@@ -614,7 +621,7 @@ Widget _buildCardView(String image, String cardText, String profileText,
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         GestureDetector(
@@ -624,6 +631,7 @@ Widget _buildCardView(String image, String cardText, String profileText,
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
+                              decorationColor: Colors.black,
                               decoration: (cardText == "Total Revenue" ||
                                       cardText == "Total Sale" ||
                                       cardText == "Total Profit")
@@ -645,9 +653,9 @@ Widget _buildCardView(String image, String cardText, String profileText,
                           children: [
                             Text(
                               profileText,
-                              style: const TextStyle(
+                              style:  TextStyle(
                                   fontSize: 18,
-                                  color: Colors.green,
+                                  color: Colors.lightGreen.shade900,
                                   fontWeight: FontWeight.bold),
                             ),
                             Text(sign,
