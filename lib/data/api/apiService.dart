@@ -17,6 +17,7 @@ import '../../dataRequestModel/CityPart/AddWardRequestModel.dart';
 import '../../dataRequestModel/CityPart/EditCity.dart';
 import '../../dataRequestModel/CountryPart/AddCountry.dart';
 import '../../dataRequestModel/CountryPart/EditCountry.dart';
+import '../../dataRequestModel/DeliveryPart/AddDeliveryCompanyInfoRequestModel.dart';
 import '../../dataRequestModel/DeliveryPart/AddDeliveryCompanyNameRequestModel.dart';
 import '../../dataRequestModel/DeliveryPart/AddOrderRequestModel.dart';
 import '../../dataRequestModel/DeliveryPart/ChangeOrderProductQty.dart';
@@ -47,6 +48,7 @@ import '../responsemodel/CityPart/Street.dart';
 import '../responsemodel/CityPart/StreetByWardIdResponse.dart';
 import '../responsemodel/CityPart/WardByTownshipResponse.dart';
 import '../responsemodel/CityPart/Wards.dart';
+import '../responsemodel/DeliveryPart/DeliveryCompanyInfoResponse.dart';
 import '../responsemodel/DeliveryPart/EditOrderDetailResponse.dart';
 import '../responsemodel/DeliveryPart/FetchAllDeliveries.dart';
 import '../responsemodel/DeliveryPart/FetchAllOrderByDate.dart';
@@ -510,6 +512,26 @@ class ApiService {
     }
   }
 
+  //company delivery info
+  Future<DeliCompanyInfoResponse> deliCompanyInfo(AddDeliCompanyInfoRequest addDeliCompanyInfoRequest) async {
+    try {
+      final Response response = await _dio.post(
+          'https://www.mmeasyinvoice.com/api/add-delivery-info',data: addDeliCompanyInfoRequest
+         );
+
+      if (response.statusCode == 200) {
+        final DeliCompanyInfoResponse deliCompanyResponse =
+        DeliCompanyInfoResponse.fromJson(response.data);
+        return deliCompanyResponse;
+      } else {
+        throw Exception('Failed to fetch data');
+      }
+    } catch (error) {
+      throw Exception('Failed to fetch data');
+    }
+  }
+
+
   //Update faulty item
   Future<EditResponse> editFaulty(
       EditRequestModel editRequestModel, int id) async {
@@ -608,9 +630,9 @@ class ApiService {
 
           deliveryItemData.addAll(deliveryData);
 
-          nextPageUrl = allDeliveryResponse.nextPageUrl;
+          nextPageUrl = allDeliveryResponse.next_page_url;
 
-          if (currentPage == allDeliveryResponse.lastPage) {
+          if (currentPage == allDeliveryResponse.last_page) {
             break;
           } else {
             currentPage++;
@@ -621,19 +643,19 @@ class ApiService {
       }
 
       return FetchAllDelivery(
-        currentPage: currentPage,
+        current_page: currentPage,
         data: deliveryItemData,
-        firstPageUrl: 'https://mmeasyinvoice.com/api/all-deliveries?page=1',
+        first_page_url: 'https://mmeasyinvoice.com/api/all-deliveries?page=1',
         from: 1,
         // Always set to 1 if data is not empty
-        lastPage: currentPage,
-        lastPageUrl:
+        last_page: currentPage,
+        last_page_url:
             'https://mmeasyinvoice.com/api/all-deliveries?page=$currentPage',
         links: [],
-        nextPageUrl: nextPageUrl,
+        next_page_url: nextPageUrl,
         path: 'https://mmeasyinvoice.com/api/faulty-item',
-        perPage: deliveryItemData.length,
-        prevPageUrl: (currentPage > 1)
+        per_page: deliveryItemData.length,
+        prev_page_url: (currentPage > 1)
             ? 'https://mmeasyinvoice.com/api/all-deliveries?page=${currentPage - 1}'
             : null,
         to: 1,
@@ -902,9 +924,9 @@ class ApiService {
 
           wrapData.addAll(wrapItem);
 
-          nextPageUrl = wardResponse.nextPageUrl;
+          nextPageUrl = wardResponse.next_page_url;
 
-          if (currentPage == wardResponse.lastPage) {
+          if (currentPage == wardResponse.last_page) {
             break;
           } else {
             currentPage++;
@@ -915,18 +937,18 @@ class ApiService {
       }
 
       return WardResponse(
-        currentPage: currentPage,
+        current_page: currentPage,
         data: wrapData,
-        firstPageUrl: 'https://mmeasyinvoice.com/api/wards?page=1',
+        first_page_url: 'https://mmeasyinvoice.com/api/wards?page=1',
         from: 1,
         // Always set to 1 if data is not empty
-        lastPage: currentPage,
-        lastPageUrl: 'https://mmeasyinvoice.com/api/wards?page=$currentPage',
+        last_page: currentPage,
+        last_page_url: 'https://mmeasyinvoice.com/api/wards?page=$currentPage',
         links: [],
-        nextPageUrl: nextPageUrl,
+        next_page_url: nextPageUrl,
         path: 'https://mmeasyinvoice.com/api/wards',
-        perPage: wrapData.length,
-        prevPageUrl: (currentPage > 1)
+        per_page: wrapData.length,
+        prev_page_url: (currentPage > 1)
             ? 'https://mmeasyinvoice.com/api/wards?page=${currentPage - 1}'
             : null,
         to: 1,
@@ -1130,7 +1152,7 @@ class ApiService {
         throw Exception('Failed to fetch data');
       }
     } catch (error) {
-      throw Exception('Failed to fetch data');
+      throw Exception('Failed to fetch data $error');
     }
   }
 

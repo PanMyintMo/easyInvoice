@@ -283,7 +283,7 @@ class _FetchOrderByDateContentState extends State<FetchOrderByDateContent> {
                               DataCell(Text(orderItem.firstname.toString())),
                               DataCell(Text(orderItem.mobile.toString())),
                               DataCell(
-                                  Text(orderItem.delivery_company.toString())),
+                                  Text(orderItem.company_name.toString())),
                               DataCell(Text(orderItem.status.toString())),
                               DataCell(
                                   DropdownButton<String>(

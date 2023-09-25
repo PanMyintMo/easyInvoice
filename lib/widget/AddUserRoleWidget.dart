@@ -26,6 +26,14 @@ class _UserWidgetState extends State<UserWidget> {
   var password = TextEditingController();
   var utype = TextEditingController();
 
+  List<String> userItems = [
+    "User",
+    "Admin (Disabled)",
+    "Warehouse",
+    'Shopkeeper',
+    "Delivery"
+  ];
+
   File? image; // Assuming you have a variable to store the selected image path
   String? selectedUserRole;
 
@@ -53,7 +61,10 @@ class _UserWidgetState extends State<UserWidget> {
               children: [
                 Container(
                   width: double.infinity,
-                  height: MediaQuery.of(context).size.height * 0.4,
+                  height: MediaQuery
+                      .of(context)
+                      .size
+                      .height * 0.4,
                   child: Center(
                     child: Stack(
                       children: [
@@ -132,52 +143,47 @@ class _UserWidgetState extends State<UserWidget> {
                           TextInputType.visiblePassword,
                         ),
                         const SizedBox(height: 10),
-                        DropdownButtonFormField(
-                          decoration: InputDecoration(
-                            prefixIcon: const Padding(
-                              padding: EdgeInsets.only(left: 20, right: 30),
-                              child: Icon(Icons.accessibility),
-                            ),
-                            border: OutlineInputBorder(
-                              borderSide: const BorderSide(
-                                  color: Colors.black12, width: 2),
-                              borderRadius:
-                              BorderRadius.circular(50), // Rounded corners
-                            ),
-                          ),
-                          dropdownColor: Colors.grey,
+
+                        buildDropdown(
                           value: selectedUserRole,
-                          onChanged: (String? newValue) {
+                          items: userItems.map((item) {
+                            return DropdownMenuItem<String>(
+                              value: item,
+                              child: Text(item),
+                            );
+                          }).toList()
+                          ,
+                          onChanged: (value) {
                             setState(() {
-                              selectedUserRole = newValue;
+                              selectedUserRole = value;
                             });
                           },
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Please select a user role'; // Validation error message
-                            }
-                            return null; // Validation passed
-                          },
-                          hint: const Text(
-                            'Select a user role',
-                            style: TextStyle(fontSize: 16),
-                          ),
-                          items: const [
-                            "User",
-                            "Admin (Disabled)",
-                            "Warehouse",
-                            'Shopkeeper',
-                            "Delivery"
-                          ].map<DropdownMenuItem<String>>((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(
-                                value,
-                                style: const TextStyle(fontSize: 16),
-                              ),
-                            );
-                          }).toList(),
+                          hint: "Select a user role",
                         ),
+
+                        //   validator: (value) {
+                        //     if (value == null || value.isEmpty) {
+                        //       return 'Please select a user role'; // Validation error message
+                        //     }
+                        //     return null; // Validation passed
+                        //   },
+
+                        //   items: const [
+                        //     "User",
+                        //     "Admin (Disabled)",
+                        //     "Warehouse",
+                        //     'Shopkeeper',
+                        //     "Delivery"
+                        //   ].map<DropdownMenuItem<String>>((String value) {
+                        //     return DropdownMenuItem<String>(
+                        //       value: value,
+                        //       child: Text(
+                        //         value,
+                        //         style: const TextStyle(fontSize: 16),
+                        //       ),
+                        //     );
+                        //   }).toList(),
+                        // ),
                         const SizedBox(height: 50),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
@@ -200,11 +206,11 @@ class _UserWidgetState extends State<UserWidget> {
                                       .read<AddUserRoleCubit>()
                                       .addUser(
                                     UserRequestModel(
-                                      name: name.text,
-                                      email: email.text,
-                                      password: password.text,
-                                      utpye: selectedUserRole!,
-                                      newimage : image
+                                        name: name.text,
+                                        email: email.text,
+                                        password: password.text,
+                                        utpye: selectedUserRole!,
+                                        newimage: image
                                     ),
                                   )
                                       .then((result) {
@@ -212,7 +218,7 @@ class _UserWidgetState extends State<UserWidget> {
                                     setState(() {
                                       _isAddingUser = false;
                                     });
-                                      });
+                                  });
                                 }
                               }
                             },

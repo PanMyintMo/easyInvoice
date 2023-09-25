@@ -8,12 +8,14 @@ import '../../common/FormValidator.dart';
 import '../../common/ThemeHelperUserClass.dart';
 import '../../data/api/apiService.dart';
 import '../../data/responsemodel/CityPart/FetchCityByCountryId.dart';
-import '../../data/responsemodel/CityPart/Wards.dart';
+
 import '../../data/responsemodel/CountryPart/CountryResponse.dart';
 import '../../data/responsemodel/TownshipsPart/TownshipByCityIdResponse.dart';
 import '../../data/responsemodel/common/WardResponse.dart';
+
 class AddStreetWidget extends StatefulWidget {
   final bool isLoading;
+
   const AddStreetWidget({super.key, required this.isLoading});
 
   @override
@@ -28,7 +30,7 @@ class _AddStreetWidgetState extends State<AddStreetWidget> {
   String city_id = '';
   String township_id = '';
   List<Country> countries = [];
-  List<Ward> wards=[];
+  List<Ward> wards = [];
   List<CityByCountryIdData> cities = [];
   List<TownshipByCityIdData> townships = [];
   bool hasCitiesForSelectedCountry = true;
@@ -76,7 +78,7 @@ class _AddStreetWidgetState extends State<AddStreetWidget> {
         townships = response;
         if (response.isNotEmpty) {
           township_id =
-          'Select Township'; // Reset city_id to default 'Select City'
+              'Select Township'; // Reset city_id to default 'Select City'
           hasTownshipForSelectedCity = true;
         } else {
           hasTownshipForSelectedCity = false;
@@ -100,56 +102,41 @@ class _AddStreetWidgetState extends State<AddStreetWidget> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 30,right: 30,top: 50,bottom: 10),
+      padding: const EdgeInsets.only(left: 30, right: 30, top: 50, bottom: 10),
       child: Stack(
         children: [
           ListView(
             children: [
-              const Text('Country Name',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold),),
-              DropdownButton<String>(
-                hint: const Text('Select Country Name',),
+              const Text(
+                'Country Name',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+              buildDropdown(
                 value: select_country,
-                items: [
-                  ...countries.map((country) {
-                    return DropdownMenuItem<String>(
-                      value: country.id.toString(),
-                      child: Text(country.name),
-                    );
-                  }).toList(),
-                ],
+                items: countries.map((country) {
+                  return DropdownMenuItem(
+                      value: country.id.toString(), child: Text(country.name));
+                }).toList(),
                 onChanged: (value) {
                   setState(() {
-                    select_country = value!; // Update the selected country
+                    select_country = value!;
                     int countryId = int.parse(value);
                     fetchCitiesByCountryId(countryId);
                   });
                 },
-                underline: const SizedBox(),
-                borderRadius: BorderRadius.circular(10),
-                icon: const Icon(Icons.arrow_drop_down),
-                iconSize: 24,
-                isExpanded: true,
-                dropdownColor: Colors.white,
-                style: const TextStyle(
-                  color: Colors.black,
-                  fontSize: 16,
-                ),
+                hint: "Select Country Name",
               ),
               const SizedBox(
                 height: 10,
               ),
-              const Text('Choose City',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold)),
-              DropdownButton<String>(
-                hint: const Text('Select City Name'),
+              const Text('Choose City',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+              buildDropdown(
                 value: select_city,
-                items: [
-                  ...cities.map((cities) {
-                    return DropdownMenuItem<String>(
-                      value: cities.id.toString(),
-                      child: Text(cities.name),
-                    );
-                  }).toList(),
-                ],
+                items: cities.map((city) {
+                  return DropdownMenuItem(
+                      value: city.id.toString(), child: Text(city.name));
+                }).toList(),
                 onChanged: (value) {
                   setState(() {
                     select_city = value!; // Update the selected city
@@ -157,83 +144,50 @@ class _AddStreetWidgetState extends State<AddStreetWidget> {
                     fetchTownshipByCityId(cityId);
                   });
                 },
-                underline: const SizedBox(),
-                borderRadius: BorderRadius.circular(10),
-                icon: const Icon(Icons.arrow_drop_down),
-                iconSize: 24,
-                isExpanded: true,
-                dropdownColor: Colors.white,
-                style: const TextStyle(
-                  color: Colors.black,
-                  fontSize: 16,
-                ),
+                hint: "Select City Name",
               ),
               const SizedBox(
                 height: 16,
               ),
-              const Text('Choose Township',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold)),
-              Expanded(
-                child: DropdownButton<String>(
-                  hint: const Text('Select Township Name'),
-                  value: hasTownshipForSelectedCity ? select_township : null,
-                  items: [
-                    if (hasTownshipForSelectedCity)
-                      ...townships.map((township) {
-                        return DropdownMenuItem<String>(
-                          value: township.id.toString(),
-                          child: Text(township.name),
-                        );
-                      }).toList(),
-                  ],
-                  onChanged: (value) {
-                    setState(() {
-                      select_township = value!;
-                    });
-                  },
-                  underline: const SizedBox(),
-                  borderRadius: BorderRadius.circular(10),
-                  icon: const Icon(Icons.arrow_drop_down),
-                  iconSize: 24,
-                  isExpanded: true,
-                  dropdownColor: Colors.white,
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 16,
-                  ),
-                ),
+              const Text('Choose Township',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+              buildDropdown(
+                value: select_city,
+                items: townships.map((township) {
+                  return DropdownMenuItem(
+                      value: township.id.toString(),
+                      child: Text(township.name));
+                }).toList(),
+                onChanged: (value) {
+                  setState(() {
+                    select_township = value!;
+                  });
+                },
+                hint: "Select Township Name",
               ),
               const SizedBox(
                 height: 16,
               ),
-              const Text('Choose Ward',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold)),
-              DropdownButton<String>(
-                hint: const Text('Select Ward Name'),
+              const Text('Choose Ward',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+
+              buildDropdown(
                 value: select_ward,
-                items: [
-                    ...wards.map((ward) {
-                      return DropdownMenuItem<String>(
-                        value: ward.id.toString(),
-                        child: Text(ward.ward_name),
-                      );
-                    }).toList(),
-                ],
+                items: wards.map((ward) {
+                  return DropdownMenuItem(
+                      value: ward.id.toString(),
+                      child: Text(ward.ward_name));
+                }).toList(),
                 onChanged: (value) {
                   setState(() {
                     select_ward = value!;
                   });
                 },
-                underline: const SizedBox(),
-                borderRadius: BorderRadius.circular(10),
-                icon: const Icon(Icons.arrow_drop_down),
-                iconSize: 24,
-                isExpanded: true,
-                dropdownColor: Colors.white,
-                style: const TextStyle(
-                  color: Colors.black,
-                  fontSize: 16,
-                ),
+                hint: "Select Ward Name",
               ),
-              const Text('Name',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold)),
+
+              const Text('Name',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
               const SizedBox(
                 height: 16,
               ),
@@ -250,13 +204,15 @@ class _AddStreetWidgetState extends State<AddStreetWidget> {
                 child: ElevatedButton(
                     onPressed: () {
                       context.read<AddStreetCubit>().addStreet(
-                          AddStreetRequestModel(ward_id: select_ward.toString(), street_name: name.text.toString()));
+                          AddStreetRequestModel(
+                              ward_id: select_ward.toString(),
+                              street_name: name.text.toString()));
                     },
                     child: const Text("Add Street")),
               )
             ],
           ),
-          if(widget.isLoading)
+          if (widget.isLoading)
             Container(
               color: Colors.black.withOpacity(0.5),
               child: const Center(

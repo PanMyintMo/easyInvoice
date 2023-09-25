@@ -1,3 +1,4 @@
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 
 class ThemeHelperUserRole {
@@ -79,38 +80,34 @@ Widget buildInputContainer(String labelText, String hintText, IconData iconData,
 }
 
 Widget buildProductContainerText(String name) {
-  return Expanded(
-    child: Container(
-        margin: const EdgeInsets.fromLTRB(0, 0, 10, 0),
-        child: Text(
-          name,
-          style: const TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w700,
-            color: Color(0xff000000),
-          ),
-        )),
-  );
+  return Container(
+      margin: const EdgeInsets.fromLTRB(0, 0, 10, 0),
+      child: Text(
+        name,
+        style: const TextStyle(
+          fontSize: 14,
+          fontWeight: FontWeight.w700,
+          color: Color(0xff000000),
+        ),
+      ));
 }
 
 Widget buildProductContainerForm(String label, TextInputType inputType,
     TextEditingController controller, String? Function(String?)? validator) {
-  return Expanded(
-    child: TextFormField(
-      keyboardType: inputType,
-      controller: controller,
-      validator: validator,
-      decoration: InputDecoration(
-        labelText: label, // Corrected the way label is provided
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderSide: const BorderSide(color: Colors.blue, width: 1.0),
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        fillColor: Colors.grey,
+  return TextFormField(
+    keyboardType: inputType,
+    controller: controller,
+    validator: validator,
+    decoration: InputDecoration(
+      labelText: label, // Corrected the way label is provided
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10.0),
       ),
+      focusedBorder: OutlineInputBorder(
+        borderSide: const BorderSide(color: Colors.blue, width: 1.0),
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      fillColor: Colors.grey,
     ),
   );
 }
@@ -140,19 +137,7 @@ Widget buildProfileBox(String name, String realName) {
   );
 }
 
-Widget chooseItemIdForm(DropdownButton dropdownButton) {
-  return Expanded(
-    child: Container(
-      padding: EdgeInsets.only(left: 8, right: 10),
-      width: 200,
-      height: 50,
-      decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey, width: 1),
-          borderRadius: BorderRadius.circular(10)),
-      child: dropdownButton,
-    ),
-  );
-}
+
 
 Widget textFieldForm(dynamic controller, String label) {
   return TextField(
@@ -163,3 +148,77 @@ Widget textFieldForm(dynamic controller, String label) {
     ),
   );
 }
+
+
+Widget buildDropdown({
+  required  value,
+  required Function(dynamic) onChanged,
+  String? hint, required items,
+}) {
+  return Expanded(
+    child: SizedBox(
+      width: 200,
+      height: 50,
+      child: DropdownButtonFormField2(
+        value: value,
+
+        hint: Text(hint.toString()),
+        decoration: InputDecoration(
+          contentPadding: const EdgeInsets.symmetric(vertical: 16),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(15),
+          ),
+        ),
+        items: items,
+        onChanged: onChanged,
+        buttonStyleData: const ButtonStyleData(
+          padding: EdgeInsets.only(right: 8),
+        ),
+        iconStyleData: const IconStyleData(
+          icon: Icon(
+            Icons.arrow_drop_down,
+            color: Colors.black45,
+          ),
+          iconSize: 24,
+        ),
+        dropdownStyleData: DropdownStyleData(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(15),
+          ),
+        ),
+        menuItemStyleData: const MenuItemStyleData(
+          padding: EdgeInsets.symmetric(horizontal: 16),
+        ),
+      ),
+    ),
+  );
+}
+
+// Widget buildImageWidget() {
+//   if (image != null) {
+//     return Image.file(
+//       image!,
+//       fit: BoxFit.cover,
+//     );
+//   } else {
+//     return const Column(
+//       mainAxisAlignment: MainAxisAlignment.center,
+//       children: [
+//         Icon(
+//           Icons.cloud_upload,
+//           size: 40,
+//           color: Colors.grey,
+//         ),
+//         SizedBox(height: 10),
+//         Text(
+//           'Upload Image',
+//           style: TextStyle(
+//             fontSize: 16,
+//             fontWeight: FontWeight.w500,
+//             color: Colors.grey,
+//           ),
+//         ),
+//       ],
+//     );
+//   }
+// }

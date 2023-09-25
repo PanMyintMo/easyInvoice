@@ -36,7 +36,8 @@ class _MainPageState extends State<MainPageScreen> {
     "Weekly Orders",
     "Monthly Orders",
     "Yearly Orders",
-    "lastmonth"
+    "lastmonth",
+    "All Orders",
   ];
 
   @override
@@ -60,6 +61,10 @@ class _MainPageState extends State<MainPageScreen> {
 
   @override
   Widget build(BuildContext context) {
+   /* final text = MediaQuery.of(context).platformBrightness == Brightness.dark
+        ? 'DarkTheme'
+        : 'LightTheme';
+*/
     List<WarehouseData> warehouseData = [];
     OrderApiResponse? mainPageResponse;
 
@@ -81,7 +86,6 @@ class _MainPageState extends State<MainPageScreen> {
         ),
       ],
       child: Scaffold(
-        backgroundColor: Colors.white,
         drawer: const NavigationDrawerWidget(),
         appBar: utype == 'ADM' ? _buildAdminAppBar() : _buildDefaultAppBar(),
         body: SingleChildScrollView(
@@ -139,76 +143,31 @@ class _MainPageState extends State<MainPageScreen> {
                                         children: [
                                           Align(
                                             alignment: Alignment.topRight,
-                                            child: chooseItemIdForm(
-                                              DropdownButton<String>(
-                                                value: dropDownValue,
-                                                items: [
-                                                  const DropdownMenuItem<
-                                                      String>(
-                                                    value: 'All Orders',
-                                                    child: Text('All Orders'),
-                                                  ),
-                                                  ...filterItem.map((item) {
-                                                    return DropdownMenuItem<
-                                                        String>(
-                                                      value: item,
-                                                      child: Text(item),
-                                                    );
-                                                  }).toList(),
-                                                ],
-                                                onChanged: (value) {
-                                                  if (value == dropDownValue) {
-                                                    setState(() {
-                                                      dropDownValue = value!;
-                                                    });
-                                                    showDialog(
-                                                      context: context,
-                                                      builder: (context) {
-                                                        return AlertDialog(
-                                                          title: const Text(
-                                                              'Error'),
-                                                          content: const Text(
-                                                              'You need to choose one.'),
-                                                          actions: [
-                                                            ElevatedButton(
-                                                              onPressed: () {
-                                                                Navigator.pop(
-                                                                    context);
-                                                              },
-                                                              child: const Text(
-                                                                  'OK'),
-                                                            ),
-                                                          ],
-                                                        );
-                                                      },
-                                                    );
-                                                  } else {
-                                                    setState(() {
-                                                      dropDownValue = value!;
-                                                    });
-                                                  }
-                                                  // Fetch data based on the selected dropdown value
-                                                  final cubit = context.read<
-                                                      OrderFilterByDateCubit>();
-                                                  cubit
-                                                      .fetchDataForDifferentFilterTypes(
-                                                          dropDownValue);
-                                                },
-                                                underline: const SizedBox(),
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                                icon: const Icon(
-                                                    Icons.arrow_drop_down),
-                                                iconSize: 24,
-                                                isExpanded: true,
-                                                dropdownColor: Colors.white,
-                                                style: const TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 16,
-                                                ),
-                                              ),
+                                            child: buildDropdown(
+                                              value: dropDownValue,
+                                              items: filterItem.map((item) {
+                                      return DropdownMenuItem<
+                                      String>(
+                                      value: item,
+                                      child: Text(item),
+                                      );
+                                      }).toList(),
+                                              onChanged: (value) {
+                                                if (value != dropDownValue) {
+                                                  setState(() {
+                                                    dropDownValue = value!;
+                                                    // Fetch data based on the selected dropdown value
+                                                    final cubit = context.read<
+                                                        OrderFilterByDateCubit>();
+                                                    cubit
+                                                        .fetchDataForDifferentFilterTypes(
+                                                        dropDownValue);
+                                                  });
+
+                                                }
+                                              },
                                             ),
-                                          ),
+                                          )
                                         ],
                                       ),
                                     )
@@ -298,6 +257,7 @@ class _MainPageState extends State<MainPageScreen> {
                               const SizedBox(
                                 height: 16,
                               ),
+
                               SingleChildScrollView(
                                 scrollDirection: Axis.horizontal,
                                 child: SizedBox(
@@ -443,7 +403,10 @@ class _MainPageState extends State<MainPageScreen> {
                                         [],
                                   ),
                                 ),
-                              )
+                              ),
+                              const SizedBox(
+                                height: 16,
+                              ),
                             ],
                           );
                         });
@@ -507,10 +470,11 @@ class _MainPageState extends State<MainPageScreen> {
                     ),
                   ],
                 ).then((value) {
-
                   if (value == 0) {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) =>
-                    const SettingScreen()));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const SettingScreen()));
                   } else if (value == 1) {
                     showDialog(
                       context: context,
@@ -527,7 +491,7 @@ class _MainPageState extends State<MainPageScreen> {
                                 Navigator.of(context).pop(); // Close the dialog
                                 // Handle logout here
                                 Get.offAll(() =>
-                                const Login()); // Navigate to the login screen
+                                    const Login()); // Navigate to the login screen
                                 SessionManager()
                                     .removeAuthToken(); // Remove the authentication token
                               },
@@ -551,7 +515,6 @@ class _MainPageState extends State<MainPageScreen> {
                 });
               },
             ),
-
             const SizedBox(
               width: 4,
             ),
@@ -598,7 +561,6 @@ class _MainPageState extends State<MainPageScreen> {
       ],
     );
   }
-
 }
 
 Widget _buildCardView(String image, String cardText, String profileText,
@@ -653,13 +615,13 @@ Widget _buildCardView(String image, String cardText, String profileText,
                           children: [
                             Text(
                               profileText,
-                              style:  TextStyle(
+                              style: TextStyle(
                                   fontSize: 18,
                                   color: Colors.lightGreen.shade900,
                                   fontWeight: FontWeight.bold),
                             ),
                             Text(sign,
-                                style: const TextStyle(color: Colors.red)),
+                                style: TextStyle(color: Colors.red.shade600)),
                           ],
                         ),
                       ],

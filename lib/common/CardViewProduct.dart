@@ -46,7 +46,6 @@ class CardViewProduct extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(10), // Add padding for spacing
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Image.network(
               imageUrl ?? '', // Use imageUrl and provide a default value ('' in this case)

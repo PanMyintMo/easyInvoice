@@ -25,8 +25,8 @@ class _AddRequestFaultyItemWidgetState
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   List<PaginationItem> categories = [];
   List<ProductListItem> products = [];
-  String category_id = 'Select Category';
-  String product_id = 'Select Product';
+  String? category_id;
+  String? product_id;
   var quantity = TextEditingController();
 
   @override
@@ -44,10 +44,9 @@ class _AddRequestFaultyItemWidgetState
 
   Future<void> fetchProductsByCategory(int id) async {
     final response = await ApiService().fetchAllProductByCateId(id);
-
     setState(() {
       products = response;
-      product_id = 'Select Product'; // Reset selected product
+      product_id= null;
     });
   }
 
@@ -90,63 +89,20 @@ class _AddRequestFaultyItemWidgetState
                   ),
                   SizedBox(
                     width: double.infinity,
-                    child: chooseItemIdForm(
-                      DropdownButton<String>(
-                        value: category_id,
-                        items: [
-                          const DropdownMenuItem<String>(
-                            value: 'Select Category',
-                            child: Text('Select Category'),
-                          ),
-                          ...categories.map((category) {
-                            return DropdownMenuItem<String>(
-                              value: category.id.toString(),
-                              child: Text(category.name),
-                            );
-                          }).toList(),
-                        ],
-                        onChanged: (value) {
-                          if (value == 'Select Category') {
-                            setState(() {
-                              category_id = value!;
-                              product_id = 'Select Product';
-                            });
-                            showDialog(
-                              context: context,
-                              builder: (context) {
-                                return AlertDialog(
-                                  title: const Text('Error'),
-                                  content: const Text(
-                                      'You need to choose a category.'),
-                                  actions: [
-                                    ElevatedButton(
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                      },
-                                      child: const Text('OK'),
-                                    ),
-                                  ],
-                                );
-                              },
-                            );
-                          } else {
-                            setState(() {
-                              category_id = value!;
-                            });
-                            fetchProductsByCategory(int.parse(value!));
-                          }
-                        },
-                        underline: const SizedBox(),
-                        borderRadius: BorderRadius.circular(10),
-                        icon: const Icon(Icons.arrow_drop_down),
-                        iconSize: 24,
-                        isExpanded: true,
-                        dropdownColor: Colors.white,
-                        style: const TextStyle(
-                          color: Colors.black,
-                          fontSize: 16,
-                        ),
-                      ),
+                    child: buildDropdown(
+                      value: category_id,
+                      items: categories.map((category) {
+                        return DropdownMenuItem(
+                            value: category.id.toString(),
+                            child: Text(category.name));
+                      }).toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          category_id = value!;
+                          fetchProductsByCategory(int.parse(category_id!));
+                        });
+                      },
+                      hint: "Select Category",
                     ),
                   ),
                   const SizedBox(
@@ -162,37 +118,19 @@ class _AddRequestFaultyItemWidgetState
                   ),
                   SizedBox(
                     width: double.infinity,
-                    child: chooseItemIdForm(
-                      DropdownButton<String>(
-                        value: product_id,
-                        items: [
-                          const DropdownMenuItem<String>(
-                            value: 'Select Product',
-                            child: Text('Select Product'),
-                          ),
-                          ...products.map((product) {
-                            return DropdownMenuItem<String>(
-                              value: product.id.toString(),
-                              child: Text(product.name),
-                            );
-                          }).toList(),
-                        ],
-                        onChanged: (value) {
-                          setState(() {
-                            product_id = value!;
-                          });
-                        },
-                        underline: const SizedBox(),
-                        borderRadius: BorderRadius.circular(10),
-                        icon: const Icon(Icons.arrow_drop_down),
-                        iconSize: 24,
-                        isExpanded: true,
-                        dropdownColor: Colors.white,
-                        style: const TextStyle(
-                          color: Colors.black,
-                          fontSize: 16,
-                        ),
-                      ),
+                    child: buildDropdown(
+                      value: product_id,
+                      items: products.map((product) {
+                        return DropdownMenuItem(
+                            value: product.id.toString(),
+                            child: Text(product.name));
+                      }).toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          product_id = value!;
+                        });
+                      },
+                      hint: "Select Product",
                     ),
                   ),
                   const SizedBox(
@@ -229,7 +167,7 @@ class _AddRequestFaultyItemWidgetState
                           context
                               .read<AddRequestFaultyItemCubit>()
                               .addRequestFaultyItem(AddFaultyItemRequest(
-                                  product_id: product_id,
+                                  product_id: product_id!,
                                   quantity: quantity.text.toString()));
                         }
                       },

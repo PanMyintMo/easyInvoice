@@ -232,63 +232,64 @@ class _EditProductItemScreenState extends State<EditProductItemScreen> {
                       const SizedBox(height: 10),
                       Row(
                         children: [
-                          chooseItemIdForm(
-                            DropdownButton(
-                              items: categories.map((category) {
-                                return DropdownMenuItem<String>(
-                                  value: category.id.toString(),
-                                  child: Text(category.name.toString()),
-                                );
-                              }).toList(),
-                              onChanged: (value) {
-                                setState(() {
-                                  category_id.text = value;
-                                });
-                              },
-                              value: category_id.text,
-                              hint: const Text('Choose One'),
-                              underline: const SizedBox(),
-                              borderRadius: BorderRadius.circular(10),
-                              icon: const Icon(Icons.arrow_drop_down),
-                              iconSize: 24,
-                              isExpanded: true,
-                              dropdownColor: Colors.white,
-                              style: const TextStyle(
-                                color: Colors.black,
-                                fontSize: 16,
-                              ),
-                            ),
-                          ),
+                          // chooseItemIdForm(
+                          //
+                          //   DropdownButton(
+                          //     items: categories.map((category) {
+                          //       return DropdownMenuItem<String>(
+                          //         value: category.id.toString(),
+                          //         child: Text(category.name.toString()),
+                          //       );
+                          //     }).toList(),
+                          //     onChanged: (value) {
+                          //       setState(() {
+                          //         category_id.text = value;
+                          //       });
+                          //     },
+                          //     value: category_id.text,
+                          //     hint: const Text('Choose One'),
+                          //     underline: const SizedBox(),
+                          //     borderRadius: BorderRadius.circular(10),
+                          //     icon: const Icon(Icons.arrow_drop_down),
+                          //     iconSize: 24,
+                          //     isExpanded: true,
+                          //     dropdownColor: Colors.white,
+                          //     style: const TextStyle(
+                          //       color: Colors.black,
+                          //       fontSize: 16,
+                          //     ),
+                          //   ),
+                          // ),
                           const SizedBox(
                             width: 10,
                           ),
-                          chooseItemIdForm(
-                            DropdownButton(
-                              items: sizes.map((size) {
-                                return DropdownMenuItem<String>(
-                                  value: size.id.toString(),
-                                  child: Text(size.name.toString()),
-                                );
-                              }).toList(),
-                              onChanged: (value) {
-                                setState(() {
-                                  size_id.text = value;
-                                });
-                              },
-                              value: size_id.text,
-                              hint: const Text('Choose One'),
-                              underline: const SizedBox(),
-                              borderRadius: BorderRadius.circular(10),
-                              icon: const Icon(Icons.arrow_drop_down),
-                              iconSize: 24,
-                              isExpanded: true,
-                              dropdownColor: Colors.white,
-                              style: const TextStyle(
-                                color: Colors.black,
-                                fontSize: 16,
-                              ),
-                            ),
-                          ),
+                          // chooseItemIdForm(
+                          //   DropdownButton(
+                          //     items: sizes.map((size) {
+                          //       return DropdownMenuItem<String>(
+                          //         value: size.id.toString(),
+                          //         child: Text(size.name.toString()),
+                          //       );
+                          //     }).toList(),
+                          //     onChanged: (value) {
+                          //       setState(() {
+                          //         size_id.text = value;
+                          //       });
+                          //     },
+                          //     value: size_id.text,
+                          //     hint: const Text('Choose One'),
+                          //     underline: const SizedBox(),
+                          //     borderRadius: BorderRadius.circular(10),
+                          //     icon: const Icon(Icons.arrow_drop_down),
+                          //     iconSize: 24,
+                          //     isExpanded: true,
+                          //     dropdownColor: Colors.white,
+                          //     style: const TextStyle(
+                          //       color: Colors.black,
+                          //       fontSize: 16,
+                          //     ),
+                          //   ),
+                          // ),
                         ],
                       ),
                       const SizedBox(height: 10),

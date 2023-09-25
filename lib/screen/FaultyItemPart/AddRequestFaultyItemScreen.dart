@@ -48,7 +48,6 @@ class _AddRequestFaultyItemState extends State<AddRequestFaultyItem> {
                 isLoading: false,
               );
             }
-
             return const AddRequestFaultyItemWidget(
               isLoading: false,
             );

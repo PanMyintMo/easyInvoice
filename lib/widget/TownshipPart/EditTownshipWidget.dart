@@ -89,88 +89,38 @@ class _EditTownshipWidgetState extends State<EditTownshipWidget> {
                 ),
               ),
             ),
-            Container(
+         /*   Container(
               width: double.infinity,
               padding: const EdgeInsets.all(16.0),
-              child: chooseItemIdForm(
-                DropdownButton<String>(
-                  value: select_country,
-                  items: [
-                    const DropdownMenuItem(
-                      value: null, // Set initial value to null
-                      child: Text('Select Country Name'),
-                    ),
-                    ...countries.map((country) {
-                      return DropdownMenuItem<String>(
-                        value: country.id.toString(),
-                        child: Text(country.name),
-                      );
-                    }).toList(),
-                  ],
-                  onChanged: (value) {
-                    if (value == 'Select Country Name') {
-                      setState(() {
-                        select_country = value; // Update the selected country
-                        city_id = 'Select City'; // Reset city_id when a country is selected
-                      });
-                    } else {
-                      setState(() {
-                        select_country = value;
-                      });
+              child: buildDropdown(
+                value: select_country!,
+                hint: "Select City",
+                items: countries,
+                onChanged: (value) {
+                  setState(() {
+                    select_country = value;
+                    city_id = 'Select City';
+                    fetchCitiesByCountryId(int.parse(value!));
+                  });
+                },
+              ),
 
-                      fetchCitiesByCountryId(int.parse(value!));
-                    }
-                  },
-                  underline: const SizedBox(),
-                  borderRadius: BorderRadius.circular(10),
-                  icon: const Icon(Icons.arrow_drop_down),
-                  iconSize: 24,
-                  isExpanded: true,
-                  dropdownColor: Colors.white,
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 16,
-                  ),
-                ),
-              ),
-            ),
-            Container(
+            ),*/
+         /*   Container(
               width: double.infinity,
               padding: const EdgeInsets.all(16.0),
-              child: chooseItemIdForm(
-                DropdownButton<String>(
-                  value: city_id,
-                  items: [
-                    const DropdownMenuItem<String>(
-                      value: 'Select City',
-                      child: Text('Select City'),
-                    ),
-                    ...cities.map((city) {
-                      return DropdownMenuItem<String>(
-                        value: city.id.toString(),
-                        child: Text(city.name),
-                      );
-                    }).toList(),
-                  ],
-                  onChanged: (value) {
-                    setState(() {
-                      city_id = value; // Update the selected city_id
-                    });
-                  },
-                  hint: const Text("Select City"),
-                  underline: const SizedBox(),
-                  borderRadius: BorderRadius.circular(10),
-                  icon: const Icon(Icons.arrow_drop_down),
-                  iconSize: 24,
-                  isExpanded: true,
-                  dropdownColor: Colors.white,
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 16,
-                  ),
-                ),
+              child: buildDropdown(
+                value: city_id!,
+                hint: "Select City",
+                items: cities,
+                onChanged: (value) {
+                  setState(() {
+                    city_id = value;
+                  });
+                },
               ),
-            ),
+
+            ),*/
             TextButton(
               onPressed: () {
                 if (formKey.currentState!.validate()) {

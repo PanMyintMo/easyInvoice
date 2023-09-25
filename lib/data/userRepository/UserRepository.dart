@@ -17,6 +17,7 @@ import '../../dataRequestModel/CityPart/AddWardRequestModel.dart';
 import '../../dataRequestModel/CityPart/EditCity.dart';
 import '../../dataRequestModel/CountryPart/AddCountry.dart';
 import '../../dataRequestModel/CountryPart/EditCountry.dart';
+import '../../dataRequestModel/DeliveryPart/AddDeliveryCompanyInfoRequestModel.dart';
 import '../../dataRequestModel/DeliveryPart/AddDeliveryCompanyNameRequestModel.dart';
 import '../../dataRequestModel/DeliveryPart/AddOrderRequestModel.dart';
 import '../../dataRequestModel/DeliveryPart/ChangeOrderStatusRequestModel.dart';
@@ -39,6 +40,7 @@ import '../responsemodel/CityPart/AddWardResponse.dart';
 import '../responsemodel/CityPart/Cities.dart';
 import '../responsemodel/CityPart/EditWardResponse.dart';
 import '../responsemodel/CityPart/Street.dart';
+import '../responsemodel/DeliveryPart/DeliveryCompanyInfoResponse.dart';
 import '../responsemodel/DeliveryPart/EditOrderDetailResponse.dart';
 import '../responsemodel/DeliveryPart/FetchAllDeliveries.dart';
 import '../responsemodel/DeliveryPart/OrderDetailResponse.dart';
@@ -172,7 +174,6 @@ class UserRepository {
       return responseData;
 
     } catch (error) {
-
       rethrow;
     }
   }
@@ -218,6 +219,18 @@ class UserRepository {
       rethrow;
     }
   }
+
+
+  //deli company info
+  Future<DeliCompanyInfoResponse> deliCompanyInfo(AddDeliCompanyInfoRequest addDeliCompanyInfoRequest) async {
+    try {
+      final response = await _apiService.deliCompanyInfo(addDeliCompanyInfoRequest);
+      return response;
+    } catch (error) {
+      rethrow;
+    }
+  }
+
 
   //fetch order detail
   Future<OrderDetailResponse> fetchOrderDetail(int id) async {

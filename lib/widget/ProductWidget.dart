@@ -18,7 +18,7 @@ class _ProductWidgetState extends State<ProductWidget> {
           'Product List', style: TextStyle(color: Colors.black),)),
       ),
       body: Container(
-        margin: EdgeInsets.only(top: 25, left: 25, right: 25),
+        margin: const EdgeInsets.only(top: 25, left: 25, right: 25),
         child: ListView(
           children:[ Column(
             children: [
@@ -26,7 +26,7 @@ class _ProductWidgetState extends State<ProductWidget> {
                 children: [
                   Expanded(child: TextField(
                     controller: TextEditingController(),
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                         contentPadding: EdgeInsets.symmetric(horizontal: 13,),
                         prefixIcon: Icon(Icons.search)
                     ),
@@ -35,9 +35,9 @@ class _ProductWidgetState extends State<ProductWidget> {
                   Container(
                       height: 49,
                       width: 49,
-                      padding: EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        //  borderRadius: BorderRadius.circular(),
+                      padding: const EdgeInsets.all(12),
+                      decoration: const BoxDecoration(
+
                           color: Colors.black
                       ),
 

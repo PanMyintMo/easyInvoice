@@ -81,7 +81,7 @@ class WardData extends DataTableSource {
                   context,
                   MaterialPageRoute(
                     builder: (context) => EditWardScreen(
-                        state_id: wards.state_id.toString(),
+                        township_id: wards.township_id.toString(),
                         ward_name: wards.ward_name),
                   ),
                 );

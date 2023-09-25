@@ -27,7 +27,7 @@ class _OrderDetailWidgetState extends State<OrderDetailWidget> {
           const SizedBox(height: 16),
           CardView(
               id: widget.orderDetailResponse.data.order_id.toString(),
-              str1: widget.orderDetailResponse.data.delivery_company,
+              str1: widget.orderDetailResponse.data.company_name.toString(),
               str2: widget.orderDetailResponse.data.status,
               str3: widget.orderDetailResponse.data.product_description),
           const SizedBox(height: 16),

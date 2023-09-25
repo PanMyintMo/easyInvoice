@@ -1,3 +1,4 @@
+import 'package:easy_invoice/common/ThemeProvider.dart';
 import 'package:easy_invoice/screen/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -24,8 +25,8 @@ class MyApp extends StatelessWidget {
       create: (BuildContext context) => getIt.get<SignUpCubit>(),
       child: GetMaterialApp(
         debugShowCheckedModeBanner: false,
-        theme: ThemeData.light(),
-        darkTheme: ThemeData.dark(),
+        theme: MyThemes.lightTheme,
+        darkTheme: MyThemes.darkTheme,
         themeMode: ThemeMode.system,
         getPages: [
           GetPage(name: "/", page: () => const SplashScreen()),

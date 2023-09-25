@@ -33,15 +33,14 @@ class _AddNewTownshipState extends State<AddNewTownshipWidget> {
   void fetchCityName() async {
     final city = await ApiHelper.fetchCityName();
     setState(() {
-      this.cities = city;
+      cities = city;
     });
   }
-
 
   void fetchCountyName() async {
     final country = await ApiHelper.fetchCountryName();
     setState(() {
-      this.countries = country!;
+      countries = country!;
     });
   }
   final formKey = GlobalKey<FormState>();
@@ -52,73 +51,44 @@ class _AddNewTownshipState extends State<AddNewTownshipWidget> {
         Form(
           key: formKey,
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Container(
-                width: double.infinity,
                 padding: const EdgeInsets.all(16.0),
-                child: chooseItemIdForm(
-                  DropdownButton<String>(
-                    hint: const Text("Select Country"),
-                    value: select_country,
-                    items: [
-                      ...countries.map((country) {
-                        return DropdownMenuItem<String>(
-                          value: country.id.toString(),
-                          child: Text(country.name),
-                        );
-                      }).toList(),
-                    ],
-                    onChanged: (value) {
-                      setState(() {
-                        select_country = value; // Update the selected city
-                      });
-                    },
-                    underline: const SizedBox(),
-                    borderRadius: BorderRadius.circular(10),
-                    icon: const Icon(Icons.arrow_drop_down),
-                    iconSize: 24,
-                    isExpanded: true,
-                    dropdownColor: Colors.white,
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 16,
-                    ),
-                  ),
+                width : double.infinity,
+                child: buildDropdown(
+                  value: select_country,
+                  items: countries.map((country) {
+                    return DropdownMenuItem(
+                        value: country.id.toString(),
+                        child: Text(country.name));
+                  }).toList(),
+                  onChanged: (value) {
+                    setState(() {
+                      select_country = value;
+                    });
+                  },
+                  hint: "Select Country",
                 ),
               ),
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(16.0),
-                child: chooseItemIdForm(
-                  DropdownButton<String>(
-                    hint: const Text("Select City"),
-                    value: select_city,
-                    items: [
 
-                      ...cities.map((city) {
-                        return DropdownMenuItem<String>(
-                          value: city.id.toString(),
-                          child: Text(city.name),
-                        );
-                      }).toList(),
-                    ],
-                    onChanged: (value) {
-                      setState(() {
-                        select_city = value; // Update the selected city
-                      });
-                    },
-                    underline: const SizedBox(),
-                    borderRadius: BorderRadius.circular(10),
-                    icon: const Icon(Icons.arrow_drop_down),
-                    iconSize: 24,
-                    isExpanded: true,
-                    dropdownColor: Colors.white,
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 16,
-                    ),
-                  ),
+              Container(
+                padding: const EdgeInsets.all(16.0),
+                width: double.infinity,
+                child: buildDropdown(
+                  value: select_city,
+                  items: cities.map((city) {
+                    return DropdownMenuItem(
+                        value: city.id.toString(),
+                        child: Text(city.name));
+                  }).toList(),
+                  onChanged: (value) {
+                    setState(() {
+                      select_city = value;
+                    });
+                  },
+                  hint: "Select City",
                 ),
               ),
               Container(

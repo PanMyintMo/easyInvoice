@@ -40,7 +40,7 @@ class FormValidator {
 }
 
 String? validateField(String? value) {
-  if (value!.isEmpty) {
+  if (value!.trim().isEmpty) {
     return 'Please fill this field!';
   }
   return null;

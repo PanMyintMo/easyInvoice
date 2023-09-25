@@ -6,7 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../common/ToastMessage.dart';
 import '../../module/module.dart';
 import '../../widget/DeliveryPart/FetchAllDeliveryWidget.dart';
-import 'AddDeliveryScreen.dart';
+import 'RequestDeliveryCompanyScreen.dart';
 
 class AllDeliveryScreen extends StatelessWidget {
   const AllDeliveryScreen({Key? key}) : super(key: key);
@@ -14,20 +14,19 @@ class AllDeliveryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+
       appBar: AppBar(
         elevation: 0.0,
-        backgroundColor: Colors.white70,
+        backgroundColor: Colors.grey[200],
         iconTheme: const IconThemeData(
           color: Colors.red, // Set the color of the navigation icon to black
         ),
         title: const Text(
-          'All Delivery Screen',
+          'All Delivery  Screen',
           style: TextStyle(
-            color: Colors.black54,
-            fontWeight: FontWeight.bold,
-            fontSize: 16,
-          ),
+              color: Colors.black54,
+              fontWeight: FontWeight.bold,
+              fontSize: 16),
         ),
       ),
       body: MultiBlocProvider(
@@ -67,7 +66,7 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
             onPressed: () async {
               final result = await Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (context) => const AddDeliveryScreen(),
+                  builder: (context) => const RequestDeliveryCompanyScreen(),
                 ),
               );
               if (result == true) {
@@ -90,6 +89,7 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
           ),
         ),
         Expanded(
+          flex: 1,
           child: BlocBuilder<FetchAllDeliveryCubit, FetchAllDeliveryState>(
             builder: (context, state) {
               if (state is FetchAllDeliveryLoading) {

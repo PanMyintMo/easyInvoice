@@ -5,16 +5,15 @@ class ProductListItem {
   final String short_description;
   final String description;
   final String regular_price;
-  final String salePrice;
+  final String sale_price;
   final String buying_price;
   final String SKU;
-  final String stockStatus;
+  final String stock_status;
   final int feature;
   final int quantity;
-  final String? image;
   final int category_id;
-  final String createdAt;
-  final String updatedAt;
+  final String created_at;
+  final String updated_at;
   final dynamic barcode;
   final int size_id;
   final String? url;
@@ -26,16 +25,15 @@ class ProductListItem {
     required this.short_description,
     required this.description,
     required this.regular_price,
-    required this.salePrice,
+    required this.sale_price,
     required this.buying_price,
     required this.SKU,
-    required this.stockStatus,
+    required this.stock_status,
     required this.feature,
     required this.quantity,
-    required this.image,
     required this.category_id,
-    required this.createdAt,
-    required this.updatedAt,
+    required this.created_at,
+    required this.updated_at,
     required this.barcode,
     required this.size_id,
     required this.url,
@@ -49,16 +47,15 @@ class ProductListItem {
       short_description: json['short_description'],
       description: json['description'],
       regular_price: json['regular_price'],
-      salePrice: json['sale_price'],
+      sale_price: json['sale_price'],
       buying_price: json['buying_price'],
       SKU: json['SKU'],
-      stockStatus: json['stock_status'],
+      stock_status: json['stock_status'],
       feature: json['feature'],
       quantity: json['quantity'],
-      image: json['image'],
       category_id: json['category_id'],
-      createdAt: json['created_at'],
-      updatedAt: json['updated_at'],
+      created_at: json['created_at'],
+      updated_at: json['updated_at'],
       barcode: json['barcode'],
       size_id: json['size_id'],
       url: json['url'],

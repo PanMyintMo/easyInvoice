@@ -1,71 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import '../../bloc/post/DeliveryPart/deli_company_info_cubit.dart';
-import '../../common/ApiHelper.dart';
 import '../../common/FormValidator.dart';
 import '../../common/ThemeHelperUserClass.dart';
-import '../../data/api/apiService.dart';
 import '../../data/responsemodel/CityPart/Cities.dart';
 import '../../data/responsemodel/DeliveryPart/FetchAllDeliveryName.dart';
 import '../../data/responsemodel/TownshipsPart/TownshipByCityIdResponse.dart';
 import '../../dataRequestModel/DeliveryPart/AddDeliveryCompanyInfoRequestModel.dart';
-
-class AddDeliveryWidget extends StatefulWidget {
+class UpdateDeliveryWidget extends StatefulWidget {
   final bool isLoading;
-
-  const AddDeliveryWidget({super.key, required this.isLoading});
+  const UpdateDeliveryWidget({super.key, required this.isLoading});
 
   @override
-  State<AddDeliveryWidget> createState() => _AddDeliveryWidgetState();
+  State<UpdateDeliveryWidget> createState() => _UpdateDeliveryWidgetState();
 }
 
-class _AddDeliveryWidgetState extends State<AddDeliveryWidget> {
+class _UpdateDeliveryWidgetState extends State<UpdateDeliveryWidget> {
   String? select_company;
   List<AllDeliveryName> deliveryCompanyName = [];
   List<City> cities = [];
   String? select_city;
-  final basicCost = TextEditingController();
-  final waitingTime = TextEditingController();
-
   String? select_township;
   List<TownshipByCityIdData> townships = [];
+  final basicCost = TextEditingController();
+  final waitingTime = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    fetchDeliveryCompanyName();
-    fetchCityName();
   }
-
-
-
-  void fetchCityName() async {
-    final cities = await ApiHelper.fetchCityName();
-    setState(() {
-      this.cities = cities;
-    });
-  }
-
-  void fetchDeliveryCompanyName() async {
-    final deliveryCompanyName =
-        await ApiService().fetchAllDeliveryCompanyName();
-    setState(() {
-      this.deliveryCompanyName = deliveryCompanyName;
-
-    });
-  }
-
-    void fetchTownshipByCityId(int id) async {
-
-    final response = await ApiService().fetchAllTownshipByCityId(id);
-      setState(() {
-        townships = response;
-        if (response.isNotEmpty) {
-        }
-      });
-  }
-
 
   @override
   Widget build(BuildContext context) {
@@ -81,7 +44,7 @@ class _AddDeliveryWidgetState extends State<AddDeliveryWidget> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  buildProductContainerText("Choose Delivery"),
+
                   const SizedBox(
                     height: 16,
                   ),
@@ -123,7 +86,7 @@ class _AddDeliveryWidgetState extends State<AddDeliveryWidget> {
                       onChanged: (value) {
                         setState(() {
                           select_city = value!;
-                          fetchTownshipByCityId(int.parse(select_city!));
+                         // fetchTownshipByCityId(int.parse(select_city!));
                         });
                       },
                       hint: "Choose City",
@@ -188,9 +151,9 @@ class _AddDeliveryWidgetState extends State<AddDeliveryWidget> {
                       onPressed: () {
                         if (formKey.currentState!.validate()) {
                           context.read<DeliCompanyInfoCubit>().deliCompanyInfo(
-                           AddDeliCompanyInfoRequest(company_id: select_company.toString(),
-                               city_id: select_city.toString(), township_id: select_township.toString(),
-                               basic_cost: basicCost.text.toString(), waiting_time: waitingTime.text.toString())
+                              AddDeliCompanyInfoRequest(company_id: select_company.toString(),
+                                  city_id: select_city.toString(), township_id: select_township.toString(),
+                                  basic_cost: basicCost.text.toString(), waiting_time: waitingTime.text.toString())
                           );
                         }
                       },

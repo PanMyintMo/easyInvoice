@@ -31,6 +31,7 @@ class _EditOrderWidgetState extends State<EditOrderWidget> {
   List<TownshipByCityIdData> townships = [];
   List<Ward> wards = [];
   List<Street> streets = [];
+
   List<CompanyData> companyData = [];
   String? selectedCountryId; // Use the country ID for initial selection
   String? selectedCityId; // Use the country ID for initial selection
@@ -45,7 +46,6 @@ class _EditOrderWidgetState extends State<EditOrderWidget> {
   String cname = '';
   bool isVisible = false;
   String url = '';
-
 
   var firstname = TextEditingController();
   var lastname = TextEditingController();
@@ -122,7 +122,7 @@ class _EditOrderWidgetState extends State<EditOrderWidget> {
 
     if (townships.isNotEmpty) {
       final matchingTownship = townships.firstWhere(
-        (township) => township.id == widget.orderDetailResponse.state_id,
+        (township) => township.id == widget.orderDetailResponse.township_id,
       );
       selectedTownshipId = matchingTownship.id.toString();
     }
@@ -144,7 +144,6 @@ class _EditOrderWidgetState extends State<EditOrderWidget> {
     setState(() {
       selectDeliveryCompanyId = selectDeliveryCompanyId;
     });
-    //fetchStreetByWardId(int.parse(selectWardId!));
   }
 
   void fetchWardByTownshipId(int id) async {
@@ -256,38 +255,39 @@ class _EditOrderWidgetState extends State<EditOrderWidget> {
                 const SizedBox(
                   height: 18,
                 ),
-                SizedBox(
-                  width: double.infinity,
-                  child: chooseItemIdForm(DropdownButton(
-                    hint: const Text("Select Country"),
-                    value: selectedCountryId,
-                    items: [
-                      ...countries.map((country) {
-                        return DropdownMenuItem<String>(
-                          value: country.id.toString(),
-                          child: Text(country.name),
-                        );
-                      }).toList(),
-                    ],
-                    onChanged: (value) {
-                      setState(() {
-                        selectedCountryId = value.toString();
-                        int countryId = int.parse(value!);
-                        fetchCitiesByCountryId(countryId);
-                      });
-                    },
-                    underline: const SizedBox(),
-                    borderRadius: BorderRadius.circular(10),
-                    icon: const Icon(Icons.arrow_drop_down),
-                    iconSize: 24,
-                    isExpanded: true,
-                    dropdownColor: Colors.white,
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 16,
-                    ),
-                  )),
-                ),
+
+                // SizedBox(
+                //   width: double.infinity,
+                //   child: chooseItemIdForm(DropdownButton(
+                //     hint: const Text("Select Country"),
+                //     value: selectedCountryId,
+                //     items: [
+                //       ...countries.map((country) {
+                //         return DropdownMenuItem<String>(
+                //           value: country.id.toString(),
+                //           child: Text(country.name),
+                //         );
+                //       }).toList(),
+                //     ],
+                //     onChanged: (value) {
+                //       setState(() {
+                //         selectedCountryId = value.toString();
+                //         int countryId = int.parse(value!);
+                //         fetchCitiesByCountryId(countryId);
+                //       });
+                //     },
+                //     underline: const SizedBox(),
+                //     borderRadius: BorderRadius.circular(10),
+                //     icon: const Icon(Icons.arrow_drop_down),
+                //     iconSize: 24,
+                //     isExpanded: true,
+                //     dropdownColor: Colors.white,
+                //     style: const TextStyle(
+                //       color: Colors.black,
+                //       fontSize: 16,
+                //     ),
+                //   )),
+                // ),
                 const SizedBox(
                   height: 18,
                 ),
@@ -296,38 +296,20 @@ class _EditOrderWidgetState extends State<EditOrderWidget> {
                 const SizedBox(
                   height: 18,
                 ),
-                SizedBox(
-                  width: double.infinity,
-                  child: chooseItemIdForm(DropdownButton(
-                    hint: const Text("Select City Name"),
-                    value: selectedCityId,
-                    items: [
-                      ...cities.map((city) {
-                        return DropdownMenuItem<String>(
-                          value: city.id.toString(),
-                          child: Text(city.name),
-                        );
-                      }).toList(),
-                    ],
-                    onChanged: (value) {
-                      setState(() {
-                        selectedCityId = value;
-                        int cityId = int.parse(value!);
-                        fetchTownshipByCityId(cityId);
-                      });
-                    },
-                    underline: const SizedBox(),
-                    borderRadius: BorderRadius.circular(10),
-                    icon: const Icon(Icons.arrow_drop_down),
-                    iconSize: 24,
-                    isExpanded: true,
-                    dropdownColor: Colors.white,
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 16,
-                    ),
-                  )),
-                ),
+               /* buildDropdown(
+                  value: selectedCityId!,
+                  hint: "Select City Name",
+                  items: cities,
+                  onChanged: (value) {
+                    setState(() {
+                      selectedCityId = value;
+                      int cityId = int.parse(value!);
+                      fetchWardByTownshipId(int.parse(selectedTownshipId!));
+                      fetchTownshipByCityId(cityId);
+                    });
+                  },
+                ),*/
+
                 const SizedBox(
                   height: 18,
                 ),
@@ -336,106 +318,48 @@ class _EditOrderWidgetState extends State<EditOrderWidget> {
                 const SizedBox(
                   height: 18,
                 ),
-                SizedBox(
-                  width: double.infinity,
-                  child: chooseItemIdForm(DropdownButton(
-                    hint: const Text("Select Township"),
-                    value: selectedTownshipId,
-                    items: [
-                      ...townships.map((township) {
-                        return DropdownMenuItem<String>(
-                          value: township.id.toString(),
-                          child: Text(township.name),
-                        );
-                      }).toList(),
-                    ],
-                    onChanged: (value) {
-                      setState(() {
-                        selectedTownshipId = value;
-                        fetchDeliCompanyNameByTownshipId(int.parse(selectedTownshipId!));
-                        fetchWardByTownshipId(int.parse(selectedTownshipId!));
-                      });
-                    },
-                    underline: const SizedBox(),
-                    borderRadius: BorderRadius.circular(10),
-                    icon: const Icon(Icons.arrow_drop_down),
-                    iconSize: 24,
-                    isExpanded: true,
-                    dropdownColor: Colors.white,
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 16,
-                    ),
-                  )),
-                ),
+               /* buildDropdown(
+                  value: selectedTownshipId!,
+                  hint: "Select Township",
+                  items: townships,
+                  onChanged: (value) {
+                    setState(() {
+                      selectedTownshipId = value;
+                      fetchDeliCompanyNameByTownshipId(int.parse(selectedTownshipId!));
+                      fetchWardByTownshipId(int.parse(selectedTownshipId!));                    });
+                  },
+                ),*/
+
                 const SizedBox(
                   height: 18,
                 ),
-                SizedBox(
-                  width: double.infinity,
-                  child: chooseItemIdForm(DropdownButton(
-                    hint: const Text("Select Ward"),
-                    value: selectWardId,
-                    items: [
-                      ...wards.map((ward) {
-                        return DropdownMenuItem(
-                          value: ward.id.toString(),
-                          child: Text(ward.ward_name),
-                        );
-                      }).toList(),
-                    ],
-                    onChanged: (value) {
-                      setState(() {
-                        selectWardId = value;
-                        int wardId = int.parse(value!);
-                        fetchStreetByWardId(wardId);
-                      });
-                    },
-                    underline: const SizedBox(),
-                    borderRadius: BorderRadius.circular(10),
-                    icon: const Icon(Icons.arrow_drop_down),
-                    iconSize: 24,
-                    isExpanded: true,
-                    dropdownColor: Colors.white,
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 16,
-                    ),
-                  )),
-                ),
+
+               /* buildDropdown(
+                  value: selectWardId!,
+                  hint: "Select Ward",
+                  items: streets,
+                  onChanged: (value) {
+                    setState(() {
+                      selectWardId = value;
+                      int wardId = int.parse(value!);
+                      fetchStreetByWardId(wardId);
+                    });
+                  },
+                ),*/
+
                 const SizedBox(
                   height: 18,
                 ),
-                SizedBox(
-                  width: double.infinity,
-                  child: chooseItemIdForm(DropdownButton(
-                    hint: const Text("Select Street"),
-                    value: selectStreetId,
-                    items: [
-                      ...streets.map((street) {
-                        return DropdownMenuItem<String>(
-                          value: street.id.toString(),
-                          child: Text(street.street_name),
-                        );
-                      }).toList(),
-                    ],
-                    onChanged: (value) {
-                      setState(() {
-                        selectStreetId = value;
-                      });
-                    },
-                    underline: const SizedBox(),
-                    borderRadius: BorderRadius.circular(10),
-                    icon: const Icon(Icons.arrow_drop_down),
-                    iconSize: 24,
-                    isExpanded: true,
-                    dropdownColor: Colors.white,
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 16,
-                    ),
-                  )),
-                ),
+            /*    buildDropdown(
+                  value: selectStreetId!,
+                  hint: "Select Street",
+                  items: streets,
+                  onChanged: (value) {
+                    setState(() {
+                      selectStreetId = value;
+                    });
+                  },
+                ),*/
                 const SizedBox(
                   height: 18,
                 ),
@@ -524,7 +448,8 @@ class _EditOrderWidgetState extends State<EditOrderWidget> {
                                 url = companyData[index].companyType.url;
                                 cname = companyName;
                               } else {
-                                isVisible = false; // Hide the details if no service is selected
+                                isVisible =
+                                    false; // Hide the details if no service is selected
                               }
                             });
                           },
@@ -590,40 +515,8 @@ class _EditOrderWidgetState extends State<EditOrderWidget> {
                 const SizedBox(
                   height: 18,
                 ),
-                // SizedBox(
-                //   width: double.infinity,
-                //   child: chooseItemIdForm(DropdownButton(
-                //     hint: const Text("Select Product"),
-                //     value: select_product,
-                //     items: [
-                //       ...products.map((product) {
-                //         return DropdownMenuItem<String>(
-                //           value: product.id.toString(),
-                //           child: Text(product.name),
-                //         );
-                //       }).toList(),
-                //     ],
-                //     onChanged: (value) {
-                //       setState(() {
-                //         select_product = value;
-                //         product_id =
-                //         select_product!; // Assign selected value to product_id
-                //         chooseProductOrderById(
-                //             ChooseProductOrderRequest(product_id: product_id));
-                //       });
-                //     },
-                //     underline: const SizedBox(),
-                //     borderRadius: BorderRadius.circular(10),
-                //     icon: const Icon(Icons.arrow_drop_down),
-                //     iconSize: 24,
-                //     isExpanded: true,
-                //     dropdownColor: Colors.white,
-                //     style: const TextStyle(
-                //       color: Colors.black,
-                //       fontSize: 16,
-                //     ),
-                //   )),
-                // ),
+
+
                 const SizedBox(
                   height: 18,
                 ),
@@ -636,41 +529,41 @@ class _EditOrderWidgetState extends State<EditOrderWidget> {
                 const SizedBox(
                   height: 18,
                 ),
-                // Row(
-                //   children: [
-                //     Expanded(
-                //       child: Container(
-                //         padding: const EdgeInsets.symmetric(horizontal: 10),
-                //         alignment: Alignment.centerLeft,
-                //         width: 200,
-                //         height: 50,
-                //         decoration: BoxDecoration(
-                //           border: Border.all(color: Colors.black54, width: 0.3),
-                //           borderRadius:
-                //           const BorderRadius.all(Radius.circular(10.0)),
-                //         ),
-                //         child: Text("$salePrice"),
-                //       ),
-                //     ),
-                //     const SizedBox(
-                //       width: 10,
-                //     ),
-                //     Expanded(
-                //       child: Container(
-                //         padding: const EdgeInsets.symmetric(horizontal: 10),
-                //         alignment: Alignment.centerLeft,
-                //         width: 200,
-                //         height: 50,
-                //         decoration: BoxDecoration(
-                //           border: Border.all(color: Colors.black54, width: 0.3),
-                //           borderRadius:
-                //           const BorderRadius.all(Radius.circular(10.0)),
-                //         ),
-                //         child: Text("$productQuality"),
-                //       ),
-                //     ),
-                //   ],
-                // ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        alignment: Alignment.centerLeft,
+                        width: 200,
+                        height: 50,
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.black54, width: 0.3),
+                          borderRadius:
+                          const BorderRadius.all(Radius.circular(10.0)),
+                        ),
+                        child: Text("$sale_price"),
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    Expanded(
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        alignment: Alignment.centerLeft,
+                        width: 200,
+                        height: 50,
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.black54, width: 0.3),
+                          borderRadius:
+                          const BorderRadius.all(Radius.circular(10.0)),
+                        ),
+                        child: Text(""),
+                      ),
+                    ),
+                  ],
+                ),
                 const SizedBox(
                   height: 18,
                 ),
@@ -683,62 +576,62 @@ class _EditOrderWidgetState extends State<EditOrderWidget> {
                     const SizedBox(
                       width: 25,
                     ),
-                    // Expanded(
-                    //   child: TextFormField(
-                    //     textAlign: TextAlign.center,
-                    //     controller: quantity,
-                    //     onChanged: (val) {
-                    //       if (val.isNotEmpty) {
-                    //         int enteredQuantity = int.tryParse(val) ?? 0;
-                    //         if (enteredQuantity > productQuality!) {
-                    //           setState(() {
-                    //             totalQty = 0;
-                    //             errorText =
-                    //             'Quality can not be greater than available quanity!';
-                    //           });
-                    //         } else {
-                    //           setState(() {
-                    //             totalQty = 0;
-                    //             errorText = null;
-                    //           });
-                    //           changeOrderQty(ChangeOrderProductQtyRequest(
-                    //             selectedProductId: product_id,
-                    //             selectedProductQuantity:
-                    //             productQuality.toString(),
-                    //             quantity: val.toString(),
-                    //             sale_price: salePrice.toString(),
-                    //           ));
-                    //         }
-                    //       } else {
-                    //         setState(() {
-                    //           totalQty = 0;
-                    //           errorText = null;
-                    //           changeOrderQty(ChangeOrderProductQtyRequest(
-                    //             selectedProductId: product_id,
-                    //             selectedProductQuantity:
-                    //             productQuality.toString(),
-                    //             quantity: val.toString(),
-                    //             sale_price: salePrice.toString(),
-                    //           ));
-                    //         });
-                    //       }
-                    //     },
-                    //     keyboardType: TextInputType.number,
-                    //     validator: validateField,
-                    //     decoration: InputDecoration(
-                    //       border: OutlineInputBorder(
-                    //         borderRadius: BorderRadius.circular(10.0),
-                    //       ),
-                    //       focusedBorder: OutlineInputBorder(
-                    //         borderSide:
-                    //         const BorderSide(color: Colors.blue, width: 1.0),
-                    //         borderRadius: BorderRadius.circular(10.0),
-                    //       ),
-                    //       fillColor: Colors.grey,
-                    //       errorText: errorText, // Display the error message
-                    //     ),
-                    //   ),
-                    // ),
+                 /*   Expanded(
+                      child: TextFormField(
+                        textAlign: TextAlign.center,
+                        controller: quantity,
+                        onChanged: (val) {
+                          if (val.isNotEmpty) {
+                            int enteredQuantity = int.tryParse(val) ?? 0;
+                            if (enteredQuantity > productQuality!) {
+                              setState(() {
+                                totalQty = 0;
+                                errorText =
+                                'Quality can not be greater than available quanity!';
+                              });
+                            } else {
+                              setState(() {
+                                totalQty = 0;
+                                errorText = null;
+                              });
+                              changeOrderQty(ChangeOrderProductQtyRequest(
+                                selectedProductId: product_id,
+                                selectedProductQuantity:
+                                productQuality.toString(),
+                                quantity: val.toString(),
+                                sale_price: salePrice.toString(),
+                              ));
+                            }
+                          } else {
+                            setState(() {
+                              totalQty = 0;
+                              errorText = null;
+                              changeOrderQty(ChangeOrderProductQtyRequest(
+                                selectedProductId: product_id,
+                                selectedProductQuantity:
+                                productQuality.toString(),
+                                quantity: val.toString(),
+                                sale_price: salePrice.toString(),
+                              ));
+                            });
+                          }
+                        },
+                        keyboardType: TextInputType.number,
+                        validator: validateField,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide:
+                            const BorderSide(color: Colors.blue, width: 1.0),
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                          fillColor: Colors.grey,
+                          errorText: errorText, // Display the error message
+                        ),
+                      ),
+                    ),*/
                   ],
                 ),
                 const SizedBox(
@@ -753,20 +646,20 @@ class _EditOrderWidgetState extends State<EditOrderWidget> {
                     const SizedBox(
                       width: 50,
                     ),
-                    // Expanded(
-                    //   child: Container(
-                    //     padding: const EdgeInsets.symmetric(horizontal: 10),
-                    //     alignment: Alignment.center,
-                    //     width: 200,
-                    //     height: 50,
-                    //     decoration: BoxDecoration(
-                    //       border: Border.all(color: Colors.black54, width: 0.3),
-                    //       borderRadius:
-                    //       const BorderRadius.all(Radius.circular(10.0)),
-                    //     ),
-                    //     child: Text("$totalQty"),
-                    //   ),
-                    // ),
+                /*    Expanded(
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        alignment: Alignment.center,
+                        width: 200,
+                        height: 50,
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.black54, width: 0.3),
+                          borderRadius:
+                          const BorderRadius.all(Radius.circular(10.0)),
+                        ),
+                        child: Text("$totalQty"),
+                      ),
+                    ),*/
                   ],
                 ),
                 const SizedBox(
@@ -779,82 +672,82 @@ class _EditOrderWidgetState extends State<EditOrderWidget> {
                 const SizedBox(
                   height: 18,
                 ),
-                // Row(
-                //   children: [
-                //     Expanded(
-                //       child: RadioListTile(
-                //         title: const Text('Cash'),
-                //         activeColor: Colors.pink,
-                //         value: "cod",
-                //         dense: true,
-                //         groupValue: payment,
-                //         onChanged: (value) {
-                //           setState(() {
-                //             payment = value as String;
-                //           });
-                //         },
-                //       ),
-                //     ),
-                //     Expanded(
-                //       child: RadioListTile(
-                //         title: const Text('KPay'),
-                //         value: "Kpay",
-                //         dense: true,
-                //         activeColor: Colors.pink,
-                //         groupValue: payment,
-                //         onChanged: (value) {
-                //           setState(() {
-                //             payment = value as String;
-                //           });
-                //         },
-                //       ),
-                //     ),
-                //     Expanded(
-                //       child: RadioListTile(
-                //         title: const Text('WavePay'),
-                //         value: "wavepay",
-                //         dense: true,
-                //         activeColor: Colors.pink,
-                //         groupValue: payment,
-                //         onChanged: (value) {
-                //           setState(() {
-                //             payment = value as String;
-                //           });
-                //         },
-                //       ),
-                //     )
-                //   ],
-                // ),
+                Row(
+                  children: [
+                   /* Expanded(
+                      child: RadioListTile(
+                        title: const Text('Cash'),
+                        activeColor: Colors.pink,
+                        value: "cod",
+                        dense: true,
+                        groupValue: payment,
+                        onChanged: (value) {
+                          setState(() {
+                            payment = value as String;
+                          });
+                        },
+                      ),
+                    ),*/
+               /*     Expanded(
+                      child: RadioListTile(
+                        title: const Text('KPay'),
+                        value: "Kpay",
+                        dense: true,
+                        activeColor: Colors.pink,
+                        groupValue: payment,
+                        onChanged: (value) {
+                          setState(() {
+                            payment = value as String;
+                          });
+                        },
+                      ),
+                    ),*/
+               /*     Expanded(
+                      child: RadioListTile(
+                        title: const Text('WavePay'),
+                        value: "wavepay",
+                        dense: true,
+                        activeColor: Colors.pink,
+                        groupValue: payment,
+                        onChanged: (value) {
+                          setState(() {
+                            payment = value as String;
+                          });
+                        },
+                      ),
+                    )*/
+                  ],
+                ),
                 const SizedBox(height: 18),
-                // Center(
-                //     child: ElevatedButton(
-                //         onPressed: () {
-                //           if (_formKey.currentState!.validate()) {}
-                //           context.read<AddOrderCubit>().addOrder(
-                //               AddOrderRequestModel(
-                //                   firstname: firstname.text.toString(),
-                //                   lastname: lastname.text.toString(),
-                //                   email: email.text.toString(),
-                //                   mobile: mobile.text.toString(),
-                //                   line1: line1.text.toString(),
-                //                   line2: line2.text.toString(),
-                //                   selectedCountry: select_country.toString(),
-                //                   selectedTownship: select_township.toString(),
-                //                   selectedCity: select_city.toString(),
-                //                   zipcode: zipcode.text.toString(),
-                //                   mode: payment.toString(),
-                //                   delivery: serviceId.toString(),
-                //                   user_sign: '',
-                //                   product_id: product_id.toString(),
-                //                   price: salePrice.toString(),
-                //                   quantity: quantity.text.toString(),
-                //                   user_id: userId.toString(),
-                //                   selectedWard: select_ward.toString(),
-                //                   selectedStreet: select_street.toString(),
-                //                   block_no: block_no.text.toString(),
-                //                   floor: floor.text.toString()));
-                //         },
-                //         child: const Text('Place Order Now')))
+              /*  Center(
+                    child: ElevatedButton(
+                        onPressed: () {
+                          if (_formKey.currentState!.validate()) {}
+                          context.read<AddOrderCubit>().addOrder(
+                              AddOrderRequestModel(
+                                  firstname: firstname.text.toString(),
+                                  lastname: lastname.text.toString(),
+                                  email: email.text.toString(),
+                                  mobile: mobile.text.toString(),
+                                  line1: line1.text.toString(),
+                                  line2: line2.text.toString(),
+                                  selectedCountry: select_country.toString(),
+                                  selectedTownship: select_township.toString(),
+                                  selectedCity: select_city.toString(),
+                                  zipcode: zipcode.text.toString(),
+                                  mode: payment.toString(),
+                                  delivery: serviceId.toString(),
+                                  user_sign: '',
+                                  product_id: product_id.toString(),
+                                  price: salePrice.toString(),
+                                  quantity: quantity.text.toString(),
+                                  user_id: userId.toString(),
+                                  selectedWard: select_ward.toString(),
+                                  selectedStreet: select_street.toString(),
+                                  block_no: block_no.text.toString(),
+                                  floor: floor.text.toString()));
+                        },
+                        child: const Text('Place Order Now')))*/
               ],
             ),
           ),

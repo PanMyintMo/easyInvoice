@@ -1,20 +1,25 @@
+import 'package:easy_invoice/data/api/apiService.dart';
 import 'package:flutter/material.dart';
-
 import '../../common/ApiHelper.dart';
+import '../../common/FormValidator.dart';
 import '../../common/ThemeHelperUserClass.dart';
-import '../../data/responsemodel/CityPart/Cities.dart';
+import '../../data/responsemodel/CityPart/FetchCityByCountryId.dart';
 import '../../data/responsemodel/CountryPart/CountryResponse.dart';
+import '../../data/responsemodel/TownshipsPart/TownshipByCityIdResponse.dart';
+import '../../data/responsemodel/common/WardResponse.dart';
 
 class EditWardWidget extends StatefulWidget {
   final bool isLoading;
   final String ward_name;
-  final String state_id;
+  final String township_id;
+  final List<Ward> ward;
 
   const EditWardWidget({
     Key? key,
     required this.isLoading,
     required this.ward_name,
-    required this.state_id,
+    required this.township_id,
+    required this.ward,
   }) : super(key: key);
 
   @override
@@ -22,37 +27,100 @@ class EditWardWidget extends StatefulWidget {
 }
 
 class _EditWardWidgetState extends State<EditWardWidget> {
-  List<Country> countries = [];
-  List<int>? updateCountryId;
-  List<int>? countryId;
+  TextEditingController wardNameController = TextEditingController();
+  String? countryId;
+  String? cityId;
+  String? townshipId;
 
-  List<City> cities = [];
-  var country_id;
-  var ward_name = TextEditingController();
+  List<Country> countries = [];
+  List<CityByCountryIdData> cities = [];
+  List<TownshipByCityIdData> townships = [];
 
   @override
   void initState() {
     super.initState();
-    ward_name = TextEditingController(text: widget.ward_name);
-
-    fetchAllCity();
+    wardNameController.text = widget.ward_name;
+    initializeDropdownValues();
   }
-  void fetchCountyName() async {
-    final country = await ApiHelper.fetchCountryName();
-    if (country!.isNotEmpty) {
-      countryId = countries.map((country) => country.id).toList();
-      if (countryId!.contains(updateCountryId)) {
-        country_id = updateCountryId;
-      } else if (countryId!.isNotEmpty) {
-        country_id = countryId?.first;
-      }
+
+  void initializeDropdownValues() async {
+    final fetchCountries = await ApiHelper.fetchCountryName();
+    if (fetchCountries != null && fetchCountries.isNotEmpty) {
+      setState(() {
+        countries = fetchCountries;
+        final ward = widget.ward.firstWhere(
+              (ward) => ward.township_id == int.parse(widget.township_id),
+          orElse: () => Ward(
+            id: 0,
+            township_id: 0,
+            ward_name: '',
+            created_at: '',
+            updated_at: '',
+            township: Townships(
+              id: 0,
+              city_id: 0,
+              name: '',
+              created_at: '',
+              updated_at: '',
+              cities: Cities(
+                id: 0,
+                country_id: 0,
+                name: '',
+                created_at: '',
+                updated_at: '',
+              ),
+            ),
+          ),
+        );
+        countryId = ward.township.cities.country_id.toString();
+        fetchCitiesByCountryId(int.parse(countryId!));
+      });
     }
   }
 
-  void fetchAllCity() async {
-    final city = await ApiHelper.fetchCityName();
-    if (city.isNotEmpty) {
-      updateCountryId = cities.map((city) => city.countryId).toList();
+  void fetchCitiesByCountryId(int id) async {
+    final fetchCities = await ApiService().fetchAllCitiesByCountryId(id);
+    if (fetchCities.isNotEmpty) {
+      setState(() {
+        cities = fetchCities;
+        final ward = widget.ward.firstWhere(
+              (ward) => ward.township_id == int.parse(widget.township_id),
+          orElse: () => Ward(
+            id: 0,
+            township_id: 0,
+            ward_name: '',
+            created_at: '',
+            updated_at: '',
+            township: Townships(
+              id: 0,
+              city_id: 0,
+              name: '',
+              created_at: '',
+              updated_at: '',
+              cities: Cities(
+                id: 0,
+                country_id: id, // Assuming the country_id should be set to the provided 'id'
+                name: '',
+                created_at: '',
+                updated_at: '',
+              ),
+            ),
+          ),
+        );
+        cityId = ward.township.cities.id.toString();
+        fetchTownshipsByCityId(int.parse(cityId!));
+      });
+    }
+  }
+
+
+  void fetchTownshipsByCityId(int id) async {
+    final fetchTownship = await ApiService().fetchAllTownshipByCityId(id);
+    if (fetchTownship.isNotEmpty) {
+      setState(() {
+        townships = fetchTownship;
+        townshipId = widget.township_id;
+      });
     }
   }
 
@@ -63,135 +131,92 @@ class _EditWardWidgetState extends State<EditWardWidget> {
       children: [
         Form(
           key: formKey,
-          child: Column(
-            children: [
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(16.0),
-                child: chooseItemIdForm(
-                  DropdownButton<String>(
-                    hint: const Text('Select Country Name'),
-                    value: country_id.toString(),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                buildProductContainerText("Country Name"),
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(16.0),
+                  child: buildDropdown(
+                    value: countryId,
                     items: countries.map((country) {
-                      return DropdownMenuItem<String>(
+                      return DropdownMenuItem(
                         value: country.id.toString(),
                         child: Text(country.name),
                       );
                     }).toList(),
                     onChanged: (value) {
                       setState(() {
-                        country_id = value; // Update the selected country_id
+                        countryId = value;
+                        cityId = null;
+                        townshipId = null;
+                        fetchCitiesByCountryId(int.parse(countryId!));
                       });
                     },
-                    underline: const SizedBox(),
-                    borderRadius: BorderRadius.circular(10),
-                    icon: const Icon(Icons.arrow_drop_down),
-                    iconSize: 24,
-                    isExpanded: true,
-                    dropdownColor: Colors.white,
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 16,
-                    ),
+                    hint: "Select Country Name",
                   ),
                 ),
-              ),
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(16.0),
-                child: chooseItemIdForm(
-                  DropdownButton<String>(
-                    hint: const Text('Select City Name'),
-                    value: country_id.toString(),
-                    items: countries.map((country) {
-                      return DropdownMenuItem<String>(
-                        value: country.id.toString(),
-                        child: Text(country.name),
+                buildProductContainerText("City Name"),
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(16.0),
+                  child: buildDropdown(
+                    value: cityId,
+                    items: cities.map((city) {
+                      return DropdownMenuItem(
+                        value: city.id.toString(),
+                        child: Text(city.name),
                       );
                     }).toList(),
                     onChanged: (value) {
                       setState(() {
-                        country_id = value; // Update the selected country_id
+                        cityId = value;
+                        townshipId = null;
+                        fetchTownshipsByCityId(int.parse(cityId!));
                       });
                     },
-                    underline: const SizedBox(),
-                    borderRadius: BorderRadius.circular(10),
-                    icon: const Icon(Icons.arrow_drop_down),
-                    iconSize: 24,
-                    isExpanded: true,
-                    dropdownColor: Colors.white,
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 16,
-                    ),
+                    hint: "Select City Name",
                   ),
                 ),
-              ),
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(16.0),
-                child: chooseItemIdForm(
-                  DropdownButton<String>(
-                    hint: const Text('Select Township Name'),
-                    value: country_id.toString(),
-                    items: countries.map((country) {
-                      return DropdownMenuItem<String>(
-                        value: country.id.toString(),
-                        child: Text(country.name),
+                buildProductContainerText("Township Name"),
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(16.0),
+                  child: buildDropdown(
+                    value: townshipId,
+                    items: townships.map((township) {
+                      return DropdownMenuItem(
+                        value: township.id.toString(),
+                        child: Text(township.name),
                       );
                     }).toList(),
                     onChanged: (value) {
                       setState(() {
-                        country_id = value; // Update the selected country_id
+                        townshipId = value;
                       });
                     },
-                    underline: const SizedBox(),
-                    borderRadius: BorderRadius.circular(10),
-                    icon: const Icon(Icons.arrow_drop_down),
-                    iconSize: 24,
-                    isExpanded: true,
-                    dropdownColor: Colors.white,
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 16,
-                    ),
+                    hint: "Select Township Name",
                   ),
                 ),
-              ),
-              Container(
-                alignment: Alignment.center,
-                padding: const EdgeInsets.all(16),
-                child: TextFormField(
-                  controller: ward_name,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                    labelText: 'Ward Name',
-                    hintText: 'Ward Name',
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Ward name cannot be empty';
-                    }
-                    return null;
-                  },
+                buildProductContainerText("Name"),
+                const SizedBox(
+                  height: 16,
                 ),
-              ),
-
-              // TextButton(
-              //   onPressed: () {
-              //     if (formKey.currentState!.validate()) {
-              //       formKey.currentState!.save();
-              //       context.read<EditCityCubit>().updateCity(
-              //         widget.id,
-              //         EditCity(country_id: country_id!.toString(), name: name.text),
-              //       );
-              //     }
-              //   },
-              //   child: const Text('Update City'),
-              // )
-            ],
+                buildProductContainerForm(
+                  'Ward',
+                  TextInputType.text,
+                  wardNameController,
+                  FormValidator.validateName,
+                ),
+                ElevatedButton(
+                  onPressed: () {},
+                  child: const Text("Update Ward"),
+                ),
+              ],
+            ),
           ),
         ),
         if (widget.isLoading)

@@ -69,7 +69,7 @@ class _AllProductWidgetState extends State<AllProductWidget> {
                 mainAxisAlignment: MainAxisAlignment.start,
 
                 children: [
-                  product.image != null
+                  product.url != null
                       ? Image.network(
                     product.url!,
                     width: 100.0,
@@ -98,7 +98,7 @@ class _AllProductWidgetState extends State<AllProductWidget> {
                         const SizedBox(height: 10,),
                         Text('Category Id: ${product.category_id}'),
                         const SizedBox(height: 10,),
-                        Text('Stock: ${product.stockStatus}'),
+                        Text('Stock: ${product.stock_status}'),
                         const SizedBox(height: 10,),
                         Text('Product Id: ${product.id}'),
 
@@ -109,7 +109,7 @@ class _AllProductWidgetState extends State<AllProductWidget> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  Text('Date: ${product.createdAt.substring(0, 10)}'),
+                  Text('Date: ${product.created_at.substring(0, 10)}'),
                   const SizedBox(height: 16,),
                   Center(
                     child: (utype == 'ADM') ? CustomButton(

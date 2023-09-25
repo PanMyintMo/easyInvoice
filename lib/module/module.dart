@@ -61,6 +61,7 @@ import '../bloc/post/CityPart/add_city_cubit.dart';
 import '../bloc/edit/CountryPart/edit_country_cubit.dart';
 import '../bloc/post/CountryPart/request_country_cubit.dart';
 import '../bloc/post/DeliveryPart/add_order_cubit.dart';
+import '../bloc/post/DeliveryPart/deli_company_info_cubit.dart';
 import '../bloc/post/ShopKeeperPart/update_shop_keeper_cubit.dart';
 import '../bloc/post/add_size_cubit.dart';
 
@@ -155,6 +156,13 @@ void locator() {
   FetchAllFaultyItemCubit fetchAllFaultyItemCubit =
       FetchAllFaultyItemCubit(getIt.get<UserRepository>());
   getIt.registerLazySingleton(() => fetchAllFaultyItemCubit);
+
+
+  //deli company info
+  DeliCompanyInfoCubit deliCompanyInfoCubit =
+  DeliCompanyInfoCubit(getIt.get<UserRepository>());
+  getIt.registerLazySingleton(() => deliCompanyInfoCubit);
+
 
   //fetch all delivery
   FetchAllDeliveryCubit fetchAllDeliveryCubit =

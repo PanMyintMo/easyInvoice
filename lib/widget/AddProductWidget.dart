@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import '../common/ApiHelper.dart';
+import '../common/DynamicImageWidget.dart';
 import '../common/FormValidator.dart';
 import '../common/ThemeHelperUserClass.dart';
 import '../data/responsemodel/GetAllPagnitaionDataResponse.dart';
@@ -23,8 +24,7 @@ class AddProductWidget extends StatefulWidget {
 }
 
 class _AddProductWidgetState extends State<AddProductWidget> {
-  final _formKey = GlobalKey<FormState>();
-  var name = TextEditingController();
+  final TextEditingController name = TextEditingController();
   var slug = TextEditingController();
   var regular_price = TextEditingController();
   var sale_price = TextEditingController();
@@ -34,20 +34,33 @@ class _AddProductWidgetState extends State<AddProductWidget> {
   var short_description = TextEditingController();
   var description = TextEditingController();
 
-  String category_id = 'Select Category';
-  String sizeId = 'Select Size';
+  String? category_id;
+  String? sizeId;
   List<PaginationItem> categories = [];
   List<PaginationItem> sizeIdList = [];
 
   @override
   void initState() {
     super.initState();
+
     fetchCategoriesName();
     fetchSizeName();
-    name.addListener(() {
-      _updateSlugField();
-    });
   }
+
+  @override
+  void dispose() {
+    name.dispose();
+    slug.dispose();
+    regular_price.dispose();
+    sale_price.dispose();
+    buying_price.dispose();
+    SKU.dispose();
+    quantity.dispose();
+    short_description.dispose();
+    description.dispose();
+    super.dispose();
+  }
+
 
   Future<void> fetchSizeName() async {
     final sizeIdList = await ApiHelper.fetchSizeName();
@@ -72,372 +85,272 @@ class _AddProductWidgetState extends State<AddProductWidget> {
       final imageTemp = File(image.path);
       setState(() => this.image = imageTemp);
     } catch (e) {
-      print('Failed to pick image: $e');
+      //print('Failed to pick image: $e');
     }
   }
 
-  Widget buildImageWidget() {
-    if (image != null) {
-      return Image.file(
-        image!,
-        fit: BoxFit.cover,
-      );
-    } else {
-      return const Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            Icons.cloud_upload,
-            size: 40,
-            color: Colors.grey,
-          ),
-          SizedBox(height: 10),
-          Text(
-            'Upload Image',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
-              color: Colors.grey,
-            ),
-          ),
-        ],
-      );
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
+    final formKey = GlobalKey<FormState>();
     return Stack(
       children: [
-        ListView(
-          children: [
-            Container(
-              padding: const EdgeInsets.fromLTRB(27, 25, 20, 40),
-              width: double.infinity,
-              decoration: const BoxDecoration(
-                color: Color(0xffffffff),
-              ),
-              child: SingleChildScrollView(
-                child: Form(
-                  key: _formKey,
-                  child: Column(
+        SingleChildScrollView(
+          child: Form(
+            key: formKey,
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  buildProductContainerText("Category Id"),
+                  const SizedBox(height: 5),
+                  SizedBox(
+                    width: double.infinity,
+                    child: buildDropdown(
+                      value: category_id,
+                      items: categories.map((category) {
+                        return DropdownMenuItem(
+                          value: category.id.toString(),
+                          child: Text(category.name),
+                        );
+                      }).toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          category_id = value!;
+                        });
+                      },
+                      hint: "Select Category",
+                    ),
+                  ),
+                  const SizedBox(height: 5),
+                  buildProductContainerText("Size Id"),
+                  const SizedBox(height: 5),
+                  SizedBox(
+                    width: double.infinity,
+                    child: buildDropdown(
+                      value: sizeId,
+                      items: sizeIdList.map((size) {
+                        return DropdownMenuItem(
+                          value: size.id.toString(),
+                          child: Text(size.name),
+                        );
+                      }).toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          sizeId = value!;
+                        });
+                      },
+                      hint: "Select Size",
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  buildProductContainerText("Product Name"),
+                  const SizedBox(height: 16),
+                  SizedBox(
+                    width: double.infinity,
+                    child: TextField(
+                      controller: name,
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'Product Name',
+                      ),
+                      onChanged: (value) {
+                        _updateSlugField(value);
+                      },
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  Row(
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          buildProductContainerText("Category Id"),
-                          buildProductContainerText("Size Id"),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          chooseItemIdForm(
-                            DropdownButton<String>(
-                              value: category_id,
-                              items: [
-                                const DropdownMenuItem<String>(
-                                  value: 'Select Category',
-                                  child: Text('Select Category'),
-                                ),
-                                ...categories.map((category) {
-                                  return DropdownMenuItem<String>(
-                                    value: category.id.toString(),
-                                    child: Text(category.name),
-                                  );
-                                }).toList(),
-                              ],
-                              onChanged: (value) {
-                                if (value == 'Select Category') {
-                                  setState(() {
-                                    category_id = value!;
-                                    // print('$category_id');
-                                  });
-                                  showDialog(
-                                    context: context,
-                                    builder: (context) {
-                                      return AlertDialog(
-                                        title: const Text('Error'),
-                                        content: const Text(
-                                            'You need to choose a category.'),
-                                        actions: [
-                                          ElevatedButton(
-                                            onPressed: () {
-                                              Navigator.pop(context);
-                                            },
-                                            child: const Text('OK'),
-                                          ),
-                                        ],
-                                      );
-                                    },
-                                  );
-                                } else {
-                                  setState(() {
-                                    category_id = value!;
-                                  });
-                                }
-                              },
-                              underline: const SizedBox(),
-                              borderRadius: BorderRadius.circular(10),
-                              icon: const Icon(Icons.arrow_drop_down),
-                              iconSize: 24,
-                              isExpanded: true,
-                              dropdownColor: Colors.white,
-                              style: const TextStyle(
-                                color: Colors.black,
-                                fontSize: 16,
-                              ),
+                      Expanded(
+                          flex: 1,
+                          child: buildProductContainerText("Slug Name")),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: TextField(
+                            controller: slug,
+                            enabled: false,
+                            decoration: const InputDecoration(
+                              border: OutlineInputBorder(),
+                              labelText: 'Slug Name',
                             ),
                           ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          chooseItemIdForm(
-                            DropdownButton<String>(
-                              value: sizeId,
-                              items: [
-                                const DropdownMenuItem<String>(
-                                  value: 'Select Size',
-                                  child: Text('Select Size'),
-                                ),
-                                ...sizeIdList.map((size) {
-                                  return DropdownMenuItem<String>(
-                                    value: size.id.toString(),
-                                    child: Text(size.name),
-                                  );
-                                }).toList(),
-                              ],
-                              onChanged: (value) {
-                                if (value == 'Select Size') {
-                                  setState(() {
-                                    sizeId = value!;
-                                  });
-                                  showDialog(
-                                    context: context,
-                                    builder: (context) {
-                                      return AlertDialog(
-                                        title: const Text('Error'),
-                                        content: const Text(
-                                            'You need to choose a category.'),
-                                        actions: [
-                                          ElevatedButton(
-                                            onPressed: () {
-                                              Navigator.pop(context);
-                                            },
-                                            child: const Text('OK'),
-                                          ),
-                                        ],
-                                      );
-                                    },
-                                  );
-                                } else {
-                                  setState(() {
-                                    sizeId = value!;
-                                  });
-                                }
-                              },
-                              underline: const SizedBox(),
-                              borderRadius: BorderRadius.circular(10),
-                              icon: const Icon(Icons.arrow_drop_down),
-                              iconSize: 24,
-                              isExpanded: true,
-                              dropdownColor: Colors.white,
-                              style: const TextStyle(
-                                color: Colors.black,
-                                fontSize: 16,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 30,
-                      ),
-                      Column(
-                        children: [
-                          Row(
-                            children: [
-                              buildProductContainerText("Product"),
-                              buildProductContainerText("Slug Name"),
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Row(
-                            children: [
-                              buildProductContainerForm('Product Name',
-                                  TextInputType.name, name, validateField),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              buildProductContainerForm('Slug',
-                                  TextInputType.name, slug, validateField),
-                            ],
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 30),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          buildProductContainerText("Regular Price"),
-                          buildProductContainerForm(
-                              'Regular Price',
-                              TextInputType.number,
-                              regular_price,
-                              validateField),
-                        ],
-                      ),
-                      const SizedBox(height: 30),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          buildProductContainerText("Sale Price"),
-                          buildProductContainerForm('Sale Price',
-                              TextInputType.number, sale_price, validateField),
-                        ],
-                      ),
-                      const SizedBox(height: 30),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          buildProductContainerText("Buying Price"),
-                          buildProductContainerForm(
-                              'Buying Price',
-                              TextInputType.number,
-                              buying_price,
-                              validateField),
-                        ],
-                      ),
-                      const SizedBox(height: 30),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          buildProductContainerText("SKU"),
-                          buildProductContainerForm(
-                              'SKU', TextInputType.text, SKU, validateField),
-                        ],
-                      ),
-                      const SizedBox(height: 30),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          buildProductContainerText("Quantity"),
-                          buildProductContainerForm('Quantity',
-                              TextInputType.number, quantity, validateField),
-                        ],
-                      ),
-                      const SizedBox(height: 30),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          buildProductContainerText("Short description"),
-                          buildProductContainerForm(
-                              'Short description',
-                              TextInputType.text,
-                              short_description,
-                              validateField),
-                        ],
-                      ),
-                      const SizedBox(height: 20),
-                      Column(
-                        children: [
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: buildProductContainerText("Description"),
-                          ),
-                          const SizedBox(
-                            height: 5,
-                          ),
-                          TextFormField(
-                            maxLines: 4,
-                            controller: description,
-                            keyboardType: TextInputType.name,
-                            decoration: InputDecoration(
-                              labelText: 'Description',
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10.0),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: const BorderSide(
-                                    color: Colors.blue, width: 1.0),
-                                borderRadius: BorderRadius.circular(10.0),
-                              ),
-                              fillColor: Colors.grey,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      SizedBox(
-                        width: double.infinity,
-                        child: Column(
-                          children: [
-                            Align(
-                              alignment: Alignment.centerLeft,
-                              child: buildProductContainerText("Upload Image"),
-                            ),
-                            const SizedBox(
-                              height: 5,
-                            ),
-                            Flex(
-                              direction: Axis.horizontal,
-                              children: [
-                                Expanded(
-                                  child: DottedBorder(
-                                    borderType: BorderType.RRect,
-                                    color: Colors.grey,
-                                    strokeWidth: 1,
-                                    radius: const Radius.circular(10),
-                                    dashPattern: const [4, 4],
-                                    child: InkWell(
-                                      onTap: () {
-                                        pickImage();
-                                      },
-                                      child: SizedBox(
-                                        width: double.infinity,
-                                        height: 100,
-                                        child: Center(
-                                          child: buildImageWidget(),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
                         ),
                       ),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      ElevatedButton(
-                          onPressed: () {
-                            if (_formKey.currentState!.validate())
-                              _submitForm();
-                          },
-                          child: const Text('Submit'))
                     ],
                   ),
-                ),
+                  const SizedBox(height: 16),
+                  Row(
+                    children: [
+                      Expanded(
+                        flex: 1,
+                        child: buildProductContainerText("Regular Price"),
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: buildProductContainerForm(
+                          'Regular Price',
+                          TextInputType.number,
+                          regular_price,
+                          validateField,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  Row(
+                    children: [
+                      Expanded(
+                        flex: 1,
+                        child: buildProductContainerText("Sale Price"),
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: buildProductContainerForm(
+                          'Sale Price',
+                          TextInputType.number,
+                          sale_price,
+                          validateField,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  Row(
+                    children: [
+                      Expanded(
+                        flex: 1,
+                        child: buildProductContainerText("Buying Price"),
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: buildProductContainerForm(
+                          'Buying Price',
+                          TextInputType.number,
+                          buying_price,
+                          validateField,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  Row(
+                    children: [
+                      Expanded(
+                        flex: 1,
+                        child: buildProductContainerText("SKU"),
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: buildProductContainerForm(
+                          'SKU',
+                          TextInputType.text,
+                          SKU,
+                          validateField,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  Row(
+                    children: [
+                      Expanded(
+                        flex: 1,
+                        child: buildProductContainerText("Quantity"),
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: buildProductContainerForm(
+                          'Quantity',
+                          TextInputType.number,
+                          quantity,
+                          validateField,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  Row(
+                    children: [
+                      Expanded(
+                        flex: 1,
+                        child: buildProductContainerText("Short description"),
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: buildProductContainerForm(
+                          'Short description',
+                          TextInputType.text,
+                          short_description,
+                          validateField,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: buildProductContainerText("Description"),
+                  ),
+                  const SizedBox(height: 16),
+                  buildProductContainerForm('Description', TextInputType.text,
+                      description, validateField),
+                  const SizedBox(height: 16),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: buildProductContainerText("Upload Image"),
+                  ),
+                  const SizedBox(height: 16),
+                  DottedBorder(
+                    borderType: BorderType.RRect,
+                    color: Colors.grey,
+                    strokeWidth: 1,
+                    radius: const Radius.circular(10),
+                    dashPattern: const [4, 4],
+                    child: InkWell(
+                      onTap: () {
+                        pickImage();
+                      },
+                      child: SizedBox(
+                        width: double.infinity,
+                        height: 100,
+                        child: Center(
+                          child: DynamicImageWidget(image: image,
+                            onTap: () {
+                              pickImage();
+                            },
+
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  SizedBox(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        if (formKey.currentState!.validate()) _submitForm();
+                      },
+                      child: const Text('Submit'),
+                    ),
+                  ),
+                  if (widget.isLoading)
+                    Container(
+                      color: Colors.black.withOpacity(0.5),
+                      child: const Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                    ),
+                ],
               ),
             ),
-          ],
-        ),
-        if (widget.isLoading)
-          Container(
-            color: Colors.black.withOpacity(0.5),
-            child: const Center(
-              child: CircularProgressIndicator(),
-            ),
           ),
+        )
       ],
     );
   }
@@ -479,19 +392,13 @@ class _AddProductWidgetState extends State<AddProductWidget> {
           SKU: SKU.text,
           quantity: quantity.text,
           newimage: image,
-          category_id: category_id,
-          size_id: sizeId));
-    } catch (e) {
-
-    }
+          category_id: category_id!,
+          size_id: sizeId!));
+    } catch (e) {}
   }
 
-  void _updateSlugField() {
-    final productName = name.text;
-    final slugName = productName.toLowerCase().replaceAll(' ', '_');
-
-    setState(() {
-      slug.text = slugName;
-    });
+  void _updateSlugField(String productName) {
+    final slugName = productName.toLowerCase().replaceAll(' ', '-');
+    slug.text = slugName;
   }
 }

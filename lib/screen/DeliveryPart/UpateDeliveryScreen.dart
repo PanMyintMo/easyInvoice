@@ -1,18 +1,19 @@
-import 'package:easy_invoice/widget/DeliveryPart/AddDeliveryWidget.dart';
+import 'package:easy_invoice/widget/DeliveryPart/UpdateDeliveryWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import '../../bloc/post/DeliveryPart/deli_company_info_cubit.dart';
 import '../../common/ToastMessage.dart';
 import '../../module/module.dart';
-
-class AddDeliveryScreen extends StatefulWidget {
-  const AddDeliveryScreen({super.key});
+import '../../widget/DeliveryPart/AddDeliveryWidget.dart';
+class UpdateDelivery extends StatefulWidget {
+  const UpdateDelivery({super.key});
 
   @override
-  State<AddDeliveryScreen> createState() => _AddDeliveryScreenState();
+  State<UpdateDelivery> createState() => _UpdateDeliveryState();
 }
 
-class _AddDeliveryScreenState extends State<AddDeliveryScreen> {
+class _UpdateDeliveryState extends State<UpdateDelivery> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -34,20 +35,20 @@ class _AddDeliveryScreenState extends State<AddDeliveryScreen> {
           builder: (context, state) {
             final loading = state is DeliCompanyInfoLoading;
             if (state is DeliCompanyInfoLoading) {
-              return AddDeliveryWidget(isLoading: loading);
+              return UpdateDeliveryWidget(isLoading: loading);
             } else if (state is DeliCompanyInfoSuccess) {
               showToastMessage("Successful");
               Navigator.pop(context, true);
-              return const AddDeliveryWidget(
+              return const UpdateDeliveryWidget(
                 isLoading: false,
               );
             } else if (state is DeliCompanyInfoFail) {
               showToastMessage(state.error);
-              return const AddDeliveryWidget(
+              return const UpdateDeliveryWidget(
                 isLoading: false,
               );
             }
-            return const AddDeliveryWidget(
+            return const UpdateDeliveryWidget(
               isLoading: false,
             );
           },

@@ -81,6 +81,7 @@ class _SizeAddFormWidgetState extends State<SizeAddFormWidget> {
                           decoration: const InputDecoration(
                             border: OutlineInputBorder(),
                             labelText: 'Slug Name',
+                            enabled: false,
                           ),
                         ),
                       ),

@@ -1,3 +1,4 @@
+import 'package:easy_invoice/common/ThemeHelperUserClass.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../bloc/post/CityPart/add_city_cubit.dart';
@@ -8,7 +9,7 @@ import '../../dataRequestModel/CityPart/AddCity.dart';
 class AddNewCityWidget extends StatefulWidget {
   final bool isLoading;
 
-  const AddNewCityWidget({Key? key, required this.isLoading});
+  const AddNewCityWidget({super.key,required this.isLoading});
 
   @override
   State<AddNewCityWidget> createState() => _AddNewCityWidgetState();
@@ -16,8 +17,9 @@ class AddNewCityWidget extends StatefulWidget {
 
 class _AddNewCityWidgetState extends State<AddNewCityWidget> {
   List<Country> countries = [];
-  String? selectedCountryId;
-  TextEditingController nameController = TextEditingController(); // Use TextEditingController
+  Country? selectedCountryId;
+  TextEditingController nameController =
+      TextEditingController(); // Use TextEditingController
 
   @override
   void initState() {
@@ -41,38 +43,42 @@ class _AddNewCityWidgetState extends State<AddNewCityWidget> {
         Form(
           key: formKey,
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+
+              Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(8.0),
+                  child: buildProductContainerText("Country")),
+
               Container(
                 width: double.infinity,
-                padding: const EdgeInsets.all(16.0),
-                child: DropdownButtonFormField<String>(
-                  hint: const Text("Select Country Name"),
+                padding: const EdgeInsets.all(8.0),
+                child:buildDropdown(
                   value: selectedCountryId,
-                  items: [
-
-                    ...countries.map((country) {
-                      return DropdownMenuItem<String>(
-                        value: country.id.toString(),
-                        child: Text(country.name),
-                      );
-                    }).toList(),
-                  ],
+                  items: countries.map((country) {
+                    return DropdownMenuItem(
+                      value: country.id.toString(),
+                        child: Text(country.name));
+                  }).toList(),
                   onChanged: (value) {
                     setState(() {
-                      selectedCountryId = value;
+                      selectedCountryId = value ;
                     });
                   },
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                    labelText: 'Country',
-                  ),
-                ),
+                  hint: "Select Country",
+                )
+
               ),
               Container(
-                padding: const EdgeInsets.all(16),
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(8),
+
+                  child: buildProductContainerText("City")),
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(8),
                 child: TextField(
                   controller: nameController, // Use the TextEditingController
                   decoration: const InputDecoration(
@@ -81,14 +87,15 @@ class _AddNewCityWidgetState extends State<AddNewCityWidget> {
                   ),
                 ),
               ),
-
               TextButton(
                 onPressed: () {
                   if (formKey.currentState!.validate()) {
                     formKey.currentState!.save();
                     context.read<AddCityCubit>().addCity(
-                      AddCity(name: nameController.text, country_id: selectedCountryId.toString()),
-                    );
+                          AddCity(
+                              name: nameController.text,
+                              country_id: selectedCountryId.toString()),
+                        );
                   }
                 },
                 child: const Text('Add New City'),

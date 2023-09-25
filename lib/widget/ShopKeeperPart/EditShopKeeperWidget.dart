@@ -18,11 +18,13 @@ class EditShopKeeperWidget extends StatefulWidget {
   final String shProductId;
   final int id;
 
-  const EditShopKeeperWidget({super.key,
-    required this.isLoading,
-    required this.quantity,
-    required this.shCategoryId,
-    required this.shProductId, required this.id});
+  const EditShopKeeperWidget(
+      {super.key,
+      required this.isLoading,
+      required this.quantity,
+      required this.shCategoryId,
+      required this.shProductId,
+      required this.id});
 
   @override
   State<EditShopKeeperWidget> createState() => _EditShopKeeperWidgetState();
@@ -93,7 +95,7 @@ class _EditShopKeeperWidgetState extends State<EditShopKeeperWidget> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) =>
-                                const ShopKeeperScreen()));
+                                    const ShopKeeperScreen()));
                       },
                       child: const Text('All ShopKeeper'),
                     ),
@@ -105,39 +107,19 @@ class _EditShopKeeperWidgetState extends State<EditShopKeeperWidget> {
                   const SizedBox(
                     height: 16,
                   ),
-                  SizedBox(
-                    width: double.infinity,
-                    child: chooseItemIdForm(
-                      DropdownButton<String>(
-                        value: category_id,
-                        items: [
-                          ...categories.map((category) {
-                            return DropdownMenuItem<String>(
-                              value: category.id.toString(),
-                              child: Text(category.name),
-                            );
-                          }).toList(),
-                        ],
-                        onChanged: (value) async {
-                          await fetchProductsByCategory(int.parse(value!));
-                          setState(() {
-                            category_id = value;
-                            product_id = ''; // Reset product_id
-                          });
-                        },
-                        underline: const SizedBox(),
-                        borderRadius: BorderRadius.circular(10),
-                        icon: const Icon(Icons.arrow_drop_down),
-                        iconSize: 24,
-                        isExpanded: true,
-                        dropdownColor: Colors.white,
-                        style: const TextStyle(
-                          color: Colors.black,
-                          fontSize: 16,
-                        ),
-                      ),
-                    ),
-                  ),
+               /*   buildDropdown(
+                    value: category_id,
+                    hint: "Select Category",
+                    items: categories,
+                    onChanged: (value) {
+                      setState(() {
+                        category_id = value!;
+                        product_id = ''; // Reset product_id
+                      });
+
+                      fetchProductsByCategory(int.parse(value!));
+                    },
+                  ),*/
                   const SizedBox(
                     height: 16,
                   ),
@@ -145,38 +127,16 @@ class _EditShopKeeperWidgetState extends State<EditShopKeeperWidget> {
                   const SizedBox(
                     height: 16,
                   ),
-                  SizedBox(
-                    width: double.infinity,
-                    child: chooseItemIdForm(
-                      DropdownButton<String>(
-                        value: product_id.isNotEmpty ? product_id : null,
-                        items: [
-                          ...products.map((product) {
-                            return DropdownMenuItem<String>(
-                              value: product.id.toString(),
-                              child: Text(product.name),
-                            );
-                          }).toList(),
-                        ],
-                        onChanged: (value) {
-                          setState(() {
-                            product_id = value!;
-                          });
-                        },
-                        hint: const Text('Select Product'),
-                        underline: const SizedBox(),
-                        borderRadius: BorderRadius.circular(10),
-                        icon: const Icon(Icons.arrow_drop_down),
-                        iconSize: 24,
-                        isExpanded: true,
-                        dropdownColor: Colors.white,
-                        style: const TextStyle(
-                          color: Colors.black,
-                          fontSize: 16,
-                        ),
-                      ),
-                    ),
-                  ),
+              /*    buildDropdown(
+                    value: product_id,
+                    hint: "Select Product",
+                    items: products,
+                    onChanged: (value) {
+                      setState(() {
+                        product_id = value!;
+                      });
+                    },
+                  ),*/
                   const SizedBox(
                     height: 16,
                   ),

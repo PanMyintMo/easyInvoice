@@ -73,29 +73,25 @@ class ProductDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        BlocConsumer<DeleteProductItemCubit, DeleteProductItemState>(
-          builder: (context, deleteState) {
-            bool loading = deleteState is DeleteProductItemLoading;
+    return BlocConsumer<DeleteProductItemCubit, DeleteProductItemState>(
+      builder: (context, deleteState) {
+        bool loading = deleteState is DeleteProductItemLoading;
 
-            return ProductDetailWidget(
-              isLoading: loading,
-              products: product,
-            );
-          },
-          listener: (context, deleteState) {
-            if (deleteState is DeleteProductItemSuccess) {
-              showToastMessage('Deleted Product successful.');
-              BlocProvider.of<GetAllProductCubit>(context).getAllProduct();
-              Navigator.pop(context, true);
-            } else if (deleteState is DeleteProductItemFail) {
-              showToastMessage(
-                  'Failed to delete product: ${deleteState.error}');
-            }
-          },
-        ),
-      ],
+        return ProductDetailWidget(
+          isLoading: loading,
+          products: product,
+        );
+      },
+      listener: (context, deleteState) {
+        if (deleteState is DeleteProductItemSuccess) {
+          showToastMessage('Deleted Product successful.');
+          BlocProvider.of<GetAllProductCubit>(context).getAllProduct();
+          Navigator.pop(context, true);
+        } else if (deleteState is DeleteProductItemFail) {
+          showToastMessage(
+              'Failed to delete product: ${deleteState.error}');
+        }
+      },
     );
   }
 }
@@ -122,7 +118,7 @@ void onSelected(BuildContext context, item, ProductListItem product) async {
               short_description: product.short_description,
               description: product.description,
               regular_price: product.regular_price,
-              sale_price: product.salePrice,
+              sale_price: product.sale_price,
               buying_price: product.buying_price,
               SKU: product.SKU,
               quantity: product.quantity,
