@@ -49,7 +49,7 @@ class CardViewProduct extends StatelessWidget {
           children: [
             Image.network(
               imageUrl ?? '', // Use imageUrl and provide a default value ('' in this case)
-              height: 100, // Adjust the height as needed
+              height: 200, // Adjust the height as needed
               width: double.infinity, // Adjust the width as needed
             ),
             const SizedBox(height : 16),

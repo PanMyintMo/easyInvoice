@@ -24,6 +24,7 @@ import '../../dataRequestModel/DeliveryPart/ChangeOrderStatusRequestModel.dart';
 import '../../dataRequestModel/DeliveryPart/EditOrderDetailRequestModel.dart';
 import '../../dataRequestModel/DeliveryPart/OrderByDateRequestModel.dart';
 import '../../dataRequestModel/DeliveryPart/ProductInvoiceRequest.dart';
+import '../../dataRequestModel/DeliveryPart/UpdateDeliveryRequestModel.dart';
 import '../../dataRequestModel/EditCategoryModel.dart';
 import '../../dataRequestModel/EditSizeModel.dart';
 import '../../dataRequestModel/Login&Register/EditCompanyProfileRequestModel.dart';
@@ -41,7 +42,6 @@ import '../responsemodel/CityPart/Cities.dart';
 import '../responsemodel/CityPart/EditWardResponse.dart';
 import '../responsemodel/CityPart/Street.dart';
 import '../responsemodel/DeliveryPart/DeliveryCompanyInfoResponse.dart';
-import '../responsemodel/DeliveryPart/EditOrderDetailResponse.dart';
 import '../responsemodel/DeliveryPart/FetchAllDeliveries.dart';
 import '../responsemodel/DeliveryPart/OrderDetailResponse.dart';
 import '../responsemodel/ShopKeeperResponsePart/DeliveredWarehouseRequest.dart';
@@ -117,6 +117,18 @@ class UserRepository {
     try {
       final response =
           await _apiService.editCompanyProfile(editProfileRequestModel, id);
+      return response;
+    } catch (error) {
+      rethrow;
+    }
+  }
+
+  //For edit delivery
+  Future<DeliCompanyInfoResponse> updateDeliveryById(
+    int id,UpdateDeliveryRequestModel updateDeliveryRequestModel) async {
+    try {
+      final response =
+      await _apiService.updateDeliveryById(id,updateDeliveryRequestModel);
       return response;
     } catch (error) {
       rethrow;
@@ -243,7 +255,7 @@ class UserRepository {
   }
 
 //edit order detail
-  Future<EditOrderData> editOrderDetail(int id,EditOrderDetailRequestModel editOrderDetailRequestModel) async {
+  Future<OrderResponse> editOrderDetail(int id,EditOrderDetailRequestModel editOrderDetailRequestModel) async {
     try {
       final response = await _apiService.editOrderDetail(id,editOrderDetailRequestModel);
       return response;

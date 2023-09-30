@@ -161,29 +161,6 @@ class _UserWidgetState extends State<UserWidget> {
                           hint: "Select a user role",
                         ),
 
-                        //   validator: (value) {
-                        //     if (value == null || value.isEmpty) {
-                        //       return 'Please select a user role'; // Validation error message
-                        //     }
-                        //     return null; // Validation passed
-                        //   },
-
-                        //   items: const [
-                        //     "User",
-                        //     "Admin (Disabled)",
-                        //     "Warehouse",
-                        //     'Shopkeeper',
-                        //     "Delivery"
-                        //   ].map<DropdownMenuItem<String>>((String value) {
-                        //     return DropdownMenuItem<String>(
-                        //       value: value,
-                        //       child: Text(
-                        //         value,
-                        //         style: const TextStyle(fontSize: 16),
-                        //       ),
-                        //     );
-                        //   }).toList(),
-                        // ),
                         const SizedBox(height: 50),
                         Padding(
                           padding: const EdgeInsets.all(8.0),

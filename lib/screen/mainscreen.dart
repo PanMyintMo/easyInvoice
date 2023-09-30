@@ -5,7 +5,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import '../bloc/get/MainPagePart/order_filter_by_date_cubit.dart';
 import '../bloc/get/WarehousePart/warehouse_product_list_cubit.dart';
 import '../common/ThemeHelperUserClass.dart';
@@ -89,6 +88,7 @@ class _MainPageState extends State<MainPageScreen> {
         drawer: const NavigationDrawerWidget(),
         appBar: utype == 'ADM' ? _buildAdminAppBar() : _buildDefaultAppBar(),
         body: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
           child: Column(
             children: [
               BlocConsumer<OrderFilterByDateCubit, OrderFilterByDateState>(
@@ -130,120 +130,101 @@ class _MainPageState extends State<MainPageScreen> {
 
                           return Column(
                             children: [
-                              SizedBox(
-                                width: double.infinity,
-                                height: 50,
-                                child: Column(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.only(right: 12),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.end,
-                                        children: [
-                                          Align(
-                                            alignment: Alignment.topRight,
-                                            child: buildDropdown(
-                                              value: dropDownValue,
-                                              items: filterItem.map((item) {
-                                      return DropdownMenuItem<
-                                      String>(
-                                      value: item,
-                                      child: Text(item),
-                                      );
-                                      }).toList(),
-                                              onChanged: (value) {
-                                                if (value != dropDownValue) {
-                                                  setState(() {
-                                                    dropDownValue = value!;
-                                                    // Fetch data based on the selected dropdown value
-                                                    final cubit = context.read<
-                                                        OrderFilterByDateCubit>();
-                                                    cubit
-                                                        .fetchDataForDifferentFilterTypes(
-                                                        dropDownValue);
-                                                  });
+                              Align(
+                                alignment: Alignment.topRight,
+                                child: buildDropdown(
+                                  value: dropDownValue,
+                                  items: filterItem.map((item) {
+                              return DropdownMenuItem<
+                              String>(
+                              value: item,
+                              child: Text(item),
+                              );
+                              }).toList(),
+                                  onChanged: (value) {
+                                    if (value != dropDownValue) {
+                                      setState(() {
+                                        dropDownValue = value!;
+                                        // Fetch data based on the selected dropdown value
+                                        final cubit = context.read<
+                                            OrderFilterByDateCubit>();
+                                        cubit
+                                            .fetchDataForDifferentFilterTypes(
+                                            dropDownValue);
+                                      });
 
-                                                }
-                                              },
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                    )
-                                  ],
+                                    }
+                                  },
                                 ),
                               ),
                               const SizedBox(
                                 height: 16,
                               ),
-                              Padding(
-                                padding: const EdgeInsets.all(12.0),
-                                child: Container(
-                                  height: 100,
-                                  color: Colors.white10,
-                                  child: ListView(
-                                    scrollDirection: Axis.horizontal,
-                                    children: [
-                                      if (utype == 'ADM')
-                                        _buildCardView(
-                                            'assets/revenue.png',
-                                            'Total Revenue',
-                                            '${mainPageResponse?.totalRevenue.toString() ?? 0}',
-                                            '\$',
-                                            () {}),
+                              Container(
+                                height: 100,
+                                padding : const EdgeInsets.all((16)),
+                                color: Colors.white10,
+                                child: ListView(
+                                  scrollDirection: Axis.horizontal,
+                                  children: [
+                                    if (utype == 'ADM')
                                       _buildCardView(
-                                          'assets/sale.jpg',
-                                          'Total Sale',
-                                          '${mainPageResponse?.totalSales.toString() ?? 0}',
-                                          ' (Sales)',
-                                          () {}),
-                                      _buildCardView(
-                                          'assets/profits.png',
-                                          'Total Profit',
-                                          '${mainPageResponse?.totalProfit.toString() ?? 0}',
+                                          'assets/revenue.png',
+                                          'Total Revenue',
+                                          '${mainPageResponse?.totalRevenue.toString() ?? 0}',
                                           '\$',
                                           () {}),
-                                      _buildCardView(
-                                          'assets/faulty.png',
-                                          'Faulty Item',
-                                          '${mainPageResponse?.totalFaultyItem.toString() ?? 0}',
-                                          ' (Items)', () {
+                                    _buildCardView(
+                                        'assets/sale.jpg',
+                                        'Total Sale',
+                                        '${mainPageResponse?.totalSales.toString() ?? 0}',
+                                        ' (Sales)',
+                                        () {}),
+                                    _buildCardView(
+                                        'assets/profits.png',
+                                        'Total Profit',
+                                        '${mainPageResponse?.totalProfit.toString() ?? 0}',
+                                        '\$',
+                                        () {}),
+                                    _buildCardView(
+                                        'assets/faulty.png',
+                                        'Faulty Item',
+                                        '${mainPageResponse?.totalFaultyItem.toString() ?? 0}',
+                                        ' (Items)', () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const AllFaultyItemsScreen()));
+                                    }),
+                                    _buildCardView(
+                                      'assets/warehouse.png',
+                                      'Ware House',
+                                      '${mainPageResponse?.totalWareHouseQuantity.toString() ?? 0}',
+                                      '',
+                                      () {
                                         Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    const AllFaultyItemsScreen()));
-                                      }),
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const WarehouseTableScreen()), // Replace WarehousePage() with your actual destination page
+                                        );
+                                      },
+                                    ),
+                                    if (utype == 'ADM' || utype == 'SK')
                                       _buildCardView(
-                                        'assets/warehouse.png',
-                                        'Ware House',
-                                        '${mainPageResponse?.totalWareHouseQuantity.toString() ?? 0}',
-                                        '',
-                                        () {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    const WarehouseTableScreen()), // Replace WarehousePage() with your actual destination page
-                                          );
-                                        },
-                                      ),
-                                      if (utype == 'ADM' || utype == 'SK')
-                                        _buildCardView(
-                                            'assets/shopkeeper.jpg',
-                                            'Shop Keeper',
-                                            '${mainPageResponse?.shopKeeper.toString() ?? 0}',
-                                            '(Item Left)', () {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    const ShopKeeperProductTableScreen()), // Replace WarehousePage() with your actual destination page
-                                          );
-                                        }),
-                                    ],
-                                  ),
+                                          'assets/shopkeeper.jpg',
+                                          'Shop Keeper',
+                                          '${mainPageResponse?.shopKeeper.toString() ?? 0}',
+                                          '(Item Left)', () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const ShopKeeperProductTableScreen()), // Replace WarehousePage() with your actual destination page
+                                        );
+                                      }),
+                                  ],
                                 ),
                               ),
                               const SizedBox(
@@ -260,68 +241,66 @@ class _MainPageState extends State<MainPageScreen> {
 
                               SingleChildScrollView(
                                 scrollDirection: Axis.horizontal,
-                                child: SizedBox(
-                                  child: DataTable(
-                                    headingRowColor:
-                                        MaterialStateColor.resolveWith(
-                                            (states) => Colors.teal),
-                                    columnSpacing: 40.0,
-                                    columns: const [
-                                      DataColumn(
-                                        label: Text(
-                                          'ID',
-                                          style: TextStyle(
-                                              fontSize: 16,
-                                              color: Colors.white),
-                                        ),
+                                child: DataTable(
+                                  headingRowColor:
+                                      MaterialStateColor.resolveWith(
+                                          (states) => Colors.teal),
+                                  columnSpacing: 40.0,
+                                  columns: const [
+                                    DataColumn(
+                                      label: Text(
+                                        'ID',
+                                        style: TextStyle(
+                                            fontSize: 16,
+                                            color: Colors.white),
                                       ),
-                                      DataColumn(
-                                        label: Text(
-                                          'Name',
-                                          style: TextStyle(
-                                              fontSize: 16,
-                                              color: Colors.white),
-                                        ),
+                                    ),
+                                    DataColumn(
+                                      label: Text(
+                                        'Name',
+                                        style: TextStyle(
+                                            fontSize: 16,
+                                            color: Colors.white),
                                       ),
-                                      DataColumn(
-                                        label: Text(
-                                          'Sale Price',
-                                          style: TextStyle(
-                                              fontSize: 16,
-                                              color: Colors.white),
-                                        ),
+                                    ),
+                                    DataColumn(
+                                      label: Text(
+                                        'Sale Price',
+                                        style: TextStyle(
+                                            fontSize: 16,
+                                            color: Colors.white),
                                       ),
-                                      DataColumn(
-                                        label: Text(
-                                          'Buying Price',
-                                          style: TextStyle(
-                                              fontSize: 16,
-                                              color: Colors.white),
-                                        ),
+                                    ),
+                                    DataColumn(
+                                      label: Text(
+                                        'Buying Price',
+                                        style: TextStyle(
+                                            fontSize: 16,
+                                            color: Colors.white),
                                       ),
-                                      DataColumn(
-                                        label: Text(
-                                          'Quantity',
-                                          style: TextStyle(
-                                              fontSize: 16,
-                                              color: Colors.white),
-                                        ),
+                                    ),
+                                    DataColumn(
+                                      label: Text(
+                                        'Quantity',
+                                        style: TextStyle(
+                                            fontSize: 16,
+                                            color: Colors.white),
                                       ),
-                                    ],
-                                    rows: warehouseData.map((warehouseData) {
-                                      return DataRow(cells: [
-                                        DataCell(
-                                            Text(warehouseData.id.toString())),
-                                        DataCell(Text(warehouseData.name)),
-                                        DataCell(Text(warehouseData.sale_price
-                                            .toString())),
-                                        DataCell(Text(warehouseData.buying_price
-                                            .toString())),
-                                        DataCell(Text(
-                                            warehouseData.quantity.toString())),
-                                      ]);
-                                    }).toList(),
-                                  ),
+                                    ),
+                                  ],
+                                  rows: warehouseData.map((warehouseData) {
+                                    return DataRow(cells: [
+                                      DataCell(
+                                          Text(warehouseData.id.toString())),
+                                      DataCell(Text(warehouseData.name)),
+                                      DataCell(Text(warehouseData.sale_price
+                                          .toString())),
+                                      DataCell(Text(warehouseData.buying_price
+                                          .toString())),
+                                      DataCell(Text(
+                                          warehouseData.quantity.toString())),
+                                    ]);
+                                  }).toList(),
                                 ),
                               ),
                               const SizedBox(
@@ -339,74 +318,70 @@ class _MainPageState extends State<MainPageScreen> {
                               ),
                               SingleChildScrollView(
                                 scrollDirection: Axis.horizontal,
-                                child: SizedBox(
-                                  child: DataTable(
-                                    headingRowColor:
-                                        MaterialStateColor.resolveWith(
-                                            (states) => Colors.teal),
-                                    columnSpacing: 40.0,
-                                    columns: const [
-                                      DataColumn(
-                                        label: Text(
-                                          'ID',
-                                          style: TextStyle(
-                                              fontSize: 16,
-                                              color: Colors.white),
-                                        ),
+                                child: DataTable(
+                                  headingRowColor:
+                                      MaterialStateColor.resolveWith(
+                                          (states) => Colors.teal),
+                                  columnSpacing: 40.0,
+                                  columns: const [
+                                    DataColumn(
+                                      label: Text(
+                                        'ID',
+                                        style: TextStyle(
+                                            fontSize: 16,
+                                            color: Colors.white),
                                       ),
-                                      DataColumn(
-                                        label: Text(
-                                          'Name',
-                                          style: TextStyle(
-                                              fontSize: 16,
-                                              color: Colors.white),
-                                        ),
+                                    ),
+                                    DataColumn(
+                                      label: Text(
+                                        'Name',
+                                        style: TextStyle(
+                                            fontSize: 16,
+                                            color: Colors.white),
                                       ),
-                                      DataColumn(
-                                        label: Text(
-                                          'Status',
-                                          style: TextStyle(
-                                              fontSize: 16,
-                                              color: Colors.white),
-                                        ),
+                                    ),
+                                    DataColumn(
+                                      label: Text(
+                                        'Status',
+                                        style: TextStyle(
+                                            fontSize: 16,
+                                            color: Colors.white),
                                       ),
-                                      DataColumn(
-                                        label: Text(
-                                          'Quantity',
-                                          style: TextStyle(
-                                              fontSize: 16,
-                                              color: Colors.white),
-                                        ),
+                                    ),
+                                    DataColumn(
+                                      label: Text(
+                                        'Quantity',
+                                        style: TextStyle(
+                                            fontSize: 16,
+                                            color: Colors.white),
                                       ),
-                                      DataColumn(
-                                        label: Text(
-                                          'Email',
-                                          style: TextStyle(
-                                              fontSize: 16,
-                                              color: Colors.white),
-                                        ),
+                                    ),
+                                    DataColumn(
+                                      label: Text(
+                                        'Email',
+                                        style: TextStyle(
+                                            fontSize: 16,
+                                            color: Colors.white),
                                       ),
-                                    ],
-                                    rows: mainPageResponse?.data?.map((data) {
-                                          return DataRow(cells: [
-                                            DataCell(
-                                                Text(data.order_id.toString())),
-                                            DataCell(Text(data.name)),
-                                            DataCell(
-                                                Text(data.status.toString())),
-                                            DataCell(
-                                                Text(data.quantity.toString())),
-                                            DataCell(
-                                                Text(data.email.toString())),
-                                          ]);
-                                        }).toList() ??
-                                        [],
-                                  ),
+                                    ),
+                                  ],
+                                  rows: mainPageResponse?.data?.map((data) {
+                                        return DataRow(cells: [
+                                          DataCell(
+                                              Text(data.order_id.toString())),
+                                          DataCell(Text(data.name)),
+                                          DataCell(
+                                              Text(data.status.toString())),
+                                          DataCell(
+                                              Text(data.quantity.toString())),
+                                          DataCell(
+                                              Text(data.email.toString())),
+                                        ]);
+                                      }).toList() ??
+                                      [],
                                 ),
                               ),
-                              const SizedBox(
-                                height: 16,
-                              ),
+
                             ],
                           );
                         });
@@ -572,70 +547,58 @@ Widget _buildCardView(String image, String cardText, String profileText,
       elevation: 5,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
       color: Colors.white,
-      child: GestureDetector(
-        onTap: onTap, // Use the provided onTap function here
-        child: Column(
-          children: [
-            Expanded(
-              child: SizedBox(
-                height: 100,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        GestureDetector(
-                          onTap: onTap, // Use the same onTap function here
-                          child: Text(
-                            cardText,
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              decorationColor: Colors.black,
-                              decoration: (cardText == "Total Revenue" ||
-                                      cardText == "Total Sale" ||
-                                      cardText == "Total Profit")
-                                  ? TextDecoration
-                                      .none // No underline for these titles
-                                  : TextDecoration.underline,
-                              // Underline style for other titles
-                              color: (cardText == "Total Revenue" ||
-                                      cardText == "Total Sale" ||
-                                      cardText == "Total Profit")
-                                  ? Colors.black // Change color as needed
-                                  : Colors.blue, // Color for other titles
-                            ),
-                          ),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              profileText,
-                              style: TextStyle(
-                                  fontSize: 18,
-                                  color: Colors.lightGreen.shade900,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            Text(sign,
-                                style: TextStyle(color: Colors.red.shade600)),
-                          ],
-                        ),
-                      ],
-                    ),
-                    Image(
-                      image: AssetImage(image),
-                      width: 50,
-                    ),
-                  ],
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              GestureDetector(
+                onTap: onTap, // Use the same onTap function here
+                child: Text(
+                  cardText,
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    decorationColor: Colors.black,
+                    decoration: (cardText == "Total Revenue" ||
+                            cardText == "Total Sale" ||
+                            cardText == "Total Profit")
+                        ? TextDecoration
+                            .none // No underline for these titles
+                        : TextDecoration.underline,
+                    // Underline style for other titles
+                    color: (cardText == "Total Revenue" ||
+                            cardText == "Total Sale" ||
+                            cardText == "Total Profit")
+                        ? Colors.black // Change color as needed
+                        : Colors.blue, // Color for other titles
+                  ),
                 ),
               ),
-            ),
-          ],
-        ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    profileText,
+                    style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.lightGreen.shade900,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  Text(sign,
+                      style: TextStyle(color: Colors.red.shade600)),
+                ],
+              ),
+            ],
+          ),
+          Image(
+            image: AssetImage(image),
+            width: 50,
+          ),
+        ],
       ),
     ),
   );

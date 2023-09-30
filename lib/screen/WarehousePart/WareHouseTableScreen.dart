@@ -35,7 +35,8 @@ class WarehouseTableScreen extends StatelessWidget {
             ),
           ),
         ),
-        body: Column(
+        body: SingleChildScrollView(
+            child: Column(
           children: [
             Align(
               alignment: Alignment.topRight,
@@ -71,7 +72,6 @@ class WarehouseTableScreen extends StatelessWidget {
                 if (state is WarehouseProductListLoading) {
                   return const Center(child: CircularProgressIndicator());
                 } else if (state is WarehouseProductListSuccess) {
-                  showToastMessage("Successfully Warehouse data retrieved.");
                   return WarehouseTableWidget(
                     isLoading: false,
                     warehouseData: state.warehouseData,
@@ -91,7 +91,7 @@ class WarehouseTableScreen extends StatelessWidget {
               },
             )
           ],
-        ),
+        )),
       ),
     );
   }

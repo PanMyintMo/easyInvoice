@@ -1,4 +1,5 @@
 import 'package:easy_invoice/data/api/apiService.dart';
+import 'package:easy_invoice/widget/ProviceInvoicePart/pdf_invoice_api.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:simple_barcode_scanner/enum.dart';
@@ -41,7 +42,7 @@ class _ProductInvoiceWidgetState extends State<ProductInvoiceWidget> {
   }
 
   Future<void> barcodeScanner() async {
-    try {
+
       final result = await Navigator.push(
         context,
         MaterialPageRoute(
@@ -60,9 +61,7 @@ class _ProductInvoiceWidgetState extends State<ProductInvoiceWidget> {
         setState(() {
           prouductno.text = scannedBarcode;
         });
-      }
-    } catch (e) {
-      print("Error during barcode scanning: $e");
+
     }
   }
 
@@ -131,8 +130,11 @@ class _ProductInvoiceWidgetState extends State<ProductInvoiceWidget> {
               ),
               const SizedBox(height: 16),
               ElevatedButton(
-                onPressed: isClick
-                    ? () {
+                onPressed: isClick ? () async {
+//
+// final pdfFile= await PdfInvoiceApi.generate(invoice);
+// pdfFile.openFile(pdfFile);
+
                   // Handle print button click
                 }
                     : null,
@@ -249,3 +251,4 @@ class _ProductInvoiceWidgetState extends State<ProductInvoiceWidget> {
     );
   }
 }
+

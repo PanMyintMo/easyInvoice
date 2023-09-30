@@ -61,6 +61,7 @@ class _AddCategoryFromWidgetState extends State<AddCategoryFromWidget> {
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: TextField(
+                          enabled: false,
                           controller: slug,
                           decoration: const InputDecoration(
                             border: OutlineInputBorder(),

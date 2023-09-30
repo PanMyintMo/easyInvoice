@@ -21,58 +21,41 @@ class DeliveryCompanyResponse {
 
 class CompanyData {
   int id;
-  double? kg;
+  int company_id;
+  int basic_cost;
+  String waiting_time;
+  String township_id;
   String? description;
-  String state;
-  double basicCost;
-  String waitingTime;
-  int companyId;
-  DateTime createdAt;
-  DateTime updatedAt;
-  int cityId;
-  CompanyType companyType;
+  CompanyType company_type;
 
-  CompanyData({
-    required this.id,
-    this.kg,
-    this.description,
-    required this.state,
-    required this.basicCost,
-    required this.waitingTime,
-    required this.companyId,
-    required this.createdAt,
-    required this.updatedAt,
-    required this.cityId,
-    required this.companyType,
-  });
+  CompanyData(
+      {required this.id,
+      required this.basic_cost,
+      required this.waiting_time,
+      required this.township_id,
+      required this.description,
+      required this.company_id,
+      required this.company_type});
 
   factory CompanyData.fromJson(Map<String, dynamic> json) {
     return CompanyData(
       id: json["id"],
-      kg: json["kg"]?.toDouble(),
       description: json["description"],
-      state: json["state"],
-      basicCost: json["basic_cost"].toDouble(),
-      waitingTime: json["waiting_time"],
-      companyId: json["company_id"],
-      createdAt: DateTime.parse(json["created_at"]),
-      updatedAt: DateTime.parse(json["updated_at"]),
-      cityId: int.parse(json["city_id"]),
-      companyType: CompanyType.fromJson(json["company_type"]),
+      basic_cost: json["basic_cost"],
+      waiting_time: json["waiting_time"],
+      township_id: json['township_id'],
+      company_id: json['company_id'],
+      company_type: CompanyType.fromJson(json['company_type']),
     );
   }
 }
 
 class CompanyType {
-  int id;
-  String name;
-  String url;
+  final int id;
+  final String name;
+  final String url;
 
-  CompanyType({
-    required this.id,
-    required this.name,
-    required this.url,
-  });
+  CompanyType({required this.id, required this.name, required this.url});
 
   factory CompanyType.fromJson(Map<String, dynamic> json) {
     return CompanyType(

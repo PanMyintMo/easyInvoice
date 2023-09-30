@@ -17,6 +17,7 @@ class AddFaultyItemResponse {
 class FaultyData {
   final String quantity;
   final String product_id;
+  final String product_name;
   final String updated_at;
   final String created_at;
   final int id;
@@ -24,6 +25,7 @@ class FaultyData {
   FaultyData(
       {required this.quantity,
       required this.product_id,
+        required this.product_name,
       required this.updated_at,
       required this.created_at,
       required this.id});
@@ -32,6 +34,7 @@ class FaultyData {
     return FaultyData(
         quantity: json['quantity'],
         product_id: json['product_id'],
+        product_name: json['product_name'],
         updated_at: json['updated_at'],
         created_at: json['created_at'],
         id: json['id']);

@@ -23,6 +23,7 @@ import 'package:easy_invoice/bloc/post/CityPart/add_street_cubit.dart';
 import 'package:easy_invoice/bloc/post/DeliveryPart/add_delivery_cubit.dart';
 import 'package:easy_invoice/bloc/post/DeliveryPart/change_order_status_cubit.dart';
 import 'package:easy_invoice/bloc/post/DeliveryPart/fetch_order_by_date_cubit.dart';
+import 'package:easy_invoice/bloc/post/DeliveryPart/update_delivery_cubit.dart';
 import 'package:easy_invoice/bloc/post/FaultyItemPart/add_request_faulty_item_cubit.dart';
 import 'package:easy_invoice/bloc/post/Login&Register/edit_company_profile_cubit.dart';
 import 'package:easy_invoice/bloc/post/ShopKeeperPart/add_request_product_shop_keeper_cubit.dart';
@@ -162,6 +163,12 @@ void locator() {
   DeliCompanyInfoCubit deliCompanyInfoCubit =
   DeliCompanyInfoCubit(getIt.get<UserRepository>());
   getIt.registerLazySingleton(() => deliCompanyInfoCubit);
+
+
+  //update delivery by id
+  UpdateDeliveryCubit updateDeliveryCubit =
+  UpdateDeliveryCubit(getIt.get<UserRepository>());
+  getIt.registerLazySingleton(() => updateDeliveryCubit);
 
 
   //fetch all delivery

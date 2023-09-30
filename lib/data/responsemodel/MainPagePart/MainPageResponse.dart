@@ -44,7 +44,7 @@ class OrderDatas {
   final int user_id;
   final int customer_id;
   final int address_id;
-  final String description;
+  final String? description;
   final String subtotal;
   final String discount;
   final String tax;
@@ -68,13 +68,12 @@ class OrderDatas {
   final String SKU;
   final String stock_status;
   final int product_quantity;
-
   final String? product_url;
   final int category_id;
   final int? company_id;
-  final String company_name;
-  final int basic_cost;
-  final String waiting_time;
+  final String? company_name;
+  final int? basic_cost;
+  final String? waiting_time;
   final String? company_url;
   final String firstname;
   final String lastname;
@@ -93,67 +92,68 @@ class OrderDatas {
   final String ward_name;
   final int city_id;
   final String state_name;
-  final int country_id;
+  final int? country_id;
   final String city_name;
   final String country_name;
+  final ShopProduct shop_product;
 
-  OrderDatas({
-    required this.company_id,
-    required this.company_name,
-    required this.basic_cost,
-    required this.waiting_time,
-    required this.company_url,
-    required this.street_name,
-    required this.description,
-    required this.delivery_info_id,
-    required this.township_id,
-    required this.order_id,
-    required this.user_id,
-    required this.quantity,
-    required this.price,
-    required this.product_id,
-    required this.product_url,
-    required this.zipcode,
-    required this.floor,
-    required this.block_no,
-    required this.line2,
-    required this.line1,
-    required this.mobile,
-    required this.lastname,
-    required this.firstname,
-    required this.country_id,
-    required this.ward_name,
-    required this.country_name,
-    required this.city_name,
-    required this.ward_id,
-    required this.street_id,
-    required this.email,
-    required this.sale_price,
-    required this.category_id,
-    required this.SKU,
-    required this.buying_price,
-    required this.regular_price,
-    required this.short_description,
-    required this.slug,
-    required this.name,
-    required this.customer_id,
-    required this.status,
-    required this.total,
-    required this.subtotal,
-    required this.discount,
-    required this.tax,
-    required this.delivery_charge,
-    required this.city_id,
-    required this.stock_status,
-    required this.add_type,
-    required this.address_id,
-    required this.orderitem_id,
-    required this.product_description,
-    required this.product_quantity,
-    required this.state_name,
-    required this.transaction_id,
-    required this.transaction_mode,
-  });
+  OrderDatas(
+      {required this.company_id,
+      required this.company_name,
+      required this.basic_cost,
+      required this.waiting_time,
+      required this.company_url,
+      required this.street_name,
+      required this.description,
+      required this.delivery_info_id,
+      required this.township_id,
+      required this.order_id,
+      required this.user_id,
+      required this.quantity,
+      required this.price,
+      required this.product_id,
+      required this.product_url,
+      required this.zipcode,
+      required this.floor,
+      required this.block_no,
+      required this.line2,
+      required this.line1,
+      required this.mobile,
+      required this.lastname,
+      required this.firstname,
+      required this.country_id,
+      required this.ward_name,
+      required this.country_name,
+      required this.city_name,
+      required this.ward_id,
+      required this.street_id,
+      required this.email,
+      required this.sale_price,
+      required this.category_id,
+      required this.SKU,
+      required this.buying_price,
+      required this.regular_price,
+      required this.short_description,
+      required this.slug,
+      required this.name,
+      required this.customer_id,
+      required this.status,
+      required this.total,
+      required this.subtotal,
+      required this.discount,
+      required this.tax,
+      required this.delivery_charge,
+      required this.city_id,
+      required this.stock_status,
+      required this.add_type,
+      required this.address_id,
+      required this.orderitem_id,
+      required this.product_description,
+      required this.product_quantity,
+      required this.state_name,
+      required this.transaction_id,
+      required this.transaction_mode,
+      required this.shop_product});
 
   factory OrderDatas.fromJson(Map<String, dynamic> json) {
     return OrderDatas(
@@ -212,6 +212,34 @@ class OrderDatas {
       country_id: json['country_id'],
       city_name: json['city_name'],
       country_name: json['country_name'],
+      shop_product: ShopProduct.fromJson(json['shop_product']),
     );
+  }
+}
+
+class ShopProduct {
+  final int id;
+  final int product_id;
+  final int quantity;
+  final String created_at;
+  final String updated_at;
+  final String product_name;
+
+  ShopProduct(
+      {required this.id,
+      required this.product_id,
+      required this.quantity,
+      required this.updated_at,
+      required this.created_at,
+      required this.product_name});
+
+  factory ShopProduct.fromJson(Map<String, dynamic> json) {
+    return ShopProduct(
+        id: json['id'],
+        product_id: json['product_id'],
+        quantity: json['quantity'],
+        updated_at: json['updated_at'],
+        created_at: json['created_at'],
+        product_name: json['product_name']);
   }
 }

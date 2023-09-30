@@ -1,6 +1,6 @@
 class ChangeOrderQtyResponse {
-  final int total;
-  final String sale_price;
+  final int? total;
+  final String? sale_price;
   final int available_quantity;
   final int status;
   final String message;

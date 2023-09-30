@@ -3,12 +3,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../bloc/delete/DeliveryPart/delete_delivery_cubit.dart';
 import '../../common/showDeleteConfirmationDialog.dart';
 import '../../data/responsemodel/DeliveryPart/FetchAllDeliveries.dart';
+import '../../screen/DeliveryPart/UpateDeliveryScreen.dart';
 
 class FetchAllDeliveryWidget extends StatelessWidget {
   final List<DeliveriesItem> deliveriesItem;
   final bool isLoading;
 
-  const FetchAllDeliveryWidget({Key? key, required this.deliveriesItem, required this.isLoading})
+  const FetchAllDeliveryWidget(
+      {Key? key, required this.deliveriesItem, required this.isLoading})
       : super(key: key);
 
   @override
@@ -52,9 +54,12 @@ class DeliData extends DataTableSource {
         Row(
           children: [
             IconButton(
-              icon:  Icon(Icons.edit, color: Colors.green.shade900),
+              icon: Icon(Icons.edit, color: Colors.green.shade900),
               onPressed: () {
-
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>  UpdateDelivery(id: deliveriesItem.delivery_info_id, city_id: deliveriesItem.city_id.toString(), township_id: deliveriesItem.township_id.toString(), basic_cost: deliveriesItem.basic_cost.toString(), waiting_time: deliveriesItem.waiting_time.toString(), company_id: deliveriesItem.company_id.toString(),)));
               },
             ),
             IconButton(
@@ -63,7 +68,7 @@ class DeliData extends DataTableSource {
                 showDeleteConfirmationDialogs(
                   context,
                   "Are you sure you want to delete this delivery item?",
-                      () {
+                  () {
                     context
                         .read<DeleteDeliveryCubit>()
                         .deleteDelivery(deliveriesItem.delivery_info_id);
@@ -86,4 +91,3 @@ class DeliData extends DataTableSource {
   @override
   int get selectedRowCount => 0;
 }
-

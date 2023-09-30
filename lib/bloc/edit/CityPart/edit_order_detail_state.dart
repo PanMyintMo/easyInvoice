@@ -13,7 +13,7 @@ class EditOrderDetailLoading extends EditOrderDetailState {
   List<Object?> get props => [];
 }
 class EditOrderDetailSuccess extends EditOrderDetailState {
-  final EditOrderData editOrderDetailResponse;
+  final OrderResponse editOrderDetailResponse;
   const EditOrderDetailSuccess(this.editOrderDetailResponse);
   @override
   List<Object?> get props => [editOrderDetailResponse];

@@ -1,5 +1,6 @@
 import 'package:easy_invoice/common/ApiHelper.dart';
 import 'package:easy_invoice/data/api/apiService.dart';
+import 'package:easy_invoice/data/responsemodel/CityPart/WardByTownshipResponse.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../bloc/post/DeliveryPart/add_order_cubit.dart';
@@ -9,9 +10,8 @@ import '../../data/responsemodel/CityPart/FetchCityByCountryId.dart';
 import '../../data/responsemodel/CityPart/Street.dart';
 import '../../data/responsemodel/CountryPart/CountryResponse.dart';
 import '../../data/responsemodel/DeliveryPart/DeliCompanyNameByTownshipId.dart';
+import '../../data/responsemodel/ShopKeeperResponsePart/ShopProductListResponse.dart';
 import '../../data/responsemodel/TownshipsPart/TownshipByCityIdResponse.dart';
-import '../../data/responsemodel/common/ProductListItemResponse.dart';
-import '../../data/responsemodel/common/WardResponse.dart';
 import '../../dataRequestModel/DeliveryPart/AddOrderRequestModel.dart';
 import '../../dataRequestModel/DeliveryPart/ChangeOrderProductQty.dart';
 import '../../dataRequestModel/DeliveryPart/ChooseProductForOrderRequestModel.dart';
@@ -31,7 +31,7 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
   int serviceId = 0;
   int? userId;
   String? select_product;
-  List<ProductListItem> products = [];
+  List<ShopProductItem> products = [];
   List<CompanyData> companyData = [];
   List<Country> countries = [];
   String? select_country;
@@ -46,12 +46,10 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
   List<String> companyName = [];
   String? select_city;
   String? select_street;
-  late String city_id;
-  late String township_id;
-  String? ward_id;
-  late String street_id;
+
+
   String waitingTime = '';
-  double basicCost = 0;
+  int basicCost = 0;
   List<int>? companyId = [];
   int totalQty = 0;
   String? message = '';
@@ -59,7 +57,7 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
 
   List<CityByCountryIdData> cities = [];
   List<TownshipByCityIdData> townships = [];
-  List<Ward> wards = [];
+  List<WardByTownshipData> wards = [];
   List<Street> streets = [];
 
   final TextEditingController firstname = TextEditingController();
@@ -96,9 +94,9 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
   }
 
   void fetchProductListItem() async {
-    final products = await ApiHelper.fetchAllProductItem();
+    final response = await ApiHelper.allShopProduct();
     setState(() {
-      this.products = products!;
+      products = response!.data.data;
     });
   }
 
@@ -110,60 +108,40 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
   }
 
   void chooseProductOrderById(ChooseProductOrderRequest? id) async {
-
-      final response = await ApiService().chooseProductOrder(id!);
-      setState(() {
-        productQuality = response.available_quantity;
-        salePrice = response.sale_price;
-      });
-
-  }
-
-  void changeOrderQty(ChangeOrderProductQtyRequest orderProductRequest) async {
-    final response = await ApiService().changeOrderQty(orderProductRequest);
-    if (response.status == 200) {
+    final response = await ApiService().chooseProductOrder(id!);
+    setState(() {
       productQuality = response.available_quantity;
-      totalQty = response.total;
-      message = response.message;
-    }
+      salePrice = response.sale_price;
+    });
   }
+
+
 
   void fetchCitiesByCountryId(int id) async {
-
-      final response = await ApiService().fetchAllCitiesByCountryId(id);
-      setState(() {
-        cities = response;
-        if (response.isNotEmpty) {
-          city_id = 'Select City'; // Reset city_id to default 'Select City'
-        }
-      });
-
+    final response = await ApiService().fetchAllCitiesByCountryId(id);
+    setState(() {
+      cities = response;
+      if (response.isNotEmpty) {}
+    });
   }
 
   void fetchTownshipByCityId(int id) async {
-    try {
-      final response = await ApiService().fetchAllTownshipByCityId(id);
-      setState(() {
-        townships = response;
-        if (response.isNotEmpty) {
-          township_id =
-              'Select Township'; // Reset city_id to default 'Select City'
-        }
-      });
-    } catch (e) {
-      setState(() {
-        townships = [];
+    final response = await ApiService().fetchAllTownshipByCityId(id);
+    setState(() {
+      townships = response;
+      if (response.isNotEmpty) {
 
-      });
-    }
+      }
+    });
   }
 
   void fetchWardByTownshipId(int id) async {
     final response = await ApiHelper.fetchWardByTownshipId(id);
+
     setState(() {
       wards = response;
       if (response.isNotEmpty) {
-        ward_id = null; // Reset ward_id to default 'Select Ward'
+
       }
     });
   }
@@ -172,9 +150,7 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
     final response = await ApiHelper.fetchStreetByWardId(id);
     setState(() {
       streets = response;
-      if (response.isNotEmpty) {
-        street_id = 'Select Street'; // Reset street_id to default 'Select City'
-      }
+      if (response.isNotEmpty) {}
     });
   }
 
@@ -322,6 +298,8 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
                       onChanged: (value) {
                         setState(() {
                           select_country = value;
+                          select_township = null;
+                          select_city = null;
                           int countryId = int.parse(value!);
                           fetchCitiesByCountryId(countryId);
                         });
@@ -350,6 +328,7 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
                       onChanged: (value) {
                         setState(() {
                           select_city = value;
+                          select_township = null;
                           int cityId = int.parse(value!);
                           fetchTownshipByCityId(cityId);
                         });
@@ -393,7 +372,7 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
                   SizedBox(
                     width: double.infinity,
                     child: buildDropdown(
-                      value: select_street,
+                      value: select_ward,
                       items: wards.map((ward) {
                         return DropdownMenuItem(
                             value: ward.id.toString(),
@@ -411,7 +390,7 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
                   ),
 
                   const SizedBox(
-                    height: 18,
+                    height: 16,
                   ),
 
                   SizedBox(
@@ -445,7 +424,7 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
                     ),
                   ),
                   const SizedBox(
-                    height: 18,
+                    height: 16,
                   ),
                   SizedBox(
                     width: double.infinity,
@@ -457,7 +436,7 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
                     ),
                   ),
                   const SizedBox(
-                    height: 18,
+                    height: 16,
                   ),
                   SizedBox(
                     width: double.infinity,
@@ -469,7 +448,7 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
                     ),
                   ),
                   const SizedBox(
-                    height: 18,
+                    height: 16,
                   ),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -488,8 +467,8 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
                             itemCount: companyData.length,
                             itemBuilder: (context, index) {
                               var companyName =
-                                  companyData[index].companyType.name;
-                              var id = companyData[index].companyType.id;
+                                  companyData[index].company_type.name;
+                              var id = companyData[index].company_id;
 
                               return RadioListTile(
                                   dense: true,
@@ -503,17 +482,18 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
                                   onChanged: (value) {
                                     setState(() {
                                       serviceId = value as int;
-                                      if (companyData[index].companyId ==
-                                          companyData[index].companyType.id) {
+                                      if (companyData[index].id ==
+                                          companyData[index].id) {
                                         isVisible = true;
                                         waitingTime =
-                                            companyData[index].waitingTime;
+                                            companyData[index].waiting_time;
                                         basicCost =
-                                            companyData[index].basicCost;
+                                            companyData[index].basic_cost;
                                         url =
-                                            companyData[index].companyType.url;
+                                            companyData[index].company_type.url;
                                         cname =
-                                            companyData[index].companyType.name;
+                                            companyData[index].company_type
+                                                .name;
                                       } else {
                                         url = '';
                                       }
@@ -543,7 +523,7 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
                                   fontSize: 16, fontWeight: FontWeight.bold),
                             ),
                             const SizedBox(
-                              height: 18,
+                              height: 16,
                             ),
                             Text(
                               "Company Name is : $cname",
@@ -551,7 +531,7 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
                                   fontSize: 16, fontWeight: FontWeight.bold),
                             ),
                             const SizedBox(
-                              height: 18,
+                              height: 16,
                             ),
                             if (url.isNotEmpty)
                               Image.network(
@@ -565,12 +545,12 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
                     ],
                   ),
                   const SizedBox(
-                    height: 18,
+                    height: 16,
                   ),
                   const Text("Product Name",
                       style: TextStyle(fontSize: 18, color: Colors.pink)),
                   const SizedBox(
-                    height: 18,
+                    height: 16,
                   ),
 
                   SizedBox(
@@ -580,15 +560,16 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
                       items: products.map((product) {
                         return DropdownMenuItem(
                             value: product.id.toString(),
-                            child: Text(product.name));
+                            child: Text(product.product_name.toString()
+                            ));
                       }).toList(),
                       onChanged: (value) {
                         setState(() {
                           select_product = value;
-                          product_id =select_product!;
+                          product_id = select_product!;
                           // Assign selected value to product_id
-                          chooseProductOrderById(ChooseProductOrderRequest(product_id: product_id));
-
+                          chooseProductOrderById(ChooseProductOrderRequest(
+                              product_id: product_id));
                         });
                       },
                       hint: "Select Product",
@@ -596,16 +577,19 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
                   ),
 
                   const SizedBox(
-                    height: 18,
+                    height: 16,
                   ),
                   Row(
                     children: [
-                      Expanded(flex: 1 ,child: buildProductContainerText("Sale Price")),
-                      Expanded(flex: 1,child: buildProductContainerText("Available Quantity")),
+                      Expanded(flex: 1,
+                          child: buildProductContainerText("Sale Price")),
+                      Expanded(flex: 1,
+                          child: buildProductContainerText(
+                              "Available Quantity")),
                     ],
                   ),
                   const SizedBox(
-                    height: 18,
+                    height: 6,
                   ),
                   Row(
                     children: [
@@ -617,9 +601,9 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
                           height: 50,
                           decoration: BoxDecoration(
                             border:
-                                Border.all(color: Colors.black54, width: 0.3),
+                            Border.all(color: Colors.black54, width: 0.3),
                             borderRadius:
-                                const BorderRadius.all(Radius.circular(10.0)),
+                            const BorderRadius.all(Radius.circular(10.0)),
                           ),
                           child: Text(salePrice),
                         ),
@@ -635,9 +619,9 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
                           height: 50,
                           decoration: BoxDecoration(
                             border:
-                                Border.all(color: Colors.black54, width: 0.3),
+                            Border.all(color: Colors.black54, width: 0.3),
                             borderRadius:
-                                const BorderRadius.all(Radius.circular(10.0)),
+                            const BorderRadius.all(Radius.circular(10.0)),
                           ),
                           child: Text("$productQuality"),
                         ),
@@ -645,7 +629,7 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
                     ],
                   ),
                   const SizedBox(
-                    height: 18,
+                    height: 16,
                   ),
                   Row(
                     children: [
@@ -660,26 +644,46 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
                         child: TextFormField(
                           textAlign: TextAlign.center,
                           controller: quantity,
-                          onChanged: (val) {
+                          onChanged: (val) async {
                             if (val.isNotEmpty) {
                               int enteredQuantity = int.tryParse(val) ?? 0;
                               if (enteredQuantity > productQuality!) {
                                 setState(() {
                                   totalQty = 0;
                                   errorText =
-                                      'Quality can not be greater than available quantity!';
+                                  'Quality can not be greater than available quantity!';
                                 });
                               } else {
+                                final response = await ApiService()
+                                    .changeOrderQty(
+                                    ChangeOrderProductQtyRequest(
+                                      selectedProductId: product_id.toString(),
+                                      quantity: val.toString(),
+                                      sale_price: salePrice.toString(),
+                                    )
+                                );
                                 setState(() {
-                                  totalQty = totalQty;
+                                  productQuality = response.available_quantity;
+                                  totalQty = response.total!.toInt();
                                   errorText = null;
-                                  changeOrderQty(ChangeOrderProductQtyRequest(
+                                });
+                              }
+                            }
+                            else {
+
+                              final response = await ApiService()
+                                  .changeOrderQty(
+                                  ChangeOrderProductQtyRequest(
                                     selectedProductId: product_id.toString(),
                                     quantity: val.toString(),
                                     sale_price: salePrice.toString(),
-                                  ));
-                                });
-                              }
+                                  )
+                              );
+                              setState(() {
+                                productQuality = response.available_quantity;
+                                totalQty = response.total!.toInt();
+                                errorText = null;
+                              });
                             }
                           },
                           keyboardType: TextInputType.number,
@@ -703,7 +707,7 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
                     ],
                   ),
                   const SizedBox(
-                    height: 18,
+                    height: 16,
                   ),
                   Row(
                     children: [
@@ -722,9 +726,9 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
                           height: 50,
                           decoration: BoxDecoration(
                             border:
-                                Border.all(color: Colors.black54, width: 0.3),
+                            Border.all(color: Colors.black54, width: 0.3),
                             borderRadius:
-                                const BorderRadius.all(Radius.circular(10.0)),
+                            const BorderRadius.all(Radius.circular(10.0)),
                           ),
                           child: Text("$totalQty"),
                         ),
@@ -732,14 +736,14 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
                     ],
                   ),
                   const SizedBox(
-                    height: 18,
+                    height: 16,
                   ),
                   const Text(
                     'Payment Method',
                     style: TextStyle(fontSize: 18, color: Colors.black),
                   ),
                   const SizedBox(
-                    height: 18,
+                    height: 16,
                   ),
                   Row(
                     children: [
@@ -787,7 +791,7 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
                       )
                     ],
                   ),
-                  const SizedBox(height: 18),
+                  const SizedBox(height: 16),
                   Center(
                       child: ElevatedButton(
                           onPressed: () {
@@ -802,7 +806,7 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
                                     line2: line2.text.toString(),
                                     selectedCountry: select_country.toString(),
                                     selectedTownship:
-                                        select_township.toString(),
+                                    select_township.toString(),
                                     selectedCity: select_city.toString(),
                                     zipcode: zipcode.text.toString(),
                                     mode: payment.toString(),

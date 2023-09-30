@@ -1,10 +1,12 @@
 import 'package:easy_invoice/data/responsemodel/CityPart/Cities.dart';
+import 'package:easy_invoice/data/responsemodel/CityPart/WardByTownshipResponse.dart';
 
 import '../data/api/apiService.dart';
 import '../data/responsemodel/CityPart/Street.dart';
 import '../data/responsemodel/CountryPart/CountryResponse.dart';
 import '../data/responsemodel/FaultyItemPart/AllFaultyItems.dart';
 import '../data/responsemodel/GetAllPagnitaionDataResponse.dart';
+import '../data/responsemodel/ShopKeeperResponsePart/ShopProductListResponse.dart';
 import '../data/responsemodel/TownshipsPart/AllTownshipResponse.dart';
 import '../data/responsemodel/common/ProductListItemResponse.dart';
 import '../data/responsemodel/common/WardResponse.dart';
@@ -89,7 +91,7 @@ class ApiHelper {
   }
 
   //fetch ward by township id
-  static Future<List<Ward>> fetchWardByTownshipId(int id) async{
+  static Future<List<WardByTownshipData>> fetchWardByTownshipId(int id) async{
     try{
       final response= await ApiService().fetchWardByTownship(id);
       if(response.isNotEmpty){
@@ -128,6 +130,19 @@ class ApiHelper {
       print('Error fetching product: $error');
     }
     return [];
+  }
+
+//fetch all shop's product list
+  static Future<ShopProductListResponse?> allShopProduct() async {
+    try {
+      final response = await ApiService().shopProductList();
+
+        return response;
+
+    } catch (error) {
+      print('Error fetching product: $error');
+    }
+    return null;
   }
 
   //fetch all faultyItem

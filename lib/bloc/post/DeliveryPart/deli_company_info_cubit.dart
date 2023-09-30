@@ -1,7 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
-import '../../../data/responsemodel/DeliveryPart/DeliCompanyNameByTownshipId.dart';
 import '../../../data/responsemodel/DeliveryPart/DeliveryCompanyInfoResponse.dart';
 import '../../../data/userRepository/UserRepository.dart';
 import '../../../dataRequestModel/DeliveryPart/AddDeliveryCompanyInfoRequestModel.dart';

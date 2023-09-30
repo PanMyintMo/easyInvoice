@@ -7,7 +7,6 @@ class OrderResponse {
   final int status;
   final String message;
 
-
   OrderResponse({
     required this.customer,
     required this.address,
@@ -147,25 +146,24 @@ class Address {
 }
 
 class OrderData {
+  final int id;
+  final String user_id;
   final int customer_id;
   final int address_id;
   final String product_id;
-  final String user_id;
-  final String? description; // Use String? for nullable fields
-  final double subtotal;
-  final double discount;
-  final double tax;
-  final double delivery_charge;
-  final String delivery_company;
+  final String delivery_info_id;
+  final String? description;
+  final String subtotal;
+  final String discount;
+  final String tax;
+  final int total;
+  final int delivery_charge;
   final String status;
-  final double total;
-  final dynamic delivered_date; // Adjust data type as needed
-  final dynamic canceled_date; // Adjust data type as needed
   final String updated_at;
   final String created_at;
-  final int id;
 
   OrderData({
+    required this.delivery_info_id,
     required this.customer_id,
     required this.address_id,
     required this.product_id,
@@ -175,11 +173,8 @@ class OrderData {
     required this.discount,
     required this.tax,
     required this.delivery_charge,
-    required this.delivery_company,
     required this.status,
     required this.total,
-    this.delivered_date,
-    this.canceled_date,
     required this.updated_at,
     required this.created_at,
     required this.id,
@@ -192,22 +187,21 @@ class OrderData {
       product_id: json['product_id'] ?? '',
       user_id: json['user_id'] ?? '',
       description: json['description'] ?? '',
-      subtotal: json['subtotal'] ?? 0.0,
-      discount: json['discount'] ?? 0.0,
-      tax: json['tax'] ?? 0.0,
-      delivery_charge: json['delivery_charge'] ?? 0.0, // Default value added
-      delivery_company: json['delivery_company'] ?? '', // Default value added
-      status: json['status'] ?? '', // Default value added
-      total: json['total'] ?? 0.0,
-      delivered_date: json['delivered_date'],
-      canceled_date: json['canceled_date'],
+      subtotal: json['subtotal'] ?? '',
+      discount: json['discount'] ?? '',
+      tax: json['tax'] ?? '',
+      delivery_charge: json['delivery_charge'] ?? 0,
+      // Default value added
+      status: json['status'] ?? '',
+      // Default value added
+      total: json['total'] ?? 0,
+      delivery_info_id: json['delivery_info_id'] ?? '',
       updated_at: json['updated_at'] ?? '',
       created_at: json['created_at'] ?? '',
       id: json['id'] ?? 0,
     );
   }
 }
-
 
 class OrderItemData {
   final String price;
@@ -237,7 +231,6 @@ class OrderItemData {
     );
   }
 }
-
 
 class TransactionData {
   final String user_id;

@@ -1,33 +1,82 @@
+import 'package:easy_invoice/bloc/post/DeliveryPart/update_delivery_cubit.dart';
+import 'package:easy_invoice/common/ApiHelper.dart';
+import 'package:easy_invoice/data/api/apiService.dart';
+import 'package:easy_invoice/dataRequestModel/DeliveryPart/UpdateDeliveryRequestModel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../bloc/post/DeliveryPart/deli_company_info_cubit.dart';
 import '../../common/FormValidator.dart';
 import '../../common/ThemeHelperUserClass.dart';
 import '../../data/responsemodel/CityPart/Cities.dart';
 import '../../data/responsemodel/DeliveryPart/FetchAllDeliveryName.dart';
 import '../../data/responsemodel/TownshipsPart/TownshipByCityIdResponse.dart';
-import '../../dataRequestModel/DeliveryPart/AddDeliveryCompanyInfoRequestModel.dart';
+
 class UpdateDeliveryWidget extends StatefulWidget {
   final bool isLoading;
-  const UpdateDeliveryWidget({super.key, required this.isLoading});
+  final int id;
+  final String city_id;
+  final String township_id;
+  final String basic_cost;
+  final String waiting_time;
+  final String company_id;
+
+  const UpdateDeliveryWidget(
+      {super.key,
+      required this.isLoading,
+      required this.id,
+      required this.city_id,
+      required this.township_id,
+      required this.basic_cost,
+      required this.waiting_time,
+        required this.company_id});
 
   @override
   State<UpdateDeliveryWidget> createState() => _UpdateDeliveryWidgetState();
 }
 
 class _UpdateDeliveryWidgetState extends State<UpdateDeliveryWidget> {
-  String? select_company;
+
   List<AllDeliveryName> deliveryCompanyName = [];
   List<City> cities = [];
+
+  List<TownshipByCityIdData> townships = [];
+  var basicCost = TextEditingController();
+  var waitingTime = TextEditingController();
+
+  String? select_company;
   String? select_city;
   String? select_township;
-  List<TownshipByCityIdData> townships = [];
-  final basicCost = TextEditingController();
-  final waitingTime = TextEditingController();
 
   @override
   void initState() {
     super.initState();
+
+    select_city = widget.city_id;
+    select_township=widget.township_id;
+    select_company=widget.company_id;
+
+    basicCost = TextEditingController(text: widget.basic_cost);
+    waitingTime = TextEditingController(text: widget.waiting_time);
+    fetchCityName();
+  }
+
+  void fetchCityName() async {
+    final response = await ApiHelper.fetchCityName();
+    cities = response;
+    setState(() {
+      if (select_city != null) {
+        fetchTownshipByCityId(int.parse(select_city!));
+      }
+    });
+  }
+
+  void fetchTownshipByCityId(int id) async {
+    final response = await ApiService().fetchAllTownshipByCityId(id);
+    townships = response;
+    setState(() {
+      if (select_township != null) {
+        select_township = widget.township_id.toString();
+      }
+    });
   }
 
   @override
@@ -36,39 +85,14 @@ class _UpdateDeliveryWidgetState extends State<UpdateDeliveryWidget> {
     return Stack(
       children: [
         SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Form(
-              key: formKey,
+          child: Form(
+            key: formKey,
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  SizedBox(
-                    width: double.infinity,
-                    child: buildDropdown(
-                      value: select_company,
-                      items: deliveryCompanyName.map((company) {
-                        return DropdownMenuItem(
-                          value: company.id.toString(),
-                          child: Text(company.name),
-                        );
-                      }).toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          select_company = value!;
-                        });
-                      },
-                      hint: "Choose Company",
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 16,
-                  ),
                   buildProductContainerText("Choose City"),
                   const SizedBox(
                     height: 16,
@@ -86,8 +110,9 @@ class _UpdateDeliveryWidgetState extends State<UpdateDeliveryWidget> {
                       onChanged: (value) {
                         setState(() {
                           select_city = value!;
-                         // fetchTownshipByCityId(int.parse(select_city!));
+                          select_township = null;
                         });
+                        fetchTownshipByCityId(int.parse(value!));
                       },
                       hint: "Choose City",
                     ),
@@ -150,17 +175,14 @@ class _UpdateDeliveryWidgetState extends State<UpdateDeliveryWidget> {
                     child: ElevatedButton(
                       onPressed: () {
                         if (formKey.currentState!.validate()) {
-                          context.read<DeliCompanyInfoCubit>().deliCompanyInfo(
-                              AddDeliCompanyInfoRequest(company_id: select_company.toString(),
-                                  city_id: select_city.toString(), township_id: select_township.toString(),
-                                  basic_cost: basicCost.text.toString(), waiting_time: waitingTime.text.toString())
-                          );
+                      context.read<UpdateDeliveryCubit>().updateDeliveryById(
+                          widget.id, UpdateDeliveryRequestModel(company_id: select_company!, township_id: select_township.toString(),
+                          basic_cost: basicCost.toString(), waiting_time: waitingTime.toString()));
                         }
                       },
-                      child: const Text('Add Delivery'),
+                      child: const Text('Update Delivery'),
                     ),
                   ),
-
                 ],
               ),
             ),

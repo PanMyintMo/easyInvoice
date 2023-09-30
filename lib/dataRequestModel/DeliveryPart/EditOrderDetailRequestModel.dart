@@ -18,6 +18,7 @@ class EditOrderDetailRequestModel {
   final String product_id;
   final String price;
   final String quantity;
+  final String? user_sign;
   final String user_id;
 
   EditOrderDetailRequestModel(
@@ -32,6 +33,7 @@ class EditOrderDetailRequestModel {
       required this.selectedStreet,
       required this.selectedWard,
       required this.quantity,
+        required this.user_sign,
       required this.block_no,
       required this.product_id,
       required this.zipcode,
@@ -62,6 +64,7 @@ class EditOrderDetailRequestModel {
       'floor': floor,
       'price': price,
       'user_id': user_id,
+      'user_sign': user_sign,
       'delivery': delivery,
       'mode': mode
     };

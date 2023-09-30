@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
 import 'package:easy_invoice/data/responsemodel/AddSizeResponse.dart';
 import 'package:easy_invoice/data/responsemodel/EditProductResponse.dart';
@@ -26,6 +28,7 @@ import '../../dataRequestModel/DeliveryPart/ChooseProductForOrderRequestModel.da
 import '../../dataRequestModel/DeliveryPart/EditOrderDetailRequestModel.dart';
 import '../../dataRequestModel/DeliveryPart/OrderByDateRequestModel.dart';
 import '../../dataRequestModel/DeliveryPart/ProductInvoiceRequest.dart';
+import '../../dataRequestModel/DeliveryPart/UpdateDeliveryRequestModel.dart';
 import '../../dataRequestModel/DeliveryPart/UpdateQuantityInBarcodeRequest.dart';
 import '../../dataRequestModel/EditCategoryModel.dart';
 import '../../dataRequestModel/EditSizeModel.dart';
@@ -49,7 +52,6 @@ import '../responsemodel/CityPart/StreetByWardIdResponse.dart';
 import '../responsemodel/CityPart/WardByTownshipResponse.dart';
 import '../responsemodel/CityPart/Wards.dart';
 import '../responsemodel/DeliveryPart/DeliveryCompanyInfoResponse.dart';
-import '../responsemodel/DeliveryPart/EditOrderDetailResponse.dart';
 import '../responsemodel/DeliveryPart/FetchAllDeliveries.dart';
 import '../responsemodel/DeliveryPart/FetchAllOrderByDate.dart';
 import '../responsemodel/DeliveryPart/OrderDetailResponse.dart';
@@ -1177,23 +1179,23 @@ class ApiService {
   }
 
   //fetch edit order detail response
-  Future<EditOrderData> editOrderDetail(
+  Future<OrderResponse> editOrderDetail(
       int id, EditOrderDetailRequestModel editOrderDetailRequestModel) async {
     try {
       final Response response = await _dio.post(
-          'https://mmeasyinvoice.com/api/edit-order/$id',
+          'https://mmeasyinvoice.com/api/update-order/$id',
           data: editOrderDetailRequestModel.toJson());
 
-      print("Update Order detail response are : $response");
+
       if (response.statusCode == 200) {
-        final EditOrderData orderApiResponse =
-            EditOrderData.fromJson(response.data);
+        final OrderResponse orderApiResponse =
+        OrderResponse.fromJson(response.data);
         return orderApiResponse;
       } else {
         throw Exception('Failed to fetch data');
       }
     } catch (error) {
-      throw Exception('Failed to fetch data');
+      throw Exception('Failed to fetch data $error');
     }
   }
 
@@ -1454,16 +1456,18 @@ class ApiService {
   }
 
   //fetch all ward by township Id
-  Future<List<Ward>> fetchWardByTownship(int id) async {
+  Future<List<WardByTownshipData>> fetchWardByTownship(int id) async {
     try {
       final response = await _dio
           .get('https://mmeasyinvoice.com/api/wards-by-townshipid/$id');
       //print("Fetch Ward By Township response are $response");
 
+      log('wardByTownship : $response');
+
       if (response.statusCode == 200) {
         final responseData = response.data;
         final wardByTownshipResponse =
-            WardByTownshipResponse.fromJson(responseData);
+        WardByTownshipResponse.fromJson(responseData);
         return wardByTownshipResponse.data;
       } else {
         throw Exception('Invalid data format for ward by township id field');
@@ -1472,6 +1476,27 @@ class ApiService {
       throw Exception('Failed to fetch ward by township id : $e');
     }
   }
+
+  //update delivery by id
+  Future<DeliCompanyInfoResponse> updateDeliveryById(int id,UpdateDeliveryRequestModel updateDeliveryRequestModel) async {
+    try {
+      final response =
+      await _dio.post('https://mmeasyinvoice.com/api/edit-delivery/$id',data: updateDeliveryRequestModel);
+      if (response.statusCode == 200) {
+        final responseData = response.data;
+        final updateDeliveryResponse =
+        DeliCompanyInfoResponse.fromJson(responseData);
+        return updateDeliveryResponse;
+      } else {
+        throw Exception('Invalid data format for update delivery id field');
+      }
+    } catch (e) {
+      throw Exception('Failed to update delivery by  id : $e');
+    }
+  }
+
+
+
 
 //fetch all street by ward Id
   Future<StreetByWardIdResponse> fetchStreetByWardId(int id) async {

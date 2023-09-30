@@ -28,7 +28,7 @@ class _EditOrderScreenState extends State<EditOrderScreen> {
           color: Colors.red, // Set the color of the navigation icon to black
         ),
         title: const Text(
-          'Edit Order Detail Screen',
+          'Edit Order Screen',
           style: TextStyle(
             color: Colors.black54,
             fontWeight: FontWeight.bold,
@@ -69,44 +69,52 @@ class EditOrder extends StatefulWidget {
 class _EditOrderState extends State<EditOrder> {
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      scrollDirection: Axis.vertical,
-      child: Column(
-        children: [
-          BlocBuilder<FetchAllOrderDetailCubit, FetchAllOrderDetailState>(
+    return BlocBuilder<FetchAllOrderDetailCubit, FetchAllOrderDetailState>(
+      builder: (context, state) {
+        final loading= state   is FetchAllOrderDetailLoading || state is EditOrderDetailLoading;
+        if (state is FetchAllOrderDetailLoading) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (state is FetchAllOrderDetailSuccess) {
+          final orderDetailResponse = state.orderDetail.data;
+          return BlocConsumer<EditOrderDetailCubit, EditOrderDetailState>(
             builder: (context, state) {
-              if (state is FetchAllOrderDetailLoading) {
-                return const Center(child: CircularProgressIndicator());
-              } else if (state is FetchAllOrderDetailSuccess) {
-                final orderDetailResponse = state.orderDetail.data;
-                return BlocConsumer<EditOrderDetailCubit, EditOrderDetailState>(
-                  builder: (context, state) {
-                    final bool loading = state is EditOrderDetailLoading;
-                    return EditOrderWidget(
-                      isLoading: loading, // No longer loading
-                      orderDetailResponse: orderDetailResponse,
-                    );
-                  },
-                  listener: (context, state) {
-                    if (state is EditOrderDetailLoading) {
-                    } else if (state is EditOrderDetailSuccess) {
-                      showToastMessage('Updated successful.');
-                      context
-                          .read<FetchAllOrderDetailCubit>()
-                          .fetchOrderDetail(widget.order_id);
-                    } else if (state is EditOrderDetailFail) {
-                      showToastMessage(
-                          'Failed to update order item: ${state.error}');
-                    }
-                  },
+
+              if (state is EditOrderDetailLoading) {
+                return EditOrderWidget(
+                  isLoading: loading, // No longer loading
+                  orderDetailResponse: orderDetailResponse,
                 );
-              } else {
-                return const SizedBox(); // Handle other states if needed
+              } else if (state is EditOrderDetailSuccess) {
+                showToastMessage('Updated successful.');
+                context
+                    .read<FetchAllOrderDetailCubit>()
+                    .fetchOrderDetail(widget.order_id);
+              }
+              else if(state is EditOrderDetailFail){
+                showToastMessage(state.error);
+              }
+              return EditOrderWidget(
+                isLoading: loading, // No longer loading
+                orderDetailResponse: orderDetailResponse,
+              );
+            },
+            listener: (context, state) {
+              if (state is EditOrderDetailLoading) {
+              } else if (state is EditOrderDetailSuccess) {
+                showToastMessage('Updated successful.');
+                context
+                    .read<FetchAllOrderDetailCubit>()
+                    .fetchOrderDetail(widget.order_id);
+              } else if (state is EditOrderDetailFail) {
+                showToastMessage(
+                    'Failed to update order item: ${state.error}');
               }
             },
-          ),
-        ],
-      ),
+          );
+        }
+      return  const SizedBox();
+
+        },
     );
   }
 }
