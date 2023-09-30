@@ -1,5 +1,5 @@
 import 'package:easy_invoice/data/api/apiService.dart';
-import 'package:easy_invoice/widget/ProviceInvoicePart/pdf_invoice_api.dart';
+import 'package:easy_invoice/widget/ProviceInvoicePart/PdfPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:simple_barcode_scanner/enum.dart';
@@ -127,8 +127,8 @@ class _ProductInvoiceWidgetState extends State<ProductInvoiceWidget> {
               ElevatedButton(
                 onPressed: isClick
                     ? () async {
-                        // final pdfFile = await PdfInvoiceApi.generate(invoice);
-                        // pdfFile.OpenFile(pdfFile);
+
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => PdfPage()));
 
                         // Handle print button click
                       }

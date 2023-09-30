@@ -20,16 +20,16 @@ class _PdfPageState extends State<PdfPage> {
   Widget build(BuildContext context) => Scaffold(
     backgroundColor: Colors.black,
     appBar: AppBar(
-      title: Text("Invoice"),
+      title: const Text("Invoice"),
       centerTitle: true,
     ),
     body: Container(
-      padding: EdgeInsets.all(32),
+      padding: const EdgeInsets.all(32),
       child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            TitleWidget(
+            const TitleWidget(
               icon: Icons.picture_as_pdf,
               text: 'Generate Invoice',
             ),
@@ -41,12 +41,12 @@ class _PdfPageState extends State<PdfPage> {
                 final dueDate = date.add(Duration(days: 7));
 
                 final invoice = Invoice(
-                  supplier: Supplier(
+                  supplier: const Supplier(
                     name: 'Sarah Field',
                     address: 'Sarah Street 9, Beijing, China',
                     paymentInfo: 'https://paypal.me/sarahfieldzz',
                   ),
-                  customer: Customers(
+                  customer: const Customers(
                     name: 'Apple Inc.',
                     address: 'Apple Street, Cupertino, CA 95014',
                   ),
