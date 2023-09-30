@@ -127,10 +127,7 @@ class _ProductInvoiceWidgetState extends State<ProductInvoiceWidget> {
               ElevatedButton(
                 onPressed: isClick
                     ? () async {
-
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => PdfPage()));
-
-                        // Handle print button click
+                  // Handle print button click
                       }
                     : null,
                 child: const Text('Print'),
