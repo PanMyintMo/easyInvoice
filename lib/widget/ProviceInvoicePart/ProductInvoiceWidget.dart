@@ -42,26 +42,23 @@ class _ProductInvoiceWidgetState extends State<ProductInvoiceWidget> {
   }
 
   Future<void> barcodeScanner() async {
-
-      final result = await Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) =>
-          const SimpleBarcodeScannerPage(
-            cancelButtonText: "Cancel",
-            scanType: ScanType.barcode,
-          ),
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const SimpleBarcodeScannerPage(
+          cancelButtonText: "Cancel",
+          scanType: ScanType.barcode,
         ),
-      );
+      ),
+    );
 
-      if (result != null) {
-        // Assuming the result contains the scanned barcode string
-        String scannedBarcode = result.toString(); // Modify this line
+    if (result != null) {
+      // Assuming the result contains the scanned barcode string
+      String scannedBarcode = result.toString(); // Modify this line
 
-        setState(() {
-          prouductno.text = scannedBarcode;
-        });
-
+      setState(() {
+        prouductno.text = scannedBarcode;
+      });
     }
   }
 
@@ -79,7 +76,7 @@ class _ProductInvoiceWidgetState extends State<ProductInvoiceWidget> {
   Future<void> updateQuantity(UpdateQuantityBarcodeRequest request) async {
     try {
       List<UpdateQuantity> response =
-      await ApiService().updatedQuantityItemBarcode(request);
+          await ApiService().updatedQuantityItemBarcode(request);
 
       if (response.isNotEmpty) {
         setState(() {
@@ -99,7 +96,6 @@ class _ProductInvoiceWidgetState extends State<ProductInvoiceWidget> {
       print("Error $e");
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -125,18 +121,17 @@ class _ProductInvoiceWidgetState extends State<ProductInvoiceWidget> {
                       size: 25,
                     ),
                   ),
-
                 ],
               ),
               const SizedBox(height: 16),
               ElevatedButton(
-                onPressed: isClick ? () async {
-//
-// final pdfFile= await PdfInvoiceApi.generate(invoice);
-// pdfFile.openFile(pdfFile);
+                onPressed: isClick
+                    ? () async {
+                        // final pdfFile = await PdfInvoiceApi.generate(invoice);
+                        // pdfFile.OpenFile(pdfFile);
 
-                  // Handle print button click
-                }
+                        // Handle print button click
+                      }
                     : null,
                 child: const Text('Print'),
               ),
@@ -153,7 +148,7 @@ class _ProductInvoiceWidgetState extends State<ProductInvoiceWidget> {
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderSide:
-                    const BorderSide(color: Colors.blue, width: 1.0),
+                        const BorderSide(color: Colors.blue, width: 1.0),
                     borderRadius: BorderRadius.circular(10.0),
                   ),
                   fillColor: Colors.grey,
@@ -166,23 +161,23 @@ class _ProductInvoiceWidgetState extends State<ProductInvoiceWidget> {
                   columns: const [
                     DataColumn(
                       label: Text('Product Name',
-                          style: TextStyle(
-                              fontSize: 16, color: Colors.black54)),
+                          style:
+                              TextStyle(fontSize: 16, color: Colors.black54)),
                     ),
                     DataColumn(
                       label: Text('QTY',
-                          style: TextStyle(
-                              fontSize: 16, color: Colors.black54)),
+                          style:
+                              TextStyle(fontSize: 16, color: Colors.black54)),
                     ),
                     DataColumn(
                       label: Text('Sale Price',
-                          style: TextStyle(
-                              fontSize: 16, color: Colors.black54)),
+                          style:
+                              TextStyle(fontSize: 16, color: Colors.black54)),
                     ),
                     DataColumn(
                       label: Text('Total',
-                          style: TextStyle(
-                              fontSize: 16, color: Colors.black54)),
+                          style:
+                              TextStyle(fontSize: 16, color: Colors.black54)),
                     ),
                   ],
                   rows: widget.invoiceData.map((item) {
@@ -202,17 +197,15 @@ class _ProductInvoiceWidgetState extends State<ProductInvoiceWidget> {
                               ),
                               child: Row(
                                 mainAxisAlignment:
-                                MainAxisAlignment.spaceBetween,
+                                    MainAxisAlignment.spaceBetween,
                                 children: <Widget>[
                                   IconButton(
                                     icon: const Icon(Icons.add),
-                                    onPressed: () =>
-                                        updateQuantity(
-                                            UpdateQuantityBarcodeRequest(
-                                                quantity: (item.quantity + 1)
-                                                    .toString(),
-                                                invoice_id:
-                                                item.id.toString())),
+                                    onPressed: () => updateQuantity(
+                                        UpdateQuantityBarcodeRequest(
+                                            quantity:
+                                                (item.quantity + 1).toString(),
+                                            invoice_id: item.id.toString())),
                                   ),
                                   Text(
                                     item.quantity.toString(),
@@ -220,13 +213,11 @@ class _ProductInvoiceWidgetState extends State<ProductInvoiceWidget> {
                                   ),
                                   IconButton(
                                     icon: const Icon(Icons.remove),
-                                    onPressed: () =>
-                                        updateQuantity(
-                                            UpdateQuantityBarcodeRequest(
-                                                quantity: (item.quantity - 1)
-                                                    .toString(),
-                                                invoice_id:
-                                                item.id.toString())),
+                                    onPressed: () => updateQuantity(
+                                        UpdateQuantityBarcodeRequest(
+                                            quantity:
+                                                (item.quantity - 1).toString(),
+                                            invoice_id: item.id.toString())),
                                   ),
                                 ],
                               ),
@@ -251,4 +242,3 @@ class _ProductInvoiceWidgetState extends State<ProductInvoiceWidget> {
     );
   }
 }
-
