@@ -15,8 +15,8 @@ class ProductInvoiceCubit extends Cubit<ProductInvoiceState> {
   Future<void> productInvoice(ProductInvoiceRequest productInvoiceRequest) async {
     emit(ProductInvoiceLoading());
     try {
-      final List<InvoiceData> response = await _userRepository.productInvoice(productInvoiceRequest);
-      if (response.isNotEmpty) {
+      final response = await _userRepository.productInvoice(productInvoiceRequest);
+      if (response != null) {
         emit(ProductInvoiceSuccess(response));
       } else {
         emit(const ProductInvoiceFail("No data found."));

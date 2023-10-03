@@ -55,7 +55,7 @@ class DeliData extends DataTableSource {
           children: [
             IconButton(
               icon: Icon(Icons.edit, color: Colors.green.shade900),
-              onPressed: () {
+              onPressed: () async{
                 Navigator.push(
                     context,
                     MaterialPageRoute(

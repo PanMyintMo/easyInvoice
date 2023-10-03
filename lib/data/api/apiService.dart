@@ -41,6 +41,7 @@ import '../../dataRequestModel/ShopKeeperPart/EditRequestModel.dart';
 import '../../dataRequestModel/ShopKeeperPart/ShopKeeperRequestModel.dart';
 import '../../dataRequestModel/TownshipPart/AddTownship.dart';
 import '../../dataRequestModel/TownshipPart/EditTownship.dart';
+import '../../widget/ProviceInvoicePart/InvoiceResponse/Invoice.dart';
 import '../responsemodel/AddCategoryResponseModel.dart';
 import '../responsemodel/CityPart/AddCityResponse.dart';
 import '../responsemodel/CityPart/AddStreetResponse.dart';
@@ -155,6 +156,26 @@ class ApiService {
       throw Exception('Failed to fetch data');
     }
   }
+
+
+  //Invoice
+  Future<Invoice> generate() async {
+    try {
+      final Response response =
+      await _dio.get('https://mmeasyinvoice.com/api/invoice');
+
+      if (response.statusCode == 200) {
+        final Invoice data =
+        Invoice.fromJson(response.data);
+        return data;
+      } else {
+        throw Exception('Failed to fetch data');
+      }
+    } catch (error) {
+      throw Exception('Failed to fetch data');
+    }
+  }
+
 
   //Edit company profile detail
   Future<EditCompanyProfileResponse> editCompanyProfile(
@@ -1380,7 +1401,7 @@ class ApiService {
   }
 
   //fetch updated quantity barcode response
-  Future<List<UpdateQuantity>> updatedQuantityItemBarcode(
+  Future <UpdateQuantity> updatedQuantityItemBarcode(
       UpdateQuantityBarcodeRequest updateBarcodeRequest) async {
     try {
       final response = await _dio.post(
@@ -1388,13 +1409,14 @@ class ApiService {
           data: updateBarcodeRequest.toJson());
       if (response.statusCode == 200) {
         final responseData = response.data;
-        final updateQuantityList = (responseData['data'] as List)
-            .map((item) => UpdateQuantity.fromJson(item))
-            .toList();
-        return updateQuantityList;
-      } else {
-        throw Exception(
-            'Invalid data format for updated quantity in barcode scan field');
+        final updateQuantityBarcodeResponse =
+        UpdateQuantityBarcodeResponse.fromJson(responseData);
+
+        return updateQuantityBarcodeResponse.data;
+
+      }
+      else {
+        throw Exception('Invalid data format for warehouse');
       }
     } catch (e) {
       throw Exception('Failed to fetch updated quantity in barcode scan: $e');

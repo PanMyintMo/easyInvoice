@@ -23,7 +23,7 @@ class ShopKeeperUpdatedData {
   final int id;
   final String quantity;
   final String product_id;
-  final String status;
+  final String? status;
   final String product_name;
 
   ShopKeeperUpdatedData({
@@ -40,7 +40,7 @@ class ShopKeeperUpdatedData {
       quantity: json['quantity'],
       product_id: json['product_id'],
       product_name: json['product_name'],
-      status: json['status'],
+      status: json['status'] ?? ''
     );
   }
 }

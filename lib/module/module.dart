@@ -13,6 +13,7 @@ import 'package:easy_invoice/bloc/edit/statusChange/delivery_man_status_cubit.da
 import 'package:easy_invoice/bloc/edit/statusChange/warehouse_manager_status_cubit.dart';
 import 'package:easy_invoice/bloc/get/CityPart/fetch_all_city_cubit.dart';
 import 'package:easy_invoice/bloc/get/CityPart/fetch_all_street_cubit.dart';
+import 'package:easy_invoice/bloc/get/Invoice/invoice_cubit.dart';
 import 'package:easy_invoice/bloc/get/MainPagePart/order_filter_by_date_cubit.dart';
 import 'package:easy_invoice/bloc/get/ProductPart/get_all_product_cubit.dart';
 import 'package:easy_invoice/bloc/get/ShopKeeperPart/shop_product_list_cubit.dart';
@@ -314,6 +315,12 @@ void locator() {
   ShopProductListCubit shopProductListCubit =
       ShopProductListCubit(getIt.call());
   getIt.registerLazySingleton(() => shopProductListCubit);
+
+  //generate invoice
+  InvoiceCubit invoiceCubit =
+  InvoiceCubit(getIt.call());
+  getIt.registerLazySingleton(() => invoiceCubit);
+
 
   //fetch warehouse product list
   WarehouseProductListCubit warehouseProductListCubit =

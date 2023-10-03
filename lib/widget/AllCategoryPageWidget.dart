@@ -50,36 +50,6 @@ class _AllCategoryPageWidgetState extends State<AllCategoryPageWidget> {
       child: Column(
           children: [
 
-            // Padding(
-            //   padding: const EdgeInsets.all(12.0),
-            //   child: Align(
-            //     alignment: Alignment.topRight,
-            //     child: Container(
-            //       width: 250,
-            //       padding: const EdgeInsets.symmetric(horizontal: 40),
-            //       decoration: BoxDecoration(
-            //         border: Border.all(color: Colors.grey),
-            //         borderRadius: BorderRadius.circular(5),
-            //       ),
-            //       child: const Row(
-            //         mainAxisAlignment: MainAxisAlignment.end,
-            //         children: [
-            //           Icon(Icons.search),
-            //           SizedBox(width: 5),
-            //           Expanded(
-            //             child: TextField(
-            //               decoration: InputDecoration(
-            //                 hintText: 'Enter your search',
-            //                 border: InputBorder.none,
-            //               ),
-            //             ),
-            //           ),
-            //         ],
-            //       ),
-            //     ),
-            //   ),
-            // ),
-            // const SizedBox(height: 16),
             Stack(
               children: [
                 SingleChildScrollView(

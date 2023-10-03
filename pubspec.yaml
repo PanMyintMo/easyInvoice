@@ -67,9 +67,11 @@ dependencies:
   settings_ui: ^2.0.2
   dropdown_button2: ^2.3.9
   logger: ^2.0.2+1
-  pdf: ^3.10.4
-  path_provider: ^2.1.1
-  open_file: ^3.3.2
+  pdf: ^3.1.0
+  open_file: ^3.1.0
+  path_provider: ^2.0.1
+  printing: ^5.11.0
+
 
 dev_dependencies:
   flutter_test:

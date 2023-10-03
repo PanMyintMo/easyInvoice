@@ -34,6 +34,7 @@ import '../../dataRequestModel/ShopKeeperPart/EditRequestModel.dart';
 import '../../dataRequestModel/ShopKeeperPart/ShopKeeperRequestModel.dart';
 import '../../dataRequestModel/TownshipPart/AddTownship.dart';
 import '../../dataRequestModel/TownshipPart/EditTownship.dart';
+import '../../widget/ProviceInvoicePart/InvoiceResponse/Invoice.dart';
 import '../responsemodel/AddCategoryResponseModel.dart';
 import '../responsemodel/CityPart/AddCityResponse.dart';
 import '../responsemodel/CityPart/AddStreetResponse.dart';
@@ -258,6 +259,16 @@ class UserRepository {
   Future<OrderResponse> editOrderDetail(int id,EditOrderDetailRequestModel editOrderDetailRequestModel) async {
     try {
       final response = await _apiService.editOrderDetail(id,editOrderDetailRequestModel);
+      return response;
+    } catch (error) {
+      rethrow;
+    }
+  }
+
+  //Invoice
+  Future<Invoice> generateInvoice() async {
+    try {
+      final response = await _apiService.generate();
       return response;
     } catch (error) {
       rethrow;

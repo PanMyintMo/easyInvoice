@@ -28,7 +28,7 @@ class _UpdateFaultyWidgetState extends State<UpdateFaultyWidget> {
   List<PaginationItem> categories = [];
   List<ProductListItem> products = [];
   String category_id = '';
-  String product_id = '';
+  String? product_id;
   var quantity = TextEditingController();
 
 
@@ -47,8 +47,6 @@ class _UpdateFaultyWidgetState extends State<UpdateFaultyWidget> {
       if (products
           .any((product) => product.id == int.parse(widget.product_id))) {
         product_id = widget.product_id;
-      } else {
-        product_id = '';
       }
     }
   }
@@ -100,39 +98,26 @@ class _UpdateFaultyWidgetState extends State<UpdateFaultyWidget> {
                   const SizedBox(
                     height: 16,
                   ),
-                  // SizedBox(
-                  //   width: double.infinity,
-                  //   child: chooseItemIdForm(
-                  //     DropdownButton<String>(
-                  //       value: category_id,
-                  //       items: [
-                  //         ...categories.map((category) {
-                  //           return DropdownMenuItem<String>(
-                  //             value: category.id.toString(),
-                  //             child: Text(category.name),
-                  //           );
-                  //         }).toList(),
-                  //       ],
-                  //       onChanged: (value) async {
-                  //         await fetchProductsByCategory(int.parse(value!));
-                  //         setState(() {
-                  //           category_id = value;
-                  //           product_id = ''; // Reset product_id
-                  //         });
-                  //       },
-                  //       underline: const SizedBox(),
-                  //       borderRadius: BorderRadius.circular(10),
-                  //       icon: const Icon(Icons.arrow_drop_down),
-                  //       iconSize: 24,
-                  //       isExpanded: true,
-                  //       dropdownColor: Colors.white,
-                  //       style: const TextStyle(
-                  //         color: Colors.black,
-                  //         fontSize: 16,
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
+                  SizedBox(
+                    width: double.infinity,
+                    child: buildDropdown(
+                      value: category_id,
+                      items: categories.map((category) {
+                        return DropdownMenuItem(
+                          value: category.id.toString(),
+                          child: Text(category.name),
+                        );
+                      }).toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          category_id = value;
+                          product_id = null;
+                          fetchProductsByCategory(int.parse(value!));                        });
+                      },
+                      hint: "Select Category",
+                    ),
+                  ),
+
                   const SizedBox(
                     height: 16,
                   ),
@@ -140,38 +125,24 @@ class _UpdateFaultyWidgetState extends State<UpdateFaultyWidget> {
                   const SizedBox(
                     height: 16,
                   ),
-                  // SizedBox(
-                  //   width: double.infinity,
-                  //   child: chooseItemIdForm(
-                  //     DropdownButton<String>(
-                  //       value: product_id.isNotEmpty ? product_id : null,
-                  //       items: [
-                  //         ...products.map((product) {
-                  //           return DropdownMenuItem<String>(
-                  //             value: product.id.toString(),
-                  //             child: Text(product.name),
-                  //           );
-                  //         }).toList(),
-                  //       ],
-                  //       onChanged: (value) {
-                  //         setState(() {
-                  //           product_id = value!;
-                  //         });
-                  //       },
-                  //       hint: const Text('Select Product'),
-                  //       underline: const SizedBox(),
-                  //       borderRadius: BorderRadius.circular(10),
-                  //       icon: const Icon(Icons.arrow_drop_down),
-                  //       iconSize: 24,
-                  //       isExpanded: true,
-                  //       dropdownColor: Colors.white,
-                  //       style: const TextStyle(
-                  //         color: Colors.black,
-                  //         fontSize: 16,
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
+                  SizedBox(
+                    width: double.infinity,
+                    child: buildDropdown(
+                      value: product_id,
+                      items: products.map((product) {
+                        return DropdownMenuItem(
+                          value: product.id.toString(),
+                          child: Text(product.name),
+                        );
+                      }).toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          product_id = value!;
+                        });
+                      },
+                      hint: "Select Product",
+                    ),
+                  ),
                   const SizedBox(
                     height: 16,
                   ),
@@ -209,7 +180,7 @@ class _UpdateFaultyWidgetState extends State<UpdateFaultyWidget> {
   void validateAndSubmit() async {
     if (_formKey.currentState!.validate()) {
       final requestModel = EditRequestModel(
-        product_id: product_id,
+        product_id: product_id!,
         quantity: quantity.text,
       );
       context

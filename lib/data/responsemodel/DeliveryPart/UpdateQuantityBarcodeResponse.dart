@@ -1,6 +1,6 @@
 class UpdateQuantityBarcodeResponse {
-  final List<UpdateQuantity> data;
-  final int status;
+  final UpdateQuantity data;
+  final String status;
   final String message;
 
   UpdateQuantityBarcodeResponse({
@@ -11,7 +11,7 @@ class UpdateQuantityBarcodeResponse {
 
   factory UpdateQuantityBarcodeResponse.fromJson(Map<String, dynamic> json) {
     return UpdateQuantityBarcodeResponse(
-      data: List<UpdateQuantity>.from(json['data'].map((updatedQuantity) => UpdateQuantity.fromJson(updatedQuantity))),
+      data: UpdateQuantity.fromJson(json['data']),
       status: json['status'],
       message: json['message'],
     );

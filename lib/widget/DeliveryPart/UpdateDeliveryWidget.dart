@@ -177,7 +177,7 @@ class _UpdateDeliveryWidgetState extends State<UpdateDeliveryWidget> {
                         if (formKey.currentState!.validate()) {
                       context.read<UpdateDeliveryCubit>().updateDeliveryById(
                           widget.id, UpdateDeliveryRequestModel(company_id: select_company!, township_id: select_township.toString(),
-                          basic_cost: basicCost.toString(), waiting_time: waitingTime.toString()));
+                          basic_cost: basicCost.text.toString(), waiting_time: waitingTime.text.toString()));
                         }
                       },
                       child: const Text('Update Delivery'),
