@@ -16,6 +16,7 @@ class FetchAllDeliveryWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PaginatedDataTable(
+      arrowHeadColor: Colors.blue.shade300,
       columns: const [
         DataColumn(label: Text('Cost')),
         DataColumn(label: Text('City')),

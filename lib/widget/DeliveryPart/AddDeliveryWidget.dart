@@ -38,8 +38,6 @@ class _AddDeliveryWidgetState extends State<AddDeliveryWidget> {
     fetchCityName();
   }
 
-
-
   void fetchCityName() async {
     final cities = await ApiHelper.fetchCityName();
     setState(() {
@@ -65,7 +63,6 @@ class _AddDeliveryWidgetState extends State<AddDeliveryWidget> {
         }
       });
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -185,6 +182,7 @@ class _AddDeliveryWidgetState extends State<AddDeliveryWidget> {
                   const SizedBox(height: 16),
                   Center(
                     child: ElevatedButton(
+                      style: ThemeHelperUserRole().buttonStyle(),
                       onPressed: () {
                         if (formKey.currentState!.validate()) {
                           context.read<DeliCompanyInfoCubit>().deliCompanyInfo(

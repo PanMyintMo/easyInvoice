@@ -15,8 +15,8 @@ class EditSizeCubit extends Cubit<EditSizeState> {
   Future<void> editSize(EditSize editSize, int id) async {
     emit(EditSizeLoading());
     try {
-      final respone = await _userRepository.updateSize(editSize, id);
-      emit(EditSizeSuccess(respone));
+      final response = await _userRepository.updateSize(editSize, id);
+      emit(EditSizeSuccess(response));
     }
     catch (error) {
       emit(EditSizeFail(error.toString()));

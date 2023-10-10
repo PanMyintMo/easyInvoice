@@ -22,15 +22,15 @@ class ProductInvoiceResponse {
 }
 
 class InvoiceData {
-  final int id;
-  final int product_id;
-  final String created_at;
-  final String updated_at;
-  int quantity;
-  int total;
-  final String product_name;
-  final String sale_price;
-  final String user_id;
+  final int? id;
+  final int? product_id;
+  final String? created_at;
+  final String? updated_at;
+  int? quantity;
+  int? total;
+  final String? product_name;
+  final String ?sale_price;
+  final String? user_id;
 
   InvoiceData({
     required this.id,

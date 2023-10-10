@@ -107,10 +107,10 @@ class _LoginInFormState extends State<LoginInForm> {
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.w800,
-              color: Colors.red,
+              color: Colors.blueAccent,
             ),
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 30),
           Form(
             key: formKey,
             child: ListView(
@@ -157,7 +157,7 @@ class _LoginInFormState extends State<LoginInForm> {
                         _obscureText ? Icons.visibility : Icons.visibility_off,
                         semanticLabel:
                             _obscureText ? 'show password' : 'hide password',
-                        color: Colors.redAccent,
+                        color: Colors.blueAccent,
                       ),
                     ),
                   ),

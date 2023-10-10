@@ -8,6 +8,7 @@ import '../bloc/edit/edit_user_role_cubit.dart';
 import '../bloc/get/UserRolePart/get_all_user_role_cubit.dart';
 import '../common/HeaderWidget.dart';
 import '../common/ToastMessage.dart';
+import '../common/showDeleteConfirmationDialog.dart';
 import '../common/theme_helper.dart';
 import '../module/module.dart';
 
@@ -67,8 +68,8 @@ class _UserDetailProfileScreenState extends State<UserDetailProfileScreen> {
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
-                    Colors.redAccent.withOpacity(0.3),
-                    Colors.pink.withOpacity(0.7),
+                    Colors.blueGrey.withOpacity(0.3),
+                    Colors.green.withOpacity(0.7),
                   ],
                   begin: Alignment.topLeft,
                   end: Alignment.topCenter,
@@ -219,11 +220,12 @@ class _UserDetailProfileScreenState extends State<UserDetailProfileScreen> {
                               padding: const EdgeInsets.all(5),
                               child: ElevatedButton(
                                 onPressed: () {
-                                  deleteConfirmationDialog(
-                                    context,
-                                    context.read<DeleteUserRoleCubit>(),
-                                    widget.id,
+                                  showDeleteConfirmationDialogs(context,"Are you sure you want to delete this user account?",
+                                      (){
+                                    context.read<DeleteUserRoleCubit>().deleteUserRole(widget.id);
+                                      }
                                   );
+                                  Navigator.pop(context);
                                 },
                                 style: ThemeHelper().buttonStyle(),
                                 child: const Text(
@@ -259,32 +261,4 @@ class _UserDetailProfileScreenState extends State<UserDetailProfileScreen> {
     );
   }
 
-  void deleteConfirmationDialog(
-      BuildContext context, DeleteUserRoleCubit cubit, int id) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Confirmation!'),
-          content:
-              const Text('Are you sure you want to delete this user account?'),
-          actions: [
-            TextButton(
-              onPressed: () {
-                cubit.deleteUserRole(id);
-                Navigator.pop(context); // Close the dialog
-              },
-              child: const Text('Delete'),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context); // Close the dialog
-              },
-              child: const Text('Cancel'),
-            ),
-          ],
-        );
-      },
-    );
-  }
 }

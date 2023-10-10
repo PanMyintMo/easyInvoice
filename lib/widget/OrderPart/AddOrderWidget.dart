@@ -281,7 +281,7 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
                   ),
                   const Text(
                     "Country",
-                    style: TextStyle(fontSize: 18, color: Colors.pink),
+                    style: TextStyle(fontSize: 18, color: Colors.blue),
                   ),
                   const SizedBox(
                     height: 18,
@@ -312,7 +312,7 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
                     height: 18,
                   ),
                   const Text("City",
-                      style: TextStyle(fontSize: 18, color: Colors.pink)),
+                      style: TextStyle(fontSize: 18, color: Colors.blue)),
                   const SizedBox(
                     height: 18,
                   ),
@@ -341,7 +341,7 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
                     height: 18,
                   ),
                   const Text("Township",
-                      style: TextStyle(fontSize: 18, color: Colors.pink)),
+                      style: TextStyle(fontSize: 18, color: Colors.blue)),
                   const SizedBox(
                     height: 18,
                   ),
@@ -456,7 +456,7 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
                     children: [
                       const Text(
                         'Choose Delivery service :',
-                        style: TextStyle(color: Colors.pink, fontSize: 18),
+                        style: TextStyle(color: Colors.blue, fontSize: 18),
                       ),
                       const SizedBox(
                         height: 18,
@@ -472,7 +472,7 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
 
                               return RadioListTile(
                                   dense: true,
-                                  activeColor: Colors.pink,
+                                  activeColor: Colors.blue,
                                   title: Text(
                                     "Service :$companyName",
                                     style: const TextStyle(color: Colors.black),
@@ -548,7 +548,7 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
                     height: 16,
                   ),
                   const Text("Product Name",
-                      style: TextStyle(fontSize: 18, color: Colors.pink)),
+                      style: TextStyle(fontSize: 18, color: Colors.blue)),
                   const SizedBox(
                     height: 16,
                   ),
@@ -693,11 +693,17 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
 
                               borderRadius: BorderRadius.circular(10.0),
                             ),
+                            errorBorder: OutlineInputBorder( // Customize the error border here
+                              borderSide: const BorderSide(
+                                color: Colors.orange, // Change the color to your desired color
+                                width: 1.0,
+                              ),
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
                             focusedBorder: OutlineInputBorder(
                               borderSide: const BorderSide(
                                   color: Colors.blue, width: 1.0),
                               borderRadius: BorderRadius.circular(10.0),
-
                             ),
                             fillColor: Colors.grey,
                             errorText: errorText, // Display the error message
@@ -750,7 +756,7 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
                       Expanded(
                         child: RadioListTile(
                           title: const Text('Cash'),
-                          activeColor: Colors.pink,
+                          activeColor: Colors.blue,
                           value: "cod",
                           dense: true,
                           groupValue: payment,
@@ -766,7 +772,7 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
                           title: const Text('KPay'),
                           value: "Kpay",
                           dense: true,
-                          activeColor: Colors.pink,
+                          activeColor: Colors.blue,
                           groupValue: payment,
                           onChanged: (value) {
                             setState(() {
@@ -780,7 +786,7 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
                           title: const Text('WavePay'),
                           value: "wavepay",
                           dense: true,
-                          activeColor: Colors.pink,
+                          activeColor: Colors.blue,
                           groupValue: payment,
                           onChanged: (value) {
                             setState(() {

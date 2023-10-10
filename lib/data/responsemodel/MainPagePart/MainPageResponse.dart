@@ -2,7 +2,7 @@ class OrderApiResponse {
   final List<OrderDatas>? data;
   final int? totalProfit;
   final int? totalSales;
-  final int? totalRevenue;
+  final String? totalRevenue;
   final int? shopKeeper;
   final int? totalWareHouseQuantity;
   final String? totalFaultyItem;
@@ -29,7 +29,7 @@ class OrderApiResponse {
           [],
       totalProfit: json['totalProfit'] ?? 0,
       totalSales: json['totalSales'] ?? 0,
-      totalRevenue: json['totalRevenue'] ?? 0,
+      totalRevenue: json['totalRevenue'] ?? '',
       shopKeeper: json['shopKeeper'] ?? 0,
       totalWareHouseQuantity: json['totalWareHouseQuantity'] ?? 0,
       totalFaultyItem: json['totalFaultyItem'] ?? '',

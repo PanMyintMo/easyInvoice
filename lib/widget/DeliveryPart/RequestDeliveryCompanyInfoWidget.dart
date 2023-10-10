@@ -63,11 +63,14 @@ class _RequestDeliveryCompanyWidgetState extends State<RequestDeliveryCompanyWid
                             );
                           },
                           child: const Text(
-                              "Add Delivery"
+                              "Add Delivery Info"
                           ),
                         ),
                       ),
-                      buildProductContainerText("Delivery Name"),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(10, 10, 10, 5),
+                        child: buildProductContainerText("Delivery Name"),
+                      ),
                       Container(
                         padding : const EdgeInsets.fromLTRB(10, 10, 10, 5),
                         child: buildProductContainerForm(
@@ -78,27 +81,33 @@ class _RequestDeliveryCompanyWidgetState extends State<RequestDeliveryCompanyWid
                         ),
                       ),
 
-                        buildProductContainerText("Upload Image"),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(10, 10, 10, 5),
+                          child: buildProductContainerText("Upload Image"),
+                        ),
                         const SizedBox(height : 16),
-                        DottedBorder(
-                          borderType: BorderType.RRect,
-                          color: Colors.grey,
-                          strokeWidth: 1,
-                          radius: const Radius.circular(10),
-                          dashPattern: const [4, 4],
-                          child: InkWell(
-                            onTap: () {
-                              pickImage();
-                            },
-                            child: SizedBox(
-                              width: double.infinity,
-                              height: 100,
-                              child: Center(
-                                child: DynamicImageWidget(image: image,
-                                  onTap: () {
-                                    pickImage();
-                                  },
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(10, 10, 10, 5),
+                          child: DottedBorder(
+                            borderType: BorderType.RRect,
+                            color: Colors.grey,
+                            strokeWidth: 1,
+                            radius: const Radius.circular(10),
+                            dashPattern: const [4, 4],
+                            child: InkWell(
+                              onTap: () {
+                                pickImage();
+                              },
+                              child: SizedBox(
+                                width: double.infinity,
+                                height: 100,
+                                child: Center(
+                                  child: DynamicImageWidget(image: image,
+                                    onTap: () {
+                                      pickImage();
+                                    },
 
+                                  ),
                                 ),
                               ),
                             ),
@@ -108,6 +117,7 @@ class _RequestDeliveryCompanyWidgetState extends State<RequestDeliveryCompanyWid
 
                         Center(
                           child: ElevatedButton(
+                            style: ThemeHelperUserRole().buttonStyle(),
                             onPressed: () {
                               if (formKey.currentState!.validate()) {
                                 context.read<AddDeliveryCubit>().addDelivery(
@@ -118,7 +128,7 @@ class _RequestDeliveryCompanyWidgetState extends State<RequestDeliveryCompanyWid
                                 );
                               }
                             },
-                            child: const Text('Add Delivery'),
+                            child: const Text('Add Delivery Info'),
                           ),
                         ),
 

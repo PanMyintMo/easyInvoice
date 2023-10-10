@@ -12,8 +12,8 @@ class ThemeHelper{
       contentPadding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
       focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(100.0), borderSide: BorderSide(color: Colors.grey)),
       enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(100.0), borderSide: BorderSide(color: Colors.grey.shade400)),
-      errorBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(100.0), borderSide: BorderSide(color: Colors.red, width: 2.0)),
-      focusedErrorBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(100.0), borderSide: BorderSide(color: Colors.red, width: 2.0)),
+      errorBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(100.0), borderSide: BorderSide(color: Colors.blue.shade300, width: 2.0)),
+      focusedErrorBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(100.0), borderSide: BorderSide(color: Colors.blueGrey, width: 2.0)),
     );
   }
 
@@ -63,7 +63,7 @@ class ThemeHelper{
         ),
       ),
       minimumSize: MaterialStateProperty.all(Size(50, 50)),
-      backgroundColor: MaterialStateProperty.all(Colors.redAccent),
+      backgroundColor: MaterialStateProperty.all(Colors.blueAccent.shade200),
       shadowColor: MaterialStateProperty.all(Colors.red),
     );
   }

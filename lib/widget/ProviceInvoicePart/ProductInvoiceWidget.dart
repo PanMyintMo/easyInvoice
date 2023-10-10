@@ -26,14 +26,13 @@ class ProductInvoiceWidget extends StatefulWidget {
 
 class _ProductInvoiceWidgetState extends State<ProductInvoiceWidget> {
   var prouductno = TextEditingController();
+  final TextEditingController quantityController = TextEditingController();
   bool isClick = false;
-  var quantity = TextEditingController();
-  int qty = 0;
+  int quantity = 0;
 
   @override
   void initState() {
     super.initState();
-    // prouductno.addListener(_checkInput);
   }
 
   // void _checkInput() {
@@ -41,22 +40,6 @@ class _ProductInvoiceWidgetState extends State<ProductInvoiceWidget> {
   //     isClick = prouductno.text.isNotEmpty;
   //   });
   // }
-
-
-  void _updateQuantityAndTotal(InvoiceData item, int newQuantity) async {
-    await ApiService().updatedQuantityItemBarcode(
-      UpdateQuantityBarcodeRequest(
-        quantity: newQuantity.toString(),
-        invoice_id: item.id.toString(),
-      ),
-    );
-
-    setState(() {
-      item.quantity = newQuantity;
-      item.total = newQuantity * int.parse(item.sale_price);
-    });
-  }
-
 
   Future<void> barcodeScanner() async {
     final result = await Navigator.push(
@@ -124,8 +107,10 @@ class _ProductInvoiceWidgetState extends State<ProductInvoiceWidget> {
                 child: ElevatedButton(
                   onPressed: true
                       ? () async {
-                          Navigator.push(context,
-                              MaterialPageRoute(builder: (context) => PdfPage()));
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => PdfPage()));
                         }
                       : null,
                   child: const Text('Print'),
@@ -189,11 +174,11 @@ class _ProductInvoiceWidgetState extends State<ProductInvoiceWidget> {
     );
   }
 
+
   dataRowForProductInvoiceWidget({required InvoiceData item}) {
-    quantity = TextEditingController(text: item.quantity.toString());
-   return DataRow(
+    return DataRow(
       cells: [
-        DataCell(Text(item.product_name)),
+        DataCell(Text(item.product_name!)),
         DataCell(
           Container(
             alignment: Alignment.topCenter,
@@ -206,64 +191,77 @@ class _ProductInvoiceWidgetState extends State<ProductInvoiceWidget> {
                 color: Colors.grey[200],
               ),
               child: Row(
-                mainAxisAlignment : MainAxisAlignment.spaceEvenly,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
                   IconButton(
                     icon: const Icon(Icons.add),
-                    onPressed: ()  {
-                      setState(() {
-                        qty = int.parse(quantity.text) + 1;
-                        // _updateQuantityAndTotal(
-                        //     item, qty);
-                      });
+                    onPressed: () {
+                      ApiService()
+                          .updatedQuantityItemBarcode(
+                        UpdateQuantityBarcodeRequest(
+                          quantity: (quantity + 1).toString(),
+                          invoice_id: item.id.toString(),
+                        ),
+                      )
+                          .then((response) {
+                        setState(() {
+                          quantity = quantity + 1;
+                          item.total = (quantity * double.parse(item.sale_price!))
+                              .toInt();
 
+                          // Update the controller's text property
+                          quantityController.text = quantity.toString();
+                        });
+                      }).catchError((error) {
+                        // Handle the API call error
+                      });
                     },
                   ),
-
                   SizedBox(
                     width: 50,
                     height: 30,
                     child: TextFormField(
-                      controller: quantity,
+                      controller: quantityController,
                       autofocus: false,
-                      onTap: (() {
-                        quantity.selection = TextSelection.fromPosition(
-                            TextPosition(offset: quantity.text.length));
-                        quantity.selection = TextSelection(
-                          baseOffset: 0,
-                          extentOffset: quantity.value.text.length,
-                        );
-                      }),
                       keyboardType: TextInputType.number,
                       textInputAction: TextInputAction.done,
                       textAlign: TextAlign.center,
                       textAlignVertical: TextAlignVertical.center,
-                      decoration: InputDecoration(),
+                      decoration: const InputDecoration(),
                     ),
                   ),
-
                   IconButton(
                     icon: const Icon(Icons.remove),
-                    onPressed: () async {
-                      setState(() {
-                        qty = int.parse(quantity.text) - 1;
+                    onPressed: () {
+                      ApiService()
+                          .updatedQuantityItemBarcode(
+                        UpdateQuantityBarcodeRequest(
+                          quantity: (quantity - 1).toString(),
+                          invoice_id: item.id.toString(),
+                        ),
+                      )
+                          .then((response) {
+                        setState(() {
+                          quantity--;
+                          item.total = (quantity * double.parse(item.sale_price!))
+                              .toInt();
+
+                          quantityController.text = quantity.toString();
+                        });
+                      }).catchError((error) {
+                        // Handle the API call error
                       });
-                      if (qty > 0) {
-                        _updateQuantityAndTotal(
-                            item, qty);
-                      }
                     },
                   ),
-
                 ],
               ),
             ),
           ),
         ),
-        DataCell(Text(item.sale_price)),
+        DataCell(Text(item.sale_price!)),
         DataCell(
           Text(
-            item.total.toString(),
+           item.total.toString(),
           ),
         ),
       ],

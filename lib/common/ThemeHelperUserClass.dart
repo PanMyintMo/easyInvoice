@@ -56,8 +56,8 @@ class ThemeHelperUserRole {
         ),
       ),
       minimumSize: MaterialStateProperty.all(Size(50, 50)),
-      backgroundColor: MaterialStateProperty.all(Colors.redAccent),
-      shadowColor: MaterialStateProperty.all(Colors.red),
+      backgroundColor: MaterialStateProperty.all(Colors.blue.shade300),
+      shadowColor: MaterialStateProperty.all(Colors.blue),
     );
   }
 }
@@ -126,7 +126,7 @@ Widget buildProfileBox(String name, String realName) {
             width: 200,
             height: 50,
             decoration: BoxDecoration(
-              border: Border.all(color: Colors.redAccent, width: 0.3),
+              border: Border.all(color: Colors.blueAccent.shade400, width: 0.3),
               borderRadius: const BorderRadius.all(Radius.circular(10.0)),
             ),
             child: Text(realName),
@@ -143,7 +143,7 @@ Widget textFieldForm(dynamic controller, String label) {
   return TextField(
     controller: controller,
     decoration: InputDecoration(
-      border: OutlineInputBorder(),
+      border: const OutlineInputBorder(),
       labelText: label,
     ),
   );
@@ -158,10 +158,10 @@ Widget buildDropdown({
   return Expanded(
     child: SizedBox(
       width: 200,
-      height: 50,
+      height: 80,
       child: DropdownButtonFormField2(
         value: value,
-
+        isDense: true,
         hint: Text(hint.toString()),
         decoration: InputDecoration(
           contentPadding: const EdgeInsets.symmetric(vertical: 16),
@@ -193,32 +193,3 @@ Widget buildDropdown({
     ),
   );
 }
-
-// Widget buildImageWidget() {
-//   if (image != null) {
-//     return Image.file(
-//       image!,
-//       fit: BoxFit.cover,
-//     );
-//   } else {
-//     return const Column(
-//       mainAxisAlignment: MainAxisAlignment.center,
-//       children: [
-//         Icon(
-//           Icons.cloud_upload,
-//           size: 40,
-//           color: Colors.grey,
-//         ),
-//         SizedBox(height: 10),
-//         Text(
-//           'Upload Image',
-//           style: TextStyle(
-//             fontSize: 16,
-//             fontWeight: FontWeight.w500,
-//             color: Colors.grey,
-//           ),
-//         ),
-//       ],
-//     );
-//   }
-// }

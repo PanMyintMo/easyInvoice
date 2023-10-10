@@ -5,19 +5,19 @@ class ImageBuilder extends StatelessWidget {
     Key? key,
     required this.imagePath,
     this.imgWidth = 200,
-    this.imgheight = 200,
+    this.imgHeight = 200,
   }) : super(key: key);
 
   final String imagePath;
   final double imgWidth;
-  final double imgheight;
+  final double imgHeight;
 
   @override
   Widget build(BuildContext context) {
     return Image.asset(
       imagePath,
       width: imgWidth,
-      height: imgheight,
+      height: imgHeight,
     );
   }
 }

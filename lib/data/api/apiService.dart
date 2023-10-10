@@ -56,6 +56,7 @@ import '../responsemodel/DeliveryPart/DeliveryCompanyInfoResponse.dart';
 import '../responsemodel/DeliveryPart/FetchAllDeliveries.dart';
 import '../responsemodel/DeliveryPart/FetchAllOrderByDate.dart';
 import '../responsemodel/DeliveryPart/OrderDetailResponse.dart';
+import '../responsemodel/DeliveryPart/UpdateQuantityBarcodeResponse.dart';
 import '../responsemodel/ShopKeeperResponsePart/DeliveredWarehouseRequest.dart';
 import '../responsemodel/common/DeleteResponse.dart';
 import '../responsemodel/CityPart/EditCityResponse.dart';
@@ -71,7 +72,6 @@ import '../responsemodel/DeliveryPart/DeliCompanyNameByTownshipId.dart';
 import '../responsemodel/DeliveryPart/DeliveryManResponse.dart';
 import '../responsemodel/DeliveryPart/FetchAllDeliveryName.dart';
 import '../responsemodel/DeliveryPart/ProductInvoiceResponse.dart';
-import '../responsemodel/DeliveryPart/UpdateQuantityBarcodeResponse.dart';
 import '../responsemodel/EditUserRoleResponse.dart';
 import '../responsemodel/FaultyItemPart/AddFaultyItemResponse.dart';
 import '../responsemodel/FaultyItemPart/AllFaultyItems.dart';
@@ -1401,27 +1401,27 @@ class ApiService {
   }
 
   //fetch updated quantity barcode response
-  Future <UpdateQuantity> updatedQuantityItemBarcode(
+  Future<UpdateQuantityBarcodeResponse> updatedQuantityItemBarcode(
       UpdateQuantityBarcodeRequest updateBarcodeRequest) async {
     try {
       final response = await _dio.post(
-          'https://mmeasyinvoice.com/api/update-product-quantity',
-          data: updateBarcodeRequest.toJson());
+        'https://mmeasyinvoice.com/api/update-product-quantity',
+        data: updateBarcodeRequest.toJson(),
+      );
+
       if (response.statusCode == 200) {
         final responseData = response.data;
-        final updateQuantityBarcodeResponse =
-        UpdateQuantityBarcodeResponse.fromJson(responseData);
+        final productInvoiceResponse = UpdateQuantityBarcodeResponse.fromJson(responseData);
 
-        return updateQuantityBarcodeResponse.data;
-
-      }
-      else {
-        throw Exception('Invalid data format for warehouse');
+        return productInvoiceResponse;
+      } else {
+        throw Exception('Invalid data format');
       }
     } catch (e) {
-      throw Exception('Failed to fetch updated quantity in barcode scan: $e');
+      throw Exception('Failed to fetch updated quantity: $e');
     }
   }
+
 
   //fetch all cities by country Id
   Future<List<CityByCountryIdData>> fetchAllCitiesByCountryId(int id) async {
@@ -1434,10 +1434,10 @@ class ApiService {
             CityByCountryIdResponse.fromJson(responseData);
         return cityByCountryIdResponse.data;
       } else {
-        throw Exception('Invalid data format for city by country id field');
+        throw Exception('Invalid data  id');
       }
     } catch (e) {
-      throw Exception('Failed to fetch city by country id : $e');
+      throw Exception('Failed : $e');
     }
   }
 
@@ -2092,7 +2092,7 @@ class ApiService {
         throw Exception('Failed to fetch data');
       }
     } catch (error) {
-      throw Exception('Failed to fetch data');
+      throw Exception('Failed to fetch data $error');
     }
   }
 

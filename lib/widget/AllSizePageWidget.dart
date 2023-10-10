@@ -125,9 +125,9 @@ class AllSizePageWidget extends StatelessWidget {
                                       'Failed to update sizes: $result');
                                 }
                               },
-                              child: const Icon(
+                              child:  Icon(
                                 Icons.edit,
-                                color: Colors.green,
+                                color: Colors.green.shade900,
                               ),
                             )),
                             DataCell(GestureDetector(

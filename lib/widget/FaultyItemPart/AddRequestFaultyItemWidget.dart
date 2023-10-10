@@ -82,7 +82,7 @@ class _AddRequestFaultyItemWidgetState
                   const Text('Category',
                       style: TextStyle(
                           fontSize: 18,
-                          color: Colors.pink,
+                          color: Colors.blue,
                           fontWeight: FontWeight.bold)),
                   const SizedBox(
                     height: 18,
@@ -111,7 +111,7 @@ class _AddRequestFaultyItemWidgetState
                   const Text('Product',
                       style: TextStyle(
                           fontSize: 18,
-                          color: Colors.pink,
+                          color: Colors.blue,
                           fontWeight: FontWeight.bold)),
                   const SizedBox(
                     height: 18,
@@ -123,7 +123,7 @@ class _AddRequestFaultyItemWidgetState
                       items: products.map((product) {
                         return DropdownMenuItem(
                             value: product.id.toString(),
-                            child: Text(product.name));
+                            child: Text(product.name,overflow: TextOverflow.ellipsis,));
                       }).toList(),
                       onChanged: (value) {
                         setState(() {
@@ -140,7 +140,7 @@ class _AddRequestFaultyItemWidgetState
                     'Quantity',
                     style: TextStyle(
                         fontSize: 18,
-                        color: Colors.pink,
+                        color: Colors.blue,
                         fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(
@@ -160,10 +160,10 @@ class _AddRequestFaultyItemWidgetState
                   ),
                   Center(
                     child: ElevatedButton(
+                      style: ThemeHelperUserRole().buttonStyle(),
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
                           _formKey.currentState!.save();
-
                           context
                               .read<AddRequestFaultyItemCubit>()
                               .addRequestFaultyItem(AddFaultyItemRequest(
