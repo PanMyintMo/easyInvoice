@@ -2,9 +2,11 @@ import 'package:easy_invoice/bloc/delete/ShopKeeperPart/delete_shop_keeper_produ
 import 'package:easy_invoice/screen/shopkeeperPart/DeliverWarehouseToShopkeeperScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 import '../../bloc/get/ShopKeeperPart/shop_keeper_request_cubit.dart';
+import '../../common/GeneralPaganizationClass.dart';
 import '../../common/showDeleteConfirmationDialog.dart';
-import '../../data/responsemodel/ShopKeeperResponsePart/ShopKeeperRequestResponse.dart';
+import '../../data/responseModel/ShopKeeperResponsePart/ShopKeeperRequestResponse.dart';
 import '../../screen/shopkeeperPart/EditShopKeeperScreen.dart';
 import '../../screen/shopkeeperPart/RequestShopKeeper.dart';
 
@@ -60,30 +62,41 @@ class _ShopKeeperWidgetState extends State<ShopKeeperWidget> {
                 ],
               ),
               const SizedBox(height: 16),
-              PaginatedDataTable(
-                columns: const [
-                  DataColumn(
-                      label: Text(
-                    'Id',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                  )),
-                  DataColumn(
-                      label: Text('Product Name',
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold))),
-                  DataColumn(
-                      label: Text('Quantity',
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold))),
-                  DataColumn(
-                      label: Text('Action',
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold))),
-                ],
-                source: ShopData(widget.shopData, context),
-                rowsPerPage: 8,
-                arrowHeadColor: Colors.lightBlue,
-                columnSpacing: 10,
+              SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                child: SizedBox(
+                  height: context.height - GeneralPagination.topViewHeight,
+                  child: PaginatedDataTable(
+                    columns: const [
+                      DataColumn(
+                          label: Text(
+                        'Id',
+                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                      )),
+                      DataColumn(
+                          label: Text('Product Name',
+                              style: TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.bold))),
+                      DataColumn(
+                          label: Text('Quantity',
+                              style: TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.bold))),
+                      DataColumn(
+                          label: Text('Action',
+                              style: TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.bold))),
+                    ],
+                    source: ShopData(widget.shopData, context),
+                    rowsPerPage: ((context.height -
+                        GeneralPagination.topViewHeight -
+                        GeneralPagination.paginateDataTableHeaderRowHeight -
+                        GeneralPagination.pagerWidgetHeight) ~/
+                        GeneralPagination.paginateDataTableRowHeight)
+                        .toInt(),
+                    arrowHeadColor: Colors.lightBlue,
+                    columnSpacing: 10,
+                  ),
+                ),
               )
             ],
           ),

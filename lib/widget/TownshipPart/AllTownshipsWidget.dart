@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../common/ApiHelper.dart';
 import '../../common/showDeleteConfirmationDialog.dart';
-import '../../data/responsemodel/TownshipsPart/AllTownshipResponse.dart';
+import '../../data/responseModel/TownshipsPart/AllTownshipResponse.dart';
 import '../../screen/LocationPart/EditTownshipScreen.dart';
 
 class TownshipWidget extends StatefulWidget {

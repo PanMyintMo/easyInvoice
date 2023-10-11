@@ -1,7 +1,7 @@
-import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../data/responsemodel/WarehousePart/WarehouseResponse.dart';
+import '../../../data/responseModel/WarehousePart/WarehouseResponse.dart';
 import '../../../data/userRepository/UserRepository.dart';
 
 part 'warehouse_product_list_state.dart';
@@ -13,7 +13,7 @@ class WarehouseProductListCubit extends Cubit<WarehouseProductListState> {
   Future<void> warehouseProductList() async {
     emit(WarehouseProductListLoading());
     try {
-      final WarehouseResponse response = await _userRepository.warehouse();
+      final response = await _userRepository.warehouse();
 
       final List<WarehouseData> warehouseData= response.data;
 

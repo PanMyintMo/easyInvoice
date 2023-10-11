@@ -1,19 +1,19 @@
-import 'package:easy_invoice/data/responsemodel/CityPart/Cities.dart';
-import 'package:easy_invoice/data/responsemodel/CityPart/WardByTownshipResponse.dart';
 
 import '../data/api/apiService.dart';
-import '../data/responsemodel/CityPart/Street.dart';
-import '../data/responsemodel/CountryPart/CountryResponse.dart';
-import '../data/responsemodel/FaultyItemPart/AllFaultyItems.dart';
-import '../data/responsemodel/GetAllPagnitaionDataResponse.dart';
-import '../data/responsemodel/ShopKeeperResponsePart/ShopProductListResponse.dart';
-import '../data/responsemodel/TownshipsPart/AllTownshipResponse.dart';
-import '../data/responsemodel/common/ProductListItemResponse.dart';
-import '../data/responsemodel/common/WardResponse.dart';
+import '../data/responseModel/CityPart/Cities.dart';
+import '../data/responseModel/CityPart/Street.dart';
+import '../data/responseModel/CityPart/WardByTownshipResponse.dart';
+import '../data/responseModel/CountryPart/CountryResponse.dart';
+import '../data/responseModel/FaultyItemPart/AllFaultyItems.dart';
+import '../data/responseModel/GetAllPaganizationDataResponse.dart';
+import '../data/responseModel/ShopKeeperResponsePart/ShopProductListResponse.dart';
+import '../data/responseModel/TownshipsPart/AllTownshipResponse.dart';
+import '../data/responseModel/common/ProductListItemResponse.dart';
+import '../data/responseModel/common/WardResponse.dart';
 
 class ApiHelper {
   //By using static , you can call directly apiHelper.fetchCategoryName like that
-  static Future<List<PaginationItem>?> fetchCategoriesName() async {
+  static Future<List<PaganizationItem>?> fetchCategoriesName() async {
     try {
       final response = await ApiService().getAllCategories();
       if (response.data.isNotEmpty) {
@@ -26,14 +26,14 @@ class ApiHelper {
   }
 
   //Fetch size Name
-  static Future<List<PaginationItem>?> fetchSizeName() async {
+  static Future<List<PaganizationItem>?> fetchSizeName() async {
     try {
       final response = await ApiService().getAllSizes();
       if (response.data.isNotEmpty) {
         return response.data;
       }
     } catch (error) {
-      print('Error fetching sizes: $error');
+     // print('Error fetching sizes: $error');
     }
     return []; // Return an empty list if the request fails
   }
@@ -46,7 +46,7 @@ class ApiHelper {
         return response.data;
       }
     } catch (error) {
-      print('Error fetching city: $error');
+     // print('Error fetching city: $error');
     }
     return []; // Return an empty list if the request fails
   }
@@ -59,7 +59,7 @@ class ApiHelper {
         return response.data;
       }
     } catch (error) {
-      print('Error fetching township: $error');
+      //print('Error fetching township: $error');
     }
     return []; // Return an empty list if the request fails
   }
@@ -72,7 +72,7 @@ class ApiHelper {
         return response.data;
       }
     } catch (error) {
-      print('Error fetching country: $error');
+     // print('Error fetching country: $error');
     }
     return []; // Return an empty list if the request fails
   }
@@ -85,7 +85,7 @@ class ApiHelper {
         return response.data;
       }
     } catch (error) {
-      print('Error fetching wards: $error');
+      //print('Error fetching wards: $error');
     }
     return []; // Return an empty list if the request fails
   }
@@ -97,10 +97,10 @@ class ApiHelper {
       if(response.isNotEmpty){
         return response;
       }
-      print("Ward list are ${response}");
+     // print("Ward list are ${response}");
     }
     catch(error){
-      print('Error is $error');
+      //print('Error is $error');
     }
     return [];
   }
@@ -113,7 +113,7 @@ class ApiHelper {
       }
     }
     catch(error){
-      print('Error is $error');
+     // print('Error is $error');
     }
     return [];
   }
@@ -127,7 +127,7 @@ class ApiHelper {
         return response.data;
       }
     } catch (error) {
-      print('Error fetching product: $error');
+     // print('Error fetching product: $error');
     }
     return [];
   }
@@ -140,7 +140,7 @@ class ApiHelper {
         return response;
 
     } catch (error) {
-      print('Error fetching product: $error');
+     // print('Error fetching product: $error');
     }
     return null;
   }
@@ -154,7 +154,7 @@ class ApiHelper {
         return response.data;
       }
     } catch (error) {
-      print('Error fetching faulty item: $error');
+     // print('Error fetching faulty item: $error');
     }
     return [];
   }

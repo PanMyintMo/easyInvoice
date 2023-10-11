@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../common/showDeleteConfirmationDialog.dart';
-import '../../data/responsemodel/CityPart/Street.dart';
+import '../../data/responseModel/CityPart/Street.dart';
 import '../../screen/LocationPart/EditCityScreen.dart';
 
 class StreetWidget extends StatelessWidget {

@@ -87,9 +87,9 @@ class _AddCategoryFromWidgetState extends State<AddCategoryFromWidget> {
                             addCategoryCubit.addCategory(
                                 AddCategoryRequestModel(name.text, slug.text));
                           },
-                          child: const Text(
+                          child:  Text(
                             'Add Category',
-                            style: TextStyle(color: Colors.green),
+                            style: TextStyle(color: Colors.green.shade900),
                           )),
                     ),
                   ),

@@ -2,7 +2,6 @@ import 'package:easy_invoice/bloc/get/DeliveryManPart/fetch_all_order_detail_cub
 import 'package:easy_invoice/widget/OrderPart/EditOrderWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import '../../bloc/edit/CityPart/edit_order_detail_cubit.dart';
 import '../../common/ToastMessage.dart';
 import '../../module/module.dart';

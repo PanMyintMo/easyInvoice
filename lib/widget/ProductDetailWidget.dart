@@ -2,7 +2,7 @@ import 'package:easy_invoice/common/CardViewProduct.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
-import '../data/responsemodel/common/ProductListItemResponse.dart';
+import '../data/responseModel/common/ProductListItemResponse.dart';
 
 
 class ProductDetailWidget extends StatelessWidget {
@@ -17,6 +17,8 @@ class ProductDetailWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+
     return Stack(
       children: [
          SingleChildScrollView(

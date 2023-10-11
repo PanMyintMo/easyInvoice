@@ -1,8 +1,9 @@
-import 'Cities.dart';
+import 'PageLink.dart';
+import 'common/ProductListItemResponse.dart';
 
-class StreetResponse {
+class GetAllProductResponse  {
   final int currentPage;
-  final List<Street> data;
+  final List<ProductListItem> data;
   final String firstPageUrl;
   final int? from;
   final int lastPage;
@@ -17,7 +18,7 @@ class StreetResponse {
   final int? status;
   final String? message;
 
-  StreetResponse ({
+  GetAllProductResponse  ({
     required this.currentPage,
     required this.data,
     required this.firstPageUrl,
@@ -35,11 +36,11 @@ class StreetResponse {
     required this.message,
   });
 
-  factory StreetResponse.fromJson(Map<String, dynamic> json) {
-    return StreetResponse (
+  factory GetAllProductResponse.fromJson(Map<String, dynamic> json) {
+    return GetAllProductResponse   (
       currentPage: json['data']['current_page'],
       data: (json['data']['data'] as List<dynamic>?)
-          ?.map((item) => Street.fromJson(item))
+          ?.map((item) => ProductListItem.fromJson(item))
           .toList() ?? [],
       firstPageUrl: json['data']['first_page_url'],
       from: json['data']['from'],
@@ -62,29 +63,3 @@ class StreetResponse {
 
 
 
-class Street {
-  final int id;
-  final int ward_id;
-  final String street_name;
-  final String created_at;
-  final String? updated_at;
-
-  Street({
-    required this.id,
-    required this.ward_id,
-    required this.street_name,
-    required this.created_at,
-    this.updated_at,
-  });
-
-  factory Street.fromJson(Map<String, dynamic> json) {
-    return Street(
-      id: json['id'],
-      ward_id: json['ward_id'],
-      street_name: json['street_name'],
-      created_at: json['created_at'],
-      updated_at: json['updated_at'],
-    );
-  }
-
-}

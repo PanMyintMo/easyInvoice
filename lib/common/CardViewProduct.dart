@@ -48,12 +48,11 @@ class CardViewProduct extends StatelessWidget {
         child: Column(
           children: [
             Image.network(
-              imageUrl ?? '', // Use imageUrl and provide a default value ('' in this case)
+              imageUrl ?? '', // Use imageUrl and provide a default value ('assets/faulty.png' in this case)
               height: 200, // Adjust the height as needed
               width: double.infinity, // Adjust the width as needed
             ),
             const SizedBox(height : 16),
-
             Row(
               children: [
                 const Expanded(child: Text("Product Id: ")),

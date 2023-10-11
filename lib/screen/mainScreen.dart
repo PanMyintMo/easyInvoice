@@ -8,14 +8,16 @@ import 'package:get/get.dart';
 import '../bloc/get/MainPagePart/order_filter_by_date_cubit.dart';
 import '../bloc/get/WarehousePart/warehouse_product_list_cubit.dart';
 import '../common/ThemeHelperUserClass.dart';
-import '../data/responsemodel/MainPagePart/MainPageResponse.dart';
-import '../data/responsemodel/WarehousePart/WarehouseResponse.dart';
+
+import '../data/responseModel/MainPagePart/MainPageResponse.dart';
+import '../data/responseModel/WarehousePart/WarehouseResponse.dart';
 import '../module/module.dart';
 import '../navigationdrawer/navigationdrawer.dart';
 import 'package:easy_invoice/network/SharedPreferenceHelper.dart';
 
 import 'FaultyItemPart/FaultyItems.dart';
-import 'Login&Register/Login.dart';
+import 'home/Login.dart';
+
 
 class MainPageScreen extends StatefulWidget {
   const MainPageScreen({Key? key}) : super(key: key);
@@ -106,7 +108,7 @@ class _MainPageState extends State<MainPageScreen> {
                             );
                           } else if (state is OrderFilterByDateSuccess) {
                             if (dropDownValue == 'All Orders') {
-                              mainPageResponse = state.selectedResponse;
+                              mainPageResponse = state.selectedResponse!;
                             } else if (dropDownValue == 'Daily Orders') {
                               mainPageResponse = state.selectedResponse;
                             } else if (dropDownValue == 'Weekly Orders') {

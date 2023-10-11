@@ -1,6 +1,6 @@
-import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import '../../../data/responsemodel/GetAllPagnitaionDataResponse.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../data/responseModel/GetAllPaganizationDataResponse.dart';
 import '../../../data/userRepository/UserRepository.dart';
 part 'get_category_detail_state.dart';
 
@@ -14,7 +14,7 @@ class GetCategoryDetailCubit extends Cubit<GetCategoryDetailState> {
     emit(GetCategoryDetailLoading());
 
     try {
-      final List<PaginationItem>? response = await _userRepository.getCategory();
+      final List<PaganizationItem>? response = await _userRepository.getCategory();
       emit(GetCategoryDetailSuccess(response!));
     } catch (error) {
       emit(GetCategoryDetailFail(error.toString()));

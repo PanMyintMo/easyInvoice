@@ -1,7 +1,7 @@
-import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../data/responsemodel/DeliveryPart/DeliveryCompanyInfoResponse.dart';
+import '../../../data/responseModel/DeliveryPart/DeliveryCompanyInfoResponse.dart';
 import '../../../data/userRepository/UserRepository.dart';
 import '../../../dataRequestModel/DeliveryPart/UpdateDeliveryRequestModel.dart';
 

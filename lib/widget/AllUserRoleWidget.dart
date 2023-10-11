@@ -1,10 +1,10 @@
 import 'package:easy_invoice/bloc/get/UserRolePart/get_all_user_role_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../common/CustomButtom.dart';
-import '../data/responsemodel/UserRoleResponse.dart';
+import '../common/CustomButton.dart';
+import '../data/responseModel/UserRoleResponse.dart';
 import '../network/SharedPreferenceHelper.dart';
-import '../screen/UserDetailProfileScren.dart';
+import '../screen/UserDetailProfileScreen.dart';
 
 class AllUserRoleWidget extends StatefulWidget {
   final List<UserData> userData;
@@ -83,10 +83,10 @@ class _AllUserRoleWidgetState extends State<AllUserRoleWidget> {
             ),
             subtitle: Text(
               'Role: ${user.utype}',
-              style: const TextStyle(
+              style:  TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
-                color: Colors.green,
+                color: Colors.green.shade900,
               ),
             ),
             trailing: (utype == 'ADM') ?

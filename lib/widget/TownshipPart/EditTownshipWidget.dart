@@ -2,10 +2,9 @@ import 'package:easy_invoice/bloc/edit/TownshipPart/edit_township_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../common/ApiHelper.dart';
-import '../../common/ThemeHelperUserClass.dart';
 import '../../data/api/apiService.dart';
-import '../../data/responsemodel/CityPart/FetchCityByCountryId.dart';
-import '../../data/responsemodel/CountryPart/CountryResponse.dart';
+import '../../data/responseModel/CityPart/FetchCityByCountryId.dart';
+import '../../data/responseModel/CountryPart/CountryResponse.dart';
 import '../../dataRequestModel/TownshipPart/EditTownship.dart';
 
 class EditTownshipWidget extends StatefulWidget {

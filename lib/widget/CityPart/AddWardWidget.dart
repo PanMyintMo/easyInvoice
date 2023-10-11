@@ -6,9 +6,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../common/ThemeHelperUserClass.dart';
 import '../../data/api/apiService.dart';
-import '../../data/responsemodel/CityPart/FetchCityByCountryId.dart';
-import '../../data/responsemodel/CountryPart/CountryResponse.dart';
-import '../../data/responsemodel/TownshipsPart/TownshipByCityIdResponse.dart';
+import '../../data/responseModel/CityPart/FetchCityByCountryId.dart';
+import '../../data/responseModel/CountryPart/CountryResponse.dart';
+import '../../data/responseModel/TownshipsPart/TownshipByCityIdResponse.dart';
 import '../../dataRequestModel/CityPart/AddWardRequestModel.dart';
 
 class AddWardWidget extends StatefulWidget {

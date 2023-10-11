@@ -1,8 +1,8 @@
-import 'package:bloc/bloc.dart';
 import 'package:easy_invoice/dataRequestModel/DeliveryPart/EditOrderDetailRequestModel.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../data/responsemodel/DeliveryPart/AddOrderResponse.dart';
+import '../../../data/responseModel/DeliveryPart/AddOrderResponse.dart';
 import '../../../data/userRepository/UserRepository.dart';
 
 part 'edit_order_detail_state.dart';

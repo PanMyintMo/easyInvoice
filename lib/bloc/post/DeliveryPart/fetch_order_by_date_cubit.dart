@@ -1,7 +1,7 @@
-import 'package:bloc/bloc.dart';
-import 'package:easy_invoice/data/responsemodel/MainPagePart/MainPageResponse.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../data/responseModel/MainPagePart/MainPageResponse.dart';
 import '../../../data/userRepository/UserRepository.dart';
 import '../../../dataRequestModel/DeliveryPart/OrderByDateRequestModel.dart';
 
@@ -17,7 +17,7 @@ class FetchOrderByDateCubit extends Cubit<FetchOrderByDateState> {
     emit(FetchOrderByDateLoading());
 
     try {
-      final List<OrderDatas>? response = await _userRepository.allOrderByDate(orderByDateRequest);
+      final response = await _userRepository.allOrderByDate(orderByDateRequest);
       emit(FetchOrderByDateSuccess(response!));
     } catch (error) {
       emit(FetchOrderByDateFail(error.toString()));

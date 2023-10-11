@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 
-import '../../data/responsemodel/ShopKeeperResponsePart/ShopKeeperRequestResponse.dart';
+import '../../data/responseModel/ShopKeeperResponsePart/ShopKeeperRequestResponse.dart';
 
 class ShopKeeperRequestListWidget extends StatefulWidget {
   final bool isLoading = false;

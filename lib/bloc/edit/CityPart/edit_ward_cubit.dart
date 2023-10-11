@@ -1,7 +1,7 @@
-import 'package:bloc/bloc.dart';
-import 'package:easy_invoice/data/responsemodel/CityPart/EditWardResponse.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../data/responseModel/CityPart/EditWardResponse.dart';
 import '../../../data/userRepository/UserRepository.dart';
 import '../../../dataRequestModel/CityPart/AddWardRequestModel.dart';
 

@@ -1,3 +1,4 @@
+
 class AddCategoryResponse{
   String name;
   String slug;

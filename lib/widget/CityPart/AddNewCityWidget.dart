@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../bloc/post/CityPart/add_city_cubit.dart';
 import '../../common/ApiHelper.dart';
-import '../../data/responsemodel/CountryPart/CountryResponse.dart';
+import '../../data/responseModel/CountryPart/CountryResponse.dart';
 import '../../dataRequestModel/CityPart/AddCity.dart';
 
 class AddNewCityWidget extends StatefulWidget {

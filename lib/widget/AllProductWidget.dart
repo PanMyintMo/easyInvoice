@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:easy_invoice/bloc/get/ProductPart/get_all_product_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
-import '../common/CustomButtom.dart';
+import '../common/CustomButton.dart';
 import '../screen/ProductDetailScreen.dart';
 import '../network/SharedPreferenceHelper.dart';
-import 'package:easy_invoice/data/responsemodel/common/ProductListItemResponse.dart';
+import 'package:easy_invoice/data/responseModel/common/ProductListItemResponse.dart';
 
 class AllProductWidget extends StatefulWidget {
   final bool isLoading;
@@ -48,9 +48,11 @@ class _AllProductWidgetState extends State<AllProductWidget> {
       itemBuilder: (BuildContext context, int index) {
         final product = widget.products[index];
         return Card(
+          semanticContainer: true, // Set to true to make it a semantic container
+          clipBehavior: Clip.antiAliasWithSaveLayer,
+          margin: const EdgeInsets.symmetric(vertical: 12 , horizontal: 12),
           color: Colors.white,
-          elevation: 3,
-          margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+          elevation: 5,
           child: InkWell(
             onTap: () async {
               final result = await Navigator.push(
@@ -64,49 +66,115 @@ class _AllProductWidgetState extends State<AllProductWidget> {
               }
             },
             child: Container(
-              padding: const EdgeInsets.all(12),
+              padding: const EdgeInsets.symmetric(vertical: 12 , horizontal: 12),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
-
                 children: [
                   product.url != null
                       ? Image.network(
                     product.url!,
-                    width: 100.0,
-                    height: 100.0,
-                    fit: BoxFit.scaleDown,
+                    width: 80.0,
+                    height: 80.0,
+                    fit: BoxFit.fitHeight,
                   )
                       : Icon(
                     Icons.production_quantity_limits_outlined,
                     color: Colors.grey.shade300,
-                    size: 50.0,
+                    size: 80.0,
                   ),
                   const SizedBox(width: 10),
                   Expanded(
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Text(
-                          'Product name: ${product.name}',
-                          maxLines: 3,
-                          overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
+                        RichText(
+                          text: TextSpan(
+                            children: [
+                              const TextSpan(
+                                text: 'Product name: ',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.black, // Color for "Product name: "
+                                ),
+                              ),
+                              TextSpan(
+                                text: product.name,
+                                style:  TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.blue.shade900, // Color for the dynamic product name
+                                ),
+                              ),
+                            ],
                           ),
                         ),
+
+                        const SizedBox(height: 15,),
+
+                        RichText(text: TextSpan(
+                          children: [
+                            const TextSpan(
+                              text: 'Category Id: ',
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.black, // Color for "Product name: "
+                              ),
+                            ),
+                            TextSpan(
+                              text: product.category_id.toString(),
+                              style:  TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.blue.shade900, // Color for the dynamic product name
+                              ),
+                            ),
+                          ]
+                        )),
                         const SizedBox(height: 10,),
-                        Text('Category Id: ${product.category_id}'),
+                        RichText(text: TextSpan(
+                            children: [
+                              const TextSpan(
+                                text: 'Stock: ',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.black, // Color for "Product name: "
+                                ),
+                              ),
+                              TextSpan(
+                                text: product.stock_status.toString(),
+                                style:  TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.blue.shade900, // Color for the dynamic product name
+                                ),
+                              ),
+                            ]
+                        )),
                         const SizedBox(height: 10,),
-                        Text('Stock: ${product.stock_status}'),
-                        const SizedBox(height: 10,),
-                        Text('Product Id: ${product.id}'),
+                        RichText(text: TextSpan(
+                            children: [
+                              const TextSpan(
+                                text: 'Product Id: ',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.black, // Color for "Product name: "
+                                ),
+                              ),
+                              TextSpan(
+                                text: product.id.toString(),
+                                style:  TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.blue.shade900, // Color for the dynamic product name
+                                ),
+                              ),
+                            ]
+                        )),
 
                       ],
                     ),
                   ),
               Column(
-                mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Text('Date: ${product.created_at.substring(0, 10)}'),

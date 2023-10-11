@@ -1,8 +1,9 @@
-import '../CityPart/Cities.dart';
+import '../MainPagePart/MainPageResponse.dart';
+import '../PageLink.dart';
 
-class TownshipResponse{
+class OrderByDateResponse {
   final int currentPage;
-  final List<Township> data;
+  final List<OrderDatas> data;
   final String firstPageUrl;
   final int? from;
   final int lastPage;
@@ -17,7 +18,7 @@ class TownshipResponse{
   final int? status;
   final String? message;
 
-  TownshipResponse ({
+  OrderByDateResponse({
     required this.currentPage,
     required this.data,
     required this.firstPageUrl,
@@ -35,11 +36,11 @@ class TownshipResponse{
     required this.message,
   });
 
-  factory TownshipResponse  .fromJson(Map<String, dynamic> json) {
-    return TownshipResponse  (
+  factory OrderByDateResponse.fromJson(Map<String, dynamic> json) {
+    return OrderByDateResponse(
       currentPage: json['data']['current_page'],
       data: (json['data']['data'] as List<dynamic>?)
-          ?.map((item) => Township.fromJson(item))
+          ?.map((item) => OrderDatas.fromJson(item))
           .toList() ?? [],
       firstPageUrl: json['data']['first_page_url'],
       from: json['data']['from'],
@@ -62,30 +63,3 @@ class TownshipResponse{
 
 
 
-class Township {
-
-  Township({
-    required this.id,
-    required this.cityId,
-    required this.name,
-    required this.createdAt,
-    required this.updatedAt,
-  });
-
-  final int id;
-  final int cityId;
-  final String name;
-  final String createdAt;
-  final String updatedAt;
-
-  factory Township.fromJson(Map<String, dynamic> json) {
-    return Township(
-      id: json['id'],
-      cityId: json['city_id'],
-      name: json['name'],
-      createdAt: json['created_at'],
-      updatedAt: json['updated_at'],
-    );
-  }
-
-}

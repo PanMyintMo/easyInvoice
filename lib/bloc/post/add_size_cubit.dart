@@ -1,7 +1,7 @@
 
-import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import '../../data/responsemodel/AddSizeResponse.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../data/responseModel/AddSizeResponse.dart';
 import '../../data/userRepository/UserRepository.dart';
 import '../../dataRequestModel/AddSizeRequestModel.dart';
 part 'add_size_state.dart';

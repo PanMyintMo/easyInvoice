@@ -1,6 +1,8 @@
-class CityResponse {
+import '../PageLink.dart';
+
+class CountryResponse{
   final int currentPage;
-  final List<City> data;
+  final List<Country> data;
   final String firstPageUrl;
   final int? from;
   final int lastPage;
@@ -15,7 +17,7 @@ class CityResponse {
   final int? status;
   final String? message;
 
-  CityResponse ({
+  CountryResponse ({
     required this.currentPage,
     required this.data,
     required this.firstPageUrl,
@@ -33,11 +35,11 @@ class CityResponse {
     required this.message,
   });
 
-  factory CityResponse.fromJson(Map<String, dynamic> json) {
-    return CityResponse (
+  factory CountryResponse .fromJson(Map<String, dynamic> json) {
+    return CountryResponse (
       currentPage: json['data']['current_page'],
       data: (json['data']['data'] as List<dynamic>?)
-          ?.map((item) => City.fromJson(item))
+          ?.map((item) => Country.fromJson(item))
           .toList() ?? [],
       firstPageUrl: json['data']['first_page_url'],
       from: json['data']['from'],
@@ -58,49 +60,25 @@ class CityResponse {
   }
 }
 
-class PageLink {
-  final String? url;
-  final String label;
-  final bool active;
 
-  PageLink({
-    this.url,
-    required this.label,
-    required this.active,
-  });
-
-  factory PageLink.fromJson(Map<String, dynamic> json) {
-    return PageLink(
-      url: json['url'],
-      label: json['label'],
-      active: json['active'],
-    );
-  }
-}
-
-class City {
+class Country  {
   final int id;
-  final int countryId;
   final String name;
   final String createdAt;
-  final String? updatedAt;
+  final String updatedAt;
 
-  City({
+  Country({
     required this.id,
-    required this.countryId,
     required this.name,
     required this.createdAt,
-    this.updatedAt,
+    required this.updatedAt,
   });
 
-  factory City.fromJson(Map<String, dynamic> json) {
-    return City(
-      id: json['id'],
-      countryId: json['country_id'],
-      name: json['name'],
-      createdAt: json['created_at'],
-      updatedAt: json['updated_at'],
-    );
+  factory Country.fromJson(Map<String, dynamic> json) => Country(
+    id: json['id'],
+    name: json['name'],
+    createdAt: json['created_at'],
+    updatedAt: json['updated_at'],
+  );
   }
 
-}

@@ -2,7 +2,7 @@ import 'package:easy_invoice/bloc/post/Login&Register/sign_in_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_invoice/module/module.dart';
 import 'package:easy_invoice/network/SharedPreferenceHelper.dart';
-import 'package:easy_invoice/screen/mainscreen.dart';
+import 'package:easy_invoice/screen/mainScreen.dart';
 import 'package:flutter/gestures.dart';
 import 'package:easy_invoice/dataRequestModel/Login&Register/LoginRequestModel.dart';
 import 'package:flutter/material.dart';

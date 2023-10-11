@@ -1,12 +1,11 @@
 import 'package:easy_invoice/screen/ProductInvoicePart/ProductInvoiceScreenWithListView.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import '../../bloc/post/product_invoice_cubit.dart';
 import '../../common/ToastMessage.dart';
-import '../../data/responsemodel/DeliveryPart/ProductInvoiceResponse.dart';
+import '../../data/responseModel/DeliveryPart/ProductInvoiceResponse.dart';
 import '../../module/module.dart';
-import '../../widget/ProviceInvoicePart/ProductInvoiceWidget.dart';
+import '../../widget/ProductInvoicePart/ProductInvoiceWidget.dart';
 
 class ProductInvoiceScreen extends StatefulWidget {
   const ProductInvoiceScreen({super.key});
@@ -59,10 +58,6 @@ class _ProductInvoiceScreenState extends State<ProductInvoiceScreen> {
                 child: Text("Product is out of stock."),
               );
             }
-            // return ProductInvoiceWidget(
-            //   isLoading: false,
-            //   invoiceData: state.productInvoiceResponse,
-            // );
             return ProductInvoiceScreenWithListView(
               isLoading: false,
               invoiceData : state.productInvoiceResponse

@@ -1,7 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
-import '../../../data/responsemodel/common/DeleteResponse.dart';
+
+import '../../../data/responseModel/common/DeleteResponse.dart';
 import '../../../data/userRepository/UserRepository.dart';
 
 part 'delete_delivery_state.dart';

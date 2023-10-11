@@ -1,8 +1,8 @@
-import 'package:bloc/bloc.dart';
-import 'package:easy_invoice/data/responsemodel/FaultyItemPart/AddFaultyItemResponse.dart';
 import 'package:easy_invoice/dataRequestModel/FaultyItemPart/AddFaultyItemRequest.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../data/responseModel/FaultyItemPart/AddFaultyItemResponse.dart';
 import '../../../data/userRepository/UserRepository.dart';
 
 part 'add_request_faulty_item_state.dart';

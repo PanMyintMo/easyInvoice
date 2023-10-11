@@ -1,7 +1,7 @@
-import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../data/responsemodel/CityPart/AddStreetResponse.dart';
+import '../../../data/responseModel/CityPart/AddStreetResponse.dart';
 import '../../../data/userRepository/UserRepository.dart';
 import '../../../dataRequestModel/CityPart/AddStreetRequestModel.dart';
 
@@ -15,7 +15,7 @@ class AddStreetCubit extends Cubit<AddStreetState> {
   Future<void> addStreet(AddStreetRequestModel addStreetRequestModel) async {
     emit(AddStreetLoading());
     try {
-      final AddStreetResponse response = await _userRepository.addStreet(addStreetRequestModel);
+      final response = await _userRepository.addStreet(addStreetRequestModel);
       emit(AddStreetSuccess(response));
     } catch (error) {
       emit(AddStreetFail(error.toString()));

@@ -6,9 +6,9 @@ import '../../common/ApiHelper.dart';
 import '../../common/FormValidator.dart';
 import '../../common/ThemeHelperUserClass.dart';
 import '../../data/api/apiService.dart';
-import '../../data/responsemodel/CityPart/Cities.dart';
-import '../../data/responsemodel/DeliveryPart/FetchAllDeliveryName.dart';
-import '../../data/responsemodel/TownshipsPart/TownshipByCityIdResponse.dart';
+import '../../data/responseModel/CityPart/Cities.dart';
+import '../../data/responseModel/DeliveryPart/FetchAllDeliveryName.dart';
+import '../../data/responseModel/TownshipsPart/TownshipByCityIdResponse.dart';
 import '../../dataRequestModel/DeliveryPart/AddDeliveryCompanyInfoRequestModel.dart';
 
 class AddDeliveryWidget extends StatefulWidget {

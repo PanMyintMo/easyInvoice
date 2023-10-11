@@ -6,9 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../common/FormValidator.dart';
 import '../../common/ThemeHelperUserClass.dart';
-import '../../data/responsemodel/CityPart/Cities.dart';
-import '../../data/responsemodel/DeliveryPart/FetchAllDeliveryName.dart';
-import '../../data/responsemodel/TownshipsPart/TownshipByCityIdResponse.dart';
+import '../../data/responseModel/CityPart/Cities.dart';
+import '../../data/responseModel/DeliveryPart/FetchAllDeliveryName.dart';
+import '../../data/responseModel/TownshipsPart/TownshipByCityIdResponse.dart';
 
 class UpdateDeliveryWidget extends StatefulWidget {
   final bool isLoading;

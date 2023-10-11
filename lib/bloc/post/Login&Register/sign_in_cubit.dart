@@ -1,6 +1,6 @@
-import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import '../../../data/responsemodel/Login&RegisterResponse/LoginResponse.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../data/responseModel/GeneralMainResponse/LoginResponse.dart';
 import '../../../data/userRepository/UserRepository.dart';
 import '../../../dataRequestModel/Login&Register/LoginRequestModel.dart';
 

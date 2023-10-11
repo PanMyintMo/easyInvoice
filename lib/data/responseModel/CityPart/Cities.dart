@@ -1,9 +1,8 @@
-import '../CityPart/Cities.dart';
-import '../ShopKeeperResponsePart/ShopKeeperRequestResponse.dart';
+import '../PageLink.dart';
 
-class AllFaultyItemsResponse  {
+class CityResponse {
   final int currentPage;
-  final List<FaultyItemData> data;
+  final List<City> data;
   final String firstPageUrl;
   final int? from;
   final int lastPage;
@@ -18,7 +17,7 @@ class AllFaultyItemsResponse  {
   final int? status;
   final String? message;
 
-  AllFaultyItemsResponse ({
+  CityResponse ({
     required this.currentPage,
     required this.data,
     required this.firstPageUrl,
@@ -36,11 +35,11 @@ class AllFaultyItemsResponse  {
     required this.message,
   });
 
-  factory AllFaultyItemsResponse .fromJson(Map<String, dynamic> json) {
-    return AllFaultyItemsResponse (
+  factory CityResponse.fromJson(Map<String, dynamic> json) {
+    return CityResponse (
       currentPage: json['data']['current_page'],
       data: (json['data']['data'] as List<dynamic>?)
-          ?.map((item) => FaultyItemData.fromJson(item))
+          ?.map((item) => City.fromJson(item))
           .toList() ?? [],
       firstPageUrl: json['data']['first_page_url'],
       from: json['data']['from'],
@@ -61,39 +60,48 @@ class AllFaultyItemsResponse  {
   }
 }
 
+// class PageLink {
+//   final String? url;
+//   final String label;
+//   final bool active;
+//
+//   PageLink({
+//     this.url,
+//     required this.label,
+//     required this.active,
+//   });
+//
+//   factory PageLink.fromJson(Map<String, dynamic> json) {
+//     return PageLink(
+//       url: json['url'],
+//       label: json['label'],
+//       active: json['active'],
+//     );
+//   }
+// }
 
-
-class FaultyItemData  {
+class City {
   final int id;
-  final int quantity;
-  final int product_id;
-  final String created_at;
-  final String updated_at;
-  final String product_name;
-  final Product productListData;
+  final int countryId;
+  final String name;
+  final String createdAt;
+  final String? updatedAt;
 
-
-  FaultyItemData({
+  City({
     required this.id,
-    required this.quantity,
-    required this.created_at,
-    required this.updated_at,
-    required this.product_id,
-    required this.product_name,
-    required this.productListData
+    required this.countryId,
+    required this.name,
+    required this.createdAt,
+    this.updatedAt,
   });
 
-  factory FaultyItemData.fromJson(Map<String, dynamic> json) {
-    return FaultyItemData(
-        id: json['id'],
-        quantity: json['quantity'],
-        product_id: json['product_id'],
-        created_at: json['created_at'],
-        updated_at: json['updated_at'],
-        product_name: json['product_name'],
-      productListData: Product.fromJson(json['product'])
+  factory City.fromJson(Map<String, dynamic> json) {
+    return City(
+      id: json['id'],
+      countryId: json['country_id'],
+      name: json['name'],
+      createdAt: json['created_at'],
+      updatedAt: json['updated_at'],
     );
   }
 }
-
-

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../data/responsemodel/WarehousePart/WarehouseResponse.dart';
+import '../../data/responseModel/WarehousePart/WarehouseResponse.dart';
 class WarehouseTableWidget extends StatelessWidget {
   final bool isLoading;
   final List<WarehouseData> warehouseData;

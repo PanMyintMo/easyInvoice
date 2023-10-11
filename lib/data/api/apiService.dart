@@ -1,12 +1,63 @@
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
-import 'package:easy_invoice/data/responsemodel/AddSizeResponse.dart';
-import 'package:easy_invoice/data/responsemodel/EditProductResponse.dart';
-import 'package:easy_invoice/data/responsemodel/GetAllPagnitaionDataResponse.dart';
-import 'package:easy_invoice/data/responsemodel/GetAllProductResponse.dart';
-import 'package:easy_invoice/data/responsemodel/common/UpdateResponse.dart';
-import 'package:easy_invoice/data/responsemodel/UserResponse.dart';
+import 'package:easy_invoice/data/responseModel/AddCategoryResponseModel.dart';
+import 'package:easy_invoice/data/responseModel/AddSizeResponse.dart';
+import 'package:easy_invoice/data/responseModel/CityPart/AddCityResponse.dart';
+import 'package:easy_invoice/data/responseModel/CityPart/AddStreetResponse.dart';
+import 'package:easy_invoice/data/responseModel/CityPart/AddWardResponse.dart';
+import 'package:easy_invoice/data/responseModel/CityPart/Cities.dart';
+import 'package:easy_invoice/data/responseModel/CityPart/EditCityResponse.dart';
+import 'package:easy_invoice/data/responseModel/CityPart/EditWardResponse.dart';
+import 'package:easy_invoice/data/responseModel/CityPart/FetchCityByCountryId.dart';
+import 'package:easy_invoice/data/responseModel/CityPart/Street.dart';
+import 'package:easy_invoice/data/responseModel/CityPart/StreetByWardIdResponse.dart';
+import 'package:easy_invoice/data/responseModel/CityPart/WardByTownshipResponse.dart';
+import 'package:easy_invoice/data/responseModel/CityPart/Wards.dart';
+import 'package:easy_invoice/data/responseModel/CountryPart/CountryResponse.dart';
+import 'package:easy_invoice/data/responseModel/CountryPart/EditCountryResponse.dart';
+import 'package:easy_invoice/data/responseModel/CountryPart/RequestCountryResponse.dart';
+import 'package:easy_invoice/data/responseModel/DeliveryPart/AddDeliveryResponse.dart';
+import 'package:easy_invoice/data/responseModel/DeliveryPart/AddOrderResponse.dart';
+import 'package:easy_invoice/data/responseModel/DeliveryPart/ChangeOrderQtyResponse.dart';
+import 'package:easy_invoice/data/responseModel/DeliveryPart/ChooseProductOrderResponse.dart';
+import 'package:easy_invoice/data/responseModel/DeliveryPart/DeliCompanyNameByTownshipId.dart';
+import 'package:easy_invoice/data/responseModel/DeliveryPart/DeliveryCompanyInfoResponse.dart';
+import 'package:easy_invoice/data/responseModel/DeliveryPart/DeliveryManResponse.dart';
+import 'package:easy_invoice/data/responseModel/DeliveryPart/FetchAllDeliveries.dart';
+import 'package:easy_invoice/data/responseModel/DeliveryPart/FetchAllDeliveryName.dart';
+import 'package:easy_invoice/data/responseModel/DeliveryPart/FetchAllOrderByDate.dart';
+import 'package:easy_invoice/data/responseModel/DeliveryPart/OrderDetailResponse.dart';
+import 'package:easy_invoice/data/responseModel/DeliveryPart/ProductInvoiceResponse.dart';
+import 'package:easy_invoice/data/responseModel/DeliveryPart/UpdateQuantityBarcodeResponse.dart';
+import 'package:easy_invoice/data/responseModel/EditProductResponse.dart';
+import 'package:easy_invoice/data/responseModel/EditUserRoleResponse.dart';
+import 'package:easy_invoice/data/responseModel/FaultyItemPart/AddFaultyItemResponse.dart';
+import 'package:easy_invoice/data/responseModel/FaultyItemPart/AllFaultyItems.dart';
+import 'package:easy_invoice/data/responseModel/GeneralMainResponse/CompanyProfileResponse.dart';
+import 'package:easy_invoice/data/responseModel/GeneralMainResponse/EditCompanyProfileResponse.dart';
+import 'package:easy_invoice/data/responseModel/GeneralMainResponse/LoginResponse.dart';
+import 'package:easy_invoice/data/responseModel/GeneralMainResponse/RegisterResponse.dart';
+import 'package:easy_invoice/data/responseModel/GetAllPaganizationDataResponse.dart';
+import 'package:easy_invoice/data/responseModel/GetAllProductResponse.dart';
+import 'package:easy_invoice/data/responseModel/MainPagePart/MainPageResponse.dart';
+import 'package:easy_invoice/data/responseModel/ProductResponse.dart';
+import 'package:easy_invoice/data/responseModel/ShopKeeperResponsePart/DeliveredWarehouseRequest.dart';
+import 'package:easy_invoice/data/responseModel/ShopKeeperResponsePart/EditShopKeeperResponse.dart';
+import 'package:easy_invoice/data/responseModel/ShopKeeperResponsePart/ShopKeeperRequestResponse.dart';
+import 'package:easy_invoice/data/responseModel/ShopKeeperResponsePart/ShopKeeperResponse.dart';
+import 'package:easy_invoice/data/responseModel/ShopKeeperResponsePart/ShopProductListResponse.dart';
+import 'package:easy_invoice/data/responseModel/TownshipsPart/AddTownshipResponse.dart';
+import 'package:easy_invoice/data/responseModel/TownshipsPart/AllTownshipResponse.dart';
+import 'package:easy_invoice/data/responseModel/TownshipsPart/EditTownshipResponse.dart';
+import 'package:easy_invoice/data/responseModel/TownshipsPart/TownshipByCityIdResponse.dart';
+import 'package:easy_invoice/data/responseModel/UserResponse.dart';
+import 'package:easy_invoice/data/responseModel/UserRoleResponse.dart';
+import 'package:easy_invoice/data/responseModel/WarehousePart/WarehouseResponse.dart';
+import 'package:easy_invoice/data/responseModel/common/DeleteResponse.dart';
+import 'package:easy_invoice/data/responseModel/common/ProductListItemResponse.dart';
+import 'package:easy_invoice/data/responseModel/common/UpdateResponse.dart';
+import 'package:easy_invoice/data/responseModel/common/WardResponse.dart';
 import 'package:easy_invoice/dataRequestModel/EditProductRequestModel.dart';
 import 'package:easy_invoice/dataRequestModel/UserRequestModel.dart';
 import 'package:easy_invoice/network/interceptor.dart';
@@ -41,59 +92,10 @@ import '../../dataRequestModel/ShopKeeperPart/EditRequestModel.dart';
 import '../../dataRequestModel/ShopKeeperPart/ShopKeeperRequestModel.dart';
 import '../../dataRequestModel/TownshipPart/AddTownship.dart';
 import '../../dataRequestModel/TownshipPart/EditTownship.dart';
-import '../../widget/ProviceInvoicePart/InvoiceResponse/Invoice.dart';
-import '../responsemodel/AddCategoryResponseModel.dart';
-import '../responsemodel/CityPart/AddCityResponse.dart';
-import '../responsemodel/CityPart/AddStreetResponse.dart';
-import '../responsemodel/CityPart/AddWardResponse.dart';
-import '../responsemodel/CityPart/Cities.dart';
-import '../responsemodel/CityPart/EditWardResponse.dart';
-import '../responsemodel/CityPart/Street.dart';
-import '../responsemodel/CityPart/StreetByWardIdResponse.dart';
-import '../responsemodel/CityPart/WardByTownshipResponse.dart';
-import '../responsemodel/CityPart/Wards.dart';
-import '../responsemodel/DeliveryPart/DeliveryCompanyInfoResponse.dart';
-import '../responsemodel/DeliveryPart/FetchAllDeliveries.dart';
-import '../responsemodel/DeliveryPart/FetchAllOrderByDate.dart';
-import '../responsemodel/DeliveryPart/OrderDetailResponse.dart';
-import '../responsemodel/DeliveryPart/UpdateQuantityBarcodeResponse.dart';
-import '../responsemodel/ShopKeeperResponsePart/DeliveredWarehouseRequest.dart';
-import '../responsemodel/common/DeleteResponse.dart';
-import '../responsemodel/CityPart/EditCityResponse.dart';
-import '../responsemodel/CityPart/FetchCityByCountryId.dart';
-import '../responsemodel/CountryPart/CountryResponse.dart';
-import '../responsemodel/CountryPart/EditCountryResponse.dart';
-import '../responsemodel/CountryPart/RequestCountryResponse.dart';
-import '../responsemodel/DeliveryPart/AddDeliveryResponse.dart';
-import '../responsemodel/DeliveryPart/AddOrderResponse.dart';
-import '../responsemodel/DeliveryPart/ChangeOrderQtyResponse.dart';
-import '../responsemodel/DeliveryPart/ChooseProductOrderResponse.dart';
-import '../responsemodel/DeliveryPart/DeliCompanyNameByTownshipId.dart';
-import '../responsemodel/DeliveryPart/DeliveryManResponse.dart';
-import '../responsemodel/DeliveryPart/FetchAllDeliveryName.dart';
-import '../responsemodel/DeliveryPart/ProductInvoiceResponse.dart';
-import '../responsemodel/EditUserRoleResponse.dart';
-import '../responsemodel/FaultyItemPart/AddFaultyItemResponse.dart';
-import '../responsemodel/FaultyItemPart/AllFaultyItems.dart';
-import '../responsemodel/Login&RegisterResponse/EditCompanyProfileResponse.dart';
-import '../responsemodel/Login&RegisterResponse/LoginResponse.dart';
-import '../responsemodel/Login&RegisterResponse/CompanyProfileResponse.dart';
-import '../responsemodel/MainPagePart/MainPageResponse.dart';
-import '../responsemodel/ProductByCategoryIdResponse.dart';
-import '../responsemodel/ProductResponse.dart';
-import '../responsemodel/Login&RegisterResponse/RegisterResponse.dart';
-import '../responsemodel/ShopKeeperResponsePart/EditShopKeeperResponse.dart';
-import '../responsemodel/ShopKeeperResponsePart/ShopKeeperRequestResponse.dart';
-import '../responsemodel/ShopKeeperResponsePart/ShopKeeperResponse.dart';
-import '../responsemodel/ShopKeeperResponsePart/ShopProductListResponse.dart';
-import '../responsemodel/TownshipsPart/AddTownshipResponse.dart';
-import '../responsemodel/TownshipsPart/AllTownshipResponse.dart';
-import '../responsemodel/TownshipsPart/EditTownshipResponse.dart';
-import '../responsemodel/TownshipsPart/TownshipByCityIdResponse.dart';
-import '../responsemodel/UserRoleResponse.dart';
-import '../responsemodel/WarehousePart/WarehouseResponse.dart';
-import '../responsemodel/common/ProductListItemResponse.dart';
-import '../responsemodel/common/WardResponse.dart';
+import '../../widget/ProductInvoicePart/InvoiceResponse/Invoice.dart';
+import '../responseModel/ProductByCategoryIdResponse.dart';
+
+
 
 class ApiService {
   final Dio _dio = Dio();
@@ -695,10 +697,10 @@ class ApiService {
 
   //fetch all category
 
-  Future<PaginationDataResponse> getAllCategories() async {
+  Future<PaganizationResponse> getAllCategories() async {
     try {
       int currentPage = 1;
-      List<PaginationItem> categoryData = [];
+      List<PaganizationItem> categoryData = [];
       String? nextPageUrl;
 
       while (true) {
@@ -708,7 +710,7 @@ class ApiService {
         if (response.statusCode == 200) {
           final dynamic responseData = response.data;
 
-          final cateResponse = PaginationDataResponse.fromJson(responseData);
+          final cateResponse = PaganizationResponse.fromJson(responseData);
           final cateData = cateResponse.data;
 
           categoryData.addAll(cateData);
@@ -725,7 +727,7 @@ class ApiService {
         }
       }
 
-      return PaginationDataResponse(
+      return PaganizationResponse(
         currentPage: currentPage,
         data: categoryData,
         firstPageUrl: 'https://mmeasyinvoice.com/api/categories?page=1',
@@ -1186,7 +1188,7 @@ class ApiService {
         'https://mmeasyinvoice.com/api/orderdetails/$id',
       );
 
-      print("Order detail response are : $response");
+      //print("Order detail response are : $response");
       if (response.statusCode == 200) {
         final OrderDetailResponse orderApiResponse =
             OrderDetailResponse.fromJson(response.data);
@@ -1614,10 +1616,10 @@ class ApiService {
   }
 
   //fetch all sizes from db
-  Future<PaginationDataResponse> getAllSizes() async {
+  Future<PaganizationResponse> getAllSizes() async {
     try {
       int currentPage = 1;
-      List<PaginationItem> sizeData = [];
+      List<PaganizationItem> sizeData = [];
       String? nextPageUrl;
 
       while (true) {
@@ -1627,7 +1629,7 @@ class ApiService {
         if (response.statusCode == 200) {
           final dynamic responseData = response.data;
 
-          final sizeResponse = PaginationDataResponse.fromJson(responseData);
+          final sizeResponse = PaganizationResponse.fromJson(responseData);
           final sizeItemData = sizeResponse.data;
 
           sizeData.addAll(sizeItemData);
@@ -1644,7 +1646,7 @@ class ApiService {
         }
       }
 
-      return PaginationDataResponse(
+      return PaganizationResponse(
         currentPage: currentPage,
         data: sizeData,
         firstPageUrl: 'https://mmeasyinvoice.com/api/sizes?page=1',

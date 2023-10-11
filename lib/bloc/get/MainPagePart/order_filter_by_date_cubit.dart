@@ -1,7 +1,7 @@
-import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../data/responsemodel/MainPagePart/MainPageResponse.dart';
+import '../../../data/responseModel/MainPagePart/MainPageResponse.dart';
 import '../../../data/userRepository/UserRepository.dart';
 
 part 'order_filter_by_date_state.dart';
@@ -13,7 +13,7 @@ class OrderFilterByDateCubit extends Cubit<OrderFilterByDateState> {
   Future<void> fetchDataForDifferentFilterTypes(String filterType) async {
     emit(OrderFilterByDateLoading());
     try {
-      final OrderApiResponse? responses = await _userRepository.fetchDataForDifferentFilterTypes(filterType);
+      final responses = await _userRepository.fetchDataForDifferentFilterTypes(filterType);
 
       // Use the filterType parameter to get the appropriate response
       OrderApiResponse selectedResponse = responses!;

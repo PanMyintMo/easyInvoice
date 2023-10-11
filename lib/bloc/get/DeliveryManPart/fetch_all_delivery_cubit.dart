@@ -1,7 +1,7 @@
-import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../data/responsemodel/DeliveryPart/FetchAllDeliveries.dart';
+import '../../../data/responseModel/DeliveryPart/FetchAllDeliveries.dart';
 import '../../../data/userRepository/UserRepository.dart';
 
 part 'fetch_all_delivery_state.dart';
@@ -16,7 +16,7 @@ class FetchAllDeliveryCubit extends Cubit<FetchAllDeliveryState> {
     emit(FetchAllDeliveryLoading());
 
     try {
-      final List<DeliveriesItem>? response = await _userRepository.fetchAllDelivery();
+      final  response = await _userRepository.fetchAllDelivery();
       emit(FetchAllDeliverySuccess(response!));
     } catch (error) {
       emit(FetchAllDeliveryFail(error.toString()));

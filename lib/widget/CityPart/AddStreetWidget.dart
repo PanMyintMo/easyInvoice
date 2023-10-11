@@ -7,11 +7,11 @@ import '../../common/ApiHelper.dart';
 import '../../common/FormValidator.dart';
 import '../../common/ThemeHelperUserClass.dart';
 import '../../data/api/apiService.dart';
-import '../../data/responsemodel/CityPart/FetchCityByCountryId.dart';
+import '../../data/responseModel/CityPart/FetchCityByCountryId.dart';
 
-import '../../data/responsemodel/CountryPart/CountryResponse.dart';
-import '../../data/responsemodel/TownshipsPart/TownshipByCityIdResponse.dart';
-import '../../data/responsemodel/common/WardResponse.dart';
+import '../../data/responseModel/CountryPart/CountryResponse.dart';
+import '../../data/responseModel/TownshipsPart/TownshipByCityIdResponse.dart';
+import '../../data/responseModel/common/WardResponse.dart';
 
 class AddStreetWidget extends StatefulWidget {
   final bool isLoading;

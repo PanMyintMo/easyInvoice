@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:easy_invoice/bloc/post/DeliveryPart/fetch_order_by_date_cubit.dart';
 import 'package:easy_invoice/dataRequestModel/DeliveryPart/OrderByDateRequestModel.dart';
 import '../../bloc/delete/CountryPart/delete_country_cubit.dart';
-import '../../data/responsemodel/MainPagePart/MainPageResponse.dart';
+import '../../data/responseModel/MainPagePart/MainPageResponse.dart';
 import '../../module/module.dart';
 import 'EditOrderScreen.dart';
 
@@ -99,60 +99,29 @@ class _FetchOrderByDateContentState extends State<FetchOrderByDateContent> {
     ),
   ];
 
-  Future<void> _selectStartDate(BuildContext context) async {
-    final DateTime now = DateTime.now();
-    DateTime picked = (await showDatePicker(
-      context: context,
-      initialDate: _startDate ?? now,
-      firstDate: DateTime(2000),
-      lastDate: now,
-    )) ?? (_startDate ?? now);
-
-    // Ensure that the picked date is not after today
-    if (picked.isAfter(now)) {
-      picked = now;
+  Future pickDateRange(DateTimeRange? newDateRange) async {
+    if (newDateRange != null) {
+      setState(() {
+        _startDate = newDateRange.start;
+        _endDate = newDateRange.end;
+        final formattedStartDate = DateFormat('yyyy/MM/d').format(_startDate!);
+        final formattedEndDate = DateFormat('yyyy/MM/d').format(_endDate!);
+        startDateController.text = formattedStartDate;
+        endDateController.text = formattedEndDate;
+      });
     }
-
-    setState(() {
-      _startDate = picked;
-      final formattedDate = DateFormat('yyyy/MM/d').format(picked);
-      startDateController.text = formattedDate;
-    });
   }
-
-  Future<void> _selectEndDate(BuildContext context) async {
-    final DateTime now = DateTime.now();
-    DateTime picked = (await showDatePicker(
-      context: context,
-      initialDate: _endDate ?? now,
-      firstDate: DateTime(2000),
-      lastDate: now,
-    )) ?? (_endDate ?? now);
-
-    // Ensure that the picked date is not after today
-    if (picked.isAfter(now)) {
-      picked = now;
-    }
-
-    setState(() {
-      _endDate = picked;
-      final formattedDate = DateFormat('yyyy/MM/d').format(picked);
-      endDateController.text = formattedDate;
-    });
-  }
-
 
   bool isDateValid() {
     if (_startDate != null && _endDate != null) {
-      return _startDate!.isBefore(_endDate!);
+      return _startDate!.isBefore(_endDate!) || _startDate == _endDate;
     }
     return false; // Return false if both dates are not selected
   }
 
-
   @override
   Widget build(BuildContext context) {
-   String? selectedAction;
+    String? selectedAction;
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -181,14 +150,19 @@ class _FetchOrderByDateContentState extends State<FetchOrderByDateContent> {
                         ),
                         readOnly: true,
                         onTap: () async {
-                          _selectStartDate(context);
+                          final pickedDateRange = await showDateRangePicker(
+                            context: context,
+                            firstDate: DateTime(2000),
+                            lastDate: DateTime.now(),
+                          );
+                          pickDateRange(pickedDateRange);
                         },
                       ),
                     ],
                   ),
                 ),
                 const SizedBox(
-                  width: 10,
+                  width: 5,
                 ),
                 Expanded(
                   child: Column(
@@ -207,7 +181,12 @@ class _FetchOrderByDateContentState extends State<FetchOrderByDateContent> {
                         ),
                         readOnly: true,
                         onTap: () async {
-                          _selectEndDate(context);
+                          final pickedDateRange = await showDateRangePicker(
+                            context: context,
+                            firstDate: DateTime(2000),
+                            lastDate: DateTime.now(),
+                          );
+                          pickDateRange(pickedDateRange);
                         },
                       ),
                     ],
@@ -232,15 +211,14 @@ class _FetchOrderByDateContentState extends State<FetchOrderByDateContent> {
                       // Show an error message here, for example, using a Snackbar
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
-                          content: Text(
-                              'End date should be after the start date.'),
+                          content:
+                              Text('End date should be after the start date.'),
                         ),
                       );
                     }
                   },
-
                   child: const Center(
-                    child:  Text(
+                    child: Text(
                       'Search',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
@@ -250,7 +228,6 @@ class _FetchOrderByDateContentState extends State<FetchOrderByDateContent> {
                     ),
                   ),
                 )
-
               ],
             ),
           ),
@@ -275,77 +252,74 @@ class _FetchOrderByDateContentState extends State<FetchOrderByDateContent> {
                         child: DataTable(
                           border: TableBorder.all(width: 0.2),
                           headingRowColor: MaterialStateColor.resolveWith(
-                                  (states) => Colors.teal),
+                              (states) => Colors.teal),
                           columns: defaultColumns,
                           rows: state.fetchOrderByDate.map((orderItem) {
                             return DataRow(cells: [
                               DataCell(Text(orderItem.order_id.toString())),
                               DataCell(Text(orderItem.firstname.toString())),
                               DataCell(Text(orderItem.mobile.toString())),
-                              DataCell(
-                                  Text(orderItem.company_name.toString())),
+                              DataCell(Text(orderItem.company_name.toString())),
                               DataCell(Text(orderItem.status.toString())),
-                              DataCell(
-                                  DropdownButton<String>(
-                                    hint: const Text("Select"),
-                                    value: selectedAction,
-                                    onChanged: (newAction) {
-                                      setState(() {
-                                        selectedAction = newAction;
-                                      });
-                                      if (newAction == 'View Order') {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => OrderDetailScreen(order_id: orderItem.order_id),
-                                          ),
-                                        );
-                                      } else if (newAction == 'Edit Order') {
-                                         Navigator.push(
-                                        context,
-                                          MaterialPageRoute(
-                                             builder: (context) => EditOrderScreen(order_id: orderItem.order_id), // Replace with your edit screen
-                                         ),
-                                        );
-                                      } else if (newAction == 'Delete Order') {
-
-                                      }
-                                    },
-                                    items: const [
-                                      DropdownMenuItem(
-                                        value: 'View Order',
-                                        child: Row(
-                                          children: [
-                                            Icon(Icons.eco_sharp),
-                                            SizedBox(width: 8),
-                                            Text('View Order'),
-                                          ],
-                                        ),
+                              DataCell(DropdownButton<String>(
+                                hint: const Text("Select"),
+                                value: selectedAction,
+                                onChanged: (newAction) {
+                                  setState(() {
+                                    selectedAction = newAction;
+                                  });
+                                  if (newAction == 'View Order') {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => OrderDetailScreen(
+                                            order_id: orderItem.order_id),
                                       ),
-                                      DropdownMenuItem(
-                                        value: 'Edit Order',
-                                        child: Row(
-                                          children: [
-                                            Icon(Icons.edit),
-                                            SizedBox(width: 8),
-                                            Text('Edit Order'),
-                                          ],
-                                        ),
+                                    );
+                                  } else if (newAction == 'Edit Order') {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => EditOrderScreen(
+                                            order_id: orderItem
+                                                .order_id), // Replace with your edit screen
                                       ),
-                                      DropdownMenuItem(
-                                        value: 'Delete Order',
-                                        child: Row(
-                                          children: [
-                                            Icon(Icons.delete),
-                                            SizedBox(width: 8),
-                                            Text('Delete Order'),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  )
-                              )
-
+                                    );
+                                  } else if (newAction == 'Delete Order') {}
+                                },
+                                items: const [
+                                  DropdownMenuItem(
+                                    value: 'View Order',
+                                    child: Row(
+                                      children: [
+                                        Icon(Icons.eco_sharp),
+                                        SizedBox(width: 8),
+                                        Text('View Order'),
+                                      ],
+                                    ),
+                                  ),
+                                  DropdownMenuItem(
+                                    value: 'Edit Order',
+                                    child: Row(
+                                      children: [
+                                        Icon(Icons.edit),
+                                        SizedBox(width: 8),
+                                        Text('Edit Order'),
+                                      ],
+                                    ),
+                                  ),
+                                  DropdownMenuItem(
+                                    value: 'Delete Order',
+                                    child: Row(
+                                      children: [
+                                        Icon(Icons.delete),
+                                        SizedBox(width: 8),
+                                        Text('Delete Order'),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ))
                             ]);
                           }).toList(),
                         ),

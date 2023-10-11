@@ -56,8 +56,8 @@ class ThemeHelperUserRole {
         ),
       ),
       minimumSize: MaterialStateProperty.all(Size(50, 50)),
-      backgroundColor: MaterialStateProperty.all(Colors.blue.shade300),
-      shadowColor: MaterialStateProperty.all(Colors.blue),
+      backgroundColor: MaterialStateProperty.all(Colors.blue),
+      shadowColor: MaterialStateProperty.all(Colors.blue.shade900),
     );
   }
 }

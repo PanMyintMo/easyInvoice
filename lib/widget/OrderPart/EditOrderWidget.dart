@@ -1,19 +1,19 @@
 import 'package:easy_invoice/common/ApiHelper.dart';
 import 'package:easy_invoice/data/api/apiService.dart';
-import 'package:easy_invoice/data/responsemodel/CityPart/WardByTownshipResponse.dart';
-import 'package:easy_invoice/data/responsemodel/TownshipsPart/TownshipByCityIdResponse.dart';
-import 'package:easy_invoice/data/responsemodel/common/ProductListItemResponse.dart';
 import 'package:easy_invoice/dataRequestModel/DeliveryPart/EditOrderDetailRequestModel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../bloc/edit/CityPart/edit_order_detail_cubit.dart';
 import '../../common/FormValidator.dart';
 import '../../common/ThemeHelperUserClass.dart';
-import '../../data/responsemodel/CityPart/FetchCityByCountryId.dart';
-import '../../data/responsemodel/CityPart/Street.dart';
-import '../../data/responsemodel/CountryPart/CountryResponse.dart';
-import '../../data/responsemodel/DeliveryPart/DeliCompanyNameByTownshipId.dart';
-import '../../data/responsemodel/MainPagePart/MainPageResponse.dart';
+import '../../data/responseModel/CityPart/FetchCityByCountryId.dart';
+import '../../data/responseModel/CityPart/Street.dart';
+import '../../data/responseModel/CityPart/WardByTownshipResponse.dart';
+import '../../data/responseModel/CountryPart/CountryResponse.dart';
+import '../../data/responseModel/DeliveryPart/DeliCompanyNameByTownshipId.dart';
+import '../../data/responseModel/MainPagePart/MainPageResponse.dart';
+import '../../data/responseModel/TownshipsPart/TownshipByCityIdResponse.dart';
+import '../../data/responseModel/common/ProductListItemResponse.dart';
 import '../../dataRequestModel/DeliveryPart/ChangeOrderProductQty.dart';
 import '../../network/SharedPreferenceHelper.dart';
 
@@ -104,7 +104,7 @@ class _EditOrderWidgetState extends State<EditOrderWidget> {
 
     quantity = TextEditingController(
         text: widget.orderDetailResponse.quantity.toString());
-    totalQty =  widget.orderDetailResponse.total;
+    totalQty = widget.orderDetailResponse.total;
     block_no = TextEditingController(text: widget.orderDetailResponse.block_no);
     floor = TextEditingController(text: widget.orderDetailResponse.floor);
   }
@@ -123,7 +123,7 @@ class _EditOrderWidgetState extends State<EditOrderWidget> {
     products = response!;
     if (response.isNotEmpty) {
       final matchingProduct = products.firstWhere(
-          (product) => product.id == widget.orderDetailResponse.product_id);
+              (product) => product.id == widget.orderDetailResponse.product_id);
 
       selectedProductId = matchingProduct.id.toString();
     }
@@ -146,7 +146,7 @@ class _EditOrderWidgetState extends State<EditOrderWidget> {
 
     if (cities.isNotEmpty) {
       final matchingCity = cities.firstWhere(
-        (city) => city.id == widget.orderDetailResponse.city_id,
+            (city) => city.id == widget.orderDetailResponse.city_id,
       );
       selectedCityId = matchingCity.id.toString();
     }
@@ -162,7 +162,7 @@ class _EditOrderWidgetState extends State<EditOrderWidget> {
 
     if (townships.isNotEmpty) {
       final matchingTownship = townships.firstWhere(
-        (township) => township.id == widget.orderDetailResponse.township_id,
+            (township) => township.id == widget.orderDetailResponse.township_id,
       );
       selectedTownshipId = matchingTownship.id.toString();
     }
@@ -178,14 +178,13 @@ class _EditOrderWidgetState extends State<EditOrderWidget> {
     companyData = response;
     if (response.isNotEmpty) {
       final matchingDeliveryCompany = response.firstWhere(
-          (company) => company.id == widget.orderDetailResponse.company_id);
+              (company) => company.id == widget.orderDetailResponse.company_id);
 
       selectDeliveryCompanyId = matchingDeliveryCompany.id.toString();
       setState(() {
         selectDeliveryCompanyId = selectDeliveryCompanyId;
       });
     }
-
   }
 
   void fetchWardByTownshipId(int id) async {
@@ -195,7 +194,7 @@ class _EditOrderWidgetState extends State<EditOrderWidget> {
     setState(() {
       if (response.isNotEmpty) {
         final matchingWard = wards.firstWhere(
-            (ward) => ward.id == widget.orderDetailResponse.ward_id);
+                (ward) => ward.id == widget.orderDetailResponse.ward_id);
 
         selectWardId = matchingWard.id.toString();
         selectWardId = selectWardId;
@@ -210,13 +209,12 @@ class _EditOrderWidgetState extends State<EditOrderWidget> {
 
     if (streets.isNotEmpty) {
       final matchingStreet = streets.firstWhere(
-          (street) => street.id == widget.orderDetailResponse.street_id);
+              (street) => street.id == widget.orderDetailResponse.street_id);
       selectStreetId = matchingStreet.id.toString();
       setState(() {
         selectStreetId = selectStreetId;
       });
     }
-
   }
 
   @override
@@ -236,20 +234,30 @@ class _EditOrderWidgetState extends State<EditOrderWidget> {
                 children: [
                   const Text(
                     'Billing Address',
-                    style: TextStyle(fontSize: 18, color: Colors.pink),
+                    style: TextStyle(fontSize: 18, color: Colors.blue),
                   ),
                   const SizedBox(height: 16.0),
-                  buildProductContainerForm(
-                      widget.orderDetailResponse.firstname.toString(),
-                      TextInputType.name,
-                      firstname,
-                      validateField),
-                  const SizedBox(height: 16.0),
-                  buildProductContainerForm(
-                    "Last name",
-                    TextInputType.name,
-                    lastname,
-                    validateField,
+                  Row(
+                    children: [
+                      Expanded(
+                        flex :1,
+                        child: buildProductContainerForm(
+                            widget.orderDetailResponse.firstname.toString(),
+                            TextInputType.name,
+                            firstname,
+                            validateField),
+                      ),
+                      const SizedBox(width: 5.0),
+                      Expanded(
+                        flex: 1,
+                        child: buildProductContainerForm(
+                          "Last name",
+                          TextInputType.name,
+                          lastname,
+                          validateField,
+                        ),
+                      ),
+                    ],
                   ),
                   const SizedBox(height: 16.0),
                   SizedBox(
@@ -262,6 +270,35 @@ class _EditOrderWidgetState extends State<EditOrderWidget> {
                     ),
                   ),
                   const SizedBox(height: 16.0),
+
+                  Row(
+                    children: [
+                      Expanded(
+                        flex: 1,
+                        child: buildProductContainerForm(
+                          "Line",
+                          TextInputType.phone,
+                          line1,
+                          validateField,
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 5,
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: buildProductContainerForm(
+                          "Line",
+                          TextInputType.phone,
+                          line2,
+                          validateField,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
                   SizedBox(
                     width: double.infinity,
                     child: buildProductContainerForm(
@@ -274,27 +311,11 @@ class _EditOrderWidgetState extends State<EditOrderWidget> {
                   const SizedBox(
                     height: 16,
                   ),
-                  buildProductContainerForm(
-                    "Line",
-                    TextInputType.phone,
-                    line1,
-                    validateField,
-                  ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  buildProductContainerForm(
-                    "Line",
-                    TextInputType.phone,
-                    line2,
-                    validateField,
-                  ),
-                  const SizedBox(
-                    height: 16,
-                  ),
+
+
                   const Text(
                     "Country",
-                    style: TextStyle(fontSize: 18, color: Colors.pink),
+                    style: TextStyle(fontSize: 18, color: Colors.blue),
                   ),
                   const SizedBox(
                     height: 16,
@@ -323,7 +344,7 @@ class _EditOrderWidgetState extends State<EditOrderWidget> {
                     height: 16,
                   ),
                   const Text("City",
-                      style: TextStyle(fontSize: 18, color: Colors.pink)),
+                      style: TextStyle(fontSize: 18, color: Colors.blue)),
                   const SizedBox(
                     height: 16,
                   ),
@@ -352,7 +373,7 @@ class _EditOrderWidgetState extends State<EditOrderWidget> {
                     height: 16,
                   ),
                   const Text("Township",
-                      style: TextStyle(fontSize: 18, color: Colors.pink)),
+                      style: TextStyle(fontSize: 18, color: Colors.blue)),
                   const SizedBox(
                     height: 16,
                   ),
@@ -472,7 +493,7 @@ class _EditOrderWidgetState extends State<EditOrderWidget> {
                   ),
                   const Text(
                     'Choose Delivery service :',
-                    style: TextStyle(color: Colors.pink, fontSize: 18),
+                    style: TextStyle(color: Colors.blue, fontSize: 18),
                   ),
                   const SizedBox(
                     height: 16,
@@ -485,7 +506,7 @@ class _EditOrderWidgetState extends State<EditOrderWidget> {
                       var id = companyData[index].company_id;
                       return RadioListTile(
                         dense: true,
-                        activeColor: Colors.pink,
+                        activeColor: Colors.blue,
                         title: Text(
                           "Service : $companyName",
                           style: const TextStyle(color: Colors.black),
@@ -503,7 +524,7 @@ class _EditOrderWidgetState extends State<EditOrderWidget> {
                               cname = companyName;
                             } else {
                               isVisible =
-                                  false; // Hide the details if no service is selected
+                              false; // Hide the details if no service is selected
                             }
                           });
                         },
@@ -562,7 +583,7 @@ class _EditOrderWidgetState extends State<EditOrderWidget> {
                     height: 16,
                   ),
                   const Text("Product Name",
-                      style: TextStyle(fontSize: 18, color: Colors.pink)),
+                      style: TextStyle(fontSize: 18, color: Colors.blue)),
                   const SizedBox(
                     height: 16,
                   ),
@@ -612,7 +633,7 @@ class _EditOrderWidgetState extends State<EditOrderWidget> {
                     decoration: BoxDecoration(
                       border: Border.all(color: Colors.black54, width: 0.3),
                       borderRadius:
-                          const BorderRadius.all(Radius.circular(10.0)),
+                      const BorderRadius.all(Radius.circular(10.0)),
                     ),
                     child: Text("$available_quantity"),
                   ),
@@ -630,6 +651,7 @@ class _EditOrderWidgetState extends State<EditOrderWidget> {
                     height: 16,
                   ),
                   SizedBox(
+                    width: double.infinity,
                     child: TextFormField(
                       textAlign: TextAlign.center,
                       controller: quantity,
@@ -641,7 +663,7 @@ class _EditOrderWidgetState extends State<EditOrderWidget> {
                             setState(() {
                               totalQty = 0;
                               errorText =
-                                  'Quality can not be greater than available quantity!';
+                              'Quality can not be greater than available quantity!';
                             });
                           } else {
                             final response = await ApiService()
@@ -660,7 +682,6 @@ class _EditOrderWidgetState extends State<EditOrderWidget> {
                         }
 
                         else {
-
                           final response = await ApiService()
                               .changeOrderQty(
                               ChangeOrderProductQtyRequest(
@@ -675,8 +696,6 @@ class _EditOrderWidgetState extends State<EditOrderWidget> {
                             errorText = null;
                           });
                         }
-
-
                       },
                       keyboardType: TextInputType.number,
                       validator: validateField,
@@ -686,7 +705,7 @@ class _EditOrderWidgetState extends State<EditOrderWidget> {
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderSide:
-                              const BorderSide(color: Colors.blue, width: 1.0),
+                          const BorderSide(color: Colors.blue, width: 1.0),
                           borderRadius: BorderRadius.circular(10.0),
                         ),
                         fillColor: Colors.grey,
@@ -708,7 +727,7 @@ class _EditOrderWidgetState extends State<EditOrderWidget> {
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 10),
                     alignment: Alignment.center,
-                    width: 200,
+                    width: double.infinity,
                     height: 50,
                     decoration: BoxDecoration(
                       border:
@@ -731,7 +750,7 @@ class _EditOrderWidgetState extends State<EditOrderWidget> {
                         child: RadioListTile(
                           title: const Text('Cash'),
                           activeColor: transactionId == "cod"
-                              ? Colors.pink
+                              ? Colors.blue
                               : Colors.black,
                           value: "cod",
                           dense: true,
@@ -749,7 +768,7 @@ class _EditOrderWidgetState extends State<EditOrderWidget> {
                           value: "kpay",
                           dense: true,
                           activeColor: transactionId == "kpay"
-                              ? Colors.pink
+                              ? Colors.blue
                               : Colors.black,
                           groupValue: transactionId,
                           onChanged: (value) {
@@ -765,7 +784,7 @@ class _EditOrderWidgetState extends State<EditOrderWidget> {
                           value: "wavepay",
                           dense: true,
                           activeColor: transactionId == "wavepay"
-                              ? Colors.pink
+                              ? Colors.blue
                               : Colors.black,
                           groupValue: transactionId,
                           onChanged: (value) {
@@ -780,34 +799,37 @@ class _EditOrderWidgetState extends State<EditOrderWidget> {
                   const SizedBox(height: 18),
                   Center(
                       child: ElevatedButton(
-                    onPressed: () {
-                      context.read<EditOrderDetailCubit>().updateOrderDetail(
-                          widget.orderDetailResponse.order_id,
-                          EditOrderDetailRequestModel(
-                              firstname: firstname.text.toString(),
-                              lastname: lastname.text.toString(),
-                              email: email.text.toString(),
-                              line1: line1.text.toString(),
-                              line2: line2.text.toString(),
-                              selectedCountry: selectedCountryId.toString(),
-                              selectedCity: selectedCityId.toString(),
-                              selectedTownship: selectedTownshipId.toString(),
-                              selectedStreet: selectStreetId.toString(),
-                              selectedWard: selectWardId.toString(),
-                              quantity: quantity.text.toString(),
-                              block_no: block_no.text.toString(),
-                              product_id: selectedProductId.toString(),
-                              zipcode: zipcode.text.toString(),
-                              mobile: mobile.text.toString(),
-                              user_sign: '',
-                              floor: floor.text.toString(),
-                              price: sale_price.text.toString(),
-                              user_id: userId.toString(),
-                              delivery: selectDeliveryCompanyId.toString(),
-                              mode: transactionId.toString()));
-                    },
-                    child: const Text("Update Order"),
-                  ))
+                        style: ThemeHelperUserRole().buttonStyle(),
+                        onPressed: () {
+                          context.read<EditOrderDetailCubit>()
+                              .updateOrderDetail(
+                              widget.orderDetailResponse.order_id,
+                              EditOrderDetailRequestModel(
+                                  firstname: firstname.text.toString(),
+                                  lastname: lastname.text.toString(),
+                                  email: email.text.toString(),
+                                  line1: line1.text.toString(),
+                                  line2: line2.text.toString(),
+                                  selectedCountry: selectedCountryId.toString(),
+                                  selectedCity: selectedCityId.toString(),
+                                  selectedTownship: selectedTownshipId
+                                      .toString(),
+                                  selectedStreet: selectStreetId.toString(),
+                                  selectedWard: selectWardId.toString(),
+                                  quantity: quantity.text.toString(),
+                                  block_no: block_no.text.toString(),
+                                  product_id: selectedProductId.toString(),
+                                  zipcode: zipcode.text.toString(),
+                                  mobile: mobile.text.toString(),
+                                  user_sign: '',
+                                  floor: floor.text.toString(),
+                                  price: sale_price.text.toString(),
+                                  user_id: userId.toString(),
+                                  delivery: selectDeliveryCompanyId.toString(),
+                                  mode: transactionId.toString()));
+                        },
+                        child: const Text("Update Order"),
+                      ))
                 ],
               ),
             ),

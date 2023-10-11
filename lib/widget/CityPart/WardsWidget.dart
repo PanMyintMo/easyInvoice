@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../bloc/get/CityPart/fetch_all_ward_cubit.dart';
 import '../../common/showDeleteConfirmationDialog.dart';
-import '../../data/responsemodel/common/WardResponse.dart';
+import '../../data/responseModel/common/WardResponse.dart';
 import '../../screen/LocationPart/EditWardScreen.dart';
 
 class WardsWidget extends StatelessWidget {

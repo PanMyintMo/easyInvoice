@@ -1,7 +1,7 @@
-import 'package:bloc/bloc.dart';
-import 'package:easy_invoice/data/responsemodel/EditProductResponse.dart';
 import 'package:easy_invoice/dataRequestModel/EditProductRequestModel.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../data/responseModel/EditProductResponse.dart';
 import '../../data/userRepository/UserRepository.dart';
 part 'edit_product_item_state.dart';
 
@@ -12,8 +12,8 @@ class EditProductItemCubit extends Cubit<EditProductItemState> {
   Future<bool> editProductItem(EditProductRequestModel editProductRequestModel, int id) async {
     emit(EditProductItemLoading());
     try {
-      final respone = await _userRepository.updateProductItem(editProductRequestModel, id);
-      emit(EditProductItemSuccess(respone));
+      final response = await _userRepository.updateProductItem(editProductRequestModel, id);
+      emit(EditProductItemSuccess(response));
       return true;
     }
     catch (error) {

@@ -3,7 +3,7 @@ import 'package:easy_invoice/common/Card.dart';
 import 'package:flutter/material.dart';
 
 import '../../common/ProductCardView.dart';
-import '../../data/responsemodel/DeliveryPart/OrderDetailResponse.dart';
+import '../../data/responseModel/DeliveryPart/OrderDetailResponse.dart';
 
 class OrderDetailWidget extends StatefulWidget {
   final bool isLoading;

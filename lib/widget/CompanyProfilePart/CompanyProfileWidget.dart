@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import '../../network/SharedPreferenceHelper.dart';
-import '../../screen/Login&Register/Login.dart';
+import '../../screen/home/Login.dart';
 import '../../screen/profile_menu.dart';
 import '../../screen/update_company_profile.dart';
 

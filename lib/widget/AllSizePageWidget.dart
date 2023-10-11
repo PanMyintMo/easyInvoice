@@ -5,13 +5,12 @@ import 'package:easy_invoice/screen/UpdateSizeScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-
 import '../common/ToastMessage.dart';
 import '../common/showDeleteConfirmationDialog.dart';
-import '../data/responsemodel/GetAllPagnitaionDataResponse.dart';
+import '../data/responseModel/GetAllPaganizationDataResponse.dart';
 
 class AllSizePageWidget extends StatelessWidget {
-  final List<PaginationItem> sizes;
+  final List<PaganizationItem> sizes;
   final bool isLoading;
 
 

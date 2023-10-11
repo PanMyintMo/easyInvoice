@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../bloc/delete/CityPart/delete_city_cubit.dart';
 import '../../bloc/get/CityPart/fetch_all_city_cubit.dart';
 import '../../common/showDeleteConfirmationDialog.dart';
-import '../../data/responsemodel/CityPart/Cities.dart';
+import '../../data/responseModel/CityPart/Cities.dart';
 import '../../screen/LocationPart/EditCityScreen.dart';
 
 class CitiesWidget extends StatelessWidget {

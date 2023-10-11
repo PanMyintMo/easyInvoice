@@ -1,8 +1,8 @@
 import 'package:bloc/bloc.dart';
-import 'package:easy_invoice/data/responsemodel/TownshipsPart/EditTownshipResponse.dart';
 import 'package:easy_invoice/dataRequestModel/TownshipPart/EditTownship.dart';
 import 'package:equatable/equatable.dart';
 
+import '../../../data/responseModel/TownshipsPart/EditTownshipResponse.dart';
 import '../../../data/userRepository/UserRepository.dart';
 
 part 'edit_township_state.dart';

@@ -1,8 +1,7 @@
-import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../data/responsemodel/CityPart/Wards.dart';
-import '../../../data/responsemodel/common/WardResponse.dart';
+import '../../../data/responseModel/common/WardResponse.dart';
 import '../../../data/userRepository/UserRepository.dart';
 
 part 'fetch_all_ward_state.dart';
@@ -16,7 +15,7 @@ class FetchAllWardCubit extends Cubit<FetchAllWardState> {
     emit(FetchAllWardLoading());
 
     try {
-      final List<Ward>? response = await _userRepository.fetchWard();
+      final response = await _userRepository.fetchWard();
       emit(FetchAllWardSuccess(response!));
     } catch (error) {
       emit(FetchAllWardFail(error.toString()));

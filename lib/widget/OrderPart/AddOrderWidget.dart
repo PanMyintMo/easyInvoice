@@ -1,17 +1,17 @@
 import 'package:easy_invoice/common/ApiHelper.dart';
 import 'package:easy_invoice/data/api/apiService.dart';
-import 'package:easy_invoice/data/responsemodel/CityPart/WardByTownshipResponse.dart';
+import 'package:easy_invoice/data/responseModel/CityPart/WardByTownshipResponse.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../bloc/post/DeliveryPart/add_order_cubit.dart';
 import '../../common/FormValidator.dart';
 import '../../common/ThemeHelperUserClass.dart';
-import '../../data/responsemodel/CityPart/FetchCityByCountryId.dart';
-import '../../data/responsemodel/CityPart/Street.dart';
-import '../../data/responsemodel/CountryPart/CountryResponse.dart';
-import '../../data/responsemodel/DeliveryPart/DeliCompanyNameByTownshipId.dart';
-import '../../data/responsemodel/ShopKeeperResponsePart/ShopProductListResponse.dart';
-import '../../data/responsemodel/TownshipsPart/TownshipByCityIdResponse.dart';
+import '../../data/responseModel/CityPart/FetchCityByCountryId.dart';
+import '../../data/responseModel/CityPart/Street.dart';
+import '../../data/responseModel/CountryPart/CountryResponse.dart';
+import '../../data/responseModel/DeliveryPart/DeliCompanyNameByTownshipId.dart';
+import '../../data/responseModel/ShopKeeperResponsePart/ShopProductListResponse.dart';
+import '../../data/responseModel/TownshipsPart/TownshipByCityIdResponse.dart';
 import '../../dataRequestModel/DeliveryPart/AddOrderRequestModel.dart';
 import '../../dataRequestModel/DeliveryPart/ChangeOrderProductQty.dart';
 import '../../dataRequestModel/DeliveryPart/ChooseProductForOrderRequestModel.dart';
@@ -206,12 +206,12 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
                             style: TextStyle(
                                 fontSize: 16, fontWeight: FontWeight.bold),
                           ))),
-                  const SizedBox(height: 18.0),
+                  const SizedBox(height: 16.0),
                   const Text(
                     'Billing Address',
-                    style: TextStyle(fontSize: 18, color: Colors.pink),
+                    style: TextStyle(fontSize: 16, color: Colors.blue),
                   ),
-                  const SizedBox(height: 18.0),
+                  const SizedBox(height: 16.0),
                   Row(
                     children: [
                       Expanded(
@@ -231,7 +231,7 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 18.0),
+                  const SizedBox(height: 16.0),
                   SizedBox(
                     width: double.infinity,
                     child: buildProductContainerForm(
@@ -241,18 +241,10 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
                       validateField,
                     ),
                   ),
-                  const SizedBox(height: 18.0),
-                  SizedBox(
-                    width: double.infinity,
-                    child: buildProductContainerForm(
-                      'Email',
-                      TextInputType.emailAddress,
-                      email,
-                      validateField,
-                    ),
-                  ),
+
+
                   const SizedBox(
-                    height: 18,
+                    height: 16,
                   ),
                   Row(
                     children: [
@@ -277,14 +269,24 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
                     ],
                   ),
                   const SizedBox(
-                    height: 18,
+                    height: 16,
                   ),
+                  SizedBox(
+                    width: double.infinity,
+                    child: buildProductContainerForm(
+                      'Email',
+                      TextInputType.emailAddress,
+                      email,
+                      validateField,
+                    ),
+                  ),
+                  const SizedBox(height: 16.0),
                   const Text(
                     "Country",
-                    style: TextStyle(fontSize: 18, color: Colors.blue),
+                    style: TextStyle(fontSize: 16, color: Colors.blue),
                   ),
                   const SizedBox(
-                    height: 18,
+                    height: 16,
                   ),
                   SizedBox(
                     width: double.infinity,
@@ -309,12 +311,12 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
                   ),
 
                   const SizedBox(
-                    height: 18,
+                    height: 16,
                   ),
                   const Text("City",
-                      style: TextStyle(fontSize: 18, color: Colors.blue)),
+                      style: TextStyle(fontSize: 16, color: Colors.blue)),
                   const SizedBox(
-                    height: 18,
+                    height: 16,
                   ),
                   SizedBox(
                     width: double.infinity,
@@ -338,12 +340,12 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
                   ),
 
                   const SizedBox(
-                    height: 18,
+                    height: 16,
                   ),
                   const Text("Township",
-                      style: TextStyle(fontSize: 18, color: Colors.blue)),
+                      style: TextStyle(fontSize: 16, color: Colors.blue)),
                   const SizedBox(
-                    height: 18,
+                    height: 16,
                   ),
                   SizedBox(
                     width: double.infinity,
@@ -367,7 +369,7 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
                   ),
 
                   const SizedBox(
-                    height: 18,
+                    height: 16,
                   ),
                   SizedBox(
                     width: double.infinity,
@@ -412,7 +414,7 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
                   ),
 
                   const SizedBox(
-                    height: 18,
+                    height: 16,
                   ),
                   SizedBox(
                     width: double.infinity,
@@ -456,10 +458,10 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
                     children: [
                       const Text(
                         'Choose Delivery service :',
-                        style: TextStyle(color: Colors.blue, fontSize: 18),
+                        style: TextStyle(color: Colors.blue, fontSize: 16),
                       ),
                       const SizedBox(
-                        height: 18,
+                        height: 16,
                       ),
                       if (select_township != null && companyData.isNotEmpty)
                         ListView.builder(
@@ -501,7 +503,7 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
                                   });
                             }),
                       const SizedBox(
-                        height: 18,
+                        height: 16,
                       ),
                       Visibility(
                         visible: isVisible,
@@ -515,7 +517,7 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
                                   fontSize: 16, fontWeight: FontWeight.bold),
                             ),
                             const SizedBox(
-                              height: 18,
+                              height: 16,
                             ),
                             Text(
                               "Basic Cost is : $basicCost",
@@ -548,7 +550,7 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
                     height: 16,
                   ),
                   const Text("Product Name",
-                      style: TextStyle(fontSize: 18, color: Colors.blue)),
+                      style: TextStyle(fontSize: 16, color: Colors.blue)),
                   const SizedBox(
                     height: 16,
                   ),
@@ -635,7 +637,7 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
                     children: [
                       const Text(
                         "Quantity",
-                        style: TextStyle(fontSize: 18, color: Colors.black),
+                        style: TextStyle(fontSize: 16, color: Colors.black),
                       ),
                       const SizedBox(
                         width: 25,
@@ -719,7 +721,7 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
                     children: [
                       const Text(
                         "Total",
-                        style: TextStyle(fontSize: 18, color: Colors.black),
+                        style: TextStyle(fontSize: 16, color: Colors.black),
                       ),
                       const SizedBox(
                         width: 50,
@@ -746,7 +748,7 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
                   ),
                   const Text(
                     'Payment Method',
-                    style: TextStyle(fontSize: 18, color: Colors.black),
+                    style: TextStyle(fontSize: 16, color: Colors.black),
                   ),
                   const SizedBox(
                     height: 16,
@@ -800,6 +802,7 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
                   const SizedBox(height: 16),
                   Center(
                       child: ElevatedButton(
+                          style: ThemeHelperUserRole().buttonStyle(),
                           onPressed: () {
                             if (formKey.currentState!.validate()) {}
                             context.read<AddOrderCubit>().addOrder(
@@ -827,7 +830,7 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
                                     block_no: block_no.text.toString(),
                                     floor: floor.text.toString()));
                           },
-                          child: const Text('Place Order Now')))
+                          child: const Text('Place Order Now',style: TextStyle(fontWeight: FontWeight.bold),)))
                 ],
               ),
             ),

@@ -1,8 +1,8 @@
-import '../CityPart/Cities.dart';
+import 'PageLink.dart';
 
-class CountryResponse{
+class PaganizationResponse {
   final int currentPage;
-  final List<Country> data;
+  final List<PaganizationItem> data;
   final String firstPageUrl;
   final int? from;
   final int lastPage;
@@ -17,7 +17,7 @@ class CountryResponse{
   final int? status;
   final String? message;
 
-  CountryResponse ({
+  PaganizationResponse ({
     required this.currentPage,
     required this.data,
     required this.firstPageUrl,
@@ -35,11 +35,11 @@ class CountryResponse{
     required this.message,
   });
 
-  factory CountryResponse .fromJson(Map<String, dynamic> json) {
-    return CountryResponse (
+  factory PaganizationResponse.fromJson(Map<String, dynamic> json) {
+    return PaganizationResponse (
       currentPage: json['data']['current_page'],
       data: (json['data']['data'] as List<dynamic>?)
-          ?.map((item) => Country.fromJson(item))
+          ?.map((item) => PaganizationItem.fromJson(item))
           .toList() ?? [],
       firstPageUrl: json['data']['first_page_url'],
       from: json['data']['from'],
@@ -61,24 +61,30 @@ class CountryResponse{
 }
 
 
-class Country  {
+
+class PaganizationItem{
   final int id;
   final String name;
-  final String createdAt;
-  final String updatedAt;
+  final String slug;
+  final DateTime created_at;
+  final DateTime updated_at;
 
-  Country({
+  PaganizationItem({
     required this.id,
     required this.name,
-    required this.createdAt,
-    required this.updatedAt,
+    required this.slug,
+    required this.created_at,
+    required this.updated_at,
   });
 
-  factory Country.fromJson(Map<String, dynamic> json) => Country(
-    id: json['id'],
-    name: json['name'],
-    createdAt: json['created_at'],
-    updatedAt: json['updated_at'],
-  );
+  factory PaganizationItem.fromJson(Map<String, dynamic> json) {
+    return PaganizationItem(
+      id: json['id'],
+      name: json['name'],
+      slug: json['slug'],
+      created_at: DateTime.parse(json['created_at']),
+      updated_at: DateTime.parse(json['updated_at']),
+    );
   }
 
+}

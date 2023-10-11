@@ -1,7 +1,7 @@
-import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../data/responsemodel/TownshipsPart/AllTownshipResponse.dart';
+import '../../../data/responseModel/TownshipsPart/AllTownshipResponse.dart';
 import '../../../data/userRepository/UserRepository.dart';
 
 part 'fetch_all_township_state.dart';
@@ -15,7 +15,7 @@ class FetchAllTownshipCubit extends Cubit<FetchAllTownshipState> {
     emit(FetchAllTownshipLoading());
 
     try {
-      final List<Township>? response = await _userRepository.fetchTownships();
+      final response = await _userRepository.fetchTownships();
       emit(FetchAllTownshipSuccess(response!));
     } catch (error) {
       emit(FetchAllTownshipFail(error.toString()));

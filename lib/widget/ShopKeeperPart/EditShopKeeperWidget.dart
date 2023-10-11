@@ -6,8 +6,8 @@ import '../../common/ApiHelper.dart';
 import '../../common/FormValidator.dart';
 import '../../common/ThemeHelperUserClass.dart';
 import '../../data/api/apiService.dart';
-import '../../data/responsemodel/GetAllPagnitaionDataResponse.dart';
-import '../../data/responsemodel/common/ProductListItemResponse.dart';
+import '../../data/responseModel/GetAllPaganizationDataResponse.dart';
+import '../../data/responseModel/common/ProductListItemResponse.dart';
 import '../../dataRequestModel/ShopKeeperPart/EditRequestModel.dart';
 import '../../screen/shopkeeperPart/ShopKeeperAddScreen.dart';
 
@@ -31,7 +31,7 @@ class EditShopKeeperWidget extends StatefulWidget {
 }
 
 class _EditShopKeeperWidgetState extends State<EditShopKeeperWidget> {
-  List<PaginationItem> categories = [];
+  List<PaganizationItem> categories = [];
   List<ProductListItem> products = [];
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();

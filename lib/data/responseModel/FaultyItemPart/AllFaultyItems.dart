@@ -1,9 +1,10 @@
-import 'CityPart/Cities.dart';
-import 'common/ProductListItemResponse.dart';
 
-class GetAllProductResponse  {
+import '../PageLink.dart';
+import '../ShopKeeperResponsePart/ShopKeeperRequestResponse.dart';
+
+class AllFaultyItemsResponse  {
   final int currentPage;
-  final List<ProductListItem> data;
+  final List<FaultyItemData> data;
   final String firstPageUrl;
   final int? from;
   final int lastPage;
@@ -18,7 +19,7 @@ class GetAllProductResponse  {
   final int? status;
   final String? message;
 
-  GetAllProductResponse  ({
+  AllFaultyItemsResponse ({
     required this.currentPage,
     required this.data,
     required this.firstPageUrl,
@@ -36,11 +37,11 @@ class GetAllProductResponse  {
     required this.message,
   });
 
-  factory GetAllProductResponse.fromJson(Map<String, dynamic> json) {
-    return GetAllProductResponse   (
+  factory AllFaultyItemsResponse .fromJson(Map<String, dynamic> json) {
+    return AllFaultyItemsResponse (
       currentPage: json['data']['current_page'],
       data: (json['data']['data'] as List<dynamic>?)
-          ?.map((item) => ProductListItem.fromJson(item))
+          ?.map((item) => FaultyItemData.fromJson(item))
           .toList() ?? [],
       firstPageUrl: json['data']['first_page_url'],
       from: json['data']['from'],
@@ -61,5 +62,39 @@ class GetAllProductResponse  {
   }
 }
 
+
+
+class FaultyItemData  {
+  final int id;
+  final int quantity;
+  final int product_id;
+  final String created_at;
+  final String updated_at;
+  final String product_name;
+  final Product productListData;
+
+
+  FaultyItemData({
+    required this.id,
+    required this.quantity,
+    required this.created_at,
+    required this.updated_at,
+    required this.product_id,
+    required this.product_name,
+    required this.productListData
+  });
+
+  factory FaultyItemData.fromJson(Map<String, dynamic> json) {
+    return FaultyItemData(
+        id: json['id'],
+        quantity: json['quantity'],
+        product_id: json['product_id'],
+        created_at: json['created_at'],
+        updated_at: json['updated_at'],
+        product_name: json['product_name'],
+      productListData: Product.fromJson(json['product'])
+    );
+  }
+}
 
 

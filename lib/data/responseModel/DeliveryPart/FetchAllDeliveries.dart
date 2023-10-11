@@ -1,4 +1,5 @@
-import '../CityPart/Cities.dart';
+
+import '../PageLink.dart';
 
 class FetchAllDelivery {
   final int current_page;

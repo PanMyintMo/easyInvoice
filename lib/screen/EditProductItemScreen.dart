@@ -5,7 +5,7 @@ import '../bloc/edit/edit_product_item_cubit.dart';
 import '../common/ThemeHelperUserClass.dart';
 import '../common/ToastMessage.dart';
 import '../data/api/apiService.dart';
-import '../data/responsemodel/GetAllPagnitaionDataResponse.dart';
+import '../data/responseModel/GetAllPaganizationDataResponse.dart';
 
 class EditProductItemScreen extends StatefulWidget {
   final int id;
@@ -58,8 +58,8 @@ class _EditProductItemScreenState extends State<EditProductItemScreen> {
   late TextEditingController category_id;
   late TextEditingController size_id;
 
-  List<PaginationItem> categories = [];
-  List<PaginationItem> sizes = [];
+  List<PaganizationItem> categories = [];
+  List<PaganizationItem> sizes = [];
   bool isLoading = false;
    late Widget networkImage;
 
@@ -230,7 +230,7 @@ class _EditProductItemScreenState extends State<EditProductItemScreen> {
                         ],
                       ),
                       const SizedBox(height: 10),
-                      Row(
+                      const Row(
                         children: [
                           // chooseItemIdForm(
                           //
@@ -260,7 +260,7 @@ class _EditProductItemScreenState extends State<EditProductItemScreen> {
                           //     ),
                           //   ),
                           // ),
-                          const SizedBox(
+                          SizedBox(
                             width: 10,
                           ),
                           // chooseItemIdForm(

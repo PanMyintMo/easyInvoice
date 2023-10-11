@@ -6,7 +6,7 @@ import '../bloc/get/ProductPart/get_all_product_cubit.dart';
 import '../bloc/delete/delete_product_item_cubit.dart';
 import '../common/ToastMessage.dart';
 import '../common/showDeleteConfirmationDialog.dart';
-import '../data/responsemodel/common/ProductListItemResponse.dart';
+import '../data/responseModel/common/ProductListItemResponse.dart';
 import '../module/module.dart';
 import '../widget/ProductDetailWidget.dart';
 import 'EditProductItemScreen.dart';

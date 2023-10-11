@@ -1,8 +1,9 @@
-import 'CityPart/Cities.dart';
 
-class PaginationDataResponse {
+import '../PageLink.dart';
+
+class TownshipResponse{
   final int currentPage;
-  final List<PaginationItem> data;
+  final List<Township> data;
   final String firstPageUrl;
   final int? from;
   final int lastPage;
@@ -17,7 +18,7 @@ class PaginationDataResponse {
   final int? status;
   final String? message;
 
-  PaginationDataResponse ({
+  TownshipResponse ({
     required this.currentPage,
     required this.data,
     required this.firstPageUrl,
@@ -35,11 +36,11 @@ class PaginationDataResponse {
     required this.message,
   });
 
-  factory PaginationDataResponse.fromJson(Map<String, dynamic> json) {
-    return PaginationDataResponse  (
+  factory TownshipResponse  .fromJson(Map<String, dynamic> json) {
+    return TownshipResponse  (
       currentPage: json['data']['current_page'],
       data: (json['data']['data'] as List<dynamic>?)
-          ?.map((item) => PaginationItem.fromJson(item))
+          ?.map((item) => Township.fromJson(item))
           .toList() ?? [],
       firstPageUrl: json['data']['first_page_url'],
       from: json['data']['from'],
@@ -62,28 +63,29 @@ class PaginationDataResponse {
 
 
 
-class PaginationItem{
-  final int id;
-  final String name;
-  final String slug;
-  final DateTime created_at;
-  final DateTime updated_at;
+class Township {
 
-  PaginationItem({
+  Township({
     required this.id,
+    required this.cityId,
     required this.name,
-    required this.slug,
-    required this.created_at,
-    required this.updated_at,
+    required this.createdAt,
+    required this.updatedAt,
   });
 
-  factory PaginationItem.fromJson(Map<String, dynamic> json) {
-    return PaginationItem(
+  final int id;
+  final int cityId;
+  final String name;
+  final String createdAt;
+  final String updatedAt;
+
+  factory Township.fromJson(Map<String, dynamic> json) {
+    return Township(
       id: json['id'],
+      cityId: json['city_id'],
       name: json['name'],
-      slug: json['slug'],
-      created_at: DateTime.parse(json['created_at']),
-      updated_at: DateTime.parse(json['updated_at']),
+      createdAt: json['created_at'],
+      updatedAt: json['updated_at'],
     );
   }
 

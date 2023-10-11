@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "587442551809",
+    "project_id": "easyinvoice-3052d",
+    "storage_bucket": "easyinvoice-3052d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:587442551809:android:ce5a8e41258f05c39d9400",
+        "android_client_info": {
+          "package_name": "com.example.easy_invoice"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "587442551809-sv7pb3p7ans4gufd2v0l7p0igg7s7b2g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDzrpBMbtQzAWsnR1Lnu7a6zVQYqZaNNSI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "587442551809-sv7pb3p7ans4gufd2v0l7p0igg7s7b2g.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

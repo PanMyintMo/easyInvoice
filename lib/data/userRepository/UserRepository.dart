@@ -1,9 +1,12 @@
 import 'package:easy_invoice/data/api/apiService.dart';
-import 'package:easy_invoice/data/responsemodel/AddSizeResponse.dart';
-import 'package:easy_invoice/data/responsemodel/CountryPart/CountryResponse.dart';
-import 'package:easy_invoice/data/responsemodel/EditProductResponse.dart';
-import 'package:easy_invoice/data/responsemodel/Login&RegisterResponse/RegisterResponse.dart';
-import 'package:easy_invoice/data/responsemodel/UserResponse.dart';
+import 'package:easy_invoice/data/responseModel/AddSizeResponse.dart';
+import 'package:easy_invoice/data/responseModel/CityPart/AddStreetResponse.dart';
+import 'package:easy_invoice/data/responseModel/CityPart/Street.dart';
+import 'package:easy_invoice/data/responseModel/CountryPart/CountryResponse.dart';
+import 'package:easy_invoice/data/responseModel/EditProductResponse.dart';
+import 'package:easy_invoice/data/responseModel/GetAllPaganizationDataResponse.dart';
+import 'package:easy_invoice/data/responseModel/UserResponse.dart';
+import 'package:easy_invoice/dataRequestModel/CityPart/AddStreetRequestModel.dart';
 import 'package:easy_invoice/dataRequestModel/EditProductRequestModel.dart';
 import 'package:easy_invoice/dataRequestModel/EditUserRoleRequestModel.dart';
 import 'package:easy_invoice/dataRequestModel/FaultyItemPart/AddFaultyItemRequest.dart';
@@ -12,7 +15,6 @@ import '../../dataRequestModel/AddCategoryRequestModel.dart';
 import '../../dataRequestModel/AddProductRequestModel.dart';
 import '../../dataRequestModel/AddSizeRequestModel.dart';
 import '../../dataRequestModel/CityPart/AddCity.dart';
-import '../../dataRequestModel/CityPart/AddStreetRequestModel.dart';
 import '../../dataRequestModel/CityPart/AddWardRequestModel.dart';
 import '../../dataRequestModel/CityPart/EditCity.dart';
 import '../../dataRequestModel/CountryPart/AddCountry.dart';
@@ -34,47 +36,46 @@ import '../../dataRequestModel/ShopKeeperPart/EditRequestModel.dart';
 import '../../dataRequestModel/ShopKeeperPart/ShopKeeperRequestModel.dart';
 import '../../dataRequestModel/TownshipPart/AddTownship.dart';
 import '../../dataRequestModel/TownshipPart/EditTownship.dart';
-import '../../widget/ProviceInvoicePart/InvoiceResponse/Invoice.dart';
-import '../responsemodel/AddCategoryResponseModel.dart';
-import '../responsemodel/CityPart/AddCityResponse.dart';
-import '../responsemodel/CityPart/AddStreetResponse.dart';
-import '../responsemodel/CityPart/AddWardResponse.dart';
-import '../responsemodel/CityPart/Cities.dart';
-import '../responsemodel/CityPart/EditWardResponse.dart';
-import '../responsemodel/CityPart/Street.dart';
-import '../responsemodel/DeliveryPart/DeliveryCompanyInfoResponse.dart';
-import '../responsemodel/DeliveryPart/FetchAllDeliveries.dart';
-import '../responsemodel/DeliveryPart/OrderDetailResponse.dart';
-import '../responsemodel/ShopKeeperResponsePart/DeliveredWarehouseRequest.dart';
-import '../responsemodel/common/DeleteResponse.dart';
-import '../responsemodel/CityPart/EditCityResponse.dart';
-import '../responsemodel/CountryPart/EditCountryResponse.dart';
-import '../responsemodel/CountryPart/RequestCountryResponse.dart';
-import '../responsemodel/DeliveryPart/AddDeliveryResponse.dart';
-import '../responsemodel/DeliveryPart/AddOrderResponse.dart';
-import '../responsemodel/DeliveryPart/DeliveryManResponse.dart';
-import '../responsemodel/DeliveryPart/ProductInvoiceResponse.dart';
-import '../responsemodel/EditUserRoleResponse.dart';
-import '../responsemodel/FaultyItemPart/AddFaultyItemResponse.dart';
-import '../responsemodel/FaultyItemPart/AllFaultyItems.dart';
-import '../responsemodel/GetAllPagnitaionDataResponse.dart';
-import '../responsemodel/Login&RegisterResponse/EditCompanyProfileResponse.dart';
-import '../responsemodel/Login&RegisterResponse/LoginResponse.dart';
-import '../responsemodel/Login&RegisterResponse/CompanyProfileResponse.dart';
-import '../responsemodel/MainPagePart/MainPageResponse.dart';
-import '../responsemodel/ProductResponse.dart';
-import '../responsemodel/ShopKeeperResponsePart/EditShopKeeperResponse.dart';
-import '../responsemodel/ShopKeeperResponsePart/ShopKeeperRequestResponse.dart';
-import '../responsemodel/ShopKeeperResponsePart/ShopKeeperResponse.dart';
-import '../responsemodel/ShopKeeperResponsePart/ShopProductListResponse.dart';
-import '../responsemodel/TownshipsPart/AddTownshipResponse.dart';
-import '../responsemodel/TownshipsPart/AllTownshipResponse.dart';
-import '../responsemodel/TownshipsPart/EditTownshipResponse.dart';
-import '../responsemodel/common/UpdateResponse.dart';
-import '../responsemodel/UserRoleResponse.dart';
-import '../responsemodel/WarehousePart/WarehouseResponse.dart';
-import '../responsemodel/common/ProductListItemResponse.dart';
-import '../responsemodel/common/WardResponse.dart';
+import '../../widget/ProductInvoicePart/InvoiceResponse/Invoice.dart';
+import '../responseModel/AddCategoryResponseModel.dart';
+import '../responseModel/CityPart/AddCityResponse.dart';
+import '../responseModel/CityPart/AddWardResponse.dart';
+import '../responseModel/CityPart/Cities.dart';
+import '../responseModel/CityPart/EditCityResponse.dart';
+import '../responseModel/CityPart/EditWardResponse.dart';
+import '../responseModel/CountryPart/EditCountryResponse.dart';
+import '../responseModel/CountryPart/RequestCountryResponse.dart';
+import '../responseModel/DeliveryPart/AddDeliveryResponse.dart';
+import '../responseModel/DeliveryPart/AddOrderResponse.dart';
+import '../responseModel/DeliveryPart/DeliveryCompanyInfoResponse.dart';
+import '../responseModel/DeliveryPart/DeliveryManResponse.dart';
+import '../responseModel/DeliveryPart/FetchAllDeliveries.dart';
+import '../responseModel/DeliveryPart/OrderDetailResponse.dart';
+import '../responseModel/DeliveryPart/ProductInvoiceResponse.dart';
+import '../responseModel/EditUserRoleResponse.dart';
+import '../responseModel/FaultyItemPart/AddFaultyItemResponse.dart';
+import '../responseModel/FaultyItemPart/AllFaultyItems.dart';
+import '../responseModel/GeneralMainResponse/CompanyProfileResponse.dart';
+import '../responseModel/GeneralMainResponse/EditCompanyProfileResponse.dart';
+import '../responseModel/GeneralMainResponse/LoginResponse.dart';
+import '../responseModel/GeneralMainResponse/RegisterResponse.dart';
+import '../responseModel/MainPagePart/MainPageResponse.dart';
+import '../responseModel/ProductResponse.dart';
+import '../responseModel/ShopKeeperResponsePart/DeliveredWarehouseRequest.dart';
+import '../responseModel/ShopKeeperResponsePart/EditShopKeeperResponse.dart';
+import '../responseModel/ShopKeeperResponsePart/ShopKeeperRequestResponse.dart';
+import '../responseModel/ShopKeeperResponsePart/ShopKeeperResponse.dart';
+import '../responseModel/ShopKeeperResponsePart/ShopProductListResponse.dart';
+import '../responseModel/TownshipsPart/AddTownshipResponse.dart';
+import '../responseModel/TownshipsPart/AllTownshipResponse.dart';
+import '../responseModel/TownshipsPart/EditTownshipResponse.dart';
+import '../responseModel/UserRoleResponse.dart';
+import '../responseModel/WarehousePart/WarehouseResponse.dart';
+import '../responseModel/common/DeleteResponse.dart';
+import '../responseModel/common/ProductListItemResponse.dart';
+import '../responseModel/common/UpdateResponse.dart';
+import '../responseModel/common/WardResponse.dart';
+
 
 class UserRepository {
   final ApiService _apiService;
@@ -379,7 +380,7 @@ class UserRepository {
   }
 
   //fetch all categories from db
-  Future<List<PaginationItem>?> getCategory() async {
+  Future<List<PaganizationItem>?> getCategory() async {
     try {
       final response = await _apiService.getAllCategories();
       return response.data;
@@ -418,7 +419,6 @@ class UserRepository {
       throw Exception('Failed to fetch faulty items: $error');
     }
   }
-
 
   //fetch all shop product list from db
   Future<List<ShopProductItem>> fetchAllShopProductList() async {
@@ -462,7 +462,7 @@ class UserRepository {
   }
 
   //fetch street from db
-  Future<List<Street>?> fetchStreet() async {
+  Future<List<Street>> fetchStreet() async {
     try {
       final response = await _apiService.streets();
       return response.data;
@@ -502,7 +502,7 @@ class UserRepository {
   }
 
   //fetch all sizes
-  Future<List<PaginationItem>?> getSizes() async {
+  Future<List<PaganizationItem>?> getSizes() async {
     try {
       final response = await _apiService.getAllSizes();
       return response.data;
@@ -788,16 +788,6 @@ class UserRepository {
   }
 
 
-  // fetch ward by township id
-
-  // Future<List<Ward>> fetchWardByTownship(int id) async {
-  //   try {
-  //     final response = await _apiService.fetchWardByTownship(id);
-  //     return response;
-  //   } catch (error) {
-  //     rethrow;
-  //   }
-  // }
 
   // add ward
   Future<AddWardResponse> addWard(AddWardRequestModel addWardRequestModel) async {

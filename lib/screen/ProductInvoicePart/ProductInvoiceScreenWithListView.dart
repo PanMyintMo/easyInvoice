@@ -1,15 +1,13 @@
-import 'package:easy_invoice/data/api/apiService.dart';
 import 'package:easy_invoice/screen/ProductInvoicePart/ProductInvoiceScreenWithItem.dart';
-import 'package:easy_invoice/widget/ProviceInvoicePart/PdfPage.dart';
+import 'package:easy_invoice/widget/ProductInvoicePart/PdfPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:simple_barcode_scanner/enum.dart';
 import 'package:simple_barcode_scanner/simple_barcode_scanner.dart';
 import '../../common/FormValidator.dart';
-import '../../data/responsemodel/DeliveryPart/ProductInvoiceResponse.dart';
+import '../../data/responseModel/DeliveryPart/ProductInvoiceResponse.dart';
 import '../../dataRequestModel/DeliveryPart/ProductInvoiceRequest.dart';
 import '../../bloc/post/product_invoice_cubit.dart';
-import '../../dataRequestModel/DeliveryPart/UpdateQuantityInBarcodeRequest.dart'; // Make sure to import the product_invoice_cubit
 
 class ProductInvoiceScreenWithListView extends StatefulWidget {
   final bool isLoading;

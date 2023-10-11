@@ -7,11 +7,11 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import '../common/ToastMessage.dart';
 import '../common/showDeleteConfirmationDialog.dart';
-import '../data/responsemodel/GetAllPagnitaionDataResponse.dart';
+import '../data/responseModel/GetAllPaganizationDataResponse.dart';
 import '../screen/UpdateCategoryScreen.dart';
 
 class AllCategoryPageWidget extends StatefulWidget {
-  final List<PaginationItem> categories;
+  final List<PaganizationItem> categories;
   final bool isLoading;
 
 
@@ -23,11 +23,13 @@ class AllCategoryPageWidget extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _AllCategoryPageWidgetState createState() => _AllCategoryPageWidgetState();
+
+  State<AllCategoryPageWidget> createState() => _AllCategoryPageWidgetState();
+
 }
 
 class _AllCategoryPageWidgetState extends State<AllCategoryPageWidget> {
-  List<PaginationItem> displayCategories = [];
+  List<PaganizationItem> displayCategories = [];
   int currentPage = 1;
 
   @override
@@ -121,9 +123,9 @@ class _AllCategoryPageWidgetState extends State<AllCategoryPageWidget> {
                                     showToastMessage('Failed to update category: $result');
                                   }
                                 },
-                                child: const Icon(
+                                child:  Icon(
                                   Icons.edit,
-                                  color: Colors.green,
+                                  color: Colors.green.shade900,
                                 ),
                               ),
                             ),

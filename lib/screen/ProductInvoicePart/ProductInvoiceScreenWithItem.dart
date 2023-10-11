@@ -1,5 +1,5 @@
 import 'package:easy_invoice/data/api/apiService.dart';
-import 'package:easy_invoice/data/responsemodel/DeliveryPart/ProductInvoiceResponse.dart';
+import 'package:easy_invoice/data/responseModel/DeliveryPart/ProductInvoiceResponse.dart';
 import 'package:easy_invoice/dataRequestModel/DeliveryPart/UpdateQuantityInBarcodeRequest.dart';
 import 'package:flutter/material.dart';
 

@@ -15,7 +15,7 @@ class GetCategoryDetailLoading extends GetCategoryDetailState{
 }
 
 class GetCategoryDetailSuccess extends GetCategoryDetailState{
-  final List<PaginationItem> getAllCategoryDetail;
+  final List<PaganizationItem> getAllCategoryDetail;
   const GetCategoryDetailSuccess(this.getAllCategoryDetail);
   @override
 

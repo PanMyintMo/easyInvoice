@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../bloc/post/TownshipPart/add_township_cubit.dart';
 import '../../common/ApiHelper.dart';
 import '../../common/ThemeHelperUserClass.dart';
-import '../../data/responsemodel/CityPart/Cities.dart';
-import '../../data/responsemodel/CountryPart/CountryResponse.dart';
+import '../../data/responseModel/CityPart/Cities.dart';
+import '../../data/responseModel/CountryPart/CountryResponse.dart';
 import '../../dataRequestModel/TownshipPart/AddTownship.dart';
 class AddNewTownshipWidget extends StatefulWidget {
   

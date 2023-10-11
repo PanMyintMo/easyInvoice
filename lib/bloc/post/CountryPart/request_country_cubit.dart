@@ -1,7 +1,7 @@
-import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../data/responsemodel/CountryPart/CountryResponse.dart';
+import '../../../data/responseModel/CountryPart/CountryResponse.dart';
 import '../../../data/userRepository/UserRepository.dart';
 
 part 'request_country_state.dart';
@@ -14,7 +14,7 @@ class RequestCountryCubit extends Cubit<RequestCountryState> {
   Future<void> country() async {
     emit(RequestCountryLoading());
     try {
-      final List<Country>? response = await _userRepository.fetchCountry();
+      final response = await _userRepository.fetchCountry();
       emit(RequestCountrySuccess(response!));
     } catch (error) {
       emit(RequestCountryFail(error.toString()));

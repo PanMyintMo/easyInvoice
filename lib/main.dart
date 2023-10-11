@@ -3,12 +3,11 @@ import 'package:easy_invoice/screen/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
-
-import '../bloc/post/Login&Register/sign_up_cubit.dart';
-import '../module/module.dart';
-import 'Login&Register/Login.dart';
-import 'Login&Register/Register.dart';
-import 'mainscreen.dart';
+import 'bloc/post/Login&Register/sign_up_cubit.dart';
+import 'module/module.dart';
+import 'screen/home/Login.dart';
+import 'screen/home/Register.dart';
+import 'screen/mainScreen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();

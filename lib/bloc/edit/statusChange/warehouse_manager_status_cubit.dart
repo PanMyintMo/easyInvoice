@@ -1,7 +1,7 @@
-import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../data/responsemodel/common/DeleteResponse.dart';
+import '../../../data/responseModel/common/DeleteResponse.dart';
 import '../../../data/userRepository/UserRepository.dart';
 
 part 'warehouse_manager_status_state.dart';

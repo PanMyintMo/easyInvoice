@@ -1,8 +1,8 @@
-import 'package:easy_invoice/widget/ProviceInvoicePart/InvoiceScreen.dart';
 import 'package:flutter/material.dart';
 import 'ButtonWidget.dart';
 
 
+import 'InvoiceScreen.dart';
 import 'TitleWidget.dart';
 
 class PdfPage extends StatefulWidget {

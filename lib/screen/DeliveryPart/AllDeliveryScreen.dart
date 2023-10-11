@@ -1,8 +1,7 @@
 import 'package:easy_invoice/bloc/delete/DeliveryPart/delete_delivery_cubit.dart';
-import 'package:easy_invoice/bloc/get/DeliveryManPart/fetch_all_delivery_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
+import '../../bloc/get/DeliveryManPart/fetch_all_delivery_cubit.dart';
 import '../../common/ToastMessage.dart';
 import '../../module/module.dart';
 import '../../widget/DeliveryPart/FetchAllDeliveryWidget.dart';
@@ -109,7 +108,7 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
 
                     return FetchAllDeliveryWidget(
                       isLoading: loading,
-                      deliveriesItem: state.deliveryItemData,
+                      deliveriesItem:state.deliveryItemData,
                     );
                   },
                   listener: (context, deleteState) {

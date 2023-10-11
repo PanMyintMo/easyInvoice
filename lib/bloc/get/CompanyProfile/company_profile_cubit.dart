@@ -1,7 +1,7 @@
-import 'package:bloc/bloc.dart';
-import 'package:easy_invoice/data/responsemodel/Login&RegisterResponse/CompanyProfileResponse.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../data/responseModel/GeneralMainResponse/CompanyProfileResponse.dart';
 import '../../../data/userRepository/UserRepository.dart';
 
 part 'company_profile_state.dart';

@@ -1,8 +1,8 @@
-import 'package:bloc/bloc.dart';
-import 'package:easy_invoice/data/responsemodel/CountryPart/RequestCountryResponse.dart';
 import 'package:easy_invoice/dataRequestModel/CountryPart/AddCountry.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../data/responseModel/CountryPart/RequestCountryResponse.dart';
 import '../../../data/userRepository/UserRepository.dart';
 
 part 'add_request_country_state.dart';
@@ -15,7 +15,7 @@ class AddRequestCountryCubit extends Cubit<AddRequestCountryState> {
   Future<void> addCountry(AddCountry addCountry) async {
     emit(AddRequestCountryLoading());
     try {
-      final RequestCountryResponse response = await _userRepository.addCountry(addCountry);
+      final response = await _userRepository.addCountry(addCountry);
       emit(AddRequestCountrySuccess(response));
     } catch (error) {
       emit(AddRequestCountryFail(error.toString()));

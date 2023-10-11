@@ -1,7 +1,7 @@
-import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../data/responsemodel/ShopKeeperResponsePart/DeliveredWarehouseRequest.dart';
+import '../../../data/responseModel/ShopKeeperResponsePart/DeliveredWarehouseRequest.dart';
 import '../../../data/userRepository/UserRepository.dart';
 
 part 'deliver_warehouse_request_state.dart';
@@ -16,7 +16,7 @@ class DeliverWarehouseRequestCubit extends Cubit<DeliverWarehouseRequestState> {
     emit(DeliverWarehouseRequestLoading());
 
     try {
-      final List<DeliveryWarehouseItem> response = await _userRepository.deliverWarehouseRequest();
+      final response = await _userRepository.deliverWarehouseRequest();
       emit(DeliverWarehouseRequestSuccess(response));
     } catch (error) {
       emit(DeliverWarehouseRequestFail(error.toString()));

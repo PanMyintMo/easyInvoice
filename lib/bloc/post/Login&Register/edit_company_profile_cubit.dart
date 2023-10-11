@@ -1,8 +1,8 @@
-import 'package:bloc/bloc.dart';
 import 'package:easy_invoice/dataRequestModel/Login&Register/EditCompanyProfileRequestModel.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../data/responsemodel/Login&RegisterResponse/EditCompanyProfileResponse.dart';
+import '../../../data/responseModel/GeneralMainResponse/EditCompanyProfileResponse.dart';
 import '../../../data/userRepository/UserRepository.dart';
 
 part 'edit_company_profile_state.dart';

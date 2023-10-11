@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 
-import '../../data/responsemodel/DeliveryPart/DeliveryManResponse.dart';
+import '../../data/responseModel/DeliveryPart/DeliveryManResponse.dart';
+
 
 class DeliveryManWidget extends StatefulWidget {
   final List<DeliveryItemData> delivery;

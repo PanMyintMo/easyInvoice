@@ -6,7 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../common/ApiHelper.dart';
 import '../../common/showDeleteConfirmationDialog.dart';
-import '../../data/responsemodel/CountryPart/CountryResponse.dart';
+import '../../data/responseModel/CountryPart/CountryResponse.dart';
 
 class CountryWidget extends StatefulWidget {
   final bool isLoading;

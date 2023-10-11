@@ -3,8 +3,9 @@ import 'package:easy_invoice/network/SharedPreferenceHelper.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
-import 'Login&Register/Login.dart';
-import 'mainscreen.dart';
+
+import 'home/Login.dart';
+import 'mainScreen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);

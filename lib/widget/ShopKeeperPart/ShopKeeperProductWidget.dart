@@ -1,7 +1,7 @@
 import 'package:easy_invoice/screen/shopkeeperPart/RequestShopKeeper.dart';
 import 'package:flutter/material.dart';
 
-import '../../data/responsemodel/ShopKeeperResponsePart/ShopProductListResponse.dart';
+import '../../data/responseModel/ShopKeeperResponsePart/ShopProductListResponse.dart';
 import '../../screen/WarehousePart/WareHouseTableScreen.dart';
 
 class ShopKeeperProductWidget extends StatefulWidget {

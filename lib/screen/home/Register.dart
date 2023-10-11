@@ -10,7 +10,7 @@ import 'package:hexcolor/hexcolor.dart';
 import '../../common/FormValidator.dart';
 import '../../common/theme_helper.dart';
 import '../../network/SharedPreferenceHelper.dart';
-import '../mainscreen.dart';
+import '../mainScreen.dart';
 
 class Register extends StatefulWidget {
   const Register({Key? key}) : super(key: key);
@@ -49,7 +49,7 @@ class _RegisterState extends State<Register> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) =>  MainPageScreen(),
+                  builder: (context) =>  const MainPageScreen(),
                 ),
               );
             });
@@ -295,12 +295,9 @@ class _RegisterFormState extends State<RegisterForm> {
                 ),
               ),
               if (widget.isLoading)
-                Positioned.fill(
-                  child: Container(
-
-                    child:const Center(
-                      child: CircularProgressIndicator(),
-                    ),
+                const Positioned.fill(
+                  child: Center(
+                    child: CircularProgressIndicator(),
                   ),
                 ),
               if (widget.message.isNotEmpty)
