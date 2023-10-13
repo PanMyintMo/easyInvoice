@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../bloc/edit/CityPart/edit_order_detail_cubit.dart';
 import '../../common/FormValidator.dart';
 import '../../common/ThemeHelperUserClass.dart';
+import '../../data/api/ConnectivityService.dart';
 import '../../data/responseModel/CityPart/FetchCityByCountryId.dart';
 import '../../data/responseModel/CityPart/Street.dart';
 import '../../data/responseModel/CityPart/WardByTownshipResponse.dart';
@@ -141,7 +142,7 @@ class _EditOrderWidgetState extends State<EditOrderWidget> {
   }
 
   void fetchCitiesByCountryId(int id) async {
-    final fetchCities = await ApiService().fetchAllCitiesByCountryId(id);
+    final fetchCities = await ApiService(ConnectivityService()).fetchAllCitiesByCountryId(id);
     cities = fetchCities;
 
     if (cities.isNotEmpty) {
@@ -157,7 +158,7 @@ class _EditOrderWidgetState extends State<EditOrderWidget> {
   }
 
   void fetchTownshipByCityId(int id) async {
-    final fetchTownship = await ApiService().fetchAllTownshipByCityId(id);
+    final fetchTownship = await ApiService(ConnectivityService()).fetchAllTownshipByCityId(id);
     townships = fetchTownship;
 
     if (townships.isNotEmpty) {
@@ -174,7 +175,7 @@ class _EditOrderWidgetState extends State<EditOrderWidget> {
   }
 
   void fetchDeliCompanyNameByTownshipId(int id) async {
-    final response = await ApiService().fetchAllCompanyByTownshipId(id);
+    final response = await ApiService(ConnectivityService()).fetchAllCompanyByTownshipId(id);
     companyData = response;
     if (response.isNotEmpty) {
       final matchingDeliveryCompany = response.firstWhere(
@@ -666,7 +667,7 @@ class _EditOrderWidgetState extends State<EditOrderWidget> {
                               'Quality can not be greater than available quantity!';
                             });
                           } else {
-                            final response = await ApiService()
+                            final response = await ApiService(ConnectivityService())
                                 .changeOrderQty(ChangeOrderProductQtyRequest(
                               selectedProductId: selectedProductId.toString(),
                               quantity: val.toString(),
@@ -682,7 +683,7 @@ class _EditOrderWidgetState extends State<EditOrderWidget> {
                         }
 
                         else {
-                          final response = await ApiService()
+                          final response = await ApiService(ConnectivityService())
                               .changeOrderQty(
                               ChangeOrderProductQtyRequest(
                                 selectedProductId: selectedProductId.toString(),

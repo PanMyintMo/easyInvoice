@@ -23,7 +23,7 @@ class _CitiesState extends State<Cities> {
           elevation: 0.0,
           backgroundColor: Colors.white70,
           iconTheme: const IconThemeData(
-            color: Colors.red, // Set the color of the navigation icon to black
+            color: Colors.blue, // Set the color of the navigation icon to black
           ),
           title: const Text(
             'City Screen',

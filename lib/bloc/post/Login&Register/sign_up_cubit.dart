@@ -17,7 +17,7 @@ class SignUpCubit extends Cubit<SignUpState> {
     try {
       final response = await _userRepository.signUp(registerRequestModel);
       emit(SignUpSuccess(response));
-    //  print(emit(SignUpSuccess(response)));
+
     } catch (error) {
       emit(SignUpFail(error.toString()));
     }

@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../common/FormValidator.dart';
 import '../../common/ThemeHelperUserClass.dart';
+import '../../data/api/ConnectivityService.dart';
 import '../../data/responseModel/CityPart/Cities.dart';
 import '../../data/responseModel/DeliveryPart/FetchAllDeliveryName.dart';
 import '../../data/responseModel/TownshipsPart/TownshipByCityIdResponse.dart';
@@ -70,7 +71,7 @@ class _UpdateDeliveryWidgetState extends State<UpdateDeliveryWidget> {
   }
 
   void fetchTownshipByCityId(int id) async {
-    final response = await ApiService().fetchAllTownshipByCityId(id);
+    final response = await ApiService(ConnectivityService()).fetchAllTownshipByCityId(id);
     townships = response;
     setState(() {
       if (select_township != null) {

@@ -5,6 +5,7 @@ import '../../bloc/edit/FaultyPart/update_faulty_cubit.dart';
 import '../../common/ApiHelper.dart';
 import '../../common/FormValidator.dart';
 import '../../common/ThemeHelperUserClass.dart';
+import '../../data/api/ConnectivityService.dart';
 import '../../data/api/apiService.dart';
 import '../../data/responseModel/GetAllPaganizationDataResponse.dart';
 import '../../data/responseModel/common/ProductListItemResponse.dart';
@@ -59,7 +60,7 @@ class _UpdateFaultyWidgetState extends State<UpdateFaultyWidget> {
 
 
   Future<void> fetchProductsByCategory(int id) async {
-    final response = await ApiService().fetchAllProductByCateId(id);
+    final response = await ApiService(ConnectivityService()).fetchAllProductByCateId(id);
     setState(() {
       products = response;
     });

@@ -5,6 +5,7 @@ import '../../bloc/post/DeliveryPart/deli_company_info_cubit.dart';
 import '../../common/ApiHelper.dart';
 import '../../common/FormValidator.dart';
 import '../../common/ThemeHelperUserClass.dart';
+import '../../data/api/ConnectivityService.dart';
 import '../../data/api/apiService.dart';
 import '../../data/responseModel/CityPart/Cities.dart';
 import '../../data/responseModel/DeliveryPart/FetchAllDeliveryName.dart';
@@ -47,7 +48,7 @@ class _AddDeliveryWidgetState extends State<AddDeliveryWidget> {
 
   void fetchDeliveryCompanyName() async {
     final deliveryCompanyName =
-        await ApiService().fetchAllDeliveryCompanyName();
+        await ApiService(ConnectivityService()).fetchAllDeliveryCompanyName();
     setState(() {
       this.deliveryCompanyName = deliveryCompanyName;
 
@@ -56,7 +57,7 @@ class _AddDeliveryWidgetState extends State<AddDeliveryWidget> {
 
     void fetchTownshipByCityId(int id) async {
 
-    final response = await ApiService().fetchAllTownshipByCityId(id);
+    final response = await ApiService(ConnectivityService()).fetchAllTownshipByCityId(id);
       setState(() {
         townships = response;
         if (response.isNotEmpty) {

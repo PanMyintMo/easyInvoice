@@ -3,6 +3,8 @@ import 'package:easy_invoice/data/responseModel/DeliveryPart/ProductInvoiceRespo
 import 'package:easy_invoice/dataRequestModel/DeliveryPart/UpdateQuantityInBarcodeRequest.dart';
 import 'package:flutter/material.dart';
 
+import '../../data/api/ConnectivityService.dart';
+
 class ProductInvoiceScreenWithItem extends StatefulWidget {
   final InvoiceData item;
   const ProductInvoiceScreenWithItem({super.key,required this.item});
@@ -47,7 +49,7 @@ class _ProductInvoiceScreenWithItemState extends State<ProductInvoiceScreenWithI
                   IconButton(
                     icon: const Icon(Icons.add),
                     onPressed: () {
-                      ApiService()
+                      ApiService(ConnectivityService())
                           .updatedQuantityItemBarcode(
                         UpdateQuantityBarcodeRequest(
                           quantity: (quantity + 1).toString(),
@@ -84,7 +86,7 @@ class _ProductInvoiceScreenWithItemState extends State<ProductInvoiceScreenWithI
                   IconButton(
                     icon: const Icon(Icons.remove),
                     onPressed: () {
-                      ApiService()
+                      ApiService(ConnectivityService())
                           .updatedQuantityItemBarcode(
                         UpdateQuantityBarcodeRequest(
                           quantity: (quantity - 1).toString(),

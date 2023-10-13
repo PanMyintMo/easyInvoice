@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:simple_barcode_scanner/enum.dart';
 import 'package:simple_barcode_scanner/simple_barcode_scanner.dart';
 import '../../common/FormValidator.dart';
+import '../../data/api/ConnectivityService.dart';
 import '../../data/responseModel/DeliveryPart/ProductInvoiceResponse.dart';
 import '../../dataRequestModel/DeliveryPart/ProductInvoiceRequest.dart';
 import '../../bloc/post/product_invoice_cubit.dart';
@@ -196,7 +197,7 @@ class _ProductInvoiceWidgetState extends State<ProductInvoiceWidget> {
                   IconButton(
                     icon: const Icon(Icons.add),
                     onPressed: () {
-                      ApiService()
+                      ApiService(ConnectivityService())
                           .updatedQuantityItemBarcode(
                         UpdateQuantityBarcodeRequest(
                           quantity: (quantity + 1).toString(),
@@ -233,7 +234,7 @@ class _ProductInvoiceWidgetState extends State<ProductInvoiceWidget> {
                   IconButton(
                     icon: const Icon(Icons.remove),
                     onPressed: () {
-                      ApiService()
+                      ApiService(ConnectivityService())
                           .updatedQuantityItemBarcode(
                         UpdateQuantityBarcodeRequest(
                           quantity: (quantity - 1).toString(),

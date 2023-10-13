@@ -2,13 +2,16 @@ import 'package:easy_invoice/bloc/delete/TownshipPart/township_delete_cubit.dart
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 import '../../common/ApiHelper.dart';
+import '../../common/GeneralPaganizationClass.dart';
 import '../../common/showDeleteConfirmationDialog.dart';
 import '../../data/responseModel/TownshipsPart/AllTownshipResponse.dart';
 import '../../screen/LocationPart/EditTownshipScreen.dart';
 
 class TownshipWidget extends StatefulWidget {
   final bool isLoading;
+
   const TownshipWidget({super.key, required this.isLoading});
 
   @override
@@ -33,32 +36,42 @@ class _TownshipWidgetState extends State<TownshipWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-
-        SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          child: PaginatedDataTable(
-            columns: const [
-              DataColumn(label: Text('ID',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold),)),
-              DataColumn(label: Text('Name',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold))),
-              DataColumn(label: Text('Action',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold))),
-            ],
-            source: TownshipData(townships,context),
-            horizontalMargin: 20,
-            dragStartBehavior: DragStartBehavior.down,
-            arrowHeadColor: Colors.blueAccent,
-            rowsPerPage: 8,
-            columnSpacing: 85,
-          ),
-        ),
-      ],
+    return SingleChildScrollView(
+      scrollDirection: Axis.vertical,
+      child: PaginatedDataTable(
+        columns: const [
+          DataColumn(
+              label: Text(
+            'ID',
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          )),
+          DataColumn(
+              label: Text('Name',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold))),
+          DataColumn(
+              label: Text('Action',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold))),
+        ],
+        source: TownshipData(townships, context),
+        horizontalMargin: 20,
+        dragStartBehavior: DragStartBehavior.down,
+        arrowHeadColor: Colors.blueAccent,
+        rowsPerPage: ((context.height -
+                    GeneralPagination.topViewHeight -
+                    GeneralPagination.paginateDataTableHeaderRowHeight -
+                    GeneralPagination.pagerWidgetHeight) ~/
+                GeneralPagination.paginateDataTableRowHeight)
+            .toInt(),
+        columnSpacing: 85,
+      ),
     );
   }
 }
+
 class TownshipData extends DataTableSource {
   final List<Township> townships;
   final BuildContext context;
+
   TownshipData(this.townships, this.context);
 
   @override
@@ -74,17 +87,31 @@ class TownshipData extends DataTableSource {
       DataCell(Row(
         children: [
           IconButton(
-            icon:  const Icon(Icons.edit,color: Colors.green,),
+            icon: Icon(
+              Icons.edit,
+              color: Colors.green.shade900,
+            ),
             onPressed: () {
-               Navigator.push(context, MaterialPageRoute(builder: (context) =>
-                    EditTownshipScreen(city_id: township.cityId.toString(),name: township.name, id: township.id)));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => EditTownshipScreen(
+                          city_id: township.city_id.toString(),
+                          name: township.name,
+                          id: township.id)));
             },
           ),
           IconButton(
-            icon: const Icon(Icons.delete,color: Colors.red,),
+            icon: const Icon(
+              Icons.delete,
+              color: Colors.red,
+            ),
             onPressed: () {
-              showDeleteConfirmationDialogs(context,"Are you sure you want to delete township?",(){
-                context.read<TownshipDeleteCubit>().deleteTownship(township.id.toInt());
+              showDeleteConfirmationDialogs(
+                  context, "Are you sure you want to delete township?", () {
+                context
+                    .read<TownshipDeleteCubit>()
+                    .deleteTownship(township.id.toInt());
               });
             },
           ),
@@ -101,7 +128,4 @@ class TownshipData extends DataTableSource {
 
   @override
   int get selectedRowCount => 0;
-
-
-
 }

@@ -6,6 +6,7 @@ import 'package:easy_invoice/common/ThemeHelperUserClass.dart';
 import 'package:easy_invoice/data/api/apiService.dart';
 import 'package:easy_invoice/dataRequestModel/ShopKeeperPart/ShopKeeperRequestModel.dart';
 import '../../bloc/post/ShopKeeperPart/add_request_product_shop_keeper_cubit.dart';
+import '../../data/api/ConnectivityService.dart';
 import '../../data/responseModel/GetAllPaganizationDataResponse.dart';
 import '../../data/responseModel/common/ProductListItemResponse.dart';
 import '../../screen/shopkeeperPart/ShopKeeperAddScreen.dart';
@@ -45,7 +46,7 @@ class _RequestShopKeeperWidgetState extends State<RequestShopKeeperWidget> {
   }
 
   Future<void> fetchProductsByCategory(int id) async {
-    final response = await ApiService().fetchAllProductByCateId(id);
+    final response = await ApiService(ConnectivityService()).fetchAllProductByCateId(id);
     if (response.isNotEmpty) {
       setState(() {
         products = response;
@@ -150,6 +151,7 @@ class _RequestShopKeeperWidgetState extends State<RequestShopKeeperWidget> {
                   ),
                   Center(
                     child: ElevatedButton(
+                      style: ThemeHelperUserRole().buttonStyle(),
                       onPressed: validateAndSubmit,
                       child: const Text('Add ShopKeeper'),
                     ),

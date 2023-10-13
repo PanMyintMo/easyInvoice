@@ -88,7 +88,7 @@ class _RequestProductScreenState extends State<RequestProductScreen> {
                 },
                 listener: (context, deleteState) {
                   if (deleteState is WarehouseManagerStatusSuccess) {
-                    showToastMessage('Successful.');
+                   // showToastMessage('Successful.');
                     BlocProvider.of<ShopKeeperRequestCubit>(context)
                         .shopkeeperRequestList();
                   } else if (deleteState is WarehouseManagerStatusFail) {

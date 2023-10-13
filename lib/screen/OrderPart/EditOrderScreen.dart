@@ -7,9 +7,9 @@ import '../../common/ToastMessage.dart';
 import '../../module/module.dart';
 
 class EditOrderScreen extends StatefulWidget {
-  final int order_id;
+  final int orderId;
 
-  const EditOrderScreen({super.key, required this.order_id});
+  const EditOrderScreen({super.key, required this.orderId});
 
   @override
   State<EditOrderScreen> createState() => _EditOrderScreenState();
@@ -40,7 +40,7 @@ class _EditOrderScreenState extends State<EditOrderScreen> {
           BlocProvider<FetchAllOrderDetailCubit>(
             create: (context) => FetchAllOrderDetailCubit(
               getIt.call(),
-            )..fetchOrderDetail(widget.order_id),
+            )..fetchOrderDetail(widget.orderId),
           ),
           BlocProvider<EditOrderDetailCubit>(
             create: (context) => EditOrderDetailCubit(
@@ -49,7 +49,7 @@ class _EditOrderScreenState extends State<EditOrderScreen> {
           ),
         ],
         child: EditOrder(
-          order_id: widget.order_id,
+          orderId: widget.orderId,
         ),
       ),
     );
@@ -57,9 +57,9 @@ class _EditOrderScreenState extends State<EditOrderScreen> {
 }
 
 class EditOrder extends StatefulWidget {
-  final int order_id;
+  final int orderId;
 
-  const EditOrder({super.key, required this.order_id});
+  const EditOrder({super.key, required this.orderId});
 
   @override
   State<EditOrder> createState() => _EditOrderState();
@@ -87,7 +87,7 @@ class _EditOrderState extends State<EditOrder> {
                 showToastMessage('Updated successful.');
                 context
                     .read<FetchAllOrderDetailCubit>()
-                    .fetchOrderDetail(widget.order_id);
+                    .fetchOrderDetail(widget.orderId);
               }
               else if(state is EditOrderDetailFail){
                 showToastMessage(state.error);
@@ -103,7 +103,7 @@ class _EditOrderState extends State<EditOrder> {
                 showToastMessage('Updated successful.');
                 context
                     .read<FetchAllOrderDetailCubit>()
-                    .fetchOrderDetail(widget.order_id);
+                    .fetchOrderDetail(widget.orderId);
               } else if (state is EditOrderDetailFail) {
                 showToastMessage(
                     'Failed to update order item: ${state.error}');

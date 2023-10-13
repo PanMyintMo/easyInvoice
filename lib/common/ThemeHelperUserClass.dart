@@ -155,40 +155,38 @@ Widget buildDropdown({
   required Function(dynamic) onChanged,
   String? hint, required items,
 }) {
-  return Expanded(
-    child: SizedBox(
-      width: 200,
-      height: 80,
-      child: DropdownButtonFormField2(
-        value: value,
-        isDense: true,
-        hint: Text(hint.toString()),
-        decoration: InputDecoration(
-          contentPadding: const EdgeInsets.symmetric(vertical: 16),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(15),
-          ),
+  return SizedBox(
+    width: 200,
+    height: 80,
+    child: DropdownButtonFormField2(
+      value: value,
+      isDense: true,
+      hint: Text(hint.toString()),
+      decoration: InputDecoration(
+        contentPadding: const EdgeInsets.symmetric(vertical: 16),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(15),
         ),
-        items: items,
-        onChanged: onChanged,
-        buttonStyleData: const ButtonStyleData(
-          padding: EdgeInsets.only(right: 8),
+      ),
+      items: items,
+      onChanged: onChanged,
+      buttonStyleData: const ButtonStyleData(
+        padding: EdgeInsets.only(right: 8),
+      ),
+      iconStyleData: const IconStyleData(
+        icon: Icon(
+          Icons.arrow_drop_down,
+          color: Colors.black45,
         ),
-        iconStyleData: const IconStyleData(
-          icon: Icon(
-            Icons.arrow_drop_down,
-            color: Colors.black45,
-          ),
-          iconSize: 24,
+        iconSize: 24,
+      ),
+      dropdownStyleData: DropdownStyleData(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(15),
         ),
-        dropdownStyleData: DropdownStyleData(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15),
-          ),
-        ),
-        menuItemStyleData: const MenuItemStyleData(
-          padding: EdgeInsets.symmetric(horizontal: 16),
-        ),
+      ),
+      menuItemStyleData: const MenuItemStyleData(
+        padding: EdgeInsets.symmetric(horizontal: 16),
       ),
     ),
   );

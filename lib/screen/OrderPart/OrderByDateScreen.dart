@@ -281,7 +281,7 @@ class _FetchOrderByDateContentState extends State<FetchOrderByDateContent> {
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) => EditOrderScreen(
-                                            order_id: orderItem
+                                            orderId: orderItem
                                                 .order_id), // Replace with your edit screen
                                       ),
                                     );

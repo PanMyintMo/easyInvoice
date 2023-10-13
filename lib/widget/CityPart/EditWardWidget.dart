@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../common/ApiHelper.dart';
 import '../../common/FormValidator.dart';
 import '../../common/ThemeHelperUserClass.dart';
+import '../../data/api/ConnectivityService.dart';
 import '../../data/responseModel/CityPart/FetchCityByCountryId.dart';
 import '../../data/responseModel/CountryPart/CountryResponse.dart';
 import '../../data/responseModel/TownshipsPart/TownshipByCityIdResponse.dart';
@@ -51,27 +52,6 @@ class _EditWardWidgetState extends State<EditWardWidget> {
         countries = fetchCountries;
         final ward = widget.ward.firstWhere(
               (ward) => ward.township_id == int.parse(widget.township_id),
-          orElse: () => Ward(
-            id: 0,
-            township_id: 0,
-            ward_name: '',
-            created_at: '',
-            updated_at: '',
-            township: Townships(
-              id: 0,
-              city_id: 0,
-              name: '',
-              created_at: '',
-              updated_at: '',
-              cities: Cities(
-                id: 0,
-                country_id: 0,
-                name: '',
-                created_at: '',
-                updated_at: '',
-              ),
-            ),
-          ),
         );
         countryId = ward.township.cities.country_id.toString();
         fetchCitiesByCountryId(int.parse(countryId!));
@@ -80,33 +60,13 @@ class _EditWardWidgetState extends State<EditWardWidget> {
   }
 
   void fetchCitiesByCountryId(int id) async {
-    final fetchCities = await ApiService().fetchAllCitiesByCountryId(id);
+    final fetchCities = await ApiService(ConnectivityService()).fetchAllCitiesByCountryId(id);
     if (fetchCities.isNotEmpty) {
       setState(() {
         cities = fetchCities;
         final ward = widget.ward.firstWhere(
               (ward) => ward.township_id == int.parse(widget.township_id),
-          orElse: () => Ward(
-            id: 0,
-            township_id: 0,
-            ward_name: '',
-            created_at: '',
-            updated_at: '',
-            township: Townships(
-              id: 0,
-              city_id: 0,
-              name: '',
-              created_at: '',
-              updated_at: '',
-              cities: Cities(
-                id: 0,
-                country_id: id, // Assuming the country_id should be set to the provided 'id'
-                name: '',
-                created_at: '',
-                updated_at: '',
-              ),
-            ),
-          ),
+
         );
         cityId = ward.township.cities.id.toString();
         fetchTownshipsByCityId(int.parse(cityId!));
@@ -116,7 +76,7 @@ class _EditWardWidgetState extends State<EditWardWidget> {
 
 
   void fetchTownshipsByCityId(int id) async {
-    final fetchTownship = await ApiService().fetchAllTownshipByCityId(id);
+    final fetchTownship = await ApiService(ConnectivityService()).fetchAllTownshipByCityId(id);
     if (fetchTownship.isNotEmpty) {
       setState(() {
         townships = fetchTownship;

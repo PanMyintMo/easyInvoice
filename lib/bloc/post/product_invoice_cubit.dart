@@ -16,7 +16,7 @@ class ProductInvoiceCubit extends Cubit<ProductInvoiceState> {
     emit(ProductInvoiceLoading());
     try {
       final response = await _userRepository.productInvoice(productInvoiceRequest);
-      if (response != null) {
+      if (response.isNotEmpty) {
         emit(ProductInvoiceSuccess(response));
       } else {
         emit(const ProductInvoiceFail("No data found."));

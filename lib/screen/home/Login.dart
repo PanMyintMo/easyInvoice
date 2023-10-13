@@ -1,3 +1,4 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:easy_invoice/bloc/post/Login&Register/sign_in_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_invoice/module/module.dart';
@@ -10,6 +11,7 @@ import 'package:flutter/material.dart';
 import '../../common/FormValidator.dart';
 import '../../common/HeaderWidget.dart';
 import '../../common/theme_helper.dart';
+import '../../data/api/ConnectivityService.dart';
 import 'Register.dart';
 
 class Login extends StatefulWidget {
@@ -20,8 +22,6 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  bool _isLoading = false;
-  String errorMessage = '';
 
   @override
   Widget build(BuildContext context) {
@@ -30,11 +30,14 @@ class _LoginState extends State<Login> {
       child: Scaffold(
         backgroundColor: Colors.white,
         body: BlocBuilder<SignInCubit, SignInState>(
+
           builder: (context, state) {
+            final loading= state is SignInLoading;
             if (state is SignInLoading) {
-              _isLoading = true; // Set _isLoading to true when loading
+
+
               return LoginInForm(
-                isLoading: _isLoading,
+                isLoading: loading,
                 message: '',
               );
             } else if (state is SignInSuccess) {
@@ -42,7 +45,7 @@ class _LoginState extends State<Login> {
               final name = state.loginResponse.name;
               final email = state.loginResponse.email;
               final utype = state.loginResponse.utype;
-              final id=state.loginResponse.id;
+              final id = state.loginResponse.id;
               // Set the token using the SessionManager class
               SessionManager sessionManager = SessionManager();
               sessionManager.setAuthToken(token);
@@ -53,21 +56,18 @@ class _LoginState extends State<Login> {
 
               // Navigate to the user profile page after the current frame is completed
               WidgetsBinding.instance.addPostFrameCallback((_) {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const MainPageScreen(),
-                    ),
-                  );
-
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const MainPageScreen(),
+                  ),
+                );
               });
             } else if (state is SignInFail) {
-              return LoginInForm(isLoading: false, message: state.error);
+              return  LoginInForm(isLoading: loading, message: "Password is wrong.Please try again.");
             }
 
-            _isLoading = false; // Set _isLoading to false when not loading
-
-            return LoginInForm(isLoading: _isLoading, message: '');
+            return LoginInForm(isLoading: loading, message: "");
           },
         ),
       ),
@@ -92,174 +92,183 @@ class _LoginInFormState extends State<LoginInForm> {
   var email = TextEditingController();
   var password = TextEditingController();
 
+
   @override
   Widget build(BuildContext context) {
-    //  Size size = MediaQuery.of(context).size;
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          const SizedBox(
-              height: 150,
-              child: HeaderWidget(150, false, Icons.person_add_alt_1_rounded)),
-          const SizedBox(height: 20),
-          const Text(
-            'Myanmar Easy Invoice',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w800,
-              color: Colors.blueAccent,
-            ),
-          ),
-          const SizedBox(height: 30),
-          Form(
-            key: formKey,
-            child: ListView(
-              padding: const EdgeInsets.all(20),
-              shrinkWrap: true,
-              children: [
-                Container(
-                  decoration: ThemeHelper().inputBoxDecorationShaddow(),
-                  child: TextFormField(
-                    controller: email,
-                    keyboardType: TextInputType.emailAddress,
-                    decoration: ThemeHelper().textInputDecoration(
-                      'Email',
-                      'Enter your email',
-                    ),
-                    validator: FormValidator.validateEmail,
-                  ),
-                ),
-                const SizedBox(height: 20),
-                TextFormField(
-                  controller: password,
-                  obscureText: _obscureText,
-                  decoration: InputDecoration(
-                    contentPadding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
-                    iconColor: Colors.redAccent,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(50),
-                    ),
-                    hintText: 'Password',
-                    labelText: 'Password',
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(50),
-                      borderSide: const BorderSide(
-                        color: Colors.blueGrey,
-                      ), // Set the focused border color
-                    ),
-                    suffixIcon: GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          _obscureText = !_obscureText;
-                        });
-                      },
-                      child: Icon(
-                        _obscureText ? Icons.visibility : Icons.visibility_off,
-                        semanticLabel:
-                            _obscureText ? 'show password' : 'hide password',
-                        color: Colors.blueAccent,
-                      ),
-                    ),
-                  ),
-                  validator: FormValidator.validatePassword,
-                ),
-                const SizedBox(height: 20),
-                TextButton(
-                  onPressed: () {},
-                  child: const Text(
-                    'Forgot Password?',
-                    style: TextStyle(fontSize: 20, color: Colors.blueGrey),
-                  ),
-                ),
-                const SizedBox(height: 20),
-                FractionallySizedBox(
-                  widthFactor: 0.6,
-                  child: Stack(
-                    children: [
-                      Center(
-                        child: ElevatedButton(
-                          onPressed: () {
-                            if (formKey.currentState!.validate()) {
-                              formKey.currentState!.save();
-                              context.read<SignInCubit>().signIn(
-                                    LoginRequestModel(
-                                      email.text,
-                                      password.text,
-                                    ),
-                                  );
-                            }
-                          },
-                          style: ThemeHelper().buttonStyle(),
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(40, 10, 40, 10),
-                            child: Text(
-                              'Login'.toUpperCase(),
-                              style: const TextStyle(
-                                fontSize: 20,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      if (widget.isLoading)
-                        const Center(
-                          child: CircularProgressIndicator(),
-                        ),
+    return  Stack(
+     children: [
+       SingleChildScrollView(
+         child: Column(
+           children: [
+             const SizedBox(
+               height: 150,
+               child: HeaderWidget(150,false,Icons.account_circle_rounded),
+             ),
+             const SizedBox(height: 40,),
+              const Text(
+               'Myanmar Easy Invoice',
+               style: TextStyle(
+                 fontSize: 20,
+                 fontWeight: FontWeight.w800,
+                 color: Colors.blueAccent,
+               ),
+             ),
+             const SizedBox(height: 50),
 
-                      //show success or failure message base on the message
-                      if (widget.message.isNotEmpty)
-                        Positioned(
-                          child: Text(
-                            widget.message,
-                            style: TextStyle(
-                                fontSize: 18,
-                                color: widget.message.startsWith('Success')
-                                    ? Colors.green
-                                    : Colors.red),
-                          ),
-                        )
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 140),
-                Container(
-                  margin: const EdgeInsets.symmetric(vertical: 20),
-                  child: Center(
-                    child: Text.rich(
-                      TextSpan(
-                        children: [
-                          const TextSpan(
-                            text: "Don't have an account?",
-                            style: TextStyle(fontSize: 18),
-                          ),
-                          TextSpan(
-                            text: ' Sign up!',
-                            recognizer: TapGestureRecognizer()
-                              ..onTap = () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const Register(),
-                                  ),
-                                );
-                              },
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18,
-                              color: Colors.redAccent,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
+             Form(
+               key: formKey,
+                 child: ListView(
+                   padding: const EdgeInsets.all(20),
+                   shrinkWrap: true,
+                   children: [
+                     Container(
+                       decoration: ThemeHelper().inputBoxDecorationShaddow(),
+                       child: TextFormField(
+                         controller: email,
+                         keyboardType: TextInputType.emailAddress,
+                         decoration: ThemeHelper().textInputDecoration(
+                           'Email',
+                           'Enter your email',
+                         ),
+                         validator: FormValidator.validateEmail,
+                       ),
+                     ),
+                     const SizedBox(height: 20), TextFormField(
+                       controller: password,
+                       obscureText: _obscureText,
+                       decoration: InputDecoration(
+                         contentPadding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+                         iconColor: Colors.redAccent,
+                         border: OutlineInputBorder(
+                           borderRadius: BorderRadius.circular(50),
+                         ),
+                         hintText: 'Password',
+                         labelText: 'Password',
+                         focusedBorder: OutlineInputBorder(
+                           borderRadius: BorderRadius.circular(50),
+                           borderSide: const BorderSide(
+                             color: Colors.blueGrey,
+                           ), // Set the focused border color
+                         ),
+                         suffixIcon: GestureDetector(
+                           onTap: () {
+                             setState(() {
+                               _obscureText = !_obscureText;
+                             });
+                           },
+                           child: Icon(
+                             _obscureText ? Icons.visibility : Icons.visibility_off,
+                             semanticLabel:
+                             _obscureText ? 'show password' : 'hide password',
+                             color: Colors.blueAccent,
+                           ),
+                         ),
+                       ),
+                       validator: FormValidator.validatePassword,
+                     ),
+                     const SizedBox(height: 20),
+                     TextButton(
+                       onPressed: () {},
+                       child: const Text(
+                         'Forgot Password?',
+                         style: TextStyle(fontSize: 20, color: Colors.blueGrey),
+                       ),
+                     ),
+
+                     const SizedBox(height: 20),
+                     Center(
+                       child: ElevatedButton(
+                         onPressed: ()  async {
+                           if (formKey.currentState!.validate()) {
+                             formKey.currentState!.save();
+
+                             final connectivityService = ConnectivityService();
+                             final connectivityResult =
+                             await connectivityService.checkConnectivity();
+
+                             if (connectivityResult ==
+                                 ConnectivityResult.none) {
+                               //Show snackBar for no internet connection
+
+                               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                   content: Text(
+                                       'No internet connection.Please try again later.')));
+                             } else {
+                               context.read<SignInCubit>().signIn(
+                                 LoginRequestModel(
+                                   email.text,
+                                   password.text,
+                                 ),
+                               );
+                             }
+                           }
+                         },
+                         style: ThemeHelper().buttonStyle(),
+                         child: Padding(
+                           padding: const EdgeInsets.fromLTRB(40, 10, 40, 10),
+                           child: Text(
+                             'Login'.toUpperCase(),
+                             style: const TextStyle(
+                               fontSize: 20,
+                               color: Colors.white,
+                             ),
+                           ),
+                         ),
+                       ),
+                     ),
+                     const SizedBox(height: 10,),
+                     if(widget.message.isNotEmpty)
+                       Padding(
+                         padding: const EdgeInsets.only(bottom: 20),
+                         child:  Align(
+                             alignment: Alignment.bottomCenter,
+                             child: Text("Check your email and password.Please try again.",
+                               style: TextStyle(color: widget.message.startsWith('Success') ? Colors.green.shade900 : Colors.red),)),
+                       ),
+                     const SizedBox(height: 140),
+                     Container(
+                       margin: const EdgeInsets.symmetric(vertical: 20),
+                       child: Center(
+                         child: Text.rich(
+                           TextSpan(
+                             children: [
+                               const TextSpan(
+                                 text: "Don't have an account?",
+                                 style: TextStyle(fontSize: 18),
+                               ),
+                               TextSpan(
+                                 text: ' Sign up!',
+                                 recognizer: TapGestureRecognizer()
+                                   ..onTap = () {
+                                     Navigator.push(
+                                       context,
+                                       MaterialPageRoute(
+                                         builder: (context) => const Register(),
+                                       ),
+                                     );
+                                   },
+                                 style: const TextStyle(
+                                   fontWeight: FontWeight.bold,
+                                   fontSize: 18,
+                                   color: Colors.redAccent,
+                                 ),
+                               ),
+                             ],
+                           ),
+                         ),
+                       ),
+                     ),
+                   ],
+                 ))
+
+           ],
+         ),
+       ),
+      if (widget.isLoading)
+         const Center(
+           child: CircularProgressIndicator(),
+         ),
+     ],
+   );
   }
 }

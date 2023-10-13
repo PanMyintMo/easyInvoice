@@ -111,7 +111,7 @@ class _ProductInvoiceScreenWithListViewState extends State<ProductInvoiceScreenW
                         MaterialPageRoute(
                             builder: (context) => PdfPage()));
                   }
-                      : null,
+                      : (){},
                   child: const Text('Print'),
                 ),
               ),

@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../common/ApiHelper.dart';
 import '../../common/FormValidator.dart';
 import '../../common/ThemeHelperUserClass.dart';
+import '../../data/api/ConnectivityService.dart';
 import '../../data/api/apiService.dart';
 import '../../data/responseModel/CityPart/FetchCityByCountryId.dart';
 
@@ -53,7 +54,7 @@ class _AddStreetWidgetState extends State<AddStreetWidget> {
 
   void fetchCitiesByCountryId(int id) async {
     try {
-      final response = await ApiService().fetchAllCitiesByCountryId(id);
+      final response = await ApiService(ConnectivityService()).fetchAllCitiesByCountryId(id);
       setState(() {
         cities = response;
         if (response.isNotEmpty) {
@@ -73,7 +74,7 @@ class _AddStreetWidgetState extends State<AddStreetWidget> {
 
   void fetchTownshipByCityId(int id) async {
     try {
-      final response = await ApiService().fetchAllTownshipByCityId(id);
+      final response = await ApiService(ConnectivityService()).fetchAllTownshipByCityId(id);
       setState(() {
         townships = response;
         if (response.isNotEmpty) {

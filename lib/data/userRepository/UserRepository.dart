@@ -37,6 +37,7 @@ import '../../dataRequestModel/ShopKeeperPart/ShopKeeperRequestModel.dart';
 import '../../dataRequestModel/TownshipPart/AddTownship.dart';
 import '../../dataRequestModel/TownshipPart/EditTownship.dart';
 import '../../widget/ProductInvoicePart/InvoiceResponse/Invoice.dart';
+import '../api/ConnectivityService.dart';
 import '../responseModel/AddCategoryResponseModel.dart';
 import '../responseModel/CityPart/AddCityResponse.dart';
 import '../responseModel/CityPart/AddWardResponse.dart';
@@ -80,7 +81,7 @@ import '../responseModel/common/WardResponse.dart';
 class UserRepository {
   final ApiService _apiService;
 
-  UserRepository() : _apiService = ApiService();
+  UserRepository() : _apiService = ApiService(ConnectivityService());
 
   //For Register
   Future<RegisterResponse> signUp(

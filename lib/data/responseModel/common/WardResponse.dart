@@ -1,10 +1,12 @@
+import '../TownshipsPart/AllTownshipResponse.dart';
+
 class Ward {
   final int id;
   final int township_id;
   final String ward_name;
-  final String created_at;
+  final String? created_at;
   final String? updated_at;
-  final Townships township;
+  final Township township;
 
   Ward({
     required this.id,
@@ -22,12 +24,12 @@ class Ward {
       ward_name: json['ward_name'],
       created_at: json['created_at'],
       updated_at: json['updated_at'],
-      township: Townships.fromJson(json['township']),
+      township: Township.fromJson(json['township']),
     );
   }
 }
 
-class Townships {
+/*class Townships {
   final int id;
   final int city_id;
   final String name;
@@ -80,4 +82,4 @@ class Cities {
       updated_at: json['updated_at'],
     );
   }
-}
+}*/

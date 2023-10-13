@@ -1,34 +1,34 @@
 import '../PageLink.dart';
 
 class CityResponse {
-  final int currentPage;
+  final int current_page;
   final List<City> data;
-  final String firstPageUrl;
+  final String first_page_url;
   final int? from;
-  final int lastPage;
-  final String lastPageUrl;
+  final int last_page;
+  final String? last_page_url;
   final List<PageLink> links;
-  final String? nextPageUrl;
+  final String? next_page_url;
   final String path;
-  final int perPage;
-  final String? prevPageUrl;
+  final int per_page;
+  final String? prev_page_url;
   final int? to;
   final int total;
   final int? status;
   final String? message;
 
   CityResponse ({
-    required this.currentPage,
+    required this.current_page,
     required this.data,
-    required this.firstPageUrl,
+    required this.first_page_url,
     required this.from,
-    required this.lastPage,
-    required this.lastPageUrl,
+    required this.last_page,
+    required this.last_page_url,
     required this.links,
-    required this.nextPageUrl,
+    required this.next_page_url,
     required this.path,
-    required this.perPage,
-    required this.prevPageUrl,
+    required this.per_page,
+    required this.prev_page_url,
     required this.to,
     required this.total,
     required this.status,
@@ -37,21 +37,21 @@ class CityResponse {
 
   factory CityResponse.fromJson(Map<String, dynamic> json) {
     return CityResponse (
-      currentPage: json['data']['current_page'],
+      current_page: json['data']['current_page'],
       data: (json['data']['data'] as List<dynamic>?)
           ?.map((item) => City.fromJson(item))
           .toList() ?? [],
-      firstPageUrl: json['data']['first_page_url'],
+      first_page_url: json['data']['first_page_url'],
       from: json['data']['from'],
-      lastPage: json['data']['last_page'],
-      lastPageUrl: json['data']['last_page_url'],
+      last_page: json['data']['last_page'],
+      last_page_url: json['data']['last_page_url'],
       links: (json['data']['links'] as List<dynamic>?)
           ?.map((item) => PageLink.fromJson(item))
           .toList() ?? [],
-      nextPageUrl: json['data']['next_page_url'],
+      next_page_url: json['data']['next_page_url'],
       path: json['data']['path'],
-      perPage: json['data']['per_page'],
-      prevPageUrl: json['data']['prev_page_url'],
+      per_page: json['data']['per_page'],
+      prev_page_url: json['data']['prev_page_url'],
       to: json['data']['to'],
       total: json['data']['total'],
       status: json['status'],
@@ -60,48 +60,29 @@ class CityResponse {
   }
 }
 
-// class PageLink {
-//   final String? url;
-//   final String label;
-//   final bool active;
-//
-//   PageLink({
-//     this.url,
-//     required this.label,
-//     required this.active,
-//   });
-//
-//   factory PageLink.fromJson(Map<String, dynamic> json) {
-//     return PageLink(
-//       url: json['url'],
-//       label: json['label'],
-//       active: json['active'],
-//     );
-//   }
-// }
 
 class City {
   final int id;
-  final int countryId;
+  final int country_id;
   final String name;
-  final String createdAt;
-  final String? updatedAt;
+  final String? created_at;
+  final String? updated_at;
 
   City({
     required this.id,
-    required this.countryId,
+    required this.country_id,
     required this.name,
-    required this.createdAt,
-    this.updatedAt,
+    required this.created_at,
+    this.updated_at,
   });
 
   factory City.fromJson(Map<String, dynamic> json) {
     return City(
       id: json['id'],
-      countryId: json['country_id'],
+      country_id: json['country_id'],
       name: json['name'],
-      createdAt: json['created_at'],
-      updatedAt: json['updated_at'],
+      created_at: json['created_at'],
+      updated_at: json['updated_at'],
     );
   }
 }

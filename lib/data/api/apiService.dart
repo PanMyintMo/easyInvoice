@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:easy_invoice/data/responseModel/AddCategoryResponseModel.dart';
 import 'package:easy_invoice/data/responseModel/AddSizeResponse.dart';
@@ -94,20 +95,36 @@ import '../../dataRequestModel/TownshipPart/AddTownship.dart';
 import '../../dataRequestModel/TownshipPart/EditTownship.dart';
 import '../../widget/ProductInvoicePart/InvoiceResponse/Invoice.dart';
 import '../responseModel/ProductByCategoryIdResponse.dart';
+import 'ConnectivityService.dart';
+import 'NoConnectivityException.dart';
 
 
 
 class ApiService {
   final Dio _dio = Dio();
+  final ConnectivityService _connectivityService;
 
-  ApiService() {
+  ApiService(this._connectivityService) {
     _dio.options.headers['Content-Type'] = 'application/json';
     _dio.options.headers['Accept'] = 'application/json';
     _dio.interceptors.add(MyRequestInterceptor('tokenKey'));
   }
 
+
+  Future<void> _checkConnectivity() async {
+    final connectivityResult = await _connectivityService.checkConnectivity();
+    if (connectivityResult == ConnectivityResult.none) {
+      throw NoConnectivityException('No Internet connection.');
+    }
+  }
+
   Future<RegisterResponse> signUp(
       RegisterRequestModel registerRequestModel) async {
+
+   //Check network connectivity using the ConnectivityService
+    _checkConnectivity();
+
+
     try {
       final Response response = await _dio.post(
         'https://mmeasyinvoice.com/api/register',
@@ -117,14 +134,16 @@ class ApiService {
         final RegisterResponse data = RegisterResponse.fromJson(response.data);
         return data;
       } else {
-        throw Exception('Failed to fetch data');
+        throw Exception("Do again!");
       }
     } catch (error) {
-      throw Exception('Failed to fetch data');
+      throw Exception('Error $error');
     }
   }
 
   Future<LoginResponse> signIn(LoginRequestModel loginRequestModel) async {
+  //  _checkConnectivity();
+
     try {
       final Response response = await _dio.post(
         'https://mmeasyinvoice.com/api/login',
@@ -134,10 +153,10 @@ class ApiService {
         final LoginResponse data = LoginResponse.fromJson(response.data);
         return data;
       } else {
-        throw Exception('Failed to fetch data');
+        throw Exception('Do Login again!');
       }
     } catch (error) {
-      throw Exception('Failed to fetch data');
+      throw Exception('Network error $error');
     }
   }
 
@@ -444,7 +463,7 @@ class ApiService {
         'https://www.mmeasyinvoice.com/api/add-order',
         data: addOrderRequest.toJson(),
       );
-      //print("order response are :${response}");
+
 
       if (response.statusCode == 200) {
         final OrderResponse data = OrderResponse.fromJson(response.data);
@@ -832,9 +851,9 @@ class ApiService {
 
           countryData.addAll(countryItem);
 
-          nextPageUrl = countryResponse.nextPageUrl;
+          nextPageUrl = countryResponse.next_page_url;
 
-          if (currentPage == countryResponse.lastPage) {
+          if (currentPage == countryResponse.last_page) {
             break;
           } else {
             currentPage++;
@@ -845,27 +864,27 @@ class ApiService {
       }
 
       return CountryResponse(
-        currentPage: currentPage,
+        current_page: currentPage,
         data: countryData,
-        firstPageUrl: 'https://mmeasyinvoice.com/api/countries?page=1',
+        first_page_url: 'https://mmeasyinvoice.com/api/countries?page=1',
         from: 1,
         // Always set to 1 if data is not empty
-        lastPage: currentPage,
-        lastPageUrl:
+        last_page: currentPage,
+        last_page_url:
             'https://mmeasyinvoice.com/api/countries?page=$currentPage',
         links: [],
-        nextPageUrl: nextPageUrl,
+        next_page_url: nextPageUrl,
         path: 'https://mmeasyinvoice.com/api/countries',
-        perPage: countryData.length,
-        prevPageUrl: (currentPage > 1)
+        per_page: countryData.length,
+        prev_page_url: (currentPage > 1)
             ? 'https://mmeasyinvoice.com/api/countries?page=${currentPage - 1}'
-            : null,
+            : '',
         to: 1,
         total: 0,
-        status: null,
+        status: 0,
         // You can set this to null or provide the appropriate value
         message:
-            null, // You can set this to null or provide the appropriate value
+            '', // You can set this to null or provide the appropriate value
       );
     } catch (e) {
       throw Exception('Failed to fetch country response: $e');
@@ -891,9 +910,9 @@ class ApiService {
 
           cityData.addAll(cityItem);
 
-          nextPageUrl = cityResponse.nextPageUrl;
+          nextPageUrl = cityResponse.next_page_url;
 
-          if (currentPage == cityResponse.lastPage) {
+          if (currentPage == cityResponse.last_page) {
             break;
           } else {
             currentPage++;
@@ -904,18 +923,18 @@ class ApiService {
       }
 
       return CityResponse(
-        currentPage: currentPage,
+        current_page: currentPage,
         data: cityData,
-        firstPageUrl: 'https://mmeasyinvoice.com/api/cities?page=1',
+        first_page_url: 'https://mmeasyinvoice.com/api/cities?page=1',
         from: 1,
         // Always set to 1 if data is not empty
-        lastPage: currentPage,
-        lastPageUrl: 'https://mmeasyinvoice.com/api/cities?page=$currentPage',
+        last_page: currentPage,
+        last_page_url: 'https://mmeasyinvoice.com/api/cities?page=$currentPage',
         links: [],
-        nextPageUrl: nextPageUrl,
+        next_page_url: nextPageUrl,
         path: 'https://mmeasyinvoice.com/api/cities',
-        perPage: cityData.length,
-        prevPageUrl: (currentPage > 1)
+        per_page: cityData.length,
+        prev_page_url: (currentPage > 1)
             ? 'https://mmeasyinvoice.com/api/cities?page=${currentPage - 1}'
             : null,
         to: 1,
@@ -1007,9 +1026,9 @@ class ApiService {
 
           streetData.addAll(streetItem);
 
-          nextPageUrl = streetResponse.nextPageUrl;
+          nextPageUrl = streetResponse.next_page_url;
 
-          if (currentPage == streetResponse.lastPage) {
+          if (currentPage == streetResponse.last_page) {
             break;
           } else {
             currentPage++;
@@ -1020,18 +1039,18 @@ class ApiService {
       }
 
       return StreetResponse(
-        currentPage: currentPage,
+        current_page: currentPage,
         data: streetData,
-        firstPageUrl: 'https://mmeasyinvoice.com/api/streets?page=1',
+        first_page_url: 'https://mmeasyinvoice.com/api/streets?page=1',
         from: 1,
         // Always set to 1 if data is not empty
-        lastPage: currentPage,
-        lastPageUrl: 'https://mmeasyinvoice.com/api/streets?page=$currentPage',
+        last_page: currentPage,
+        last_page_url: 'https://mmeasyinvoice.com/api/streets?page=$currentPage',
         links: [],
-        nextPageUrl: nextPageUrl,
+        next_page_url: nextPageUrl,
         path: 'https://mmeasyinvoice.com/api/streets',
-        perPage: streetData.length,
-        prevPageUrl: (currentPage > 1)
+        per_page: streetData.length,
+        prev_page_url: (currentPage > 1)
             ? 'https://mmeasyinvoice.com/api/streets?page=${currentPage - 1}'
             : null,
         to: 1,
@@ -1065,9 +1084,9 @@ class ApiService {
 
           townshipData.addAll(townshipItem);
 
-          nextPageUrl = townshipResponse.nextPageUrl;
+          nextPageUrl = townshipResponse.next_page_url;
 
-          if (currentPage == townshipResponse.lastPage) {
+          if (currentPage == townshipResponse.last_page) {
             break;
           } else {
             currentPage++;
@@ -1078,19 +1097,19 @@ class ApiService {
       }
 
       return TownshipResponse(
-        currentPage: currentPage,
+        current_page: currentPage,
         data: townshipData,
-        firstPageUrl: 'https://mmeasyinvoice.com/api/townships?page=1',
+        first_page_url: 'https://mmeasyinvoice.com/api/townships?page=1',
         from: 1,
         // Always set to 1 if data is not empty
-        lastPage: currentPage,
-        lastPageUrl:
+        last_page: currentPage,
+        last_page_url:
             'https://mmeasyinvoice.com/api/townships?page=$currentPage',
         links: [],
-        nextPageUrl: nextPageUrl,
+        next_page_url: nextPageUrl,
         path: 'https://mmeasyinvoice.com/api/township',
-        perPage: townshipData.length,
-        prevPageUrl: (currentPage > 1)
+        per_page: townshipData.length,
+        prev_page_url: (currentPage > 1)
             ? 'https://mmeasyinvoice.com/api/townships?page=${currentPage - 1}'
             : null,
         to: 1,

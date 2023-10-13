@@ -64,38 +64,35 @@ class _ShopKeeperWidgetState extends State<ShopKeeperWidget> {
               const SizedBox(height: 16),
               SingleChildScrollView(
                 scrollDirection: Axis.vertical,
-                child: SizedBox(
-                  height: context.height - GeneralPagination.topViewHeight,
-                  child: PaginatedDataTable(
-                    columns: const [
-                      DataColumn(
-                          label: Text(
-                        'Id',
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                      )),
-                      DataColumn(
-                          label: Text('Product Name',
-                              style: TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.bold))),
-                      DataColumn(
-                          label: Text('Quantity',
-                              style: TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.bold))),
-                      DataColumn(
-                          label: Text('Action',
-                              style: TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.bold))),
-                    ],
-                    source: ShopData(widget.shopData, context),
-                    rowsPerPage: ((context.height -
-                        GeneralPagination.topViewHeight -
-                        GeneralPagination.paginateDataTableHeaderRowHeight -
-                        GeneralPagination.pagerWidgetHeight) ~/
-                        GeneralPagination.paginateDataTableRowHeight)
-                        .toInt(),
-                    arrowHeadColor: Colors.lightBlue,
-                    columnSpacing: 10,
-                  ),
+                child: PaginatedDataTable(
+                  columns: const [
+                    DataColumn(
+                        label: Text(
+                      'Id',
+                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    )),
+                    DataColumn(
+                        label: Text('Product Name',
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold))),
+                    DataColumn(
+                        label: Text('Quantity',
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold))),
+                    DataColumn(
+                        label: Text('Action',
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold))),
+                  ],
+                  source: ShopData(widget.shopData, context),
+                  rowsPerPage: ((context.height -
+                      GeneralPagination.topViewHeight -
+                      GeneralPagination.paginateDataTableHeaderRowHeight -
+                      GeneralPagination.pagerWidgetHeight) ~/
+                      GeneralPagination.paginateDataTableRowHeight)
+                      .toInt(),
+                  arrowHeadColor: Colors.lightBlue,
+                  columnSpacing: 10,
                 ),
               )
             ],

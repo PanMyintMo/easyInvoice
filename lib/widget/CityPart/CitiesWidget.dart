@@ -53,16 +53,15 @@ class CityData extends DataTableSource {
       DataCell(Row(
         children: [
           IconButton(
-            icon: const Icon(Icons.edit,color: Colors.green,),
+            icon: Icon(Icons.edit,color: Colors.green.shade900,),
             onPressed: () async{
              final result=await Navigator.push(context, MaterialPageRoute(builder: (context) =>
-                   EditCityScreen(country_id: city.countryId.toString(),name: city.name,id: city.id,)));
+                   EditCityScreen(country_id: city.country_id.toString(),name: city.name,id: city.id,)));
 
              if (result == true) {
-               BlocProvider.of<FetchAllCityCubit>(context).fetchAllCity();
+              BlocProvider.of<FetchAllCityCubit>(context).fetchAllCity();
+
              }
-
-
              },
           ),
           IconButton(

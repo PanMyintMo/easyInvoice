@@ -1,7 +1,9 @@
 import 'package:easy_invoice/bloc/delete/CityPart/delete_ward_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 import '../../bloc/get/CityPart/fetch_all_ward_cubit.dart';
+import '../../common/GeneralPaganizationClass.dart';
 import '../../common/showDeleteConfirmationDialog.dart';
 import '../../data/responseModel/common/WardResponse.dart';
 import '../../screen/LocationPart/EditWardScreen.dart';
@@ -15,39 +17,40 @@ class WardsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          child: PaginatedDataTable(
-            columns: const [
-              DataColumn(
-                label: Text(
-                  'ID',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                ),
-              ),
-              DataColumn(
-                label: Text(
-                  'Name',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                ),
-              ),
-              DataColumn(
-                label: Text(
-                  'Action',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                ),
-              ),
-            ],
-            source: WardData(ward, context),
-            horizontalMargin: 20,
-            arrowHeadColor: Colors.blueAccent,
-            rowsPerPage: 8,
-            columnSpacing: 85,
+    return SingleChildScrollView(
+      scrollDirection: Axis.vertical,
+      child: PaginatedDataTable(
+        columns: const [
+          DataColumn(
+            label: Text(
+              'ID',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
           ),
-        ),
-      ],
+          DataColumn(
+            label: Text(
+              'Name',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
+          ),
+          DataColumn(
+            label: Text(
+              'Action',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
+          ),
+        ],
+        source: WardData(ward, context),
+        horizontalMargin: 20,
+        arrowHeadColor: Colors.blueAccent,
+        rowsPerPage: ((context.height -
+            GeneralPagination.topViewHeight -
+            GeneralPagination.paginateDataTableHeaderRowHeight -
+            GeneralPagination.pagerWidgetHeight) ~/
+            GeneralPagination.paginateDataTableRowHeight)
+            .toInt(),
+        columnSpacing: 85,
+      ),
     );
   }
 }
@@ -72,9 +75,9 @@ class WardData extends DataTableSource {
         Row(
           children: [
             IconButton(
-              icon: const Icon(
+              icon: Icon(
                 Icons.edit,
-                color: Colors.green,
+                color: Colors.green.shade900,
               ),
               onPressed: () async {
                 final result = await Navigator.push(

@@ -2,6 +2,7 @@ import 'package:easy_invoice/bloc/edit/TownshipPart/edit_township_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../common/ApiHelper.dart';
+import '../../data/api/ConnectivityService.dart';
 import '../../data/api/apiService.dart';
 import '../../data/responseModel/CityPart/FetchCityByCountryId.dart';
 import '../../data/responseModel/CountryPart/CountryResponse.dart';
@@ -41,7 +42,7 @@ class _EditTownshipWidgetState extends State<EditTownshipWidget> {
 
   void fetchCitiesByCountryId(int id) async {
     try {
-      final response = await ApiService().fetchAllCitiesByCountryId(id);
+      final response = await ApiService(ConnectivityService()).fetchAllCitiesByCountryId(id);
       if (response.isNotEmpty) {
         setState(() {
           cities = response;

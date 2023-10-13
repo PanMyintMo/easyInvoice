@@ -67,6 +67,7 @@ class _AddNewTownshipState extends State<AddNewTownshipWidget> {
                   onChanged: (value) {
                     setState(() {
                       select_country = value;
+                      select_city= null;
                     });
                   },
                   hint: "Select Country",

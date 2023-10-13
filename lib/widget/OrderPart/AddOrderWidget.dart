@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../bloc/post/DeliveryPart/add_order_cubit.dart';
 import '../../common/FormValidator.dart';
 import '../../common/ThemeHelperUserClass.dart';
+import '../../data/api/ConnectivityService.dart';
 import '../../data/responseModel/CityPart/FetchCityByCountryId.dart';
 import '../../data/responseModel/CityPart/Street.dart';
 import '../../data/responseModel/CountryPart/CountryResponse.dart';
@@ -108,7 +109,7 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
   }
 
   void chooseProductOrderById(ChooseProductOrderRequest? id) async {
-    final response = await ApiService().chooseProductOrder(id!);
+    final response = await ApiService(ConnectivityService()).chooseProductOrder(id!);
     setState(() {
       productQuality = response.available_quantity;
       salePrice = response.sale_price;
@@ -118,7 +119,7 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
 
 
   void fetchCitiesByCountryId(int id) async {
-    final response = await ApiService().fetchAllCitiesByCountryId(id);
+    final response = await ApiService(ConnectivityService()).fetchAllCitiesByCountryId(id);
     setState(() {
       cities = response;
       if (response.isNotEmpty) {}
@@ -126,7 +127,7 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
   }
 
   void fetchTownshipByCityId(int id) async {
-    final response = await ApiService().fetchAllTownshipByCityId(id);
+    final response = await ApiService(ConnectivityService()).fetchAllTownshipByCityId(id);
     setState(() {
       townships = response;
       if (response.isNotEmpty) {
@@ -155,7 +156,7 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
   }
 
   void fetchDeliCompanyNameByTownshipId(int id) async {
-    final response = await ApiService().fetchAllCompanyByTownshipId(id);
+    final response = await ApiService(ConnectivityService()).fetchAllCompanyByTownshipId(id);
     setState(() {
       companyData = response;
       if (response.isNotEmpty) {
@@ -656,7 +657,7 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
                                   'Quality can not be greater than available quantity!';
                                 });
                               } else {
-                                final response = await ApiService()
+                                final response = await ApiService(ConnectivityService())
                                     .changeOrderQty(
                                     ChangeOrderProductQtyRequest(
                                       selectedProductId: product_id.toString(),
@@ -673,7 +674,7 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
                             }
                             else {
 
-                              final response = await ApiService()
+                              final response = await ApiService(ConnectivityService())
                                   .changeOrderQty(
                                   ChangeOrderProductQtyRequest(
                                     selectedProductId: product_id.toString(),

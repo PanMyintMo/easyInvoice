@@ -66,6 +66,7 @@ import '../bloc/post/DeliveryPart/add_order_cubit.dart';
 import '../bloc/post/DeliveryPart/deli_company_info_cubit.dart';
 import '../bloc/post/ShopKeeperPart/update_shop_keeper_cubit.dart';
 import '../bloc/post/add_size_cubit.dart';
+import '../data/api/ConnectivityService.dart';
 
 var getIt = GetIt.instance;
 
@@ -73,7 +74,7 @@ void locator() {
   Dio dio = Dio();
   getIt.registerLazySingleton(() => dio);
 
-  ApiService apiService = ApiService();
+  ApiService apiService = ApiService(ConnectivityService());
   getIt.registerLazySingleton(() => apiService);
 
   UserRepository userRepository = UserRepository();

@@ -18,7 +18,7 @@ class Wards extends StatelessWidget {
           elevation: 0.0,
           backgroundColor: Colors.white70,
           iconTheme: const IconThemeData(
-            color: Colors.red, // Set the color of the navigation icon to black
+            color: Colors.blue, // Set the color of the navigation icon to black
           ),
           title: const Text(
             'Ward Screen',
@@ -50,74 +50,76 @@ class WardScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Align(
-          alignment: Alignment.topRight,
-          child: TextButton(
-            onPressed: () async {
-              final result = await Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => const AddWardScreen(),
-                ),
-              );
-              if (result == true) {
-                BlocProvider.of<FetchAllWardCubit>(context).fetchAllWard();
-              }
-            },
-            child: const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Text(
-                'Add New Ward',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  decoration: TextDecoration.underline,
-                  color: Colors.blue,
+    return SingleChildScrollView(
+      scrollDirection: Axis.vertical,
+      child: Column(
+        children: [
+          Align(
+            alignment: Alignment.topRight,
+            child: TextButton(
+              onPressed: () async {
+                final result = await Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const AddWardScreen(),
+                  ),
+                );
+                if (result == true) {
+                  BlocProvider.of<FetchAllWardCubit>(context).fetchAllWard();
+                }
+              },
+              child: const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text(
+                  'Add New Ward',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    decoration: TextDecoration.underline,
+                    color: Colors.blue,
+                  ),
                 ),
               ),
             ),
           ),
-        ),
-        BlocBuilder<FetchAllWardCubit, FetchAllWardState>(
-          builder: (context, state) {
-            if (state is FetchAllWardLoading) {
-              return const Center(child: CircularProgressIndicator());
-            } else if (state is FetchAllWardSuccess) {
-              final ward = state.ward;
+          BlocBuilder<FetchAllWardCubit, FetchAllWardState>(
+            builder: (context, state) {
+              if (state is FetchAllWardLoading) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (state is FetchAllWardSuccess) {
+                final ward = state.ward;
 
-
-              if (ward.isEmpty) {
-                return const Center(
-                  child: Text("No Wards found."),
-                );
-              }
-
-              return BlocConsumer<DeleteWardCubit, DeleteWardState>(
-                builder: (context, deleteState) {
-                  bool loading = deleteState is DeleteWardLoading;
-
-                  return WardsWidget(
-                    isLoading: loading, ward: state.ward,
+                if (ward.isEmpty) {
+                  return const Center(
+                    child: Text("No Wards found."),
                   );
-                },
-                listener: (context, deleteState) {
-                  if (deleteState is DeleteWardSuccess) {
-                    showToastMessage('Deleted Ward successful.');
-                    BlocProvider.of<FetchAllWardCubit>(context)
-                        .fetchAllWard();
-                  } else if (deleteState is DeleteWardFail) {
-                    showToastMessage(
-                        'Failed to delete ward: ${deleteState.error}');
-                  }
-                },
-              );
-            } else {
-              return const SizedBox(); // Handle other states if needed
-            }
-          },
-        ),
-      ],
+                }
+
+                return BlocConsumer<DeleteWardCubit, DeleteWardState>(
+                  builder: (context, deleteState) {
+                    bool loading = deleteState is DeleteWardLoading;
+
+                    return WardsWidget(
+                      isLoading: loading, ward: state.ward,
+                    );
+                  },
+                  listener: (context, deleteState) {
+                    if (deleteState is DeleteWardSuccess) {
+                      showToastMessage('Deleted Ward successful.');
+                      BlocProvider.of<FetchAllWardCubit>(context)
+                          .fetchAllWard();
+                    } else if (deleteState is DeleteWardFail) {
+                      showToastMessage(
+                          'Failed to delete ward: ${deleteState.error}');
+                    }
+                  },
+                );
+              } else {
+                return const SizedBox(); // Handle other states if needed
+              }
+            },
+          ),
+        ],
+      ),
     );
   }
 }

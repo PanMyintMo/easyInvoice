@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../bloc/edit/edit_product_item_cubit.dart';
 import '../common/ThemeHelperUserClass.dart';
 import '../common/ToastMessage.dart';
+import '../data/api/ConnectivityService.dart';
 import '../data/api/apiService.dart';
 import '../data/responseModel/GetAllPaganizationDataResponse.dart';
 
@@ -103,7 +104,7 @@ class _EditProductItemScreenState extends State<EditProductItemScreen> {
 
   Future<void> fetchSizeName() async {
     try {
-      final response = await ApiService().getAllSizes();
+      final response = await ApiService(ConnectivityService()).getAllSizes();
       if (response.data.isNotEmpty) {
         setState(() {
           sizes = response.data;
@@ -116,7 +117,7 @@ class _EditProductItemScreenState extends State<EditProductItemScreen> {
 
   Future<void> fetchCategoriesName() async {
     try {
-      final response = await ApiService().getAllCategories();
+      final response = await ApiService(ConnectivityService()).getAllCategories();
       if (response.data.isNotEmpty) {
         setState(() {
           categories = response.data;

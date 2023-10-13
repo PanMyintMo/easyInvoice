@@ -1,4 +1,4 @@
-
+import '../data/api/ConnectivityService.dart';
 import '../data/api/apiService.dart';
 import '../data/responseModel/CityPart/Cities.dart';
 import '../data/responseModel/CityPart/Street.dart';
@@ -15,12 +15,12 @@ class ApiHelper {
   //By using static , you can call directly apiHelper.fetchCategoryName like that
   static Future<List<PaganizationItem>?> fetchCategoriesName() async {
     try {
-      final response = await ApiService().getAllCategories();
+      final response = await ApiService(ConnectivityService()).getAllCategories();
       if (response.data.isNotEmpty) {
         return response.data;
       }
     } catch (error) {
-      print('Error fetching categories: $error');
+     //
     }
     return []; // Return an empty list if the request fails
   }
@@ -28,12 +28,12 @@ class ApiHelper {
   //Fetch size Name
   static Future<List<PaganizationItem>?> fetchSizeName() async {
     try {
-      final response = await ApiService().getAllSizes();
+      final response = await ApiService(ConnectivityService()).getAllSizes();
       if (response.data.isNotEmpty) {
         return response.data;
       }
     } catch (error) {
-     // print('Error fetching sizes: $error');
+    //
     }
     return []; // Return an empty list if the request fails
   }
@@ -41,12 +41,12 @@ class ApiHelper {
   //Fetch city Name
   static Future<List<City>> fetchCityName() async {
     try {
-      final response = await ApiService().cities();
+      final response = await ApiService(ConnectivityService()).cities();
       if (response.data.isNotEmpty) {
         return response.data;
       }
     } catch (error) {
-     // print('Error fetching city: $error');
+     //
     }
     return []; // Return an empty list if the request fails
   }
@@ -54,12 +54,12 @@ class ApiHelper {
   //Fetch township Name
   static Future<List<Township>> fetchTownshipName() async {
     try {
-      final response = await ApiService().townships();
+      final response = await ApiService(ConnectivityService()).townships();
       if (response.data.isNotEmpty) {
         return response.data;
       }
     } catch (error) {
-      //print('Error fetching township: $error');
+     //
     }
     return []; // Return an empty list if the request fails
   }
@@ -67,12 +67,12 @@ class ApiHelper {
   //Fetch country Name
   static Future<List<Country>?> fetchCountryName() async {
     try {
-      final response = await ApiService().country();
+      final response = await ApiService(ConnectivityService()).country();
       if (response.data.isNotEmpty) {
         return response.data;
       }
     } catch (error) {
-     // print('Error fetching country: $error');
+    //
     }
     return []; // Return an empty list if the request fails
   }
@@ -80,12 +80,12 @@ class ApiHelper {
   //Fetch ward Name
   static Future<List<Ward>?> fetchWardName() async {
     try {
-      final response = await ApiService().wards();
+      final response = await ApiService(ConnectivityService()).wards();
       if (response.data.isNotEmpty) {
         return response.data;
       }
     } catch (error) {
-      //print('Error fetching wards: $error');
+     //
     }
     return []; // Return an empty list if the request fails
   }
@@ -93,27 +93,27 @@ class ApiHelper {
   //fetch ward by township id
   static Future<List<WardByTownshipData>> fetchWardByTownshipId(int id) async{
     try{
-      final response= await ApiService().fetchWardByTownship(id);
+      final response= await ApiService(ConnectivityService()).fetchWardByTownship(id);
       if(response.isNotEmpty){
         return response;
       }
-     // print("Ward list are ${response}");
+
     }
     catch(error){
-      //print('Error is $error');
+     //
     }
     return [];
   }
   //fetch street by ward id
   static Future<List<Street>> fetchStreetByWardId(int id) async{
     try{
-      final response= await ApiService().fetchStreetByWardId(id);
+      final response= await ApiService(ConnectivityService()).fetchStreetByWardId(id);
       if(response.data.isNotEmpty){
         return response.data;
       }
     }
     catch(error){
-     // print('Error is $error');
+    //
     }
     return [];
   }
@@ -122,12 +122,12 @@ class ApiHelper {
 
   static Future<List<ProductListItem>?> fetchAllProductItem() async {
     try {
-      final response = await ApiService().fetchAllProducts();
+      final response = await ApiService(ConnectivityService()).fetchAllProducts();
       if (response.data.isNotEmpty) {
         return response.data;
       }
     } catch (error) {
-     // print('Error fetching product: $error');
+   //
     }
     return [];
   }
@@ -135,12 +135,12 @@ class ApiHelper {
 //fetch all shop's product list
   static Future<ShopProductListResponse?> allShopProduct() async {
     try {
-      final response = await ApiService().shopProductList();
+      final response = await ApiService(ConnectivityService()).shopProductList();
 
         return response;
 
     } catch (error) {
-     // print('Error fetching product: $error');
+  //
     }
     return null;
   }
@@ -149,12 +149,12 @@ class ApiHelper {
 
   static Future<List<FaultyItemData>> fetchAllFaultyItem() async {
     try {
-      final response = await ApiService().fetchAllFaultyItem();
+      final response = await ApiService(ConnectivityService()).fetchAllFaultyItem();
       if (response.data.isNotEmpty) {
         return response.data;
       }
     } catch (error) {
-     // print('Error fetching faulty item: $error');
+     //
     }
     return [];
   }
