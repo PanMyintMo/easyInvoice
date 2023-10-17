@@ -1,3 +1,4 @@
+import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:easy_invoice/bloc/post/add_size_cubit.dart';
 import 'package:easy_invoice/module/module.dart';
 import 'package:easy_invoice/widget/SizeAddFormWidget.dart';
@@ -19,11 +20,22 @@ class _SizeAddScreenState extends State<SizeAddScreen> {
     return BlocProvider(
       create: (context) => AddSizeCubit(getIt.call()),
       child: Scaffold(
+        appBar: AppBar(
+          title:  Text(
+            'Sizes Add Screen',
+            style: TextStyle(
+                color: AdaptiveTheme.of(context).theme.iconTheme.color,
+                fontWeight: FontWeight.bold,
+                fontSize: 16),
+          ),
+        ),
         body: BlocBuilder<AddSizeCubit, AddSizeState>(
           builder: (context, state) {
+
+            final isLoading= state is AddSizeLoading;
             if (state is AddSizeLoading) {
-              return const SizeAddFormWidget(
-                isLoading: true,);
+              return  SizeAddFormWidget(
+                isLoading: isLoading,);
             } else if (state is AddSizeSuccess) {
               showToastMessage(state.addSizeResponse.message);
               Navigator.pop(context,true);
@@ -33,12 +45,12 @@ class _SizeAddScreenState extends State<SizeAddScreen> {
               );
             } else if (state is AddSizeFail) {
               showToastMessage(state.error.toString());
-              return const SizeAddFormWidget(
-                isLoading: false,
+              return  SizeAddFormWidget(
+                isLoading: isLoading,
               );
             }
-            return const SizeAddFormWidget(
-              isLoading: false,
+            return  SizeAddFormWidget(
+              isLoading: isLoading,
 
             );
           },

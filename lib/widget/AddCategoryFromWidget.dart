@@ -1,8 +1,10 @@
 import 'package:easy_invoice/bloc/post/CategoryPart/add_category_cubit.dart';
-import 'package:easy_invoice/module/module.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_invoice/dataRequestModel/AddCategoryRequestModel.dart';
+
+import '../common/FormValidator.dart';
+import '../common/ThemeHelperUserClass.dart';
 
 class AddCategoryFromWidget extends StatefulWidget {
   final bool isLoading; // Add the isLoading property
@@ -34,90 +36,53 @@ class _AddCategoryFromWidgetState extends State<AddCategoryFromWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => AddCategoryCubit(getIt.call()),
-      child: Scaffold(
-        body: Center(
-          child: SizedBox(
-            width: double.infinity,
-            height: 200,
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: TextField(
-                          controller: name,
-                          decoration: const InputDecoration(
-                            border: OutlineInputBorder(),
-                            labelText: 'Add Category Name',
-                          ),
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: TextField(
-                          enabled: false,
-                          controller: slug,
-                          decoration: const InputDecoration(
-                            border: OutlineInputBorder(),
-                            labelText: 'Slug Name',
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                Stack(children: [
-                  Positioned(
-                    child: Center(
-                      child: TextButton(
-                          onPressed: () {
-                            final addCategoryCubit =
-                                context.read<AddCategoryCubit>();
-                            // final token = widget.token; // Retrieve the bearer token from the widget
-                            //  final headers = {'Authorization': 'Bearer $token'};
-                            addCategoryCubit.addCategory(
-                                AddCategoryRequestModel(name.text, slug.text));
-                          },
-                          child:  Text(
-                            'Add Category',
-                            style: TextStyle(color: Colors.green.shade900),
-                          )),
-                    ),
-                  ),
-                  if (widget.isLoading)
-                    const Center(
-                      child: CircularProgressIndicator(),
-                    ),
-
-                  // //show success or failure message base on the message
-                  // if (widget.message.isNotEmpty)
-                  //   Positioned(
-                  //     left: MediaQuery.of(context).size.height * 0.5 + 60,
-                  //     child: Text(
-                  //       widget.message,
-                  //       style: TextStyle(
-                  //           fontSize: 18,
-                  //           color: widget.message.startsWith('Success')
-                  //               ? Colors.green
-                  //               : Colors.red),
-                  //     ),
-                  //   )
-                ])
-              ],
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Row(
+          children: [
+            Expanded(
+              flex: 1,
+              child: buildProductContainerForm('Category Name',
+                  TextInputType.name, name, validateField),
             ),
-          ),
+            const SizedBox(width: 10,),
+            Expanded(
+              child: TextField(
+                enabled: false,
+                controller: slug,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Slug Name',
+                ),
+              ),
+            ),
+          ],
         ),
-      ),
+        const SizedBox(
+          height: 20,
+        ),
+        TextButton(
+            onPressed: () {
+              final addCategoryCubit =
+                  context.read<AddCategoryCubit>();
+              // final token = widget.token; // Retrieve the bearer token from the widget
+              //  final headers = {'Authorization': 'Bearer $token'};
+              addCategoryCubit.addCategory(
+                  AddCategoryRequestModel(name.text, slug.text));
+            },
+            child:  Text(
+              'Add Category',
+              style: TextStyle(color: Colors.green.shade900),
+            )),
+        if (widget.isLoading)
+          const Center(
+            child: CircularProgressIndicator(),
+          )
+      ],
     );
+
+
   }
 
   void _updateSlugField() {

@@ -103,7 +103,7 @@ class _RequestShopKeeperWidgetState extends State<RequestShopKeeperWidget> {
                           fetchProductsByCategory(int.parse(value!));
                         });
                       },
-                      hint: "Select Product",
+                      hint: "Select Product", context: context,
                     ),
                   ),
                   const SizedBox(
@@ -127,7 +127,7 @@ class _RequestShopKeeperWidgetState extends State<RequestShopKeeperWidget> {
                           product_id = value!;
                         });
                       },
-                      hint: "Select Product",
+                      hint: "Select Product", context: context,
                     ),
                   ),
                   const SizedBox(

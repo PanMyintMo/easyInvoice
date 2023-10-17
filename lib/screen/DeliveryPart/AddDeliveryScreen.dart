@@ -1,3 +1,4 @@
+import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:easy_invoice/widget/DeliveryPart/AddDeliveryWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,14 +20,9 @@ class _AddDeliveryScreenState extends State<AddDeliveryScreen> {
       create: (context) => DeliCompanyInfoCubit(getIt.call()),
       child: Scaffold(
         appBar: AppBar(
-          elevation: 0.0,
-          backgroundColor: Colors.white24,
-          iconTheme: const IconThemeData(
-            color: Colors.blue, // Set the color of the navigation icon to black
-          ),
-          title: const Text('Add Delivery',
+          title: Text('Add Delivery',
               style: TextStyle(
-                  color: Colors.black54,
+                  color: AdaptiveTheme.of(context).theme.iconTheme.color,
                   fontWeight: FontWeight.bold,
                   fontSize: 16)),
         ),

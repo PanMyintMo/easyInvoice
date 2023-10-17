@@ -115,7 +115,7 @@ class _UpdateFaultyWidgetState extends State<UpdateFaultyWidget> {
                           product_id = null;
                           fetchProductsByCategory(int.parse(value!));                        });
                       },
-                      hint: "Select Category",
+                      hint: "Select Category", context: context,
                     ),
                   ),
 
@@ -141,7 +141,7 @@ class _UpdateFaultyWidgetState extends State<UpdateFaultyWidget> {
                           product_id = value!;
                         });
                       },
-                      hint: "Select Product",
+                      hint: "Select Product", context: context,
                     ),
                   ),
                   const SizedBox(

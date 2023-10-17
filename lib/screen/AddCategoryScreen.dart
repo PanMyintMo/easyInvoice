@@ -1,3 +1,4 @@
+import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:easy_invoice/bloc/post/CategoryPart/add_category_cubit.dart';
 import 'package:easy_invoice/common/ToastMessage.dart';
 import 'package:easy_invoice/module/module.dart';
@@ -19,13 +20,8 @@ class _CategoryScreenState extends State<CategoryScreen> {
       create: (context) => AddCategoryCubit(getIt.call()),
       child: Scaffold(
         appBar: AppBar(
-          elevation: 0.0,
-          backgroundColor: Colors.white24,
-          iconTheme: const IconThemeData(
-            color: Colors.red, // Set the color of the navigation icon to black
-          ),
-          title: const Text('Category',style: TextStyle(
-              color: Colors.black54, fontWeight: FontWeight.bold, fontSize: 16),),
+          title: Text('Add Category Screen',style: TextStyle(
+              color:AdaptiveTheme.of(context).theme.iconTheme.color, fontWeight: FontWeight.bold, fontSize: 16),),
         ),
         body: BlocBuilder<AddCategoryCubit, AddCategoryState>(
           builder: (context, state) {

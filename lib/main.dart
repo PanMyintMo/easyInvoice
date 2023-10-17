@@ -1,32 +1,41 @@
-import 'package:easy_invoice/common/ThemeProvider.dart';
+import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:easy_invoice/screen/splash_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
-import 'bloc/post/Login&Register/sign_up_cubit.dart';
 import 'module/module.dart';
 import 'screen/home/Login.dart';
 import 'screen/home/Register.dart';
 import 'screen/mainScreen.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   locator();
-  runApp(const MyApp());
+  final savedThemeMode = await AdaptiveTheme.getThemeMode();
+
+  runApp(MyApp(savedThemeMode: savedThemeMode));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  final AdaptiveThemeMode? savedThemeMode;
+
+  const MyApp({Key? key, this.savedThemeMode}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<SignUpCubit>(
-      create: (BuildContext context) => getIt.get<SignUpCubit>(),
-      child: GetMaterialApp(
+    return AdaptiveTheme(
+      light: ThemeData(
+        useMaterial3: true,
+          colorSchemeSeed: Color.fromRGBO(86, 169, 207, 1.0)
+
+      ),
+      dark: ThemeData(
+        useMaterial3: true,
+      ),
+      initial: savedThemeMode ?? AdaptiveThemeMode.light,
+      builder: (theme, darkTheme) => GetMaterialApp(
         debugShowCheckedModeBanner: false,
-        theme: MyThemes.lightTheme,
-        darkTheme: MyThemes.darkTheme,
-        themeMode: ThemeMode.system,
+        theme: theme,
+        darkTheme: darkTheme,
         getPages: [
           GetPage(name: "/", page: () => const SplashScreen()),
           GetPage(name: "/login", page: () => const Login()),

@@ -17,23 +17,7 @@ class InvoiceScreen extends StatelessWidget {
         cubit.generateInvoice();
         return cubit;
       },
-      child: Scaffold(
-        appBar: AppBar(
-          elevation: 0.0,
-          backgroundColor: Colors.white24,
-          iconTheme: const IconThemeData(
-            color: Colors.red,
-          ),
-          title: const Text(
-            'MMEasy Invoice Screen',
-            style: TextStyle(
-              color: Colors.black54,
-              fontWeight: FontWeight.bold,
-              fontSize: 16,
-            ),
-          ),
-        ),
-        body: BlocBuilder<InvoiceCubit, InvoiceState>(
+      child: BlocBuilder<InvoiceCubit, InvoiceState>(
           builder: (context, state) {
             final loading = state is InvoiceLoading;
             if (state is InvoiceLoading) {
@@ -50,7 +34,7 @@ class InvoiceScreen extends StatelessWidget {
             return const SizedBox();
           },
         ),
-      ),
-    );
+      );
+
   }
 }

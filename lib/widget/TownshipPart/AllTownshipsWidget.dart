@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import '../../common/ApiHelper.dart';
 import '../../common/GeneralPaganizationClass.dart';
-import '../../common/showDeleteConfirmationDialog.dart';
+import '../../common/showDefaultDialog.dart';
 import '../../data/responseModel/TownshipsPart/AllTownshipResponse.dart';
 import '../../screen/LocationPart/EditTownshipScreen.dart';
 
@@ -107,8 +107,7 @@ class TownshipData extends DataTableSource {
               color: Colors.red,
             ),
             onPressed: () {
-              showDeleteConfirmationDialogs(
-                  context, "Are you sure you want to delete township?", () {
+              showCustomDialog(title: 'Delete Township', content: 'Are you sure you want to delete township?', confirmText: 'Yes', onConfirm: (){
                 context
                     .read<TownshipDeleteCubit>()
                     .deleteTownship(township.id.toInt());

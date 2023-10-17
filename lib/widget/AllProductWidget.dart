@@ -177,7 +177,7 @@ class _AllProductWidgetState extends State<AllProductWidget> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  Text('Date: ${product.created_at.substring(0, 10)}'),
+                  Text('Date: ${product.created_at.substring(0, 10)},'),
                   const SizedBox(height: 16,),
                   Center(
                     child: (utype == 'ADM') ? CustomButton(

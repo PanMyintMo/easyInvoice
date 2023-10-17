@@ -1,3 +1,4 @@
+import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:easy_invoice/bloc/post/FaultyItemPart/add_request_faulty_item_cubit.dart';
 import 'package:easy_invoice/widget/FaultyItemPart/AddRequestFaultyItemWidget.dart';
 import 'package:flutter/material.dart';
@@ -19,16 +20,10 @@ class _AddRequestFaultyItemState extends State<AddRequestFaultyItem> {
       create: (context) => AddRequestFaultyItemCubit(getIt.call()),
       child: Scaffold(
         appBar: AppBar(
-          elevation: 0.0,
-          backgroundColor: Colors.white70,
-          iconTheme: const IconThemeData(
-            color: Colors.red, // Set the color of the navigation icon to black
-          ),
-          title: const Text(
+          title:  Text(
             'Add Faulty Item Screen',
             style: TextStyle(
-                color: Colors.black54,
-                fontWeight: FontWeight.bold,
+                color:AdaptiveTheme.of(context).theme.iconTheme.color,                fontWeight: FontWeight.bold,
                 fontSize: 16),
           ),
         ),

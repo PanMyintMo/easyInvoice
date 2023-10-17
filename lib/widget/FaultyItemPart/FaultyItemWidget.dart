@@ -3,7 +3,7 @@ import 'package:easy_invoice/screen/FaultyItemPart/UpdateFaultyItemScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import '../../common/showDeleteConfirmationDialog.dart';
+import '../../common/showDefaultDialog.dart';
 import '../../data/responseModel/FaultyItemPart/AllFaultyItems.dart';
 
 class FaultyItemWidget extends StatelessWidget {
@@ -85,12 +85,11 @@ class FaultyData extends DataTableSource {
             IconButton(
               icon: const Icon(Icons.delete, color: Colors.red),
               onPressed: () {
-                showDeleteConfirmationDialogs(context,
-                    "Are you sure you want to delete  this faulty item?", () {
-                  context
-                      .read<DeleteFaultyItemCubit>()
-                      .deleteFaultyItem(faultyItem.id);
+                showCustomDialog(title: 'Delete Faulty Item', content: 'Are you sure you want to delete this faulty item?', confirmText: 'Yes', onConfirm: (){
+                    context
+                       .read<DeleteFaultyItemCubit>().deleteFaultyItem(faultyItem.id);
                 });
+
               },
             ),
           ],

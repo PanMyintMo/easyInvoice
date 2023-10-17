@@ -1,3 +1,4 @@
+import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:settings_ui/settings_ui.dart';
 
@@ -9,10 +10,12 @@ class SettingScreen extends StatefulWidget {
 }
 
 class _SettingScreenState extends State<SettingScreen> {
-
   bool isSwitched = false;
+
   @override
   Widget build(BuildContext context) {
+    //AdaptiveTheme.of(context).mode.isLight;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Setting"),
@@ -20,7 +23,6 @@ class _SettingScreenState extends State<SettingScreen> {
       body: SettingsList(
         sections: [
           SettingsSection(
-
             title: const Text('Section 1'),
             tiles: [
               SettingsTile(
@@ -30,12 +32,16 @@ class _SettingScreenState extends State<SettingScreen> {
                 onPressed: (BuildContext context) {},
               ),
               SettingsTile.switchTile(
-                title: const Text('Use System Theme'),
+                title: const Text('Change Theme'),
                 leading: const Icon(Icons.phone_android),
-
                 onToggle: (value) {
                   setState(() {
-                    isSwitched = value;
+                     isSwitched = value;
+                    if (value) {
+                      AdaptiveTheme.of(context).setDark();
+                    } else {
+                      AdaptiveTheme.of(context).setLight();
+                    }
                   });
                 },
                 initialValue: isSwitched,
@@ -44,19 +50,18 @@ class _SettingScreenState extends State<SettingScreen> {
             ],
           ),
           SettingsSection(
-
             title: const Text('Section 2'),
             tiles: [
               SettingsTile(
                 title: const Text('Security'),
-              //  subtitle: 'Fingerprint',
+                //  subtitle: 'Fingerprint',
                 leading: const Icon(Icons.lock),
                 onPressed: (BuildContext context) {},
               ),
               SettingsTile.switchTile(
                 title: const Text('Use fingerprint'),
                 leading: const Icon(Icons.fingerprint),
-               // switchValue: true,
+                // switchValue: true,
                 onToggle: (value) {}, initialValue: null,
               ),
             ],

@@ -73,6 +73,8 @@ dependencies:
   printing: ^5.11.0
   bluetooth_print: ^4.3.0
   connectivity_plus: ^5.0.0
+  adaptive_theme: ^3.4.1
+  blue_thermal_printer: ^1.2.3
 
 
 dev_dependencies:

@@ -121,7 +121,7 @@ class _AddProductWidgetState extends State<AddProductWidget> {
                           category_id = value!;
                         });
                       },
-                      hint: "Select Category",
+                      hint: "Select Category", context: context,
                     ),
                   ),
                   const SizedBox(height: 5),
@@ -142,7 +142,7 @@ class _AddProductWidgetState extends State<AddProductWidget> {
                           sizeId = value!;
                         });
                       },
-                      hint: "Select Size",
+                      hint: "Select Size", context: context,
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -331,7 +331,7 @@ class _AddProductWidgetState extends State<AddProductWidget> {
                     ),
                   ),
                   const SizedBox(height: 16),
-                  SizedBox(
+                  Center(
                     child: ElevatedButton(
                       onPressed: () {
                         if (formKey.currentState!.validate()) _submitForm();

@@ -1,3 +1,4 @@
+import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:easy_invoice/bloc/post/CountryPart/add_request_country_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -15,15 +16,10 @@ class AddNewCountryScreen extends StatelessWidget {
       create: (context) => AddRequestCountryCubit(getIt.call()),
       child: Scaffold(
         appBar: AppBar(
-          elevation: 0.0,
-          backgroundColor: Colors.white24,
-          iconTheme: const IconThemeData(
-            color: Colors.red, // Set the color of the navigation icon to black
-          ),
-          title: const Text(
+          title:  Text(
             'Add New Country',
             style: TextStyle(
-              color: Colors.black54,
+              color:AdaptiveTheme.of(context).theme.iconTheme.color,
               fontWeight: FontWeight.bold,
               fontSize: 16,
             ),

@@ -1,3 +1,4 @@
+import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 
@@ -99,7 +100,7 @@ Widget buildProductContainerForm(String label, TextInputType inputType,
     controller: controller,
     validator: validator,
     decoration: InputDecoration(
-      labelText: label, // Corrected the way label is provided
+      hintText: label,
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(10.0),
       ),
@@ -108,6 +109,8 @@ Widget buildProductContainerForm(String label, TextInputType inputType,
         borderRadius: BorderRadius.circular(10.0),
       ),
       fillColor: Colors.grey,
+      contentPadding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0), // Adjust these values as needed
+
     ),
   );
 }
@@ -153,41 +156,40 @@ Widget textFieldForm(dynamic controller, String label) {
 Widget buildDropdown({
   required  value,
   required Function(dynamic) onChanged,
-  String? hint, required items,
+  String? hint,
+  required items,
+  required BuildContext context,
 }) {
-  return SizedBox(
-    width: 200,
-    height: 80,
-    child: DropdownButtonFormField2(
-      value: value,
-      isDense: true,
-      hint: Text(hint.toString()),
-      decoration: InputDecoration(
-        contentPadding: const EdgeInsets.symmetric(vertical: 16),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(15),
-        ),
+
+  return DropdownButtonFormField2(
+    value: value,
+    isDense: true,
+    hint: Text(hint.toString()),
+    decoration: InputDecoration(
+      contentPadding: const EdgeInsets.symmetric(vertical: 10),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(15),
       ),
-      items: items,
-      onChanged: onChanged,
-      buttonStyleData: const ButtonStyleData(
-        padding: EdgeInsets.only(right: 8),
+    ),
+    items: items,
+    onChanged: onChanged,
+    buttonStyleData: const ButtonStyleData(
+      padding: EdgeInsets.only(right: 10),
+    ),
+    iconStyleData:  IconStyleData(
+      icon: Icon(
+        Icons.arrow_drop_down,
+        color:  AdaptiveTheme.of(context).theme.iconTheme.color,
       ),
-      iconStyleData: const IconStyleData(
-        icon: Icon(
-          Icons.arrow_drop_down,
-          color: Colors.black45,
-        ),
-        iconSize: 24,
+      iconSize: 24,
+    ),
+    dropdownStyleData: DropdownStyleData(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(15),
       ),
-      dropdownStyleData: DropdownStyleData(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(15),
-        ),
-      ),
-      menuItemStyleData: const MenuItemStyleData(
-        padding: EdgeInsets.symmetric(horizontal: 16),
-      ),
+    ),
+    menuItemStyleData: const MenuItemStyleData(
+      padding: EdgeInsets.symmetric(horizontal: 16),
     ),
   );
 }

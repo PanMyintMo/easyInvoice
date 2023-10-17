@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 import '../../bloc/delete/CityPart/delete_city_cubit.dart';
 import '../../bloc/get/CityPart/fetch_all_city_cubit.dart';
-import '../../common/showDeleteConfirmationDialog.dart';
+import '../../common/GeneralPaganizationClass.dart';
+import '../../common/showDefaultDialog.dart';
 import '../../data/responseModel/CityPart/Cities.dart';
 import '../../screen/LocationPart/EditCityScreen.dart';
 
@@ -26,7 +28,12 @@ class CitiesWidget extends StatelessWidget {
             source: CityData(cities,context),
             horizontalMargin: 20,
             arrowHeadColor: Colors.blueAccent,
-            rowsPerPage: 8,
+            rowsPerPage: ((context.height -
+                GeneralPagination.topViewHeight -
+                GeneralPagination.paginateDataTableHeaderRowHeight -
+                GeneralPagination.pagerWidgetHeight) ~/
+                GeneralPagination.paginateDataTableRowHeight)
+                .toInt(),
             columnSpacing: 85,
           ),
         ),
@@ -67,8 +74,10 @@ class CityData extends DataTableSource {
           IconButton(
             icon: const Icon(Icons.delete,color: Colors.red,),
             onPressed: () {
-              showDeleteConfirmationDialogs(context,"Are you sure you want to delete this city?",(){
-                context.read<DeleteCityCubit>().deleteCity(city.id);
+
+              showCustomDialog(title: 'Delete City', content: 'Are you sure you want to delete this city?', confirmText: '', onConfirm: (){
+                   context.read<DeleteCityCubit>().deleteCity(city.id);
+
               });
 
             },

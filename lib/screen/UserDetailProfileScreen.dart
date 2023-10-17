@@ -8,7 +8,7 @@ import '../bloc/edit/edit_user_role_cubit.dart';
 import '../bloc/get/UserRolePart/get_all_user_role_cubit.dart';
 import '../common/HeaderWidget.dart';
 import '../common/ToastMessage.dart';
-import '../common/showDeleteConfirmationDialog.dart';
+import '../common/showDefaultDialog.dart';
 import '../common/theme_helper.dart';
 import '../module/module.dart';
 
@@ -61,7 +61,7 @@ class _UserDetailProfileScreenState extends State<UserDetailProfileScreen> {
       child: Builder(builder: (context) {
         BlocProvider.of<GetAllUserRoleCubit>(context);
         return Scaffold(
-          backgroundColor: Colors.white,
+
           appBar: AppBar(
             elevation: 0,
             flexibleSpace: Container(
@@ -220,12 +220,9 @@ class _UserDetailProfileScreenState extends State<UserDetailProfileScreen> {
                               padding: const EdgeInsets.all(5),
                               child: ElevatedButton(
                                 onPressed: () {
-                                  showDeleteConfirmationDialogs(context,"Are you sure you want to delete this user account?",
-                                      (){
+                                  showCustomDialog(title: 'Delete Account!', content: 'Are you sure you want to delete', confirmText: 'Yes', onConfirm: (){
                                     context.read<DeleteUserRoleCubit>().deleteUserRole(widget.id);
-                                      }
-                                  );
-                                  Navigator.pop(context);
+                                  });
                                 },
                                 style: ThemeHelper().buttonStyle(),
                                 child: const Text(

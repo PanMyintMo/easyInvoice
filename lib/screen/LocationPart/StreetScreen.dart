@@ -1,3 +1,4 @@
+import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:easy_invoice/bloc/delete/CityPart/delete_street_cubit.dart';
 import 'package:easy_invoice/screen/LocationPart/AddStreetScreen.dart';
 import 'package:flutter/material.dart';
@@ -13,17 +14,12 @@ class StreetScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+
       appBar: AppBar(
-        elevation: 0.0,
-        backgroundColor: Colors.white70,
-        iconTheme: const IconThemeData(
-          color: Colors.blue, // Set the color of the navigation icon to black
-        ),
-        title: const Text(
+        title: Text(
           'Street Screen',
           style: TextStyle(
-            color: Colors.black54,
+            color:AdaptiveTheme.of(context).theme.iconTheme.color,
             fontWeight: FontWeight.bold,
             fontSize: 16,
           ),

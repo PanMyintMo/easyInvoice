@@ -1,3 +1,4 @@
+import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:easy_invoice/bloc/delete/delete_category_cubit.dart';
 import 'package:easy_invoice/bloc/get/CategoryPart/get_category_detail_cubit.dart';
 import 'package:easy_invoice/module/module.dart';
@@ -7,24 +8,17 @@ import '../common/ToastMessage.dart';
 import '../widget/AllCategoryPageWidget.dart';
 import 'AddCategoryScreen.dart';
 
-
 class AllCategoryDetailPage extends StatelessWidget {
   const AllCategoryDetailPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.white,
         appBar: AppBar(
-          elevation: 0.0,
-          backgroundColor: Colors.white70,
-          iconTheme: const IconThemeData(
-            color: Colors.red, // Set the color of the navigation icon to black
-          ),
-          title: const Text(
+          title: Text(
             'All Category  Screen',
             style: TextStyle(
-                color: Colors.black54,
+                color: AdaptiveTheme.of(context).theme.iconTheme.color,
                 fontWeight: FontWeight.bold,
                 fontSize: 16),
           ),
@@ -70,7 +64,8 @@ class _AllCategoryScreenState extends State<AllCategoryScreen> {
                   ),
                 );
                 if (result == true) {
-                  BlocProvider.of<GetCategoryDetailCubit>(context).getCategoryDetail();
+                  BlocProvider.of<GetCategoryDetailCubit>(context)
+                      .getCategoryDetail();
                 }
               },
               child: const Padding(
@@ -107,7 +102,6 @@ class _AllCategoryScreenState extends State<AllCategoryScreen> {
                     return AllCategoryPageWidget(
                       categories: state.getAllCategoryDetail,
                       isLoading: loading,
-
                     );
                   },
                   listener: (context, deleteState) {
@@ -131,4 +125,3 @@ class _AllCategoryScreenState extends State<AllCategoryScreen> {
     );
   }
 }
-

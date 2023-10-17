@@ -1,3 +1,4 @@
+import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:easy_invoice/bloc/delete/CityPart/delete_ward_cubit.dart';
 import 'package:easy_invoice/bloc/get/CityPart/fetch_all_ward_cubit.dart';
 import 'package:easy_invoice/screen/LocationPart/AddWardScreen.dart';
@@ -13,17 +14,13 @@ class Wards extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.white,
+
         appBar: AppBar(
-          elevation: 0.0,
-          backgroundColor: Colors.white70,
-          iconTheme: const IconThemeData(
-            color: Colors.blue, // Set the color of the navigation icon to black
-          ),
-          title: const Text(
+
+          title:  Text(
             'Ward Screen',
             style: TextStyle(
-                color: Colors.black54,
+                color:AdaptiveTheme.of(context).theme.iconTheme.color,
                 fontWeight: FontWeight.bold,
                 fontSize: 16),
           ),

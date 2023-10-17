@@ -34,8 +34,6 @@ class _LoginState extends State<Login> {
           builder: (context, state) {
             final loading= state is SignInLoading;
             if (state is SignInLoading) {
-
-
               return LoginInForm(
                 isLoading: loading,
                 message: '',

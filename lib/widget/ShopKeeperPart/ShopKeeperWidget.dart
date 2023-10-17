@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import '../../bloc/get/ShopKeeperPart/shop_keeper_request_cubit.dart';
 import '../../common/GeneralPaganizationClass.dart';
-import '../../common/showDeleteConfirmationDialog.dart';
+import '../../common/showDefaultDialog.dart';
 import '../../data/responseModel/ShopKeeperResponsePart/ShopKeeperRequestResponse.dart';
 import '../../screen/shopkeeperPart/EditShopKeeperScreen.dart';
 import '../../screen/shopkeeperPart/RequestShopKeeper.dart';
@@ -34,29 +34,40 @@ class _ShopKeeperWidgetState extends State<ShopKeeperWidget> {
                 children: [
                   Expanded(
                     child: TextButton(
-                      onPressed: () async{
-                        final result=await Navigator.push(
+                      onPressed: () async {
+                        final result = await Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) =>
                                   const RequestShopKeeperScreen()),
                         );
-                        if(result == true){
-                          BlocProvider.of<ShopKeeperRequestCubit>(context).shopkeeperRequestList();
-
+                        if (result == true) {
+                          BlocProvider.of<ShopKeeperRequestCubit>(context)
+                              .shopkeeperRequestList();
                         }
-
                       },
-                      child: const Text('Request Products',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold),),
+                      child: const Text(
+                        'Request Products',
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
                     ),
                   ),
                   const SizedBox(width: 10),
                   Expanded(
                     child: TextButton(
                       onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (content) => const DeliverWarehouseToShopkeeperScreen()));
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (content) =>
+                                    const DeliverWarehouseToShopkeeperScreen()));
                       },
-                      child: const Text('Receive Products',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold),),
+                      child: const Text(
+                        'Receive Products',
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
                     ),
                   ),
                 ],
@@ -69,7 +80,8 @@ class _ShopKeeperWidgetState extends State<ShopKeeperWidget> {
                     DataColumn(
                         label: Text(
                       'Id',
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     )),
                     DataColumn(
                         label: Text('Product Name',
@@ -86,10 +98,11 @@ class _ShopKeeperWidgetState extends State<ShopKeeperWidget> {
                   ],
                   source: ShopData(widget.shopData, context),
                   rowsPerPage: ((context.height -
-                      GeneralPagination.topViewHeight -
-                      GeneralPagination.paginateDataTableHeaderRowHeight -
-                      GeneralPagination.pagerWidgetHeight) ~/
-                      GeneralPagination.paginateDataTableRowHeight)
+                              GeneralPagination.topViewHeight -
+                              GeneralPagination
+                                  .paginateDataTableHeaderRowHeight -
+                              GeneralPagination.pagerWidgetHeight) ~/
+                          GeneralPagination.paginateDataTableRowHeight)
                       .toInt(),
                   arrowHeadColor: Colors.lightBlue,
                   columnSpacing: 10,
@@ -142,13 +155,15 @@ class ShopData extends DataTableSource {
           ),
           IconButton(
             onPressed: () {
-              showDeleteConfirmationDialogs(
-                  context, "Are you sure you want to delete  this shopkeeper?",
-                  () {
-                context
-                    .read<DeleteShopKeeperProductRequestCubit>()
-                    .deleteShopKeeperRequestProduct(shopItem.id);
-              });
+              showCustomDialog(
+                  title: 'Delete ShopKeeper',
+                  content: 'Are you sure you want to delete  this shopkeeper?',
+                  confirmText: 'Yes',
+                  onConfirm: () {
+                    context
+                        .read<DeleteShopKeeperProductRequestCubit>()
+                        .deleteShopKeeperRequestProduct(shopItem.id);
+                  });
             },
             icon: const Icon(
               Icons.delete,

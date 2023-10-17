@@ -1,3 +1,4 @@
+import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:easy_invoice/bloc/delete/TownshipPart/township_delete_cubit.dart';
 import 'package:easy_invoice/widget/TownshipPart/AllTownshipsWidget.dart';
 import 'package:flutter/material.dart';
@@ -17,17 +18,11 @@ class _TownshipsState extends State<Townships> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.white,
         appBar: AppBar(
-          elevation: 0.0,
-          backgroundColor: Colors.white70,
-          iconTheme: const IconThemeData(
-            color: Colors.red, // Set the color of the navigation icon to black
-          ),
-          title: const Text(
+          title:  Text(
             'Townships  Screen',
             style: TextStyle(
-                color: Colors.black54,
+                color:AdaptiveTheme.of(context).theme.iconTheme.color,
                 fontWeight: FontWeight.bold,
                 fontSize: 16),
           ),

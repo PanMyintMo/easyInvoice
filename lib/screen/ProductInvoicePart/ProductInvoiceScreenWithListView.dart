@@ -75,96 +75,111 @@ class _ProductInvoiceScreenWithListViewState extends State<ProductInvoiceScreenW
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: ListView(
-        children: [
-          Column(
-            children: [
-              Stack(
-                alignment: Alignment.center,
-                children: [
-                  Align(
-                    alignment: Alignment.topRight,
-                    child: ElevatedButton(
-                      onPressed: barcodeScanner,
-                      style: ElevatedButton.styleFrom(
-                        shape: const CircleBorder(),
-                        padding: const EdgeInsets.all(10),
-                      ),
-                      child: const Icon(
-                        Icons.qr_code_scanner,
-                        size: 25,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 16),
-              Align(
-                alignment: Alignment.topRight,
-                child: ElevatedButton(
-                  onPressed: true
-                      ? () async {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => PdfPage()));
-                  }
-                      : (){},
-                  child: const Text('Print'),
-                ),
-              ),
-              const SizedBox(height: 16),
-              TextFormField(
-                keyboardType: TextInputType.number,
-                controller: prouductno,
-                validator: validateField,
-                onEditingComplete: _handleSearch,
-                decoration: InputDecoration(
-                  labelText: 'Invoice Number',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide:
-                    const BorderSide(color: Colors.blue, width: 1.0),
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  fillColor: Colors.grey,
-                ),
-              ),
-              const SizedBox(height: 16),
-               Expanded(
-                 child: SingleChildScrollView(
-                  child: Column(
-                    children:  [
-                      const Row(
-                        children: [
-                          Text('Product Name',
-                                style:
-                                TextStyle(fontSize: 16, color: Colors.black54)),
-                          Text('QTY',
-                                style:
-                                TextStyle(fontSize: 16, color: Colors.black54)),
-                          Text('Sale Price',
-                                style:
-                                TextStyle(fontSize: 16, color: Colors.black54)),
-                          Text('Total',
-                                style:
-                                TextStyle(fontSize: 16, color: Colors.black54)),
-                        ],
-                      ),
-                      Expanded(
-                        child: buildListView(widget.invoiceData),
-                      )
-                    ],
-                  ),
-              ),
-               )
-            ],
+    return Scaffold(
+      appBar: AppBar(
+        elevation: 0.0,
+        backgroundColor: Colors.white24,
+        iconTheme: const IconThemeData(
+          color: Colors.blue,
+          // Set the color of the navigation icon to black
+        ),
+        title: const Text(
+          'Product Invoice',
+          style: TextStyle(
+            color: Colors.black54,
+            fontWeight: FontWeight.bold,
+            fontSize: 16,
+          ),
+        ),
+        actions: [
+          ElevatedButton(
+            onPressed: barcodeScanner,
+            style: ElevatedButton.styleFrom(
+              shape: const CircleBorder(),
+              padding: const EdgeInsets.all(10),
+            ),
+            child: const Icon(
+              Icons.qr_code_scanner,
+              size: 22,
+            ),
           ),
         ],
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: ListView(
+          children: [
+            Column(
+              children: [
+
+                Align(
+                  alignment: Alignment.topRight,
+                  child: ElevatedButton(
+                    onPressed: true
+                        ? () async {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => PdfPage()));
+                    }
+                        : null,
+                    child: const Text('Print'),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                TextFormField(
+                  keyboardType: TextInputType.number,
+                  controller: prouductno,
+                  validator: validateField,
+                  onEditingComplete: _handleSearch,
+                  decoration: InputDecoration(
+                    labelText: 'Invoice Number',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide:
+                      const BorderSide(color: Colors.blue, width: 1.0),
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    fillColor: Colors.grey,
+                  ),
+                ),
+                const SizedBox(height: 16),
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: DataTable(
+                    columns: const [
+                      DataColumn(
+                        label: Text('Product Name',
+                            style:
+                            TextStyle(fontSize: 16, color: Colors.black54)),
+                      ),
+                      DataColumn(
+                        label: Text('QTY',
+                            style:
+                            TextStyle(fontSize: 16, color: Colors.black54)),
+                      ),
+                      DataColumn(
+                        label: Text('Sale Price',
+                            style:
+                            TextStyle(fontSize: 16, color: Colors.black54)),
+                      ),
+                      DataColumn(
+                        label: Text('Total',
+                            style:
+                            TextStyle(fontSize: 16, color: Colors.black54)),
+                      ),
+                    ],
+                      rows: [
+                    buildListView(widget.invoiceData)
+                  ],
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

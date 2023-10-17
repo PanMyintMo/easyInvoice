@@ -1,3 +1,4 @@
+import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:easy_invoice/bloc/delete/CountryPart/delete_country_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,17 +20,11 @@ class _CountryState extends State<Country> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.white,
         appBar: AppBar(
-          elevation: 0.0,
-          backgroundColor: Colors.white70,
-          iconTheme: const IconThemeData(
-            color: Colors.red, // Set the color of the navigation icon to black
-          ),
-          title: const Text(
+          title:  Text(
             'Country Screen',
             style: TextStyle(
-                color: Colors.black54,
+                color:AdaptiveTheme.of(context).theme.iconTheme.color,
                 fontWeight: FontWeight.bold,
                 fontSize: 16),
           ),

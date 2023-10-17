@@ -1,3 +1,4 @@
+import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
@@ -5,7 +6,8 @@ import '../bloc/edit/edit_product_item_cubit.dart';
 import '../bloc/get/ProductPart/get_all_product_cubit.dart';
 import '../bloc/delete/delete_product_item_cubit.dart';
 import '../common/ToastMessage.dart';
-import '../common/showDeleteConfirmationDialog.dart';
+
+import '../common/showDefaultDialog.dart';
 import '../data/responseModel/common/ProductListItemResponse.dart';
 import '../module/module.dart';
 import '../widget/ProductDetailWidget.dart';
@@ -20,33 +22,32 @@ class ProductDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+
       appBar: AppBar(
-          elevation: 0.0,
-          backgroundColor: Colors.white70,
-          iconTheme: const IconThemeData(
-            color: Colors.red, // Set the color of the navigation icon to black
-          ),
-          title: const Text(
+          title: Text(
             'Product Detail Screen',
             style: TextStyle(
-              color: Colors.black54,
+              color:AdaptiveTheme.of(context).theme.iconTheme.color,
               fontWeight: FontWeight.bold,
               fontSize: 16,
             ),
           ),
           actions: [
             PopupMenuButton(
-              onSelected: (item) => onSelected(context, item,product),
-              color: Colors.redAccent,
+              onSelected: (item) => onSelected(context, item, product),
+
               itemBuilder: (context) => [
-                const PopupMenuItem(
+                 PopupMenuItem(
                   value: 0,
-                  child: Text('Delete Product'),
+                  child: Text('Delete Product',style: TextStyle(
+                    color : AdaptiveTheme.of(context).theme.iconTheme.color
+                  ),),
                 ),
-                const PopupMenuItem(
+                 PopupMenuItem(
                   value: 1,
-                  child: Text('Edit Product'),
+                  child: Text('Edit Product',style: TextStyle(
+                      color : AdaptiveTheme.of(context).theme.iconTheme.color
+                  )),
                 ),
               ],
             )
@@ -88,8 +89,7 @@ class ProductDetail extends StatelessWidget {
           BlocProvider.of<GetAllProductCubit>(context).getAllProduct();
           Navigator.pop(context, true);
         } else if (deleteState is DeleteProductItemFail) {
-          showToastMessage(
-              'Failed to delete product: ${deleteState.error}');
+          showToastMessage('Failed to delete product: ${deleteState.error}');
         }
       },
     );
@@ -99,10 +99,16 @@ class ProductDetail extends StatelessWidget {
 void onSelected(BuildContext context, item, ProductListItem product) async {
   switch (item) {
     case 0:
-      showDeleteConfirmationDialogs(
-          context, "Are you sure you want to delete this product?", () {
-        context.read<DeleteProductItemCubit>().deleteProductItem(product.id);
-      });
+      showCustomDialog(
+          title: 'Delete Product!',
+          content: 'Are you sure you want to delete this product?',
+          confirmText: 'Yes',
+          onConfirm: () {
+            context
+                .read<DeleteProductItemCubit>()
+                .deleteProductItem(product.id);
+          });
+
       break;
 
     case 1:
@@ -124,7 +130,7 @@ void onSelected(BuildContext context, item, ProductListItem product) async {
               quantity: product.quantity,
               category_id: product.category_id,
               size_id: product.size_id,
-              newimage: product.url!,
+              newimage: product.url ?? '',
             ),
           ),
         ),
@@ -138,12 +144,10 @@ void onSelected(BuildContext context, item, ProductListItem product) async {
           final products = List.of(state.products);
 
           // Find the index of the updated product item
-          final index = products
-              .indexWhere((p) => p.id == product.id);
+          final index = products.indexWhere((p) => p.id == product.id);
 
           if (index != -1) {
             products[index] = result;
-
           }
         }
       }

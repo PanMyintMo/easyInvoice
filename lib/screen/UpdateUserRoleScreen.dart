@@ -34,6 +34,7 @@ class UpdateUserRoleScreen extends StatefulWidget {
 class _UpdateUserRoleScreenState extends State<UpdateUserRoleScreen> {
   File? newImage; // Store the selected new image here
 
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider<EditUserRoleCubit>(

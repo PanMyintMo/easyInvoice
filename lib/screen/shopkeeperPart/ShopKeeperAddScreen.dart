@@ -1,3 +1,4 @@
+import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:easy_invoice/bloc/delete/ShopKeeperPart/delete_shop_keeper_product_request_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -33,27 +34,15 @@ class _ShopKeeperScreenState extends State<ShopKeeperScreen> {
       ],
       child: Scaffold(
           appBar: AppBar(
-              elevation: 0.0,
-              backgroundColor: Colors.white70,
-              iconTheme: const IconThemeData(
-                color: Colors.red,
-              ),
-              title: const Text(
+              title: Text(
                 'ShopKeeper Screen',
                 style: TextStyle(
-                    color: Colors.black54,
+                    color: AdaptiveTheme.of(context).theme.iconTheme.color,
                     fontWeight: FontWeight.bold,
                     fontSize: 16),
               )),
           body: BlocConsumer<ShopKeeperRequestCubit, ShopKeeperRequestState>(
-            listener: (context, state) {
-              if (state is ShopKeeperRequestSuccess) {
-                showToastMessage("Shopkeeper successfully retrieve.");
-              }
-              else if(state is DeleteShopKeeperProductRequestItemFail){
-                showToastMessage("Shopkeeper delete fail.");
-              }
-            },
+            listener: (context, state) {},
             builder: (context, state) {
               if (state is ShopKeeperRequestLoading) {
                 return const Center(child: CircularProgressIndicator());

@@ -1,3 +1,4 @@
+import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:easy_invoice/bloc/delete/delete_product_item_cubit.dart';
 import 'package:easy_invoice/bloc/get/ProductPart/get_all_product_cubit.dart';
 import 'package:easy_invoice/screen/AddProductScreen.dart';
@@ -15,15 +16,10 @@ class AllProductScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          elevation: 0.0,
-          backgroundColor: Colors.grey[200],
-          iconTheme: const IconThemeData(
-            color: Colors.red, // Set the color of the navigation icon to black
-          ),
-          title: const Text(
+          title:  Text(
             'All Product  Screen',
             style: TextStyle(
-                color: Colors.black54,
+                color:AdaptiveTheme.of(context).theme.iconTheme.color,
                 fontWeight: FontWeight.bold,
                 fontSize: 16),
           ),

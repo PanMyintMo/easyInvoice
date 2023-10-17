@@ -94,10 +94,10 @@ class _EditProductItemScreenState extends State<EditProductItemScreen> {
     }
     else{
       networkImage = Image.asset(
-        'assets/profits.png', // Replace with the path to your default image
+        'assets/faulty.png', // Replace with the path to your default image
         width: 200,
         height: 200,
-        fit: BoxFit.cover,
+        fit: BoxFit.scaleDown,
       );
     }
   }
@@ -171,7 +171,7 @@ class _EditProductItemScreenState extends State<EditProductItemScreen> {
             elevation: 0.0,
             backgroundColor: Colors.white24,
             iconTheme: const IconThemeData(
-              color: Colors.red, // Set the color of the navigation icon to black
+              color: Colors.blue, // Set the color of the navigation icon to black
             ),
             title: const Text('Edit Product Screen',style: TextStyle(
               color: Colors.black54,
@@ -181,150 +181,100 @@ class _EditProductItemScreenState extends State<EditProductItemScreen> {
           ),
           body: Stack(
             children: [
-              Form(
-                key: _formKey,
-                child: Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: ListView(
-                    children: [
-                      Row(
-                        children: [
-                          Expanded(
-                            child: textFieldForm(name, 'Name'),
-                          ),
-                          const SizedBox(width: 10),
-                          Expanded(child: textFieldForm(slug, 'Slug')),
-                        ],
-                      ),
-                      const SizedBox(height: 10),
-                      Row(
-                        children: [
-                          Expanded(
-                            child:
-                                textFieldForm(regular_price, 'Regular Price'),
-                          ),
-                          const SizedBox(width: 10),
-                          Expanded(
-                            child: textFieldForm(sale_price, 'Sale Price'),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 10),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: textFieldForm(buying_price, 'Buying Price'),
-                          ),
-                          const SizedBox(width: 10),
-                          Expanded(child: textFieldForm(quantity, 'Quantity')),
-                        ],
-                      ),
-                      const SizedBox(height: 10),
-                      Row(
-                        children: [
-                          Expanded(child: textFieldForm(sku, 'SKU')),
-                          const SizedBox(width: 10),
-                          Expanded(
-                            child:
-                                textFieldForm(short_description, 'Short Desc'),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 10),
-                      const Row(
-                        children: [
-                          // chooseItemIdForm(
-                          //
-                          //   DropdownButton(
-                          //     items: categories.map((category) {
-                          //       return DropdownMenuItem<String>(
-                          //         value: category.id.toString(),
-                          //         child: Text(category.name.toString()),
-                          //       );
-                          //     }).toList(),
-                          //     onChanged: (value) {
-                          //       setState(() {
-                          //         category_id.text = value;
-                          //       });
-                          //     },
-                          //     value: category_id.text,
-                          //     hint: const Text('Choose One'),
-                          //     underline: const SizedBox(),
-                          //     borderRadius: BorderRadius.circular(10),
-                          //     icon: const Icon(Icons.arrow_drop_down),
-                          //     iconSize: 24,
-                          //     isExpanded: true,
-                          //     dropdownColor: Colors.white,
-                          //     style: const TextStyle(
-                          //       color: Colors.black,
-                          //       fontSize: 16,
-                          //     ),
-                          //   ),
-                          // ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          // chooseItemIdForm(
-                          //   DropdownButton(
-                          //     items: sizes.map((size) {
-                          //       return DropdownMenuItem<String>(
-                          //         value: size.id.toString(),
-                          //         child: Text(size.name.toString()),
-                          //       );
-                          //     }).toList(),
-                          //     onChanged: (value) {
-                          //       setState(() {
-                          //         size_id.text = value;
-                          //       });
-                          //     },
-                          //     value: size_id.text,
-                          //     hint: const Text('Choose One'),
-                          //     underline: const SizedBox(),
-                          //     borderRadius: BorderRadius.circular(10),
-                          //     icon: const Icon(Icons.arrow_drop_down),
-                          //     iconSize: 24,
-                          //     isExpanded: true,
-                          //     dropdownColor: Colors.white,
-                          //     style: const TextStyle(
-                          //       color: Colors.black,
-                          //       fontSize: 16,
-                          //     ),
-                          //   ),
-                          // ),
-                        ],
-                      ),
-                      const SizedBox(height: 10),
-                    SizedBox(
-                        height: 250,
-                        width: 200,
-                        child: networkImage
-                      ),
-                      const SizedBox(height: 10),
-                      ElevatedButton(
-                        onPressed: () {
-                          context.read<EditProductItemCubit>().editProductItem(
-                                EditProductRequestModel(
-                                  name: name.text,
-                                  slug: slug.text,
-                                  short_description: short_description.text,
-                                  description: description.text,
-                                  regular_price: regular_price.text,
-                                  sale_price: sale_price.text,
-                                  buying_price: buying_price.text,
-                                  SKU: sku.text,
-                                  quantity: quantity.text,
-                                  category_id: category_id.text,
-                                  size_id: size_id.text,
-                                  newimage: '',
-                                ),
-                                widget.id,
-                              );
-                        },
-                        child: Text(state is EditProductItemLoading
-                            ? 'Submitting...'
-                            : 'Submit'),
-                      ),
-                    ],
+              Padding(
+                padding:  const EdgeInsets.fromLTRB(10, 30, 10, 0),
+                child: Form(
+                  key: _formKey,
+                  child: Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: ListView(
+                      children: [
+                        Row(
+                          children: [
+                            Expanded(
+                              child: textFieldForm(name, 'Name'),
+                            ),
+                            const SizedBox(width: 10),
+                            Expanded(child: textFieldForm(slug, 'Slug')),
+                          ],
+                        ),
+                        const SizedBox(height: 10),
+                        Row(
+                          children: [
+                            Expanded(
+                              child:
+                                  textFieldForm(regular_price, 'Regular Price'),
+                            ),
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: textFieldForm(sale_price, 'Sale Price'),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 10),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: textFieldForm(buying_price, 'Buying Price'),
+                            ),
+                            const SizedBox(width: 10),
+                            Expanded(child: textFieldForm(quantity, 'Quantity')),
+                          ],
+                        ),
+                        const SizedBox(height: 10),
+                        Row(
+                          children: [
+                            Expanded(child: textFieldForm(sku, 'SKU')),
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child:
+                                  textFieldForm(short_description, 'Short Desc'),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 10),
+                        const Row(
+                          children: [
+
+                            SizedBox(
+                              width: 10,
+                            ),
+
+                          ],
+                        ),
+                        const SizedBox(height: 10),
+                      SizedBox(
+                          height: 250,
+                          width: 200,
+                          child: networkImage
+                        ),
+                        const SizedBox(height: 10),
+                        ElevatedButton(
+                          onPressed: () {
+                            context.read<EditProductItemCubit>().editProductItem(
+                                  EditProductRequestModel(
+                                    name: name.text,
+                                    slug: slug.text,
+                                    short_description: short_description.text,
+                                    description: description.text,
+                                    regular_price: regular_price.text,
+                                    sale_price: sale_price.text,
+                                    buying_price: buying_price.text,
+                                    SKU: sku.text,
+                                    quantity: quantity.text,
+                                    category_id: category_id.text,
+                                    size_id: size_id.text,
+                                    newimage: '',
+                                  ),
+                                  widget.id,
+                                );
+                          },
+                          child: Text(state is EditProductItemLoading
+                              ? 'Submitting...'
+                              : 'Submit'),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),

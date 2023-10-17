@@ -1,5 +1,7 @@
+import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:easy_invoice/screen/SettingScreen.dart';
 import 'package:easy_invoice/screen/WarehousePart/WareHouseTableScreen.dart';
+import 'package:easy_invoice/screen/home/Login.dart';
 import 'package:easy_invoice/screen/shopkeeperPart/ShopKeeperProductTableScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -8,16 +10,14 @@ import 'package:get/get.dart';
 import '../bloc/get/MainPagePart/order_filter_by_date_cubit.dart';
 import '../bloc/get/WarehousePart/warehouse_product_list_cubit.dart';
 import '../common/ThemeHelperUserClass.dart';
+import '../common/showDefaultDialog.dart';
 
 import '../data/responseModel/MainPagePart/MainPageResponse.dart';
 import '../data/responseModel/WarehousePart/WarehouseResponse.dart';
 import '../module/module.dart';
 import '../navigationdrawer/navigationdrawer.dart';
 import 'package:easy_invoice/network/SharedPreferenceHelper.dart';
-
 import 'FaultyItemPart/FaultyItems.dart';
-import 'home/Login.dart';
-
 
 class MainPageScreen extends StatefulWidget {
   const MainPageScreen({Key? key}) : super(key: key);
@@ -62,10 +62,8 @@ class _MainPageState extends State<MainPageScreen> {
 
   @override
   Widget build(BuildContext context) {
-   /* final text = MediaQuery.of(context).platformBrightness == Brightness.dark
-        ? 'DarkTheme'
-        : 'LightTheme';
-*/
+   // AdaptiveTheme.of(context).mode.isLight;
+
     List<WarehouseData> warehouseData = [];
     OrderApiResponse? mainPageResponse;
 
@@ -133,7 +131,7 @@ class _MainPageState extends State<MainPageScreen> {
                             return Column(
                               children: [
                                 Padding(
-                                  padding: const EdgeInsets.only(right: 12),
+                                  padding: const EdgeInsets.only(right: 12,top: 15),
                                   child: Align(
                                     alignment: Alignment.topRight,
                                     child: buildDropdown(
@@ -158,7 +156,7 @@ class _MainPageState extends State<MainPageScreen> {
                                           });
 
                                         }
-                                      },
+                                      }, context: context,
                                     ),
                                   ),
                                 ),
@@ -167,7 +165,7 @@ class _MainPageState extends State<MainPageScreen> {
                                 ),
                                 Container(
                                   height: 120,
-                                  color: Colors.white,
+                                  color: Colors.white70,
                                   child: ListView(
                                     scrollDirection: Axis.horizontal,
                                     children: [
@@ -295,14 +293,14 @@ class _MainPageState extends State<MainPageScreen> {
                                     rows: warehouseData.map((warehouseData) {
                                       return DataRow(cells: [
                                         DataCell(
-                                            Text(warehouseData.id.toString())),
-                                        DataCell(Text(warehouseData.name)),
+                                            Text(warehouseData.id.toString(),style :const TextStyle(color: Colors.grey))),
+                                        DataCell(Text(warehouseData.name,style :const TextStyle(color: Colors.grey))),
                                         DataCell(Text(warehouseData.sale_price
-                                            .toString())),
+                                            .toString(),style :const TextStyle(color: Colors.grey))),
                                         DataCell(Text(warehouseData.buying_price
-                                            .toString())),
+                                            .toString(),style :const TextStyle(color: Colors.grey))),
                                         DataCell(Text(
-                                            warehouseData.quantity.toString())),
+                                            warehouseData.quantity.toString(),style :const TextStyle(color: Colors.grey))),
                                       ]);
                                     }).toList(),
                                   ),
@@ -372,14 +370,14 @@ class _MainPageState extends State<MainPageScreen> {
                                     rows: mainPageResponse?.data?.map((data) {
                                           return DataRow(cells: [
                                             DataCell(
-                                                Text(data.order_id.toString())),
-                                            DataCell(Text(data.name)),
+                                                Text(data.order_id.toString(),style: const TextStyle(color: Colors.grey),)),
+                                            DataCell(Text(data.name,style :const TextStyle(color: Colors.grey))),
                                             DataCell(
-                                                Text(data.status.toString())),
+                                                Text(data.status.toString(),style :const TextStyle(color: Colors.grey))),
                                             DataCell(
-                                                Text(data.quantity.toString())),
+                                                Text(data.quantity.toString(),style :const TextStyle(color: Colors.grey))),
                                             DataCell(
-                                                Text(data.email.toString())),
+                                                Text(data.email.toString(),style :const TextStyle(color: Colors.grey))),
                                           ]);
                                         }).toList() ??
                                         [],
@@ -401,32 +399,32 @@ class _MainPageState extends State<MainPageScreen> {
   AppBar _buildAdminAppBar() {
     return AppBar(
       elevation: 0.0,
-      backgroundColor: Colors.white70,
-      iconTheme: const IconThemeData(
-        color: Colors.black, // Set the color of the navigation icon to black
+
+      iconTheme:  IconThemeData(
+        color:  AdaptiveTheme.of(context).theme.iconTheme.color, // Set the color of the navigation icon to black
       ),
-      title: const Text(
+      title:  Text(
         'Dashboard',
-        style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+        style: TextStyle(color:AdaptiveTheme.of(context).theme.iconTheme.color, fontWeight: FontWeight.bold),
       ),
       actions: [
         Row(
           children: [
             Text(
               username!.split(" ").first.toString(),
-              style: const TextStyle(
+              style:  TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.bold,
-                  color: Colors.black),
+                color:  AdaptiveTheme.of(context).theme.iconTheme.color,),
             ),
             const SizedBox(
               width: 4,
             ),
             GestureDetector(
-              child: const Icon(
+              child:  Icon(
                 CupertinoIcons.chevron_down,
                 size: 12,
-                color: Colors.black,
+                color: AdaptiveTheme.of(context).theme.iconTheme.color,
               ),
               onTap: () {
                 showMenu<int>(
@@ -455,41 +453,15 @@ class _MainPageState extends State<MainPageScreen> {
                         MaterialPageRoute(
                             builder: (context) => const SettingScreen()));
                   } else if (value == 1) {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          title: const Text("LOGOUT"),
-                          content: const Padding(
-                            padding: EdgeInsets.symmetric(vertical: 15.0),
-                            child: Text("Are you sure you want to Logout?"),
-                          ),
-                          actions: <Widget>[
-                            ElevatedButton(
-                              onPressed: () {
-                                Navigator.of(context).pop(); // Close the dialog
-                                // Handle logout here
-                                Get.offAll(() =>
-                                    const Login()); // Navigate to the login screen
-                                SessionManager()
-                                    .removeAuthToken(); // Remove the authentication token
-                              },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.redAccent,
-                                side: BorderSide.none,
-                              ),
-                              child: const Text("Yes"),
-                            ),
-                            OutlinedButton(
-                              onPressed: () {
-                                Navigator.of(context).pop(); // Close the dialog
-                              },
-                              child: const Text("No"),
-                            ),
-                          ],
+                    showCustomDialog(
+                        title: 'Logout',
+                        content: 'Are you sure you want to Logout?',
+                        confirmText: 'Yes',
+                        onConfirm: (){
+                          Get.offAll(() => const Login());
+                          SessionManager().removeAuthToken();
+                        }
                         );
-                      },
-                    );
                   }
                 });
               },
@@ -504,11 +476,10 @@ class _MainPageState extends State<MainPageScreen> {
                       radius: 20,
                       backgroundImage: NetworkImage(url!),
                     )
-                  : const Icon(
+                  :  Icon(
                       Icons.account_circle_rounded,
                       size: 37,
-                      color: Colors.black,
-                    ),
+                color:  AdaptiveTheme.of(context).theme.iconTheme.color,                    ),
             )
           ],
         ),
@@ -589,8 +560,6 @@ Widget _buildCardView(String image, String cardText, String profileText,
                     color: Colors.lightGreen.shade900,
                     fontWeight: FontWeight.bold),
               ),
-             /* Text(sign,
-                  style: TextStyle(color: Colors.red.shade600)),*/
             ],
           ),
           Padding(

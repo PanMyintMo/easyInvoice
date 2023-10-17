@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import '../../bloc/delete/DeliveryPart/delete_delivery_cubit.dart';
 import '../../common/GeneralPaganizationClass.dart';
-import '../../common/showDeleteConfirmationDialog.dart';
+import '../../common/showDefaultDialog.dart';
 import '../../data/responseModel/DeliveryPart/FetchAllDeliveries.dart';
 import '../../screen/DeliveryPart/UpdateDeliveryScreen.dart';
 
@@ -86,15 +86,9 @@ class DeliData extends DataTableSource {
             IconButton(
               icon: const Icon(Icons.delete, color: Colors.red),
               onPressed: () {
-                showDeleteConfirmationDialogs(
-                  context,
-                  "Are you sure you want to delete this delivery item?",
-                      () {
-                    context
-                        .read<DeleteDeliveryCubit>()
-                        .deleteDelivery(deliveriesItem.delivery_info_id);
-                  },
-                );
+                showCustomDialog(title: 'Delete Delivery', content: 'Are you sure you want to delete this delivery?', confirmText: 'Yes', onConfirm: (){
+                  context.read<DeleteDeliveryCubit>().deleteDelivery(deliveriesItem.delivery_info_id);
+                });
               },
             ),
           ],

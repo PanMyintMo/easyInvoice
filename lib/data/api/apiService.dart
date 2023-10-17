@@ -98,8 +98,6 @@ import '../responseModel/ProductByCategoryIdResponse.dart';
 import 'ConnectivityService.dart';
 import 'NoConnectivityException.dart';
 
-
-
 class ApiService {
   final Dio _dio = Dio();
   final ConnectivityService _connectivityService;

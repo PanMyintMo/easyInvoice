@@ -70,7 +70,7 @@ class _AddNewTownshipState extends State<AddNewTownshipWidget> {
                       select_city= null;
                     });
                   },
-                  hint: "Select Country",
+                  hint: "Select Country", context: context,
                 ),
               ),
 
@@ -89,7 +89,7 @@ class _AddNewTownshipState extends State<AddNewTownshipWidget> {
                       select_city = value;
                     });
                   },
-                  hint: "Select City",
+                  hint: "Select City", context: context,
                 ),
               ),
               Container(

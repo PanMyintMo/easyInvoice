@@ -17,13 +17,15 @@ import 'package:easy_invoice/screen/DeliveryPart/AllDeliveryScreen.dart';
 import 'package:easy_invoice/screen/FaultyItemPart/AddRequestFaultyItemScreen.dart';
 import 'package:easy_invoice/screen/LocationPart/AllTownshipsScreen.dart';
 import 'package:easy_invoice/screen/shopkeeperPart/ShopKeeperAddScreen.dart';
-
+import 'package:get/get.dart';
+import '../common/showDefaultDialog.dart';
 import '../screen/AllProductScreen.dart';
 import '../screen/DeliveryPart/RequestDeliveryCompanyScreen.dart';
 import '../screen/OrderPart/AddOrderScreen.dart';
 import '../screen/OrderPart/OrderByDateScreen.dart';
 import '../screen/SizeAddScreen.dart';
 import '../screen/UserAddScreen.dart';
+import '../screen/home/Login.dart';
 import 'menuExpansion.dart';
 
 class NavigationDrawerWidget extends StatefulWidget {
@@ -113,14 +115,14 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
                 Center(
                   child: Text(
                     username ?? '',
-                    style:  TextStyle(fontSize: 20, color: Colors.blue[400]),
+                    style: TextStyle(fontSize: 20, color: Colors.blue[400]),
                   ),
                 ),
                 const SizedBox(height: 4),
                 Center(
                   child: Text(
                     email ?? '',
-                    style:  TextStyle(fontSize: 14, color: Colors.blue[400]),
+                    style: TextStyle(fontSize: 14, color: Colors.blue[400]),
                   ),
                 ),
               ],
@@ -135,13 +137,13 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
     var color = Colors.blue[300];
 
     return TextField(
-      style:  TextStyle(color: color),
+      style: TextStyle(color: color),
       decoration: InputDecoration(
         contentPadding:
             const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
         hintText: 'Search',
-        hintStyle:  TextStyle(color: color),
-        prefixIcon:  Icon(Icons.search, color: color),
+        hintStyle: TextStyle(color: color),
+        prefixIcon: Icon(Icons.search, color: color),
         filled: true,
         fillColor: Colors.white12,
         enabledBorder: OutlineInputBorder(
@@ -157,7 +159,6 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
   }
 
   Widget buildMenuItems() {
-
     final List<MenuItem> categoryItem = [
       MenuItem(
           text: 'All Category',
@@ -358,9 +359,10 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
           ),
         const SizedBox(height: 16),
         buildMenuExpansion(
-            text: 'Delivery System',
-            icon: Icons.delivery_dining,
-            items: deliveryMenu, ),
+          text: 'Delivery System',
+          icon: Icons.delivery_dining,
+          items: deliveryMenu,
+        ),
         const Divider(color: Colors.black12),
         const SizedBox(height: 16),
         if (utype == 'SK' || utype == 'ADM')
@@ -394,27 +396,29 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
         const SizedBox(height: 16),
         if (utype == 'ADM')
           buildMenuExpansion(
-              text: 'Category',
-              icon: Icons.account_circle_rounded,
-              items: categoryItem,
-
+            text: 'Category',
+            icon: Icons.account_circle_rounded,
+            items: categoryItem,
           ),
         const SizedBox(height: 16),
         if (utype == 'ADM')
           buildMenuExpansion(
-              text: 'Size',
-              icon: Icons.format_size,
-              items: sizeMenu, ),
+            text: 'Size',
+            icon: Icons.format_size,
+            items: sizeMenu,
+          ),
         const SizedBox(height: 16),
         buildMenuExpansion(
-            text: 'Products',
-            icon: Icons.account_circle_rounded,
-            items: productMenu, ),
+          text: 'Products',
+          icon: Icons.account_circle_rounded,
+          items: productMenu,
+        ),
         const SizedBox(height: 16),
         buildMenuExpansion(
-            text: 'User Role',
-            icon: Icons.account_circle_rounded,
-            items: userMenuItems,),
+          text: 'User Role',
+          icon: Icons.account_circle_rounded,
+          items: userMenuItems,
+        ),
         const Divider(color: Colors.black12),
         const SizedBox(height: 16),
         if (utype == 'ADM' || utype == 'SK')
@@ -468,7 +472,23 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
             text: 'Location',
             icon: Icons.location_pin,
             items: locationMenuItems,
-          )
+          ),
+        buildMenuItem(
+          text: 'Logout',
+          icon: Icons.exit_to_app,
+          onClicked: () {
+            showCustomDialog(
+                title: 'Logout',
+                content: 'Are you sure you want to Logout?',
+                confirmText: 'Yes',
+                onConfirm: (){
+                  Get.offAll(() => const Login());
+                  SessionManager().removeAuthToken();
+                }
+            );
+
+          },
+        ),
       ],
     );
   }

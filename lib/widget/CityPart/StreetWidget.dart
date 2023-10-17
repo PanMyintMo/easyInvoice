@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 
 import '../../common/GeneralPaganizationClass.dart';
-import '../../common/showDeleteConfirmationDialog.dart';
+import '../../common/showDefaultDialog.dart';
 import '../../data/responseModel/CityPart/Street.dart';
 import '../../screen/LocationPart/EditCityScreen.dart';
 
@@ -44,10 +44,10 @@ class StreetWidget extends StatelessWidget {
         horizontalMargin: 20,
         arrowHeadColor: Colors.blueAccent,
         rowsPerPage: ((context.height -
-            GeneralPagination.topViewHeight -
-            GeneralPagination.paginateDataTableHeaderRowHeight -
-            GeneralPagination.pagerWidgetHeight) ~/
-            GeneralPagination.paginateDataTableRowHeight)
+                    GeneralPagination.topViewHeight -
+                    GeneralPagination.paginateDataTableHeaderRowHeight -
+                    GeneralPagination.pagerWidgetHeight) ~/
+                GeneralPagination.paginateDataTableRowHeight)
             .toInt(),
         columnSpacing: 85,
       ),
@@ -98,13 +98,15 @@ class StreetData extends DataTableSource {
                 color: Colors.red,
               ),
               onPressed: () {
-                showDeleteConfirmationDialogs(
-                  context,
-                  "Are you sure you want to delete this street?",
-                      () {
-                    context.read<DeleteStreetCubit>().deleteStreet(streets.id);
-                  },
-                );
+                showCustomDialog(
+                    title: 'Delete Street!',
+                    content: 'Are you sure you want to delete this.street?',
+                    confirmText: 'Yes',
+                    onConfirm: () {
+                      context
+                          .read<DeleteStreetCubit>()
+                          .deleteStreet(streets.id);
+                    });
               },
             ),
           ],

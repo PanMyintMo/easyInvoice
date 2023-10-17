@@ -103,7 +103,7 @@ class _AddRequestFaultyItemWidgetState
                           fetchProductsByCategory(int.parse(category_id!));
                         });
                       },
-                      hint: "Select Category",
+                      hint: "Select Category", context: context,
                     ),
                   ),
                   const SizedBox(
@@ -131,7 +131,7 @@ class _AddRequestFaultyItemWidgetState
                           product_id = value!;
                         });
                       },
-                      hint: "Select Product",
+                      hint: "Select Product", context: context,
                     ),
                   ),
                   const SizedBox(

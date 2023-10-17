@@ -1,3 +1,4 @@
+import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:easy_invoice/bloc/delete/DeliveryPart/delete_delivery_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -15,15 +16,11 @@ class AllDeliveryScreen extends StatelessWidget {
     return Scaffold(
 
       appBar: AppBar(
-        elevation: 0.0,
-        backgroundColor: Colors.grey[200],
-        iconTheme: const IconThemeData(
-          color: Colors.blue, // Set the color of the navigation icon to black
-        ),
-        title: const Text(
+
+        title: Text(
           'All Delivery  Screen',
           style: TextStyle(
-              color: Colors.black54,
+              color:AdaptiveTheme.of(context).theme.iconTheme.color,
               fontWeight: FontWeight.bold,
               fontSize: 16),
         ),

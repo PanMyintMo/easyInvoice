@@ -1,3 +1,4 @@
+import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:easy_invoice/bloc/post/CityPart/add_ward_cubit.dart';
 import 'package:easy_invoice/widget/CityPart/AddWardWidget.dart';
 import 'package:flutter/material.dart';
@@ -15,15 +16,11 @@ class AddWardScreen extends StatelessWidget {
       create: (context) => AddWardCubit(getIt.call()),
       child: Scaffold(
         appBar: AppBar(
-          elevation: 0.0,
-          backgroundColor: Colors.white24,
-          iconTheme: const IconThemeData(
-            color: Colors.red, // Set the color of the navigation icon to black
-          ),
-          title: const Text(
+
+          title:  Text(
             'Add Ward Screen',
             style: TextStyle(
-              color: Colors.black54,
+              color:AdaptiveTheme.of(context).theme.iconTheme.color,
               fontWeight: FontWeight.bold,
               fontSize: 16,
             ),

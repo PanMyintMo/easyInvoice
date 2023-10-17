@@ -16,7 +16,7 @@ class AddOrderScreen extends StatelessWidget {
         appBar: AppBar(elevation: 0.0,
           backgroundColor: Colors.white24,
           iconTheme: const IconThemeData(
-            color: Colors.red, // Set the color of the navigation icon to black
+            color: Colors.blue, // Set the color of the navigation icon to black
           ), title: const Text('Add Order Screen', style: TextStyle(
               color: Colors.black54,
               fontWeight: FontWeight.bold,

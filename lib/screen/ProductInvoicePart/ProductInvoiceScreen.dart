@@ -21,23 +21,7 @@ class _ProductInvoiceScreenState extends State<ProductInvoiceScreen> {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => ProductInvoiceCubit(getIt.call()),
-      child: Scaffold(
-        appBar: AppBar(
-          elevation: 0.0,
-          backgroundColor: Colors.white24,
-          iconTheme: const IconThemeData(
-            color: Colors.red, // Set the color of the navigation icon to black
-          ),
-          title: const Text(
-            'Product Invoice',
-            style: TextStyle(
-              color: Colors.black54,
-              fontWeight: FontWeight.bold,
-              fontSize: 16,
-            ),
-          ),
-        ),
-        body: BlocConsumer<ProductInvoiceCubit, ProductInvoiceState>(
+      child: BlocConsumer<ProductInvoiceCubit, ProductInvoiceState>(
             listener: (context, state) {
               if (state is ProductInvoiceFail) {
             showToastMessage(state.error);
@@ -58,17 +42,23 @@ class _ProductInvoiceScreenState extends State<ProductInvoiceScreen> {
                 child: Text("Product is out of stock."),
               );
             }
-            return ProductInvoiceScreenWithListView(
+            return ProductInvoiceWidget(
               isLoading: false,
-              invoiceData : state.productInvoiceResponse
+              invoiceData: state.productInvoiceResponse,
             );
+
+
+            //   ProductInvoiceScreenWithListView(
+            //   isLoading: false,
+            //   invoiceData : state.productInvoiceResponse
+            // );
           }
           return const ProductInvoiceWidget(
             isLoading: false,
             invoiceData: [],
           );
         }),
-      ),
+
     );
   }
 }

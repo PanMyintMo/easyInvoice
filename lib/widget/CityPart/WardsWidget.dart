@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import '../../bloc/get/CityPart/fetch_all_ward_cubit.dart';
 import '../../common/GeneralPaganizationClass.dart';
-import '../../common/showDeleteConfirmationDialog.dart';
+import '../../common/showDefaultDialog.dart';
 import '../../data/responseModel/common/WardResponse.dart';
 import '../../screen/LocationPart/EditWardScreen.dart';
 
@@ -100,13 +100,13 @@ class WardData extends DataTableSource {
                 color: Colors.red,
               ),
               onPressed: () {
-                showDeleteConfirmationDialogs(
-                  context,
-                  "Are you sure you want to delete this street?",
-                  () {
-                    context.read<DeleteWardCubit>().deleteWard(wards.id);
-                  },
-                );
+
+                showCustomDialog(title: 'Delete Ward', content: 'Are you sure you want to delete ward?', confirmText: 'Yes', onConfirm: (){
+                     context.read<DeleteWardCubit>().deleteWard(wards.id);
+
+                });
+
+
               },
             ),
           ],

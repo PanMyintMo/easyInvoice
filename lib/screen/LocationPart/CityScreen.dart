@@ -1,3 +1,4 @@
+import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../bloc/get/CityPart/fetch_all_city_cubit.dart';
@@ -11,24 +12,20 @@ class Cities extends StatefulWidget {
   const Cities({Key? key}) : super(key: key);
 
   @override
-  _CitiesState createState() => _CitiesState();
+  State<Cities> createState() => _CitiesState();
+
+
 }
 
 class _CitiesState extends State<Cities> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.white,
         appBar: AppBar(
-          elevation: 0.0,
-          backgroundColor: Colors.white70,
-          iconTheme: const IconThemeData(
-            color: Colors.blue, // Set the color of the navigation icon to black
-          ),
-          title: const Text(
+          title:  Text(
             'City Screen',
             style: TextStyle(
-                color: Colors.black54,
+              color:AdaptiveTheme.of(context).theme.iconTheme.color,
                 fontWeight: FontWeight.bold,
                 fontSize: 16),
           ),
