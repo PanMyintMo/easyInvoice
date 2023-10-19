@@ -5,16 +5,14 @@ import 'package:flutter/material.dart';
 class DynamicImageWidget extends StatelessWidget {
   final File? image;
   final VoidCallback? onTap;
- const DynamicImageWidget({required this.image, required this.onTap});
+ const DynamicImageWidget({super.key, required this.image, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
     return image != null
         ? Image.file(
       image!,
-      fit: BoxFit.cover,
-    )
-        : InkWell(
+      fit: BoxFit.cover,) : InkWell(
       onTap: onTap,
       child: const Column(
         mainAxisAlignment: MainAxisAlignment.center,

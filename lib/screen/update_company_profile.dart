@@ -37,17 +37,17 @@ class UpdateCompanyProfileScreen extends StatelessWidget {
         body: BlocBuilder<EditCompanyProfileCubit, EditCompanyProfileState>(
           builder: (context, state) {
             if (state is EditCompanyProfileLoading) {
-              return  EditCompanyProfileWidget(isLoading: true, username: username, email: email, id: id,);
+              return  EditCompanyProfileWidget(isLoading: true, username: username, email: email, id: id,url:url);
             } else if (state is EditCompanyProfileSuccess) {
               showToastMessage("Profile updated successfully!");
-              return  EditCompanyProfileWidget(isLoading: false, username: username  , email: email, id: id,);
+              return  EditCompanyProfileWidget(isLoading: false, username: username  , email: email, id: id,url:url);
             }
             else if (state is EditCompanyProfileFail){
               showToastMessage(state.error);
-              return  EditCompanyProfileWidget(isLoading: false, username: username, email: email, id: id,)
+              return  EditCompanyProfileWidget(isLoading: false, username: username, email: email, id: id,url:url)
               ;
             }
-            return  EditCompanyProfileWidget(isLoading: false, username: username  , email: email, id: id,);
+            return  EditCompanyProfileWidget(isLoading: false, username: username  , email: email, id: id,url:url);
           },
         ),
       ),

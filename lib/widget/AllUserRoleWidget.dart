@@ -97,13 +97,16 @@ class _AllUserRoleWidgetState extends State<AllUserRoleWidget> {
                   context,
                   MaterialPageRoute(
                     builder: (context) => UserDetailProfileScreen(
-                      id: user.id,
-                      name: user.name,
-                      email: user.email,
-                      created_at: user.createdAt,
-                      updated_at: user.updatedAt,
-                      utype: user.utype,
-                      url: user.url.toString(),
+                      user : user
+
+
+                      // id: user.id,
+                      // name: user.name,
+                      // email: user.email,
+                      // created_at: user.createdAt,
+                      // updated_at: user.updatedAt,
+                      // utype: user.utype,
+                      // url: user.url.toString(),
                     ),
                   ),
                 );

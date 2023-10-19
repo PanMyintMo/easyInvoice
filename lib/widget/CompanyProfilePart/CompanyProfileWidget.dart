@@ -34,7 +34,7 @@ class _CompanyProfileWidgetState extends State<CompanyProfileWidget> {
         padding: const EdgeInsets.all(10),
         child: Column(
           children: [
-            /// -- IMAGE
+
             Stack(
               children: [
                 CircleAvatar(

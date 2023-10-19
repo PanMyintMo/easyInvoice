@@ -1,39 +1,20 @@
-import 'dart:io';
-
 import 'package:easy_invoice/bloc/edit/edit_user_role_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import '../common/ToastMessage.dart';
-import '../dataRequestModel/EditUserRoleRequestModel.dart';
+import '../data/responseModel/UserRoleResponse.dart';
 import '../module/module.dart';
 import '../widget/EditUserRoleWidget.dart';
 
 class UpdateUserRoleScreen extends StatefulWidget {
-  final int id;
-  final String name;
-  final String email;
-  final String password;
-  final String utype;
-  final String? newimage;
-
-  const UpdateUserRoleScreen({
-    Key? key,
-    required this.id,
-    required this.name,
-    required this.password,
-    required this.utype,
-    this.newimage,
-    required this.email,
-  }) : super(key: key);
+  final UserData user;
+  const UpdateUserRoleScreen({Key? key, required this.user,}) : super(key: key);
 
   @override
   State<UpdateUserRoleScreen> createState() => _UpdateUserRoleScreenState();
 }
 
 class _UpdateUserRoleScreenState extends State<UpdateUserRoleScreen> {
-  File? newImage; // Store the selected new image here
-
 
   @override
   Widget build(BuildContext context) {
@@ -82,26 +63,7 @@ class _UpdateUserRoleScreenState extends State<UpdateUserRoleScreen> {
               ),
             ),
             body: EditUserRoleWidget(
-              id: widget.id,
-              name: widget.name,
-              email: widget.email,
-              password: widget.password,
-              utype: widget.utype,
-              newimage: newImage, // Pass the selected new image
-              onSave: () {
-                // Trigger the edit user role functionality
-                context.read<EditUserRoleCubit>().editUserRole(
-                  EditUserRoleRequestModel(
-                    name: widget.name,
-                    email: widget.email,
-                    password: widget.password,
-                    utype: widget.utype,
-                    newimage: newImage, // Pass the selected new image
-                  ),
-                  widget.id,
-                );
-              },
-            ),
+              user:widget.user),
           );
         },
       ),

@@ -10,27 +10,13 @@ import '../common/HeaderWidget.dart';
 import '../common/ToastMessage.dart';
 import '../common/showDefaultDialog.dart';
 import '../common/theme_helper.dart';
+import '../data/responseModel/UserRoleResponse.dart';
 import '../module/module.dart';
 
 class UserDetailProfileScreen extends StatefulWidget {
-  final int id;
-  final String name;
-  final String email;
-  final String created_at;
-  final String updated_at;
-  final String utype;
-  final String url;
-
+  final UserData user;
   const UserDetailProfileScreen({
-    Key? key,
-    required this.id,
-    required this.name,
-    required this.email,
-    required this.created_at,
-    required this.updated_at,
-    required this.utype,
-    required this.url,
-  }) : super(key: key);
+    Key? key, required this.user,}) : super(key: key);
 
   @override
   State<UserDetailProfileScreen> createState() =>
@@ -61,7 +47,6 @@ class _UserDetailProfileScreenState extends State<UserDetailProfileScreen> {
       child: Builder(builder: (context) {
         BlocProvider.of<GetAllUserRoleCubit>(context);
         return Scaffold(
-
           appBar: AppBar(
             elevation: 0,
             flexibleSpace: Container(
@@ -95,12 +80,9 @@ class _UserDetailProfileScreenState extends State<UserDetailProfileScreen> {
                     context,
                     MaterialPageRoute(
                       builder: (context) => UpdateUserRoleScreen(
-                        id: widget.id,
-                        name: widget.name,
-                        password: '',
-                        utype: widget.utype,
-                        email: widget.email,
-                        newimage: widget.url,
+
+                        user:widget.user
+
                       ),
                     ),
                   );
@@ -169,9 +151,9 @@ class _UserDetailProfileScreenState extends State<UserDetailProfileScreen> {
                               ),
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(100),
-                                child: widget.url.isNotEmpty
+                                child: widget.user.url!.isNotEmpty
                                     ? Image.network(
-                                        widget.url,
+                                        widget.user.url!,
                                         width: 130,
                                         height: 130,
                                         fit: BoxFit.cover,
@@ -201,18 +183,18 @@ class _UserDetailProfileScreenState extends State<UserDetailProfileScreen> {
                       Expanded(
                         child: Column(
                           children: [
-                            buildProfileBox('Id No :', widget.id.toString()),
-                            buildProfileBox('Name :', widget.name),
-                            buildProfileBox('Email :', widget.email),
+                            buildProfileBox('Id No :', widget.user.id.toString()),
+                            buildProfileBox('Name :', widget.user.name),
+                            buildProfileBox('Email :', widget.user.email),
                             buildProfileBox(
                               'Created At :',
-                              widget.created_at.toString().substring(0, 10),
+                              widget.user.createdAt.toString().substring(0, 10),
                             ),
                             buildProfileBox(
                               'Updated At :',
-                              widget.updated_at.toString().substring(0, 10),
+                              widget.user.updatedAt.toString().substring(0, 10),
                             ),
-                            buildProfileBox('Role :', widget.utype),
+                            buildProfileBox('Role :', widget.user.utype),
                             const SizedBox(
                               height: 10,
                             ),
@@ -221,7 +203,7 @@ class _UserDetailProfileScreenState extends State<UserDetailProfileScreen> {
                               child: ElevatedButton(
                                 onPressed: () {
                                   showCustomDialog(title: 'Delete Account!', content: 'Are you sure you want to delete', confirmText: 'Yes', onConfirm: (){
-                                    context.read<DeleteUserRoleCubit>().deleteUserRole(widget.id);
+                                    context.read<DeleteUserRoleCubit>().deleteUserRole(widget.user.id);
                                   });
                                 },
                                 style: ThemeHelper().buttonStyle(),

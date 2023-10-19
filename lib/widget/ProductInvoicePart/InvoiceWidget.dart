@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:esc_pos_utils_plus/esc_pos_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pdf/pdf.dart';
@@ -23,13 +24,10 @@ class InvoiceWidget extends StatefulWidget {
 class _InvoiceWidgetState extends State<InvoiceWidget> {
   BlueThermalPrinter bluetoothPrint = BlueThermalPrinter.instance;
 
-
   bool _connected = false;
-  List<BluetoothDevice>? _devices=[];
+  List<BluetoothDevice>? _devices = [];
   BluetoothDevice? _device;
   String tips = 'No device connected';
-  final pdf = pw.Document();
-  bool _isPrinting = false;
 
   @override
   void initState() {
@@ -44,7 +42,7 @@ class _InvoiceWidgetState extends State<InvoiceWidget> {
     try {
       devices = await bluetoothPrint.getBondedDevices();
     } on PlatformException {
-      print("Platform error");
+      // print("Platform error");
     }
 
     bluetoothPrint.onStateChanged().listen((state) {
@@ -80,14 +78,14 @@ class _InvoiceWidgetState extends State<InvoiceWidget> {
         case BlueThermalPrinter.STATE_OFF:
           setState(() {
             _connected = false;
-            tips = "Bluetooth device STATE_OFF";
+            tips = "Bluetooth device Not Connected";
           });
           break;
 
         case BlueThermalPrinter.STATE_ON:
           setState(() {
             _connected = false;
-            tips = "Bluetooth device STATE_ON";
+            tips = "Bluetooth device Connect";
           });
           break;
 
@@ -112,46 +110,135 @@ class _InvoiceWidgetState extends State<InvoiceWidget> {
       _devices = devices;
     });
 
-    if(isConnected == true){
+    if (isConnected == true) {
       setState(() {
         _connected = true;
       });
     }
   }
 
-  Future<void> printPdf() async {
-    setState(() {
-      _isPrinting = true;
-    });
-
-    final pdfDoc = pw.Document();
-    pdfDoc.addPage(
-      pw.MultiPage(
-        build: (context) => [
-          buildHeader(widget.invoice),
-          buildInvoice(widget.invoice),
-          pw.SizedBox(height: 100),
-          pw.Divider(),
-          pw.Align(
-            alignment: pw.Alignment.bottomCenter,
-            child: pw.Text("Thanks for choosing our service."),
-          ),
-        ],
-      ),
-    );
-
-    final pdfAsUint8List = await pdfDoc.save();
-
+  Future<void> printImage(Uint8List imageBytes) async {
     if (_connected) {
       await bluetoothPrint.connect(_device!);
-      await bluetoothPrint.writeBytes(pdfAsUint8List);
+      await bluetoothPrint.printImageBytes(imageBytes);
       await bluetoothPrint.printNewLine();
       await bluetoothPrint.disconnect();
     }
+  }
 
-    setState(() {
-      _isPrinting = false;
-    });
+  Future<void> printText(List<IData> invoice) async {
+
+    try {
+    await bluetoothPrint.connect(_device!);
+        final profile = await CapabilityProfile.load();
+        final generator = Generator(PaperSize.mm58, profile);
+
+        List<int> bytes = [];
+
+
+    bytes += generator.text("MMEasyInvoice");
+    bytes +=generator.text("Xiao Pan");
+        for (var item in invoice) {
+          bytes +=generator.row([
+            PosColumn(
+                text: item.product_name!,width: 5,
+                styles: PosStyles(
+                    align: PosAlign.left,
+                    height: PosTextSize.size1
+                    ,width: PosTextSize.size1
+                )
+            ),
+            PosColumn(
+                text: item.quantity.toString()
+                ,width: 5,
+                styles: PosStyles(
+                    align: PosAlign.left,
+                    height: PosTextSize.size1
+                    ,width: PosTextSize.size1
+                )
+            ),
+            PosColumn(
+                text: item.sale_price!,width: 5,
+                styles: PosStyles(
+                    align: PosAlign.left,
+                    height: PosTextSize.size1
+                    ,width: PosTextSize.size1
+                )
+            )
+            ,PosColumn(
+                text: item.total.toString(),width: 5,
+                styles: PosStyles(
+                    align: PosAlign.left,
+                    height: PosTextSize.size1
+                    ,width: PosTextSize.size1
+                )
+            )
+          ]
+
+          );
+
+
+        /*  bytes.addAll(generator.text(
+            "${item.product_name}",
+            styles: const PosStyles(
+              align: PosAlign.left,
+              bold: true,
+              height: PosTextSize.size2,
+              width: PosTextSize.size2,
+            ),
+          ));*/
+
+        }
+        bytes+= generator.hr();
+
+        bytes.addAll(generator.cut());
+
+
+        await bluetoothPrint.writeBytes(Uint8List.fromList(bytes));
+
+        await bluetoothPrint.printNewLine();
+
+
+        await bluetoothPrint.disconnect();
+      }
+
+     catch (e) {
+      print("Printing error: $e");
+    }
+  }
+
+  Future<void> generateAndPrintPdf() async {
+    try {
+      final pdfDoc = pw.Document();
+      pdfDoc.addPage(
+        pw.MultiPage(
+          build: (context) => [
+            buildHeader(),
+            buildInvoice(widget.invoice),
+            pw.SizedBox(height: 100),
+            pw.Divider(),
+            pw.Align(
+              alignment: pw.Alignment.bottomCenter,
+              child: pw.Text("Thanks for choosing our service."),
+            ),
+          ],
+        ),
+      );
+      final pdfAsUint8List = await pdfDoc.save();
+     // final pdfContent = String.fromCharCodes(pdfAsUint8List);
+      /*print('PDF Content: $pdfContent');
+      print(" Pdf Unit 8 List $pdfAsUint8List");
+      print("Data to print: ${widget.invoice}");*/
+
+           if (_connected) {
+        await bluetoothPrint.connect(_device!);
+        await bluetoothPrint.writeBytes(pdfAsUint8List);
+        await bluetoothPrint.printNewLine();
+        await bluetoothPrint.disconnect();
+      }
+    } catch (e) {
+     // print("Printing error in pdf file $e");
+    }
   }
 
   @override
@@ -164,8 +251,15 @@ class _InvoiceWidgetState extends State<InvoiceWidget> {
             icon: _connected
                 ? const Icon(Icons.print)
                 : const Icon(Icons.print_disabled),
-            onPressed:  _connected ? printPdf : null,
-          ),
+            onPressed: () {
+              // final ByteData data = await rootBundle.load("assets/invoice.png");
+              // final Uint8List imageBytes = data.buffer.asUint8List();
+              // await  printImage(imageBytes);
+             //  generateAndPrintPdf();
+
+              printText(widget.invoice);
+            },
+          )
         ],
       ),
       body: SingleChildScrollView(
@@ -184,25 +278,20 @@ class _InvoiceWidgetState extends State<InvoiceWidget> {
               ],
             ),
             const Divider(),
-
-            const Divider(),
             Container(
               padding: const EdgeInsets.fromLTRB(20, 5, 20, 10),
               child: Column(
                 children: [
-
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
-
                       const Text(
                         'Device:',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-
                       Expanded(
                         child: DropdownButton(
                           items: _getDeviceItems(),
@@ -212,15 +301,17 @@ class _InvoiceWidgetState extends State<InvoiceWidget> {
                         ),
                       ),
                     ],
-                  ),  Row(
+                  ),
+                  Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: <Widget>[
                       ElevatedButton(
-                        style: ElevatedButton.styleFrom(backgroundColor: Colors.brown),
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.brown),
                         onPressed: () {
                           initBluetooth();
-                          },
+                        },
                         child: const Text(
                           'Refresh',
                           style: TextStyle(color: Colors.white),
@@ -231,7 +322,8 @@ class _InvoiceWidgetState extends State<InvoiceWidget> {
                       ),
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                            backgroundColor: _connected ? Colors.red : Colors.green),
+                            backgroundColor:
+                            _connected ? Colors.red : Colors.green),
                         onPressed: _connected ? _disconnect : _connect,
                         child: Text(
                           _connected ? 'Disconnect' : 'Connect',
@@ -240,24 +332,17 @@ class _InvoiceWidgetState extends State<InvoiceWidget> {
                       ),
                     ],
                   ),
-
                 ],
               ),
             ),
             const Divider(),
-           if (_connected && _isPrinting)
+            if (_connected)
               ElevatedButton(
                 onPressed: () {
-                  printPdf();
+                   generateAndPrintPdf();
                 },
                 child: const Text("Print Preview"),
               ),
-            TextButton(
-              onPressed: () {
-                _getDeviceItems();
-              },
-              child: const Text("Refresh"),
-            )
           ],
         ),
       ),
@@ -283,7 +368,6 @@ class _InvoiceWidgetState extends State<InvoiceWidget> {
 
   void _connect() {
     if (_device != null) {
-
       setState(() {
         tips = "Device is connecting...";
         _connected = true;
@@ -296,9 +380,7 @@ class _InvoiceWidgetState extends State<InvoiceWidget> {
           });
         }
       });
-    } else {
-    /*  show('No device selected.');*/
-    }
+    } else {}
   }
 
   void _disconnect() {
@@ -306,20 +388,19 @@ class _InvoiceWidgetState extends State<InvoiceWidget> {
     setState(() => _connected = false);
   }
 
-
-  pw.Widget buildHeader(List<IData> invoices) {
+  pw.Widget buildHeader() {
     return pw.Column(
       crossAxisAlignment: pw.CrossAxisAlignment.start,
       children: [
-        pw.SizedBox(height: 1 * PdfPageFormat.cm),
+        // pw.SizedBox(height: 1 * PdfPageFormat.cm),
         pw.Row(
           mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
           children: [
-            pw.Text("Xiao Zhan is Pan Myint Mo's husband."),
+            pw.Text("Xiao Pan"),
             pw.Text("MyanmarEasyInvoice"),
           ],
         ),
-        pw.SizedBox(height: 1 * PdfPageFormat.cm),
+        //   pw.SizedBox(height: 1 * PdfPageFormat.cm),
         pw.Row(
           crossAxisAlignment: pw.CrossAxisAlignment.end,
           mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,

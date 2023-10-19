@@ -2,10 +2,10 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 
 import '../../bloc/post/Login&Register/edit_company_profile_cubit.dart';
+import '../../common/DynamicProfileImageWidget.dart';
 import '../../common/FormValidator.dart';
 import '../../dataRequestModel/Login&Register/EditCompanyProfileRequestModel.dart';
 
@@ -29,22 +29,12 @@ class EditCompanyProfileWidget extends StatefulWidget {
 }
 
 class _EditProfileWidgetState extends State<EditCompanyProfileWidget> {
+
   var username = TextEditingController();
   var email = TextEditingController();
   late String? newimage;
 
   File? _image;
-
-  Future<void> _chooseProfilePicture() async {
-    final picker = ImagePicker();
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-    if (pickedFile != null) {
-      setState(() {
-        _image = File(pickedFile.path);
-        newimage = null;
-      });
-    }
-  }
 
   @override
   void initState() {
@@ -83,26 +73,45 @@ class _EditProfileWidgetState extends State<EditCompanyProfileWidget> {
                         radius: 60,
                         child: ClipRRect(
                             borderRadius: BorderRadius.circular(100),
-                            child: _image != null
-                                ? Image.file(
-                                    _image!,
-                                    fit: BoxFit.cover,
+                            child: Stack(
+                              children: [
+                                if(_image !=null)
+                                  Image.file(_image!,
+                                    width: 130,
+                                    height: 130,
+                                  fit: BoxFit.cover,
                                   )
-                                : (widget.url != null && widget.url!.isNotEmpty)
-                                    ? Image.network(
-                                        widget.url!,
-                                        fit: BoxFit.cover,
-                                      )
-                                    : const Icon(
-                                        Icons.account_circle_rounded,
-                                        size: 100,
-                                      )),
+                                else if (newimage !=null && newimage!.isNotEmpty)
+                                  Image.network(newimage!,
+                                  width: 130,
+                                  height: 130.0,
+                                    fit: BoxFit.cover,
+
+                                  )
+                                else
+                                  Icon(Icons.person,color: Colors.grey.shade300,
+                                  size: 130,)
+
+                              ],
+                            )
+
+
+
+
+                        ),
                       ),
                       Positioned(
                         bottom: -5,
                         right: 0,
                         child: RawMaterialButton(
-                          onPressed: _chooseProfilePicture,
+                          onPressed: () async{
+                            File? selectedImage = await ChooseProfilePicture.chooseProfilePicture();
+                            if (selectedImage != null) {
+                              setState(() {
+                                _image = selectedImage;
+                              });
+                            }
+                          },
                           shape: const CircleBorder(),
                           fillColor: Colors.blueGrey,
                           constraints: const BoxConstraints.tightFor(

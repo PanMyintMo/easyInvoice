@@ -111,7 +111,7 @@ class _EditProductItemScreenState extends State<EditProductItemScreen> {
         });
       }
     } catch (error) {
-      print('Error fetching sizes Id: $error');
+    //  print('Error fetching sizes Id: $error');
     }
   }
 
@@ -124,7 +124,7 @@ class _EditProductItemScreenState extends State<EditProductItemScreen> {
         });
       }
     } catch (error) {
-      print('Error fetching categories: $error');
+     // print('Error fetching categories: $error');
     }
   }
 
