@@ -95,298 +95,305 @@ class _MainPageState extends State<MainPageScreen> {
                 BlocConsumer<OrderFilterByDateCubit, OrderFilterByDateState>(
                     listener: (context, state) {},
                     builder: (context, state) {
-                      return BlocConsumer<WarehouseProductListCubit,
-                              WarehouseProductListState>(
-                          listener: (context, state) {},
-                          builder: (context, warehouseState) {
-                            // Combine state1 and state2 to determine UI
-                            if (state is OrderFilterByDateLoading ||
-                                state is WarehouseProductListLoading) {
-                              return const Center(
-                                child: CircularProgressIndicator(),
-                              );
-                            } else if (state is OrderFilterByDateSuccess) {
-                              if (dropDownValue == 'All Orders') {
-                                mainPageResponse = state.selectedResponse;
-                              } else if (dropDownValue == 'Daily Orders') {
-                                mainPageResponse = state.selectedResponse;
-                              } else if (dropDownValue == 'Weekly Orders') {
-                                mainPageResponse = state.selectedResponse;
-                              } else if (dropDownValue == 'Monthly Orders') {
-                                mainPageResponse = state.selectedResponse;
-                              } else if (dropDownValue == 'Yearly Orders') {
-                                mainPageResponse = state.selectedResponse;
-                              } else if (dropDownValue == 'lastmonth') {
-                                mainPageResponse = state.selectedResponse;
-                              }
-                              if (warehouseState is WarehouseProductListSuccess) {
-                                warehouseData = warehouseState.warehouseData;
-                              } else if (warehouseState
-                                  is WarehouseProductListFail) {
+                      if(state is OrderFilterByDateLoading || state is WarehouseProductListLoading) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+                      return Column(
+                        children: [
+                          BlocConsumer<WarehouseProductListCubit,
+                                  WarehouseProductListState>(
+                              listener: (context, state) {},
+                              builder: (context, warehouseState) {
 
-                              }
-                            } else if (state is OrderFilterByDateFail) {
+                                  if (state is OrderFilterByDateSuccess) {
+                                  if (dropDownValue == 'All Orders') {
+                                    mainPageResponse = state.selectedResponse;
+                                  } else if (dropDownValue == 'Daily Orders') {
+                                    mainPageResponse = state.selectedResponse;
+                                  } else if (dropDownValue == 'Weekly Orders') {
+                                    mainPageResponse = state.selectedResponse;
+                                  } else if (dropDownValue == 'Monthly Orders') {
+                                    mainPageResponse = state.selectedResponse;
+                                  } else if (dropDownValue == 'Yearly Orders') {
+                                    mainPageResponse = state.selectedResponse;
+                                  } else if (dropDownValue == 'lastmonth') {
+                                    mainPageResponse = state.selectedResponse;
+                                  }
+                                  if (warehouseState is WarehouseProductListSuccess) {
+                                    warehouseData = warehouseState.warehouseData;
+                                  } else if (warehouseState
+                                      is WarehouseProductListFail) {
 
-                            }
-                            return Column(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(right: 12,top: 15),
-                                  child: Align(
-                                    alignment: Alignment.topRight,
-                                    child: buildDropdown(
-                                      value: dropDownValue,
-                                      items: filterItem.map((item) {
-                                  return DropdownMenuItem<
-                                  String>(
-                                  value: item,
-                                  child: Text(item),
-                                  );
-                                  }).toList(),
-                                      onChanged: (value) {
-                                        if (value != dropDownValue) {
-                                          setState(() {
-                                            dropDownValue = value!;
-                                            // Fetch data based on the selected dropdown value
-                                            final cubit = context.read<
-                                                OrderFilterByDateCubit>();
-                                            cubit
-                                                .fetchDataForDifferentFilterTypes(
-                                                dropDownValue);
-                                          });
+                                  }
+                                } else if (state is OrderFilterByDateFail) {
 
-                                        }
-                                      }, context: context,
+                                }
+                                return Column(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(right: 12,top: 15),
+                                      child: Align(
+                                        alignment: Alignment.topRight,
+                                        child: SizedBox(
+                                          width:200,
+                                          child: buildDropdown(
+                                            value: dropDownValue,
+                                            items: filterItem.map((item) {
+                                      return DropdownMenuItem<
+                                      String>(
+                                      value: item,
+                                      child: Text(item),
+                                      );
+                                      }).toList(),
+                                            onChanged: (value) {
+                                              if (value != dropDownValue) {
+                                                setState(() {
+                                                  dropDownValue = value!;
+                                                  // Fetch data based on the selected dropdown value
+                                                  final cubit = context.read<
+                                                      OrderFilterByDateCubit>();
+                                                  cubit
+                                                      .fetchDataForDifferentFilterTypes(
+                                                      dropDownValue);
+                                                });
+
+                                              }
+                                            }, context: context,
+                                          ),
+                                        ),
+                                      ),
                                     ),
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 16,
-                                ),
-                                Container(
-                                  height: 120,
-                                  color: Colors.white70,
-                                  child: ListView(
-                                    scrollDirection: Axis.horizontal,
-                                    children: [
-                                      if (utype == 'ADM')
-                                        _buildCardView(
-                                            'assets/revenue.png',
-                                            'Total Revenue',
-                                            '${mainPageResponse?.totalRevenue.toString() ?? 0}',
-                                            '\$',
-                                            () {}),
-                                      _buildCardView(
-                                          'assets/sale.jpg',
-                                          'Total Sale',
-                                          '${mainPageResponse?.totalSales.toString() ?? 0}',
-                                          ' (Sales)',
-                                          () {}),
-                                      _buildCardView(
-                                          'assets/profits.png',
-                                          'Total Profit',
-                                          '${mainPageResponse?.totalProfit.toString() ?? 0}',
-                                          '\$',
-                                          () {}),
-                                      _buildCardView(
-                                          'assets/faulty.png',
-                                          'Faulty Item',
-                                          '${mainPageResponse?.totalFaultyItem.toString() ?? 0}',
-                                          ' (Items)', () {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    const AllFaultyItemsScreen()));
-                                      }),
-                                      _buildCardView(
-                                        'assets/warehouse.png',
-                                        'Ware House',
-                                        '${mainPageResponse?.totalWareHouseQuantity.toString() ?? 0}',
-                                        '',
-                                        () {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    const WarehouseTableScreen()), // Replace WarehousePage() with your actual destination page
-                                          );
-                                        },
-                                      ),
-                                      if (utype == 'ADM' || utype == 'SK')
-                                        _buildCardView(
-                                            'assets/shopkeeper.jpg',
-                                            'Shop Keeper',
-                                            '${mainPageResponse?.shopKeeper.toString() ?? 0}',
-                                            '(Item Left)', () {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    const ShopKeeperProductTableScreen()), // Replace WarehousePage() with your actual destination page
-                                          );
-                                        }),
-                                    ],
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 16,
-                                ),
-                                const Text("Warehouse Data",
-                                    style: TextStyle(
-                                        color: Colors.blue,
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold)),
-                                const SizedBox(
-                                  height: 16,
-                                ),
+                                    const SizedBox(
+                                      height: 16,
+                                    ),
+                                    Container(
+                                      height: 120,
 
-                                SingleChildScrollView(
-                                  scrollDirection: Axis.horizontal,
-                                  child: DataTable(
-                                    headingRowColor:
-                                        MaterialStateColor.resolveWith(
-                                            (states) => Colors.teal),
-                                    columnSpacing: 40.0,
-                                    columns: const [
-                                      DataColumn(
-                                        label: Text(
-                                          'ID',
-                                          style: TextStyle(
-                                              fontSize: 16,
-                                              color: Colors.white),
-                                        ),
+                                      child: ListView(
+                                        scrollDirection: Axis.horizontal,
+                                        children: [
+                                          if (utype == 'ADM')
+                                            _buildCardView(
+                                                'assets/revenue.png',
+                                                'Total Revenue',
+                                                '${mainPageResponse?.totalRevenue.toString() ?? 0}',
+                                                '\$',
+                                                () {}),
+                                          _buildCardView(
+                                              'assets/sale.jpg',
+                                              'Total Sale',
+                                              '${mainPageResponse?.totalSales.toString() ?? 0}',
+                                              ' (Sales)',
+                                              () {}),
+                                          _buildCardView(
+                                              'assets/profits.png',
+                                              'Total Profit',
+                                              '${mainPageResponse?.totalProfit.toString() ?? 0}',
+                                              '\$',
+                                              () {}),
+                                          _buildCardView(
+                                              'assets/faulty.png',
+                                              'Faulty Item',
+                                              '${mainPageResponse?.totalFaultyItem.toString() ?? 0}',
+                                              ' (Items)', () {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        const AllFaultyItemsScreen()));
+                                          }),
+                                          _buildCardView(
+                                            'assets/warehouse.png',
+                                            'Ware House',
+                                            '${mainPageResponse?.totalWareHouseQuantity.toString() ?? 0}',
+                                            '',
+                                            () {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        const WarehouseTableScreen()), // Replace WarehousePage() with your actual destination page
+                                              );
+                                            },
+                                          ),
+                                          if (utype == 'ADM' || utype == 'SK')
+                                            _buildCardView(
+                                                'assets/shopkeeper.jpg',
+                                                'Shop Keeper',
+                                                '${mainPageResponse?.shopKeeper.toString() ?? 0}',
+                                                '(Item Left)', () {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        const ShopKeeperProductTableScreen()), // Replace WarehousePage() with your actual destination page
+                                              );
+                                            }),
+                                        ],
                                       ),
-                                      DataColumn(
-                                        label: Text(
-                                          'Name',
-                                          style: TextStyle(
-                                              fontSize: 16,
-                                              color: Colors.white),
-                                        ),
-                                      ),
-                                      DataColumn(
-                                        label: Text(
-                                          'Sale Price',
-                                          style: TextStyle(
-                                              fontSize: 16,
-                                              color: Colors.white),
-                                        ),
-                                      ),
-                                      DataColumn(
-                                        label: Text(
-                                          'Buying Price',
-                                          style: TextStyle(
-                                              fontSize: 16,
-                                              color: Colors.white),
-                                        ),
-                                      ),
-                                      DataColumn(
-                                        label: Text(
-                                          'Quantity',
-                                          style: TextStyle(
-                                              fontSize: 16,
-                                              color: Colors.white),
-                                        ),
-                                      ),
-                                    ],
-                                    rows: warehouseData.map((warehouseData) {
-                                      return DataRow(cells: [
-                                        DataCell(
-                                            Text(warehouseData.id.toString(),style :const TextStyle(color: Colors.grey))),
-                                        DataCell(Text(warehouseData.name,style :const TextStyle(color: Colors.grey))),
-                                        DataCell(Text(warehouseData.sale_price
-                                            .toString(),style :const TextStyle(color: Colors.grey))),
-                                        DataCell(Text(warehouseData.buying_price
-                                            .toString(),style :const TextStyle(color: Colors.grey))),
-                                        DataCell(Text(
-                                            warehouseData.quantity.toString(),style :const TextStyle(color: Colors.grey))),
-                                      ]);
-                                    }).toList(),
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 16,
-                                ),
-                                const Text(
-                                  "All Order",
-                                  style: TextStyle(
-                                      color: Colors.blue,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                const SizedBox(
-                                  height: 16,
-                                ),
-                                SingleChildScrollView(
-                                  scrollDirection: Axis.horizontal,
-                                  child: DataTable(
-                                    headingRowColor:
-                                        MaterialStateColor.resolveWith(
-                                            (states) => Colors.teal),
-                                    columnSpacing: 40.0,
-                                    columns: const [
-                                      DataColumn(
-                                        label: Text(
-                                          'ID',
-                                          style: TextStyle(
-                                              fontSize: 16,
-                                              color: Colors.white),
-                                        ),
-                                      ),
-                                      DataColumn(
-                                        label: Text(
-                                          'Name',
-                                          style: TextStyle(
-                                              fontSize: 16,
-                                              color: Colors.white),
-                                        ),
-                                      ),
-                                      DataColumn(
-                                        label: Text(
-                                          'Status',
-                                          style: TextStyle(
-                                              fontSize: 16,
-                                              color: Colors.white),
-                                        ),
-                                      ),
-                                      DataColumn(
-                                        label: Text(
-                                          'Quantity',
-                                          style: TextStyle(
-                                              fontSize: 16,
-                                              color: Colors.white),
-                                        ),
-                                      ),
-                                      DataColumn(
-                                        label: Text(
-                                          'Email',
-                                          style: TextStyle(
-                                              fontSize: 16,
-                                              color: Colors.white),
-                                        ),
-                                      ),
-                                    ],
-                                    rows: mainPageResponse?.data?.map((data) {
+                                    ),
+                                    const SizedBox(
+                                      height: 16,
+                                    ),
+                                    const Text("Warehouse Data",
+                                        style: TextStyle(
+                                            color: Colors.blue,
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold)),
+                                    const SizedBox(
+                                      height: 16,
+                                    ),
+
+                                    SingleChildScrollView(
+                                      scrollDirection: Axis.horizontal,
+                                      child: DataTable(
+                                        headingRowColor:
+                                            MaterialStateColor.resolveWith(
+                                                (states) => Colors.teal),
+                                        columnSpacing: 40.0,
+                                        columns: const [
+                                          DataColumn(
+                                            label: Text(
+                                              'ID',
+                                              style: TextStyle(
+                                                  fontSize: 16,
+                                                  color: Colors.white),
+                                            ),
+                                          ),
+                                          DataColumn(
+                                            label: Text(
+                                              'Name',
+                                              style: TextStyle(
+                                                  fontSize: 16,
+                                                  color: Colors.white),
+                                            ),
+                                          ),
+                                          DataColumn(
+                                            label: Text(
+                                              'Sale Price',
+                                              style: TextStyle(
+                                                  fontSize: 16,
+                                                  color: Colors.white),
+                                            ),
+                                          ),
+                                          DataColumn(
+                                            label: Text(
+                                              'Buying Price',
+                                              style: TextStyle(
+                                                  fontSize: 16,
+                                                  color: Colors.white),
+                                            ),
+                                          ),
+                                          DataColumn(
+                                            label: Text(
+                                              'Quantity',
+                                              style: TextStyle(
+                                                  fontSize: 16,
+                                                  color: Colors.white),
+                                            ),
+                                          ),
+                                        ],
+                                        rows: warehouseData.map((warehouseData) {
                                           return DataRow(cells: [
                                             DataCell(
-                                                Text(data.order_id.toString(),style: const TextStyle(color: Colors.grey),)),
-                                            DataCell(Text(data.name,style :const TextStyle(color: Colors.grey))),
-                                            DataCell(
-                                                Text(data.status.toString(),style :const TextStyle(color: Colors.grey))),
-                                            DataCell(
-                                                Text(data.quantity.toString(),style :const TextStyle(color: Colors.grey))),
-                                            DataCell(
-                                                Text(data.email.toString(),style :const TextStyle(color: Colors.grey))),
+                                                Text(warehouseData.id.toString(),style :const TextStyle(color: Colors.grey))),
+                                            DataCell(Text(warehouseData.name,style :const TextStyle(color: Colors.grey))),
+                                            DataCell(Text(warehouseData.sale_price
+                                                .toString(),style :const TextStyle(color: Colors.grey))),
+                                            DataCell(Text(warehouseData.buying_price
+                                                .toString(),style :const TextStyle(color: Colors.grey))),
+                                            DataCell(Text(
+                                                warehouseData.quantity.toString(),style :const TextStyle(color: Colors.grey))),
                                           ]);
-                                        }).toList() ??
-                                        [],
-                                  ),
-                                ),
+                                        }).toList(),
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 16,
+                                    ),
+                                    const Text(
+                                      "All Order",
+                                      style: TextStyle(
+                                          color: Colors.blue,
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    const SizedBox(
+                                      height: 16,
+                                    ),
+                                    SingleChildScrollView(
+                                      scrollDirection: Axis.horizontal,
+                                      child: DataTable(
+                                        headingRowColor:
+                                            MaterialStateColor.resolveWith(
+                                                (states) => Colors.teal),
+                                        columnSpacing: 40.0,
+                                        columns: const [
+                                          DataColumn(
+                                            label: Text(
+                                              'ID',
+                                              style: TextStyle(
+                                                  fontSize: 16,
+                                                  color: Colors.white),
+                                            ),
+                                          ),
+                                          DataColumn(
+                                            label: Text(
+                                              'Name',
+                                              style: TextStyle(
+                                                  fontSize: 16,
+                                                  color: Colors.white),
+                                            ),
+                                          ),
+                                          DataColumn(
+                                            label: Text(
+                                              'Status',
+                                              style: TextStyle(
+                                                  fontSize: 16,
+                                                  color: Colors.white),
+                                            ),
+                                          ),
+                                          DataColumn(
+                                            label: Text(
+                                              'Quantity',
+                                              style: TextStyle(
+                                                  fontSize: 16,
+                                                  color: Colors.white),
+                                            ),
+                                          ),
+                                          DataColumn(
+                                            label: Text(
+                                              'Email',
+                                              style: TextStyle(
+                                                  fontSize: 16,
+                                                  color: Colors.white),
+                                            ),
+                                          ),
+                                        ],
+                                        rows: mainPageResponse?.data?.map((data) {
+                                              return DataRow(cells: [
+                                                DataCell(
+                                                    Text(data.order_id.toString(),style: const TextStyle(color: Colors.grey),)),
+                                                DataCell(Text(data.name,style :const TextStyle(color: Colors.grey))),
+                                                DataCell(
+                                                    Text(data.status.toString(),style :const TextStyle(color: Colors.grey))),
+                                                DataCell(
+                                                    Text(data.quantity.toString(),style :const TextStyle(color: Colors.grey))),
+                                                DataCell(
+                                                    Text(data.email.toString(),style :const TextStyle(color: Colors.grey))),
+                                              ]);
+                                            }).toList() ??
+                                            [],
+                                      ),
+                                    ),
 
-                              ],
-                            );
-                          });
+                                  ],
+                                );
+                              }),
+                        ],
+                      );
                     }),
               ],
             ),
@@ -398,8 +405,6 @@ class _MainPageState extends State<MainPageScreen> {
 
   AppBar _buildAdminAppBar() {
     return AppBar(
-      elevation: 0.0,
-
       iconTheme:  IconThemeData(
         color:  AdaptiveTheme.of(context).theme.iconTheme.color, // Set the color of the navigation icon to black
       ),

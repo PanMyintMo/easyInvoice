@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:easy_invoice/bloc/post/ProductPart/add_product_cubit.dart';
 import 'package:easy_invoice/dataRequestModel/AddProductRequestModel.dart';
@@ -104,7 +105,7 @@ class _AddProductWidgetState extends State<AddProductWidget> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  buildProductContainerText("Category Id"),
+                  buildProductContainerText("Category Id",context),
                   const SizedBox(height: 5),
                   SizedBox(
                     width: double.infinity,
@@ -121,11 +122,11 @@ class _AddProductWidgetState extends State<AddProductWidget> {
                           category_id = value!;
                         });
                       },
-                      hint: "Select Category", context: context,
+                      hint: "Select Category",context: context
                     ),
                   ),
                   const SizedBox(height: 5),
-                  buildProductContainerText("Size Id"),
+                  buildProductContainerText("Size Id",context),
                   const SizedBox(height: 5),
                   SizedBox(
                     width: double.infinity,
@@ -146,7 +147,7 @@ class _AddProductWidgetState extends State<AddProductWidget> {
                     ),
                   ),
                   const SizedBox(height: 16),
-                  buildProductContainerText("Product Name"),
+                  buildProductContainerText("Product Name",context),
                   const SizedBox(height: 16),
                   SizedBox(
                     width: double.infinity,
@@ -168,7 +169,7 @@ class _AddProductWidgetState extends State<AddProductWidget> {
                     children: [
                       Expanded(
                           flex: 1,
-                          child: buildProductContainerText("Slug Name")),
+                          child: buildProductContainerText("Slug Name",context)),
                       Expanded(
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
@@ -189,7 +190,7 @@ class _AddProductWidgetState extends State<AddProductWidget> {
                     children: [
                       Expanded(
                         flex: 1,
-                        child: buildProductContainerText("Regular Price"),
+                        child: buildProductContainerText("Regular Price",context),
                       ),
                       Expanded(
                         flex: 1,
@@ -207,7 +208,7 @@ class _AddProductWidgetState extends State<AddProductWidget> {
                     children: [
                       Expanded(
                         flex: 1,
-                        child: buildProductContainerText("Sale Price"),
+                        child: buildProductContainerText("Sale Price",context),
                       ),
                       Expanded(
                         flex: 1,
@@ -225,7 +226,7 @@ class _AddProductWidgetState extends State<AddProductWidget> {
                     children: [
                       Expanded(
                         flex: 1,
-                        child: buildProductContainerText("Buying Price"),
+                        child: buildProductContainerText("Buying Price",context),
                       ),
                       Expanded(
                         flex: 1,
@@ -243,7 +244,7 @@ class _AddProductWidgetState extends State<AddProductWidget> {
                     children: [
                       Expanded(
                         flex: 1,
-                        child: buildProductContainerText("SKU"),
+                        child: buildProductContainerText("SKU",context),
                       ),
                       Expanded(
                         flex: 1,
@@ -261,7 +262,7 @@ class _AddProductWidgetState extends State<AddProductWidget> {
                     children: [
                       Expanded(
                         flex: 1,
-                        child: buildProductContainerText("Quantity"),
+                        child: buildProductContainerText("Quantity",context),
                       ),
                       Expanded(
                         flex: 1,
@@ -279,7 +280,7 @@ class _AddProductWidgetState extends State<AddProductWidget> {
                     children: [
                       Expanded(
                         flex: 1,
-                        child: buildProductContainerText("Short description"),
+                        child: buildProductContainerText("Short description",context),
                       ),
                       Expanded(
                         flex: 1,
@@ -295,7 +296,7 @@ class _AddProductWidgetState extends State<AddProductWidget> {
                   const SizedBox(height: 16),
                   Align(
                     alignment: Alignment.centerLeft,
-                    child: buildProductContainerText("Description"),
+                    child: buildProductContainerText("Description",context),
                   ),
                   const SizedBox(height: 16),
                   buildProductContainerForm('Description', TextInputType.text,
@@ -303,7 +304,7 @@ class _AddProductWidgetState extends State<AddProductWidget> {
                   const SizedBox(height: 16),
                   Align(
                     alignment: Alignment.centerLeft,
-                    child: buildProductContainerText("Upload Image"),
+                    child: buildProductContainerText("Upload Image",context),
                   ),
                   const SizedBox(height: 16),
                   DottedBorder(
@@ -336,7 +337,7 @@ class _AddProductWidgetState extends State<AddProductWidget> {
                       onPressed: () {
                         if (formKey.currentState!.validate()) _submitForm();
                       },
-                      child: const Text('Submit'),
+                      child:  Text('Submit',style: TextStyle(color: AdaptiveTheme.of(context).theme.iconTheme.color),),
                     ),
                   ),
                   if (widget.isLoading)

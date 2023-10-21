@@ -26,16 +26,16 @@ class ThemeHelperUserRole {
 
       focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(50.0),
-          borderSide: BorderSide(color: Colors.grey)),
+          borderSide: const BorderSide(color: Colors.grey)),
       enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(30.0),
           borderSide: BorderSide(color: Colors.grey.shade400)),
       errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(100.0),
-          borderSide: BorderSide(color: Colors.red, width: 2.0)),
+          borderSide: const BorderSide(color: Colors.red, width: 2.0)),
       focusedErrorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(100.0),
-          borderSide: BorderSide(color: Colors.red, width: 2.0)),
+          borderSide: const BorderSide(color: Colors.red, width: 2.0)),
     );
   }
 
@@ -56,7 +56,7 @@ class ThemeHelperUserRole {
           borderRadius: BorderRadius.circular(30.0),
         ),
       ),
-      minimumSize: MaterialStateProperty.all(Size(50, 50)),
+      minimumSize: MaterialStateProperty.all(const Size(50, 50)),
       backgroundColor: MaterialStateProperty.all(Colors.blue),
       shadowColor: MaterialStateProperty.all(Colors.blue.shade900),
     );
@@ -80,15 +80,15 @@ Widget buildInputContainer(String labelText, String hintText, IconData iconData,
   );
 }
 
-Widget buildProductContainerText(String name) {
+Widget buildProductContainerText(String name,BuildContext context) {
   return Container(
       margin: const EdgeInsets.fromLTRB(0, 0, 10, 0),
       child: Text(
         name,
-        style: const TextStyle(
+        style:  TextStyle(
           fontSize: 14,
           fontWeight: FontWeight.w700,
-          color: Color(0xff000000),
+          color: AdaptiveTheme.of(context).theme.iconTheme.color,
         ),
       ));
 }

@@ -609,7 +609,7 @@ class _EditOrderWidgetState extends State<EditOrderWidget> {
                   const SizedBox(
                     height: 16,
                   ),
-                  buildProductContainerText("Sale Price"),
+                  buildProductContainerText("Sale Price",context),
                   const SizedBox(
                     height: 16,
                   ),
@@ -622,7 +622,7 @@ class _EditOrderWidgetState extends State<EditOrderWidget> {
                   const SizedBox(
                     height: 16,
                   ),
-                  buildProductContainerText("Available Quantity"),
+                  buildProductContainerText("Available Quantity",context),
                   const SizedBox(
                     height: 16,
                   ),

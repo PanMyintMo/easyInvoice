@@ -1,3 +1,4 @@
+import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:easy_invoice/common/ApiHelper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -77,7 +78,7 @@ class _RequestShopKeeperWidgetState extends State<RequestShopKeeperWidget> {
                                 builder: (context) =>
                                     const ShopKeeperScreen()));
                       },
-                      child: const Text('All Requesting Products'),
+                      child:  Text('All Requesting Products',style: TextStyle(color: AdaptiveTheme.of(context).theme.iconTheme.color),),
                     ),
                   ),
                   const SizedBox(
@@ -153,7 +154,7 @@ class _RequestShopKeeperWidgetState extends State<RequestShopKeeperWidget> {
                     child: ElevatedButton(
                       style: ThemeHelperUserRole().buttonStyle(),
                       onPressed: validateAndSubmit,
-                      child: const Text('Add ShopKeeper'),
+                      child: Text('Add ShopKeeper',style: TextStyle(color: AdaptiveTheme.of(context).theme.iconTheme.color),),
                     ),
                   ),
                 ],

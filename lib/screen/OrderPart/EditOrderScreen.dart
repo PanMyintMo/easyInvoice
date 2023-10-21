@@ -1,3 +1,4 @@
+import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:easy_invoice/bloc/get/DeliveryManPart/fetch_all_order_detail_cubit.dart';
 import 'package:easy_invoice/widget/OrderPart/EditOrderWidget.dart';
 import 'package:flutter/material.dart';
@@ -19,18 +20,14 @@ class _EditOrderScreenState extends State<EditOrderScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: AppBar(
-        elevation: 0.0,
-        backgroundColor: Colors.white70,
-        iconTheme: const IconThemeData(
-          color: Colors.red, // Set the color of the navigation icon to black
+        iconTheme:  IconThemeData(
+          color:AdaptiveTheme.of(context).theme.iconTheme.color, // Set the color of the navigation icon to black
         ),
-        title: const Text(
+        title: Text(
           'Edit Order Screen',
           style: TextStyle(
-            color: Colors.black54,
-            fontWeight: FontWeight.bold,
+            color: AdaptiveTheme.of(context).theme.iconTheme.color,
             fontSize: 16,
           ),
         ),

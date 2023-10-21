@@ -25,11 +25,13 @@ class MyApp extends StatelessWidget {
     return AdaptiveTheme(
       light: ThemeData(
         useMaterial3: true,
+          brightness: Brightness.light,
           colorSchemeSeed: Color.fromRGBO(86, 169, 207, 1.0)
-
       ),
       dark: ThemeData(
         useMaterial3: true,
+        brightness: Brightness.dark,
+          colorSchemeSeed: Color.fromRGBO(86, 169, 207, 1.0)
       ),
       initial: savedThemeMode ?? AdaptiveThemeMode.light,
       builder: (theme, darkTheme) => GetMaterialApp(

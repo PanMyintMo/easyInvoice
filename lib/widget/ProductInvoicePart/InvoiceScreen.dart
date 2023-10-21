@@ -21,7 +21,10 @@ class InvoiceScreen extends StatelessWidget {
           builder: (context, state) {
             final loading = state is InvoiceLoading;
             if (state is InvoiceLoading) {
-              return const Center(child:  CircularProgressIndicator());
+              return InvoiceWidget(
+                isLoading: loading,
+                invoice:[],
+              );
             } else if (state is InvoiceSuccess) {
               return InvoiceWidget(
                 isLoading: loading,

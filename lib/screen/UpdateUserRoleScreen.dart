@@ -1,3 +1,4 @@
+import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:easy_invoice/bloc/edit/edit_user_role_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -36,13 +37,12 @@ class _UpdateUserRoleScreenState extends State<UpdateUserRoleScreen> {
         builder: (context, state) {
           return Scaffold(
             appBar: AppBar(
-              elevation: 0,
               flexibleSpace: Container(
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: [
-                      Colors.redAccent.withOpacity(0.3),
-                      Colors.pink.withOpacity(0.7),
+                      Colors.blueAccent.withOpacity(0.3),
+                      Colors.blueGrey.withOpacity(0.7),
                     ],
                     begin: Alignment.topLeft,
                     end: Alignment.topCenter,
@@ -50,15 +50,15 @@ class _UpdateUserRoleScreenState extends State<UpdateUserRoleScreen> {
                 ),
               ),
               leading: IconButton(
-                icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
+                icon:  Icon(Icons.arrow_back_ios, color: AdaptiveTheme.of(context).theme.iconTheme.color),
                 onPressed: () {
                   Navigator.pop(context); // Navigate back to the previous screen
                 },
               ),
-              title: const Center(
+              title:  Center(
                 child: Text(
                   'Edit User Role Detail Profile',
-                  style: TextStyle(fontSize: 16, color: Colors.white),
+                  style: TextStyle(fontSize: 16, color: AdaptiveTheme.of(context).theme.iconTheme.color),
                 ),
               ),
             ),

@@ -50,7 +50,7 @@ class _AddNewCityWidgetState extends State<AddNewCityWidget> {
               Container(
                   width: double.infinity,
                   padding: const EdgeInsets.all(8.0),
-                  child: buildProductContainerText("Country")),
+                  child: buildProductContainerText("Country",context)),
 
               Container(
                 width: double.infinity,
@@ -75,7 +75,7 @@ class _AddNewCityWidgetState extends State<AddNewCityWidget> {
                   width: double.infinity,
                   padding: const EdgeInsets.all(8),
 
-                  child: buildProductContainerText("City")),
+                  child: buildProductContainerText("City",context)),
               Container(
                 width: double.infinity,
                 padding: const EdgeInsets.all(8),

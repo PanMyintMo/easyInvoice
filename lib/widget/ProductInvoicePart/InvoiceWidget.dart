@@ -5,6 +5,8 @@ import 'package:flutter/services.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'InvoiceResponse/Invoice.dart';
+import '../../widget/ProductInvoicePart/printerenum.dart';
+
 import 'package:blue_thermal_printer/blue_thermal_printer.dart';
 
 class InvoiceWidget extends StatefulWidget {
@@ -117,92 +119,80 @@ class _InvoiceWidgetState extends State<InvoiceWidget> {
     }
   }
 
-  Future<void> printImage(Uint8List imageBytes) async {
-    if (_connected) {
-      await bluetoothPrint.connect(_device!);
-      await bluetoothPrint.printImageBytes(imageBytes);
-      await bluetoothPrint.printNewLine();
-      await bluetoothPrint.disconnect();
-    }
-  }
-
   Future<void> printText(List<IData> invoice) async {
-
     try {
-    await bluetoothPrint.connect(_device!);
-        final profile = await CapabilityProfile.load();
-        final generator = Generator(PaperSize.mm58, profile);
+      await bluetoothPrint.connect(_device!);
+      final profile = await CapabilityProfile.load();
+      final generator = Generator(PaperSize.mm58, profile);
 
-        List<int> bytes = [];
+      List<int> bytes = [];
 
-
-    bytes += generator.text("MMEasyInvoice");
-    bytes +=generator.text("Xiao Pan");
-        for (var item in invoice) {
-          bytes +=generator.row([
-            PosColumn(
-                text: item.product_name!,width: 5,
-                styles: PosStyles(
-                    align: PosAlign.left,
-                    height: PosTextSize.size1
-                    ,width: PosTextSize.size1
-                )
-            ),
-            PosColumn(
-                text: item.quantity.toString()
-                ,width: 5,
-                styles: PosStyles(
-                    align: PosAlign.left,
-                    height: PosTextSize.size1
-                    ,width: PosTextSize.size1
-                )
-            ),
-            PosColumn(
-                text: item.sale_price!,width: 5,
-                styles: PosStyles(
-                    align: PosAlign.left,
-                    height: PosTextSize.size1
-                    ,width: PosTextSize.size1
-                )
-            )
-            ,PosColumn(
-                text: item.total.toString(),width: 5,
-                styles: PosStyles(
-                    align: PosAlign.left,
-                    height: PosTextSize.size1
-                    ,width: PosTextSize.size1
-                )
-            )
-          ]
-
-          );
+      for (var data in invoice) {
+        ByteData bytesAsset = await rootBundle.load("assets/invoice.png");
+       final imageBytesFromAsset= bytesAsset.buffer.asUint8List(bytesAsset.offsetInBytes, bytesAsset.lengthInBytes);
 
 
-        /*  bytes.addAll(generator.text(
-            "${item.product_name}",
-            styles: const PosStyles(
-              align: PosAlign.left,
-              bold: true,
-              height: PosTextSize.size2,
-              width: PosTextSize.size2,
-            ),
-          ));*/
-
-        }
-        bytes+= generator.hr();
-
-        bytes.addAll(generator.cut());
-
-
-        await bluetoothPrint.writeBytes(Uint8List.fromList(bytes));
+        // Print the image to the right of the paper
+        bluetoothPrint.printImageBytes(imageBytesFromAsset);
 
         await bluetoothPrint.printNewLine();
 
+        bluetoothPrint.printLeftRight("LEFT", "RIGHT", Size.bold.val,
+            format:
+            "%-15s %15s %n");
 
+        await bluetoothPrint.printNewLine();
+
+        // Adding header text
+        bluetoothPrint.printCustom(
+            "MMEasyInvoice", Size.boldMedium.val, Aligns.center.val);
+        bluetoothPrint.printNewLine();
+
+        bluetoothPrint.printCustom(
+            "09798217582", Size.boldMedium.val, Aligns.center.val);
+        bluetoothPrint.printNewLine();
+        bluetoothPrint.print3Column(
+            "Client Name", "", "ITVisionHub Co.ltd;", Size.bold.val,
+            format: "%-10s %10s %10s %n");
+        await bluetoothPrint.printNewLine();
+
+        bluetoothPrint.print3Column(
+            "Sayar Yan Aung", "", "ITVisionHub Co.ltd;", Size.bold.val,
+            format: "%-10s %10s %10s %n");
+        await bluetoothPrint.printNewLine();
+
+        bluetoothPrint.print4Column(
+            "Product Name", "Price", "Quantity", "Total", Size.bold.val,
+            format: "%-10s %10s %10s %10s %n");
+        await bluetoothPrint.printNewLine();
+
+        bluetoothPrint.print4Column(
+            "${data.product_name}",
+            "${data.sale_price}",
+            "${data.quantity}",
+            "${data.total}",
+            Size.bold.val,
+            format: "%-10s %10s %10s %10s %n");
+
+        bluetoothPrint.printNewLine();
+
+        bluetoothPrint.printCustom("Thank You Choosing Our Service!", Size.bold.val, Aligns.center.val);
+
+
+
+        bytes += generator.hr();
+        generator.cut();
+
+        // Writing bytes to the printer
+        await bluetoothPrint.writeBytes(Uint8List.fromList(bytes));
+
+        // Printing a new line
+        await bluetoothPrint.printNewLine();
+
+        // Disconnecting from the printer
         await bluetoothPrint.disconnect();
       }
-
-     catch (e) {
+    } catch (e) {
       print("Printing error: $e");
     }
   }
@@ -225,19 +215,15 @@ class _InvoiceWidgetState extends State<InvoiceWidget> {
         ),
       );
       final pdfAsUint8List = await pdfDoc.save();
-     // final pdfContent = String.fromCharCodes(pdfAsUint8List);
-      /*print('PDF Content: $pdfContent');
-      print(" Pdf Unit 8 List $pdfAsUint8List");
-      print("Data to print: ${widget.invoice}");*/
 
-           if (_connected) {
+      if (_connected) {
         await bluetoothPrint.connect(_device!);
         await bluetoothPrint.writeBytes(pdfAsUint8List);
         await bluetoothPrint.printNewLine();
         await bluetoothPrint.disconnect();
       }
     } catch (e) {
-     // print("Printing error in pdf file $e");
+      // print("Printing error in pdf file $e");
     }
   }
 
@@ -252,21 +238,15 @@ class _InvoiceWidgetState extends State<InvoiceWidget> {
                 ? const Icon(Icons.print)
                 : const Icon(Icons.print_disabled),
             onPressed: () {
-              // final ByteData data = await rootBundle.load("assets/invoice.png");
-              // final Uint8List imageBytes = data.buffer.asUint8List();
-              // await  printImage(imageBytes);
-             //  generateAndPrintPdf();
-
               printText(widget.invoice);
             },
           )
         ],
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+      body: Stack(
+        children: [
+          SingleChildScrollView(
+            child: Column(
               children: [
                 Padding(
                   padding: const EdgeInsets.symmetric(
@@ -275,76 +255,85 @@ class _InvoiceWidgetState extends State<InvoiceWidget> {
                   ),
                   child: Text(tips),
                 ),
+                const Divider(),
+                const SizedBox(
+                  height: 50,
+                ),
+                Container(
+                  padding: const EdgeInsets.fromLTRB(20, 5, 20, 10),
+                  child: Column(
+                    children: [
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: <Widget>[
+                          const Text(
+                            'Device:',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 20,
+                          ),
+                          Expanded(
+                            child: DropdownButton(
+                              items: _getDeviceItems(),
+                              onChanged: (BluetoothDevice? value) =>
+                                  setState(() => _device = value),
+                              value: _device,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: <Widget>[
+                            ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.brown),
+                              onPressed: () {
+                                initBluetooth();
+                              },
+                              child: const Text(
+                                'Refresh',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  backgroundColor:
+                                      _connected ? Colors.red : Colors.green),
+                              onPressed: _connected ? _disconnect : _connect,
+                              child: Text(
+                                _connected ? 'Disconnect' : 'Connect',
+                                style: const TextStyle(color: Colors.white),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const Divider(),
+                if (_connected)
+                  ElevatedButton(
+                    onPressed: () {
+                      generateAndPrintPdf();
+                    },
+                    child: const Text("Print Preview"),
+                  ),
               ],
             ),
-            const Divider(),
-            Container(
-              padding: const EdgeInsets.fromLTRB(20, 5, 20, 10),
-              child: Column(
-                children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: <Widget>[
-                      const Text(
-                        'Device:',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Expanded(
-                        child: DropdownButton(
-                          items: _getDeviceItems(),
-                          onChanged: (BluetoothDevice? value) =>
-                              setState(() => _device = value),
-                          value: _device,
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.brown),
-                        onPressed: () {
-                          initBluetooth();
-                        },
-                        child: const Text(
-                          'Refresh',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor:
-                            _connected ? Colors.red : Colors.green),
-                        onPressed: _connected ? _disconnect : _connect,
-                        child: Text(
-                          _connected ? 'Disconnect' : 'Connect',
-                          style: const TextStyle(color: Colors.white),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            const Divider(),
-            if (_connected)
-              ElevatedButton(
-                onPressed: () {
-                   generateAndPrintPdf();
-                },
-                child: const Text("Print Preview"),
-              ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -369,7 +358,7 @@ class _InvoiceWidgetState extends State<InvoiceWidget> {
   void _connect() {
     if (_device != null) {
       setState(() {
-        tips = "Device is connecting...";
+        tips = "Device is connected";
         _connected = true;
       });
 

@@ -12,6 +12,8 @@ class SettingScreen extends StatefulWidget {
 class _SettingScreenState extends State<SettingScreen> {
   bool isSwitched = false;
 
+
+
   @override
   Widget build(BuildContext context) {
     //AdaptiveTheme.of(context).mode.isLight;
@@ -33,10 +35,11 @@ class _SettingScreenState extends State<SettingScreen> {
               ),
               SettingsTile.switchTile(
                 title: const Text('Change Theme'),
-                leading: const Icon(Icons.phone_android),
+                leading: const Icon(Icons.brightness_4),
                 onToggle: (value) {
+                  print("Switched: $value");
                   setState(() {
-                     isSwitched = value;
+                    isSwitched = value;
                     if (value) {
                       AdaptiveTheme.of(context).setDark();
                     } else {
@@ -44,6 +47,7 @@ class _SettingScreenState extends State<SettingScreen> {
                     }
                   });
                 },
+
                 initialValue: isSwitched,
                 activeSwitchColor: Colors.blue,
               ),

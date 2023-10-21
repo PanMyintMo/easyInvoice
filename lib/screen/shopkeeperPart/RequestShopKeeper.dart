@@ -1,3 +1,4 @@
+import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:easy_invoice/bloc/post/ShopKeeperPart/add_request_product_shop_keeper_cubit.dart';
 import 'package:easy_invoice/module/module.dart';
 import 'package:flutter/material.dart';
@@ -20,18 +21,16 @@ class _RequestShopKeeperScreenState extends State<RequestShopKeeperScreen> {
     return BlocProvider(
       create: (context) => AddRequestProductShopKeeperCubit(getIt.call()),
       child: Scaffold(
-        backgroundColor: Colors.white,
+
         appBar: AppBar(
-          elevation: 0.0,
-          backgroundColor: Colors.white70,
-          iconTheme: const IconThemeData(
-            color: Colors.red, // Set the color of the navigation icon to black
+
+          iconTheme:  IconThemeData(
+            color: AdaptiveTheme.of(context).theme.iconTheme.color, // Set the color of the navigation icon to black
           ),
-          title: const Text(
+          title:  Text(
             'ShopKeeper Request Screen',
             style: TextStyle(
-                color: Colors.black54,
-                fontWeight: FontWeight.bold,
+                color: AdaptiveTheme.of(context).theme.iconTheme.color,
                 fontSize: 16),
           ),
         ),

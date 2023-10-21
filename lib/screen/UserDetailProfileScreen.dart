@@ -15,8 +15,11 @@ import '../module/module.dart';
 
 class UserDetailProfileScreen extends StatefulWidget {
   final UserData user;
+
   const UserDetailProfileScreen({
-    Key? key, required this.user,}) : super(key: key);
+    Key? key,
+    required this.user,
+  }) : super(key: key);
 
   @override
   State<UserDetailProfileScreen> createState() =>
@@ -49,7 +52,7 @@ class _UserDetailProfileScreenState extends State<UserDetailProfileScreen> {
         return Scaffold(
           appBar: AppBar(
             elevation: 0,
-            flexibleSpace: Container(
+              flexibleSpace: Container(
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
@@ -79,11 +82,8 @@ class _UserDetailProfileScreenState extends State<UserDetailProfileScreen> {
                   var result = await Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => UpdateUserRoleScreen(
-
-                        user:widget.user
-
-                      ),
+                      builder: (context) =>
+                          UpdateUserRoleScreen(user: widget.user),
                     ),
                   );
 
@@ -138,8 +138,7 @@ class _UserDetailProfileScreenState extends State<UserDetailProfileScreen> {
                             child: Container(
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(100),
-                                border:
-                                    Border.all( color: Colors.white24),
+                                border: Border.all(color: Colors.white24),
                                 color: Colors.white,
                                 boxShadow: const [
                                   BoxShadow(
@@ -151,7 +150,7 @@ class _UserDetailProfileScreenState extends State<UserDetailProfileScreen> {
                               ),
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(100),
-                                child: widget.user.url!.isNotEmpty
+                                child: (widget.user.url != null && widget.user.url!.isNotEmpty)
                                     ? Image.network(
                                         widget.user.url!,
                                         width: 130,
@@ -183,7 +182,8 @@ class _UserDetailProfileScreenState extends State<UserDetailProfileScreen> {
                       Expanded(
                         child: Column(
                           children: [
-                            buildProfileBox('Id No :', widget.user.id.toString()),
+                            buildProfileBox(
+                                'Id No :', widget.user.id.toString()),
                             buildProfileBox('Name :', widget.user.name),
                             buildProfileBox('Email :', widget.user.email),
                             buildProfileBox(
@@ -202,9 +202,16 @@ class _UserDetailProfileScreenState extends State<UserDetailProfileScreen> {
                               padding: const EdgeInsets.all(5),
                               child: ElevatedButton(
                                 onPressed: () {
-                                  showCustomDialog(title: 'Delete Account!', content: 'Are you sure you want to delete', confirmText: 'Yes', onConfirm: (){
-                                    context.read<DeleteUserRoleCubit>().deleteUserRole(widget.user.id);
-                                  });
+                                  showCustomDialog(
+                                      title: 'Delete Account!',
+                                      content:
+                                          'Are you sure you want to delete',
+                                      confirmText: 'Yes',
+                                      onConfirm: () {
+                                        context
+                                            .read<DeleteUserRoleCubit>()
+                                            .deleteUserRole(widget.user.id);
+                                      });
                                 },
                                 style: ThemeHelper().buttonStyle(),
                                 child: const Text(
@@ -239,5 +246,4 @@ class _UserDetailProfileScreenState extends State<UserDetailProfileScreen> {
       }),
     );
   }
-
 }

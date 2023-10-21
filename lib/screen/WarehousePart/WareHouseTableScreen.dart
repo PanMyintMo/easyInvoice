@@ -1,3 +1,4 @@
+import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:easy_invoice/bloc/get/WarehousePart/warehouse_product_list_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,18 +20,14 @@ class WarehouseTableScreen extends StatelessWidget {
         return cubit;
       },
       child: Scaffold(
-        backgroundColor: Colors.white,
         appBar: AppBar(
-          elevation: 0.0,
-          backgroundColor: Colors.white70,
-          iconTheme: const IconThemeData(
-            color: Colors.red,
+          iconTheme: IconThemeData(
+            color: AdaptiveTheme.of(context).theme.iconTheme.color,
           ),
-          title: const Text(
+          title:  Text(
             'Warehouse Table Screen',
             style: TextStyle(
-              color: Colors.black54,
-              fontWeight: FontWeight.bold,
+              color: AdaptiveTheme.of(context).theme.iconTheme.color,
               fontSize: 16,
             ),
           ),
@@ -49,11 +46,11 @@ class WarehouseTableScreen extends StatelessWidget {
                     ),
                   );
                 },
-                child: const Text(
+                child:  Text(
                   "Requesting Products",
                   style: TextStyle(
                     decoration: TextDecoration.underline,
-                    color: Colors.blue,
+                    color: AdaptiveTheme.of(context).theme.iconTheme.color,
                     fontSize: 16,
                   ),
                 ),

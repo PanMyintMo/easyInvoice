@@ -94,7 +94,7 @@ class _UpdateDeliveryWidgetState extends State<UpdateDeliveryWidget> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  buildProductContainerText("Choose City"),
+                  buildProductContainerText("Choose City",context),
                   const SizedBox(
                     height: 16,
                   ),
@@ -121,7 +121,7 @@ class _UpdateDeliveryWidgetState extends State<UpdateDeliveryWidget> {
                   const SizedBox(
                     height: 16,
                   ),
-                  buildProductContainerText("Choose Township"),
+                  buildProductContainerText("Choose Township",context),
                   const SizedBox(
                     height: 16,
                   ),
@@ -146,7 +146,7 @@ class _UpdateDeliveryWidgetState extends State<UpdateDeliveryWidget> {
                   const SizedBox(
                     height: 16,
                   ),
-                  buildProductContainerText("Basic Cost"),
+                  buildProductContainerText("Basic Cost",context),
                   const SizedBox(
                     height: 16,
                   ),
@@ -161,7 +161,7 @@ class _UpdateDeliveryWidgetState extends State<UpdateDeliveryWidget> {
                   const SizedBox(
                     height: 16,
                   ),
-                  buildProductContainerText("Waiting Time"),
+                  buildProductContainerText("Waiting Time",context),
                   const SizedBox(height: 16),
                   SizedBox(
                     child: buildProductContainerForm(

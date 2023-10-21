@@ -38,7 +38,7 @@ class _ShopKeeperScreenState extends State<ShopKeeperScreen> {
                 'ShopKeeper Screen',
                 style: TextStyle(
                     color: AdaptiveTheme.of(context).theme.iconTheme.color,
-                    fontWeight: FontWeight.bold,
+
                     fontSize: 16),
               )),
           body: BlocConsumer<ShopKeeperRequestCubit, ShopKeeperRequestState>(

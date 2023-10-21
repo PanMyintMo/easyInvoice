@@ -43,9 +43,7 @@ class _AllUserRoleWidgetState extends State<AllUserRoleWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-
-      body: ListView.builder(
+    return ListView.builder(
         itemCount: widget.userData.length,
         itemBuilder: (BuildContext context, int index) {
           UserData user = widget.userData[index];
@@ -98,15 +96,6 @@ class _AllUserRoleWidgetState extends State<AllUserRoleWidget> {
                   MaterialPageRoute(
                     builder: (context) => UserDetailProfileScreen(
                       user : user
-
-
-                      // id: user.id,
-                      // name: user.name,
-                      // email: user.email,
-                      // created_at: user.createdAt,
-                      // updated_at: user.updatedAt,
-                      // utype: user.utype,
-                      // url: user.url.toString(),
                     ),
                   ),
                 );
@@ -117,7 +106,7 @@ class _AllUserRoleWidgetState extends State<AllUserRoleWidget> {
             ) : null,
           );
         },
-      ),
-    );
+      );
+
   }
 }

@@ -1,3 +1,4 @@
+import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:easy_invoice/bloc/post/TownshipPart/add_township_cubit.dart';
 import 'package:easy_invoice/widget/TownshipPart/AddNewTownshipWidget.dart';
 import 'package:flutter/material.dart';
@@ -19,15 +20,13 @@ class _AddNewTownshipState extends State<AddNewTownship> {
       create: (context) => AddTownshipCubit(getIt.call()),
       child: Scaffold(
         appBar: AppBar(
-          elevation: 0.0,
-          backgroundColor: Colors.white24,
-          iconTheme: const IconThemeData(
-            color: Colors.red, // Set the color of the navigation icon to black
+          iconTheme:  IconThemeData(
+            color:AdaptiveTheme.of(context).theme.iconTheme.color, // Set the color of the navigation icon to black
           ),
-          title: const Text(
+          title:Text(
             'Add New Township',
             style: TextStyle(
-              color: Colors.black54,
+              color: AdaptiveTheme.of(context).theme.iconTheme.color,
               fontWeight: FontWeight.bold,
               fontSize: 16,
             ),
@@ -35,17 +34,18 @@ class _AddNewTownshipState extends State<AddNewTownship> {
         ),
         body: BlocBuilder<AddTownshipCubit, AddTownshipState>(
           builder: (context, state) {
+            final isLoading=state is AddTownshipLoading;
             if (state is AddTownshipLoading) {
-              return const AddNewTownshipWidget(isLoading : true);
+              return  AddNewTownshipWidget(isLoading : isLoading);
             } else if (state is AddTownshipSuccess) {
               showToastMessage(state.townshipResponse.message);
               Navigator.pop(context,true);
-              return const AddNewTownshipWidget(isLoading : false);
+              return  AddNewTownshipWidget(isLoading : isLoading);
             } else if (state is AddTownshipFail) {
               showToastMessage(state.error.toString());
-              return const AddNewTownshipWidget(isLoading : false);
+              return  AddNewTownshipWidget(isLoading : isLoading);
             }
-            return const AddNewTownshipWidget(isLoading : false);
+            return  AddNewTownshipWidget(isLoading : isLoading);
           },
         ), // Remove the const from here
       ),

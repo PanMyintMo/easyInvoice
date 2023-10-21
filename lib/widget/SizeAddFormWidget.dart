@@ -40,21 +40,17 @@ class _SizeAddFormWidgetState extends State<SizeAddFormWidget> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Row(
-          children: [
-            Expanded(
-              flex: 1,
-              child: buildProductContainerForm('Size Name',
-                  TextInputType.name, name, validateField),
-            ),
-            const SizedBox(width: 10,),
-
-
-
-
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
+        Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Row(
+            children: [
+              Expanded(
+                flex: 1,
+                child: buildProductContainerForm('Size Name',
+                    TextInputType.name, name, validateField),
+              ),
+              const SizedBox(width: 10,),
+              Expanded(
                 child: TextField(
                   controller: slug,
                   decoration: const InputDecoration(
@@ -64,8 +60,8 @@ class _SizeAddFormWidgetState extends State<SizeAddFormWidget> {
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
         const SizedBox(
           height: 20,

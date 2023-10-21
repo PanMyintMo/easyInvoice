@@ -1,3 +1,4 @@
+import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:easy_invoice/widget/ShopKeeperPart/ShopKeeperProductWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -24,15 +25,12 @@ class _ShopKeeperProductTableScreenState extends State<ShopKeeperProductTableScr
 
       child: Scaffold(
         appBar: AppBar(
-          elevation: 0.0,
-          backgroundColor: Colors.white24,
-          iconTheme: const IconThemeData(
-            color: Colors.red, // Set the color of the navigation icon to black
+          iconTheme:  IconThemeData(
+            color: AdaptiveTheme.of(context).theme.iconTheme.color, // Set the color of the navigation icon to black
           ),
-          title: const Text('Shopkeeper Product Screen',
+          title:  Text('Shopkeeper Product Screen',
               style: TextStyle(
-                  color: Colors.black54,
-                  fontWeight: FontWeight.bold,
+                  color: AdaptiveTheme.of(context).theme.iconTheme.color,
                   fontSize: 16)),
         ),
         body:

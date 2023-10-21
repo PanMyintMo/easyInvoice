@@ -39,25 +39,28 @@ class _AddCategoryFromWidgetState extends State<AddCategoryFromWidget> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Row(
-          children: [
-            Expanded(
-              flex: 1,
-              child: buildProductContainerForm('Category Name',
-                  TextInputType.name, name, validateField),
-            ),
-            const SizedBox(width: 10,),
-            Expanded(
-              child: TextField(
-                enabled: false,
-                controller: slug,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Slug Name',
+        Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Row(
+            children: [
+              Expanded(
+                flex: 1,
+                child: buildProductContainerForm('Category Name',
+                    TextInputType.name, name, validateField),
+              ),
+              const SizedBox(width: 10,),
+              Expanded(
+                child: TextField(
+                  enabled: false,
+                  controller: slug,
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Slug Name',
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
         const SizedBox(
           height: 20,

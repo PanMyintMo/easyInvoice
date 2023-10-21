@@ -69,7 +69,7 @@ class _RequestDeliveryCompanyWidgetState extends State<RequestDeliveryCompanyWid
                       ),
                       Padding(
                         padding: const EdgeInsets.fromLTRB(10, 10, 10, 5),
-                        child: buildProductContainerText("Delivery Name"),
+                        child: buildProductContainerText("Delivery Name",context),
                       ),
                       Container(
                         padding : const EdgeInsets.fromLTRB(10, 10, 10, 5),
@@ -83,7 +83,7 @@ class _RequestDeliveryCompanyWidgetState extends State<RequestDeliveryCompanyWid
 
                         Padding(
                           padding: const EdgeInsets.fromLTRB(10, 10, 10, 5),
-                          child: buildProductContainerText("Upload Image"),
+                          child: buildProductContainerText("Upload Image",context),
                         ),
                         const SizedBox(height : 16),
                         Padding(

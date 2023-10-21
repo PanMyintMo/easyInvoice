@@ -1,3 +1,4 @@
+import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:easy_invoice/bloc/post/ProductPart/add_product_cubit.dart';
 import 'package:easy_invoice/common/ToastMessage.dart';
 import 'package:flutter/material.dart';
@@ -20,36 +21,38 @@ class _AddProductScreenState extends State<AddProductScreen> {
     return BlocProvider(
       create: (context) => AddProductCubit(getIt.call()),
       child: Scaffold(
-        appBar: AppBar(elevation: 0.0,
-          backgroundColor: Colors.white24,
-          iconTheme: const IconThemeData(
-            color: Colors.red, // Set the color of the navigation icon to black
-          ), title: const Text('Add Product', style: TextStyle(
-              color: Colors.black54,
-              fontWeight: FontWeight.bold,
-              fontSize: 16)),),
+        appBar: AppBar(
+          iconTheme:  IconThemeData(
+            color:AdaptiveTheme.of(context).theme.iconTheme.color, // Set the color of the navigation icon to black
+          ), title:  Text('Add Product', style: TextStyle(
+              color: AdaptiveTheme.of(context).theme.iconTheme.color,
+
+            fontSize: 16)),),
         body: BlocBuilder<AddProductCubit, AddProductState>(
           builder: (context, state) {
+            final isLoading= state is AddProductLoading;
+
             if (state is AddProductLoading) {
-              return const AddProductWidget(
-                 isLoading: true,
+
+              return  AddProductWidget(
+                 isLoading: isLoading,
 
               );
             } else if (state is AddProductSuccess) {
               showToastMessage(state.addProductResponse.message);
               Navigator.pop(context,true);
-              return const AddProductWidget(
-                isLoading: false,
+              return  AddProductWidget(
+                isLoading: isLoading,
 
               );
             } else if (state is AddProductFail) {
-              return const AddProductWidget(
-                isLoading: false,
+              return  AddProductWidget(
+                isLoading: isLoading,
 
               );
             }
-            return const AddProductWidget(
-               isLoading: false,
+            return  AddProductWidget(
+               isLoading: isLoading,
 
             );
           },

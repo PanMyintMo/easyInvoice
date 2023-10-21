@@ -1,4 +1,3 @@
-import 'package:easy_invoice/screen/ProductInvoicePart/ProductInvoiceScreenWithListView.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../bloc/post/product_invoice_cubit.dart';
@@ -22,43 +21,45 @@ class _ProductInvoiceScreenState extends State<ProductInvoiceScreen> {
     return BlocProvider(
       create: (context) => ProductInvoiceCubit(getIt.call()),
       child: BlocConsumer<ProductInvoiceCubit, ProductInvoiceState>(
-            listener: (context, state) {
-              if (state is ProductInvoiceFail) {
-            showToastMessage(state.error);
-          }
-        }, builder: (context, state) {
+          listener: (context, state) {
+        if (state is ProductInvoiceFail) {
+          showToastMessage(state.error);
+        }
+      }, builder: (context, state) {
+        final isLoading = state is ProductInvoiceLoading;
 
-          if (state is ProductInvoiceLoading) {
-            return const Center(child:  CircularProgressIndicator());
-          }
-          else if(state is ProductInvoiceFail){
-            showToastMessage(state.error);
-          }
-          else if (state is ProductInvoiceSuccess) {
-            final invoice = state.productInvoiceResponse;
+        if (state is ProductInvoiceLoading) {
+          return ProductInvoiceWidget(
+            isLoading: isLoading,
+            invoiceData: invoiceData,
+          );
+        } else if (state is ProductInvoiceFail) {
+          showToastMessage(state.error);
+        } else if (state is ProductInvoiceSuccess) {
+          final invoice = state.productInvoiceResponse;
 
-            if (invoice.isEmpty) {
-              return const Center(
-                child: Text("Product is out of stock."),
-              );
-            }
+          if (invoice.isEmpty) {
+            return const Center(
+              child: Text("Product is out of stock."),
+            );
+          } else {
+            invoiceData.addAll(invoice);
             return ProductInvoiceWidget(
-              isLoading: false,
+              isLoading: isLoading,
               invoiceData: state.productInvoiceResponse,
             );
-
-
-            //   ProductInvoiceScreenWithListView(
-            //   isLoading: false,
-            //   invoiceData : state.productInvoiceResponse
-            // );
           }
-          return const ProductInvoiceWidget(
-            isLoading: false,
-            invoiceData: [],
-          );
-        }),
 
+          //   ProductInvoiceScreenWithListView(
+          //   isLoading: false,
+          //   invoiceData : state.productInvoiceResponse
+          // );
+        }
+        return ProductInvoiceWidget(
+          isLoading: isLoading,
+          invoiceData: invoiceData,
+        );
+      }),
     );
   }
 }

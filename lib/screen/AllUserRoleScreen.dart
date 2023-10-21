@@ -1,3 +1,4 @@
+import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:easy_invoice/bloc/get/UserRolePart/get_all_user_role_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -35,15 +36,12 @@ class _AllUserRoleScreenState extends State<AllUserRoleScreen> {
       ],
       child: Scaffold(
         appBar: AppBar(
-          elevation: 0.0,
-          backgroundColor: Colors.white70,
-          iconTheme: const IconThemeData(
-            color: Colors.red, // Set the color of the navigation icon to black
+          iconTheme: IconThemeData(
+            color: AdaptiveTheme.of(context).theme.iconTheme.color, // Set the color of the navigation icon to black
           ),
-          title: const Text('All User Role',style: TextStyle(
-              color: Colors.black54, fontWeight: FontWeight.bold, fontSize: 16),),
+          title:  Text('All User Role',style: TextStyle(
+              color: AdaptiveTheme.of(context).theme.iconTheme.color, fontSize: 16),),
         ),
-
 
         body: BlocConsumer<GetAllUserRoleCubit, GetAllUserRoleState>(
           listener: (context, state) {

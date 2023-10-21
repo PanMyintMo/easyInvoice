@@ -15,7 +15,6 @@ class AllFaultyItemsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: AppBar(
         title:  Text(
           'Faulty Items Screen',
@@ -66,15 +65,15 @@ class FaultyItemDefault extends StatelessWidget {
                   BlocProvider.of<FetchAllFaultyItemCubit>(context).fetchAllFaultyItem();
                 }
               },
-              child: const Padding(
-                padding: EdgeInsets.all(8.0),
+              child:  Padding(
+                padding: const EdgeInsets.all(8.0),
                 child: Text(
                   'Add New Faulty Item',
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                     decoration: TextDecoration.underline,
-                    color: Colors.blue,
+                    color:AdaptiveTheme.of(context).theme.iconTheme.color,
                   ),
                 ),
               ),

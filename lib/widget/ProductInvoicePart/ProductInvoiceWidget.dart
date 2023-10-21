@@ -1,3 +1,4 @@
+import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:easy_invoice/data/api/apiService.dart';
 import 'package:easy_invoice/widget/ProductInvoicePart/PdfPage.dart';
 import 'package:flutter/material.dart';
@@ -31,16 +32,12 @@ class _ProductInvoiceWidgetState extends State<ProductInvoiceWidget> {
   bool isClick = false;
   int quantity = 0;
 
+
+
   @override
   void initState() {
     super.initState();
   }
-
-  // void _checkInput() {
-  //   setState(() {
-  //     isClick = prouductno.text.isNotEmpty;
-  //   });
-  // }
 
   Future<void> barcodeScanner() async {
     final result = await Navigator.push(
@@ -54,9 +51,7 @@ class _ProductInvoiceWidgetState extends State<ProductInvoiceWidget> {
     );
 
     if (result != null) {
-      // Assuming the result contains the scanned barcode string
       String scannedBarcode = result.toString(); // Modify this line
-
       setState(() {
         prouductno.text = scannedBarcode;
       });
@@ -69,8 +64,6 @@ class _ProductInvoiceWidgetState extends State<ProductInvoiceWidget> {
       context
           .read<ProductInvoiceCubit>()
           .productInvoice(ProductInvoiceRequest(barcode: prouductno.text));
-
-      // Clear the text field after using the entered value
       prouductno.clear();
     }
   }
@@ -79,30 +72,21 @@ class _ProductInvoiceWidgetState extends State<ProductInvoiceWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        elevation: 0.0,
-        backgroundColor: Colors.white24,
-        iconTheme: const IconThemeData(
-          color: Colors.blue,
-          // Set the color of the navigation icon to black
-        ),
-        title: const Text(
+
+        title:  Text(
           'Product Invoice',
           style: TextStyle(
-            color: Colors.black54,
-            fontWeight: FontWeight.bold,
-            fontSize: 16,
+            color: AdaptiveTheme.of(context).theme.iconTheme.color,
+
           ),
         ),
         actions: [
-          ElevatedButton(
+          TextButton(
             onPressed: barcodeScanner,
-            style: ElevatedButton.styleFrom(
-              shape: const CircleBorder(),
-              padding: const EdgeInsets.all(10),
-            ),
             child: const Icon(
               Icons.qr_code_scanner,
-              size: 22,
+              size: 24,
+              weight: 50.0,
             ),
           ),
         ],
@@ -116,15 +100,17 @@ class _ProductInvoiceWidgetState extends State<ProductInvoiceWidget> {
                 Align(
                   alignment: Alignment.topRight,
                   child: ElevatedButton(
-                    onPressed: true ? () async {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => PdfPage()));
-                          } : null,
-
+                    onPressed: widget.invoiceData.isNotEmpty ? () async {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => PdfPage(),
+                        ),
+                      );
+                    } : null,
                     child: const Text('Print'),
-                  ),
+                  )
+
                 ),
                 const SizedBox(height: 16),
                 TextFormField(
@@ -146,36 +132,45 @@ class _ProductInvoiceWidgetState extends State<ProductInvoiceWidget> {
                   ),
                 ),
                 const SizedBox(height: 16),
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: DataTable(
-                    columns: const [
-                      DataColumn(
-                        label: Text('Product Name',
-                            style:
-                                TextStyle(fontSize: 16, color: Colors.black54)),
+                Stack(
+                  children: [
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: DataTable(
+                        columns:  [
+                          DataColumn(
+                            label: Text('Product Name',
+                                style:
+                                    TextStyle(fontSize: 16, color:AdaptiveTheme.of(context).theme.iconTheme.color)),
+                          ),
+                          DataColumn(
+                            label: Text('QTY',
+                                style:
+                                    TextStyle(fontSize: 16, color: AdaptiveTheme.of(context).theme.iconTheme.color)),
+                          ),
+                          DataColumn(
+                            label: Text('Sale Price',
+                                style:
+                                    TextStyle(fontSize: 16, color: AdaptiveTheme.of(context).theme.iconTheme.color)),
+                          ),
+                          DataColumn(
+                            label: Text('Total',
+                                style:
+                                    TextStyle(fontSize: 16, color: AdaptiveTheme.of(context).theme.iconTheme.color)),
+                          ),
+                        ],
+                        rows: [
+                          for (final item in widget.invoiceData)
+                            dataRowForProductInvoiceWidget(item: item),
+                        ],
                       ),
-                      DataColumn(
-                        label: Text('QTY',
-                            style:
-                                TextStyle(fontSize: 16, color: Colors.black54)),
+                    ),
+
+                    if(widget.isLoading)
+                      const Center(
+                        child: CircularProgressIndicator(),
                       ),
-                      DataColumn(
-                        label: Text('Sale Price',
-                            style:
-                                TextStyle(fontSize: 16, color: Colors.black54)),
-                      ),
-                      DataColumn(
-                        label: Text('Total',
-                            style:
-                                TextStyle(fontSize: 16, color: Colors.black54)),
-                      ),
-                    ],
-                    rows: [
-                      for (final item in widget.invoiceData)
-                        dataRowForProductInvoiceWidget(item: item),
-                    ],
-                  ),
+                  ],
                 ),
               ],
             ),

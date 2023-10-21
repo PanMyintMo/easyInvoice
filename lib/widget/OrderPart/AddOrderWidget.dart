@@ -585,10 +585,10 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
                   Row(
                     children: [
                       Expanded(flex: 1,
-                          child: buildProductContainerText("Sale Price")),
+                          child: buildProductContainerText("Sale Price",context)),
                       Expanded(flex: 1,
                           child: buildProductContainerText(
-                              "Available Quantity")),
+                              "Available Quantity",context)),
                     ],
                   ),
                   const SizedBox(

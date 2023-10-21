@@ -1,13 +1,17 @@
+import 'package:easy_invoice/data/responseModel/CityPart/FetchCityByCountryId.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../bloc/post/TownshipPart/add_township_cubit.dart';
 import '../../common/ApiHelper.dart';
 import '../../common/ThemeHelperUserClass.dart';
+import '../../data/api/ConnectivityService.dart';
+import '../../data/api/apiService.dart';
 import '../../data/responseModel/CityPart/Cities.dart';
 import '../../data/responseModel/CountryPart/CountryResponse.dart';
 import '../../dataRequestModel/TownshipPart/AddTownship.dart';
+
 class AddNewTownshipWidget extends StatefulWidget {
-  
+
   final bool isLoading;
 
   const AddNewTownshipWidget({super.key, required this.isLoading});
@@ -17,7 +21,8 @@ class AddNewTownshipWidget extends StatefulWidget {
 }
 
 class _AddNewTownshipState extends State<AddNewTownshipWidget> {
-  List<City> cities=[];
+  List<City> cities = [];
+  List<CityByCountryIdData> citiesData = [];
   List<Country> countries = [];
   String? select_country;
   String? select_city;
@@ -27,15 +32,8 @@ class _AddNewTownshipState extends State<AddNewTownshipWidget> {
   void initState() {
     super.initState();
     fetchCountyName();
-    fetchCityName();
   }
 
-  void fetchCityName() async {
-    final city = await ApiHelper.fetchCityName();
-    setState(() {
-      cities = city;
-    });
-  }
 
   void fetchCountyName() async {
     final country = await ApiHelper.fetchCountryName();
@@ -43,7 +41,15 @@ class _AddNewTownshipState extends State<AddNewTownshipWidget> {
       countries = country!;
     });
   }
+
+  Future<List<CityByCountryIdData>> fetchCityByCountryId(int id) async {
+     citiesData = await ApiService(ConnectivityService())
+        .fetchAllCitiesByCountryId(id);
+    return citiesData;
+  }
+
   final formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -56,7 +62,7 @@ class _AddNewTownshipState extends State<AddNewTownshipWidget> {
             children: [
               Container(
                 padding: const EdgeInsets.all(16.0),
-                width : double.infinity,
+                width: double.infinity,
                 child: buildDropdown(
                   value: select_country,
                   items: countries.map((country) {
@@ -67,37 +73,52 @@ class _AddNewTownshipState extends State<AddNewTownshipWidget> {
                   onChanged: (value) {
                     setState(() {
                       select_country = value;
-                      select_city= null;
+                      select_city = null;
                     });
                   },
-                  hint: "Select Country", context: context,
+                  hint: "Select Country",
+                  context: context,
                 ),
               ),
 
-              Container(
-                padding: const EdgeInsets.all(16.0),
-                width: double.infinity,
-                child: buildDropdown(
-                  value: select_city,
-                  items: cities.map((city) {
-                    return DropdownMenuItem(
-                        value: city.id.toString(),
-                        child: Text(city.name));
-                  }).toList(),
-                  onChanged: (value) {
-                    setState(() {
-                      select_city = value;
-                    });
-                  },
-                  hint: "Select City", context: context,
-                ),
-              ),
+              if(select_country != null)
+                FutureBuilder(
+                    future: fetchCityByCountryId(int.parse(select_country!)),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const CircularProgressIndicator();
+                      } else if (snapshot.hasError) {
+                        return Text('Error: ${snapshot.error}');
+                      }
+                      else {
+                        citiesData = snapshot.data!;
+                        return Container(
+                          padding: const EdgeInsets.all(16.0),
+                          width: double.infinity,
+                          child: buildDropdown(
+                            value: select_city,
+                            items: citiesData.map((city) {
+                              return DropdownMenuItem(
+                                  value: city.id.toString(),
+                                  child: Text(city.name));
+                            }).toList(),
+                            onChanged: (value) {
+                              setState(() {
+                                select_city = value;
+                              });
+                            },
+                            hint: "Select City",
+                            context: context,
+                          ),
+                        );
+                      }
+                    }),
               Container(
                 alignment: Alignment.center,
                 padding: const EdgeInsets.all(16),
                 child: TextFormField(
-                  validator: (value){
-                    if(value == null || value.isEmpty){
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
                       return 'Township name cannot be empty';
                     }
                     return null;
@@ -105,7 +126,8 @@ class _AddNewTownshipState extends State<AddNewTownshipWidget> {
                   initialValue: name, // Set the initial value from the variable
                   onChanged: (value) {
                     setState(() {
-                      name = value; // Update the name variable when the field changes
+                      name =
+                          value; // Update the name variable when the field changes
                     });
                   },
                   decoration: InputDecoration(
@@ -123,7 +145,9 @@ class _AddNewTownshipState extends State<AddNewTownshipWidget> {
                   if (formKey.currentState!.validate()) {
                     formKey.currentState!.save();
                     context.read<AddTownshipCubit>().addTownship(
-                      AddTownship(name: name,country_id: select_country.toString(),city_id: select_city.toString()),
+                      AddTownship(name: name,
+                          country_id: select_country.toString(),
+                          city_id: select_city.toString()),
                     );
                   }
                 },

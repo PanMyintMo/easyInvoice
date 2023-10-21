@@ -79,7 +79,7 @@ class _AddDeliveryWidgetState extends State<AddDeliveryWidget> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  buildProductContainerText("Choose Delivery"),
+                  buildProductContainerText("Choose Delivery",context),
                   const SizedBox(
                     height: 16,
                   ),
@@ -104,7 +104,7 @@ class _AddDeliveryWidgetState extends State<AddDeliveryWidget> {
                   const SizedBox(
                     height: 16,
                   ),
-                  buildProductContainerText("Choose City"),
+                  buildProductContainerText("Choose City",context),
                   const SizedBox(
                     height: 16,
                   ),
@@ -130,7 +130,7 @@ class _AddDeliveryWidgetState extends State<AddDeliveryWidget> {
                   const SizedBox(
                     height: 16,
                   ),
-                  buildProductContainerText("Choose Township"),
+                  buildProductContainerText("Choose Township",context),
                   const SizedBox(
                     height: 16,
                   ),
@@ -155,7 +155,7 @@ class _AddDeliveryWidgetState extends State<AddDeliveryWidget> {
                   const SizedBox(
                     height: 16,
                   ),
-                  buildProductContainerText("Basic Cost"),
+                  buildProductContainerText("Basic Cost",context),
                   const SizedBox(
                     height: 16,
                   ),
@@ -170,7 +170,7 @@ class _AddDeliveryWidgetState extends State<AddDeliveryWidget> {
                   const SizedBox(
                     height: 16,
                   ),
-                  buildProductContainerText("Waiting Time"),
+                  buildProductContainerText("Waiting Time",context),
                   const SizedBox(height: 16),
                   SizedBox(
                     child: buildProductContainerForm(
