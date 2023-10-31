@@ -35,7 +35,7 @@ dependencies:
   shared_preferences: ^2.1.1
 
   retrofit: any
-  dio: ^5.1.2
+  dio: ^4.0.6
   json_annotation: any
   equatable:
   flutter_svg: ^2.0.7
@@ -76,6 +76,12 @@ dependencies:
   adaptive_theme: ^3.4.1
   blue_thermal_printer: ^1.2.3
   esc_pos_utils_plus: ^2.0.2
+  flutter_facebook_auth: ^5.0.11
+  google_sign_in: ^6.1.5
+
+
+
+
 
 
 
@@ -85,6 +91,28 @@ dev_dependencies:
   retrofit_generator: any
   json_serializable: any
   build_runner: any
+
+
+
+  flutter_launcher_icons: ^0.13.1
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/invoiceBG.jpg"
+  background_color: "#hexcode"
+  theme_color: "#hexcode"
+  min_sdk_android: 21
+  web:
+    generate: true
+    image_path: "assets/invoiceBG.jpg"
+  windows:
+    generate: true
+    image_path: "assets/invoiceBG.jpg"
+    icon_size: 48 # min:48, max:256, default: 48
+  macos:
+    generate: true
+    image_path: "assets/invoiceBG.jpg"
+
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

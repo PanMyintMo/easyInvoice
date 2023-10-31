@@ -1,3 +1,4 @@
+import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:easy_invoice/bloc/edit/statusChange/delivery_man_status_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,17 +19,15 @@ class _DeliveryManScreenState extends State<DeliveryManScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.white,
+
         appBar: AppBar(
-          elevation: 0.0,
-          backgroundColor: Colors.white70,
-          iconTheme: const IconThemeData(
-            color: Colors.red, // Set the color of the navigation icon to black
+          iconTheme:  IconThemeData(
+            color: AdaptiveTheme.of(context).theme.iconTheme.color, // Set the color of the navigation icon to black
           ),
-          title: const Text(
+          title: Text(
             'Receive Product from warehouse screen',
             style: TextStyle(
-                color: Colors.black54,
+                color: AdaptiveTheme.of(context).theme.iconTheme.color,
                 fontWeight: FontWeight.bold,
                 fontSize: 16),
           ),
@@ -85,7 +84,7 @@ class _DeliveryStatusScreenState extends State<DeliveryStatusScreen> {
                 },
                 listener: (context, deleteState) {
                   if (deleteState is DeliveryManStatusSuccess) {
-                    showToastMessage('Successful.');
+                  //  showToastMessage('Successful.');
                     BlocProvider.of<FetchAllWarehouseRequestCubit>(context)
                         .fetchAllWarehouseRequest();
                   } else if (deleteState is DeliveryManStatusFail) {

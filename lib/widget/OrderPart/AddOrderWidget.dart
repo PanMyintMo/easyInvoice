@@ -1,3 +1,5 @@
+import 'package:adaptive_theme/adaptive_theme.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:easy_invoice/common/ApiHelper.dart';
 import 'package:easy_invoice/data/api/apiService.dart';
 import 'package:easy_invoice/data/responseModel/CityPart/WardByTownshipResponse.dart';
@@ -20,8 +22,10 @@ import '../../network/SharedPreferenceHelper.dart';
 
 class AddOrderWidget extends StatefulWidget {
   final bool isLoading;
+final  List<ShopProductItem> shopProductItem;
 
-  const AddOrderWidget({Key? key, required this.isLoading}) : super(key: key);
+
+  const AddOrderWidget( {Key? key, required this.isLoading,required this.shopProductItem}) : super(key: key);
 
   @override
   State<AddOrderWidget> createState() => _AddOrderWidgetState();
@@ -32,7 +36,7 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
   int serviceId = 0;
   int? userId;
   String? select_product;
-  List<ShopProductItem> products = [];
+  //List<ShopProductItem> products = [];
   List<CompanyData> companyData = [];
   List<Country> countries = [];
   String? select_country;
@@ -44,10 +48,16 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
   int? productQuality = 0;
   String? select_township;
   String? select_ward;
+  int? townshipId;
   List<String> companyName = [];
   String? select_city;
   String? select_street;
+  int? wardId;
 
+  final connectivityService = ConnectivityService();
+
+  int? countryId;
+  int? cityId;
 
   String waitingTime = '';
   int basicCost = 0;
@@ -80,11 +90,20 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
   @override
   void initState() {
     super.initState();
-    fetchProductListItem();
+
     fetchCountyName();
+   // fetchProductListItem();
     fetchLoginUserId();
   }
-
+  // void fetchProductListItem() async {
+  //   final response = await ApiHelper.allShopProduct();
+  //
+  //   setState(() {
+  //     products = response!.data.data;
+  //     print("products are $products");
+  //   });
+  //
+  // }
   // Retrieve the user type from shared preferences
   Future<void> fetchLoginUserId() async {
     final sessionManager = SessionManager();
@@ -94,12 +113,7 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
     });
   }
 
-  void fetchProductListItem() async {
-    final response = await ApiHelper.allShopProduct();
-    setState(() {
-      products = response!.data.data;
-    });
-  }
+
 
   void fetchCountyName() async {
     final country = await ApiHelper.fetchCountryName();
@@ -109,60 +123,87 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
   }
 
   void chooseProductOrderById(ChooseProductOrderRequest? id) async {
-    final response = await ApiService(ConnectivityService()).chooseProductOrder(id!);
+    final response =
+        await ApiService(ConnectivityService()).chooseProductOrder(id!);
     setState(() {
       productQuality = response.available_quantity;
       salePrice = response.sale_price;
     });
   }
 
-
-
   void fetchCitiesByCountryId(int id) async {
-    final response = await ApiService(ConnectivityService()).fetchAllCitiesByCountryId(id);
-    setState(() {
-      cities = response;
-      if (response.isNotEmpty) {}
-    });
+    if (countryId != null) {
+      var connectivityResult = await connectivityService.checkConnectivity();
+      if (connectivityResult != ConnectivityResult.none) {
+        final response =
+        await ApiService(ConnectivityService()).fetchAllCitiesByCountryId(id);
+        setState(() {
+          select_city = null;
+          cities = response;
+        });
+      }
+    }
   }
 
   void fetchTownshipByCityId(int id) async {
-    final response = await ApiService(ConnectivityService()).fetchAllTownshipByCityId(id);
-    setState(() {
-      townships = response;
-      if (response.isNotEmpty) {
 
+    if(cityId != null){
+      var connectivityResult = await connectivityService.checkConnectivity();
+
+      if (connectivityResult != ConnectivityResult.none) {
+        final response =
+        await ApiService(ConnectivityService()).fetchAllTownshipByCityId(id);
+        setState(() {
+          select_township = null;
+          townships = response;
+        });
       }
-    });
+    }
   }
 
   void fetchWardByTownshipId(int id) async {
-    final response = await ApiHelper.fetchWardByTownshipId(id);
 
-    setState(() {
-      wards = response;
-      if (response.isNotEmpty) {
-
+    if(townshipId != null){
+      var connectivityResult = await connectivityService.checkConnectivity();
+      if (connectivityResult != ConnectivityResult.none) {
+        final response = await ApiHelper.fetchWardByTownshipId(id);
+        setState(() {
+          select_ward = null;
+          wards = response;
+        });
       }
-    });
+    }
   }
 
   void fetchStreetByWardId(int id) async {
-    final response = await ApiHelper.fetchStreetByWardId(id);
-    setState(() {
-      streets = response;
-      if (response.isNotEmpty) {}
-    });
+    if(wardId != null){
+      var connectivityResult = await connectivityService.checkConnectivity();
+      if (connectivityResult != ConnectivityResult.none) {
+        final response = await ApiHelper.fetchStreetByWardId(id);
+        setState(() {
+          select_street = null;
+          streets = response;
+        });
+      }
+    }
   }
 
   void fetchDeliCompanyNameByTownshipId(int id) async {
-    final response = await ApiService(ConnectivityService()).fetchAllCompanyByTownshipId(id);
-    setState(() {
-      companyData = response;
-      if (response.isNotEmpty) {
-        companyData = companyData.map((x) => x).toList();
+
+    if(townshipId != null){
+      var connectivityResult = await connectivityService.checkConnectivity();
+      if (connectivityResult != ConnectivityResult.none) {
+     final response=await ApiService(ConnectivityService()).fetchAllCompanyByTownshipId(id);
+        setState(() {
+          companyData = response;
+        });
       }
-    });
+    }
+
+      //
+      // if (response.isNotEmpty) {
+      //   companyData = companyData.map((x) => x).toList();
+      // }
   }
 
   @override
@@ -242,8 +283,6 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
                       validateField,
                     ),
                   ),
-
-
                   const SizedBox(
                     height: 16,
                   ),
@@ -259,7 +298,8 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
                         ),
                       ),
                       const SizedBox(width: 10.0),
-                      Expanded(flex: 1,
+                      Expanded(
+                        flex: 1,
                         child: buildProductContainerForm(
                           'Line 2',
                           TextInputType.phone,
@@ -298,19 +338,29 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
                             value: country.id.toString(),
                             child: Text(country.name));
                       }).toList(),
-                      onChanged: (value) {
+                      onChanged: (value) async {
                         setState(() {
                           select_country = value;
                           select_township = null;
                           select_city = null;
-                          int countryId = int.parse(value!);
-                          fetchCitiesByCountryId(countryId);
+                          countryId = int.parse(value!);
                         });
+
+                        if (countryId != null) {
+                          var connectivityResult =
+                              await connectivityService.checkConnectivity();
+
+                          if (connectivityResult == ConnectivityResult.none) {
+                            // no internet connection
+                          } else {
+                            fetchCitiesByCountryId(countryId!);
+                          }
+                        }
                       },
-                      hint: "Select Country Name", context: context,
+                      hint: "Select Country Name",
+                      context: context,
                     ),
                   ),
-
                   const SizedBox(
                     height: 16,
                   ),
@@ -325,21 +375,29 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
                       value: select_city,
                       items: cities.map((city) {
                         return DropdownMenuItem(
-                            value: city.id.toString(),
-                            child: Text(city.name));
+                            value: city.id.toString(), child: Text(city.name));
                       }).toList(),
-                      onChanged: (value) {
+                      onChanged: (value) async {
                         setState(() {
                           select_city = value;
                           select_township = null;
-                          int cityId = int.parse(value!);
-                          fetchTownshipByCityId(cityId);
+                           cityId = int.parse(value!);
                         });
-                      },
-                      hint: "Select City Name", context: context,
+
+                        if(countryId != null){
+                          var connectivityResult =
+                              await connectivityService.checkConnectivity();
+                          if (connectivityResult == ConnectivityResult.none) {
+                            // no internet connection
+                          } else {
+                            fetchTownshipByCityId(cityId!);
+                          }
+                        }
+                     },
+                      hint: "Select City Name",
+                      context: context,
                     ),
                   ),
-
                   const SizedBox(
                     height: 16,
                   ),
@@ -360,42 +418,52 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
                       onChanged: (value) {
                         setState(() {
                           select_township = value;
-                          int townshipId = int.parse(value!);
-                          fetchDeliCompanyNameByTownshipId(townshipId);
-                          fetchWardByTownshipId(townshipId);
+                           townshipId= int.parse(value!);
+
                         });
-                      },
-                      hint: "Select Township", context: context,
+
+                        if(townshipId != null){
+                          fetchDeliCompanyNameByTownshipId(townshipId!);
+                          fetchWardByTownshipId(townshipId!);
+                        }
+                        },
+                      hint: "Select Township",
+                      context: context,
                     ),
                   ),
-
                   const SizedBox(
                     height: 16,
                   ),
-                  SizedBox(
-                    width: double.infinity,
-                    child: buildDropdown(
-                      value: select_ward,
-                      items: wards.map((ward) {
-                        return DropdownMenuItem(
-                            value: ward.id.toString(),
-                            child: Text(ward.ward_name));
-                      }).toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          select_ward = value;
-                          int wardId = int.parse(value!);
-                          fetchStreetByWardId(wardId);
-                        });
-                      },
-                      hint: "Select Ward", context: context,
-                    ),
-                  ),
+                  buildDropdown(
+                    value: select_ward,
+                    items: wards.map((ward) {
+                      return DropdownMenuItem(
+                          value: ward.id.toString(),
+                          child: Container(
+                            constraints: const BoxConstraints(
+                              maxWidth: 200, // Adjust the width as needed
+                            ),
+                            child: Text(ward.ward_name,
+                              softWrap: true,
+                              overflow: TextOverflow.ellipsis,),
+                          ));
+                    }).toList(),
+                    onChanged: (value) {
+                      setState(() {
+                        select_ward = value;
+                         wardId= int.parse(value!);
+                      });
 
+                      if(wardId != null){
+                        fetchStreetByWardId(wardId!);
+                      }
+                      },
+                    hint: "Select Ward",
+                    context: context,
+                  ),
                   const SizedBox(
                     height: 16,
                   ),
-
                   SizedBox(
                     width: double.infinity,
                     child: buildDropdown(
@@ -410,10 +478,10 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
                           select_street = value;
                         });
                       },
-                      hint: "Select Street", context: context,
+                      hint: "Select Street",
+                      context: context,
                     ),
                   ),
-
                   const SizedBox(
                     height: 16,
                   ),
@@ -494,9 +562,9 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
                                             companyData[index].basic_cost;
                                         url =
                                             companyData[index].company_type.url;
-                                        cname =
-                                            companyData[index].company_type
-                                                .name;
+                                        cname = companyData[index]
+                                            .company_type
+                                            .name;
                                       } else {
                                         url = '';
                                       }
@@ -555,40 +623,42 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
                   const SizedBox(
                     height: 16,
                   ),
-
                   SizedBox(
                     width: double.infinity,
                     child: buildDropdown(
                       value: select_product,
-                      items: products.map((product) {
+                      items: widget.shopProductItem.map((product) {
                         return DropdownMenuItem(
                             value: product.id.toString(),
-                            child: Text(product.product_name.toString()
-                            ));
+                            child: Text(product.product_name.toString()));
                       }).toList(),
                       onChanged: (value) {
                         setState(() {
                           select_product = value;
-                          product_id = select_product!;
-                          // Assign selected value to product_id
-                          chooseProductOrderById(ChooseProductOrderRequest(
-                              product_id: product_id));
+                          product_id = value!;
+
                         });
+
+                        chooseProductOrderById(ChooseProductOrderRequest(
+                            product_id: product_id));
                       },
-                      hint: "Select Product", context: context,
+                      hint: "Select Product",
+                      context: context,
                     ),
                   ),
-
                   const SizedBox(
                     height: 16,
                   ),
                   Row(
                     children: [
-                      Expanded(flex: 1,
-                          child: buildProductContainerText("Sale Price",context)),
-                      Expanded(flex: 1,
+                      Expanded(
+                          flex: 1,
+                          child:
+                              buildProductContainerText("Sale Price", context)),
+                      Expanded(
+                          flex: 1,
                           child: buildProductContainerText(
-                              "Available Quantity",context)),
+                              "Available Quantity", context)),
                     ],
                   ),
                   const SizedBox(
@@ -604,9 +674,9 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
                           height: 50,
                           decoration: BoxDecoration(
                             border:
-                            Border.all(color: Colors.black54, width: 0.3),
+                                Border.all(color: Colors.black54, width: 0.3),
                             borderRadius:
-                            const BorderRadius.all(Radius.circular(10.0)),
+                                const BorderRadius.all(Radius.circular(10.0)),
                           ),
                           child: Text(salePrice),
                         ),
@@ -622,9 +692,9 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
                           height: 50,
                           decoration: BoxDecoration(
                             border:
-                            Border.all(color: Colors.black54, width: 0.3),
+                                Border.all(color: Colors.black54, width: 0.3),
                             borderRadius:
-                            const BorderRadius.all(Radius.circular(10.0)),
+                                const BorderRadius.all(Radius.circular(10.0)),
                           ),
                           child: Text("$productQuality"),
                         ),
@@ -654,34 +724,31 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
                                 setState(() {
                                   totalQty = 0;
                                   errorText =
-                                  'Quality can not be greater than available quantity!';
+                                      'Quality can not be greater than available quantity!';
                                 });
                               } else {
-                                final response = await ApiService(ConnectivityService())
-                                    .changeOrderQty(
-                                    ChangeOrderProductQtyRequest(
-                                      selectedProductId: product_id.toString(),
-                                      quantity: val.toString(),
-                                      sale_price: salePrice.toString(),
-                                    )
-                                );
+                                final response =
+                                    await ApiService(ConnectivityService())
+                                        .changeOrderQty(
+                                            ChangeOrderProductQtyRequest(
+                                  selectedProductId: product_id.toString(),
+                                  quantity: val.toString(),
+                                  sale_price: salePrice.toString(),
+                                ));
                                 setState(() {
                                   productQuality = response.available_quantity;
                                   totalQty = response.total!.toInt();
                                   errorText = null;
                                 });
                               }
-                            }
-                            else {
-
-                              final response = await ApiService(ConnectivityService())
-                                  .changeOrderQty(
-                                  ChangeOrderProductQtyRequest(
-                                    selectedProductId: product_id.toString(),
-                                    quantity: val.toString(),
-                                    sale_price: salePrice.toString(),
-                                  )
-                              );
+                            } else {
+                              final response = await ApiService(
+                                      ConnectivityService())
+                                  .changeOrderQty(ChangeOrderProductQtyRequest(
+                                selectedProductId: product_id.toString(),
+                                quantity: val.toString(),
+                                sale_price: salePrice.toString(),
+                              ));
                               setState(() {
                                 productQuality = response.available_quantity;
                                 totalQty = response.total!.toInt();
@@ -693,12 +760,13 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
                           validator: validateField,
                           decoration: InputDecoration(
                             border: OutlineInputBorder(
-
                               borderRadius: BorderRadius.circular(10.0),
                             ),
-                            errorBorder: OutlineInputBorder( // Customize the error border here
+                            errorBorder: OutlineInputBorder(
+                              // Customize the error border here
                               borderSide: const BorderSide(
-                                color: Colors.orange, // Change the color to your desired color
+                                color: Colors.orange,
+                                // Change the color to your desired color
                                 width: 1.0,
                               ),
                               borderRadius: BorderRadius.circular(10.0),
@@ -735,9 +803,9 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
                           height: 50,
                           decoration: BoxDecoration(
                             border:
-                            Border.all(color: Colors.black54, width: 0.3),
+                                Border.all(color: Colors.black54, width: 0.3),
                             borderRadius:
-                            const BorderRadius.all(Radius.circular(10.0)),
+                                const BorderRadius.all(Radius.circular(10.0)),
                           ),
                           child: Text("$totalQty"),
                         ),
@@ -816,7 +884,7 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
                                     line2: line2.text.toString(),
                                     selectedCountry: select_country.toString(),
                                     selectedTownship:
-                                    select_township.toString(),
+                                        select_township.toString(),
                                     selectedCity: select_city.toString(),
                                     zipcode: zipcode.text.toString(),
                                     mode: payment.toString(),
@@ -831,7 +899,10 @@ class _AddOrderWidgetState extends State<AddOrderWidget> {
                                     block_no: block_no.text.toString(),
                                     floor: floor.text.toString()));
                           },
-                          child: const Text('Place Order Now',style: TextStyle(fontWeight: FontWeight.bold),)))
+                          child:  Text(
+                            'Place Order Now',
+                            style: TextStyle(fontWeight: FontWeight.bold,color: AdaptiveTheme.of(context).theme.iconTheme.color),
+                          )))
                 ],
               ),
             ),

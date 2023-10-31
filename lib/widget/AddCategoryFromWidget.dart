@@ -36,53 +36,47 @@ class _AddCategoryFromWidgetState extends State<AddCategoryFromWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Row(
-            children: [
-              Expanded(
-                flex: 1,
-                child: buildProductContainerForm('Category Name',
-                    TextInputType.name, name, validateField),
+    return Center(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          buildProductContainerForm('Category Name',
+              TextInputType.name, name, validateField),
+          const SizedBox(width: 10,),
+          Container(
+            height: 100,
+            child: TextField(
+              enabled: false,
+              controller: slug,
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Slug Name',
               ),
-              const SizedBox(width: 10,),
-              Expanded(
-                child: TextField(
-                  enabled: false,
-                  controller: slug,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Slug Name',
-                  ),
-                ),
-              ),
-            ],
+            ),
           ),
-        ),
-        const SizedBox(
-          height: 20,
-        ),
-        TextButton(
-            onPressed: () {
-              final addCategoryCubit =
-                  context.read<AddCategoryCubit>();
-              // final token = widget.token; // Retrieve the bearer token from the widget
-              //  final headers = {'Authorization': 'Bearer $token'};
-              addCategoryCubit.addCategory(
-                  AddCategoryRequestModel(name.text, slug.text));
-            },
-            child:  Text(
-              'Add Category',
-              style: TextStyle(color: Colors.green.shade900),
-            )),
-        if (widget.isLoading)
-          const Center(
-            child: CircularProgressIndicator(),
-          )
-      ],
+          const SizedBox(
+            height: 20,
+          ),
+          TextButton(
+              onPressed: () {
+                final addCategoryCubit =
+                    context.read<AddCategoryCubit>();
+                // final token = widget.token; // Retrieve the bearer token from the widget
+                //  final headers = {'Authorization': 'Bearer $token'};
+                addCategoryCubit.addCategory(
+                    AddCategoryRequestModel(name.text, slug.text));
+              },
+              child:  Text(
+                'Add Category',
+                style: TextStyle(color: Colors.green.shade900),
+              )),
+          if (widget.isLoading)
+            const Center(
+              child: CircularProgressIndicator(),
+            )
+        ],
+      ),
     );
 
 

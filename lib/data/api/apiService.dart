@@ -1248,7 +1248,7 @@ class ApiService {
 
       while (true) {
         final response = await _dio.get(
-            'https://mmeasyinvoice.com/api/show-shopkeeper?page=$currentPage');
+            'https://mmeasyinvoice.com/api/show-shopkeeper?page${1}');
 
         if (response.statusCode == 200) {
           final dynamic responseData = response.data;
@@ -1306,10 +1306,12 @@ class ApiService {
 
       String? nextPageUrl;
 
-      while (true) {
+     while (true) {
         final response = await _dio.post(
             'https://www.mmeasyinvoice.com/api/ordersByDate?page=$currentPage',
             data: orderByDateRequestModel.toJson());
+
+      print("response are $response");
 
         if (response.statusCode == 200) {
           final dynamic responseData = response.data;

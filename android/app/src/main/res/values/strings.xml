@@ -1,0 +1,8 @@
+<?xml version = "1.0" encoding = "utf-8"?>
+<resources>
+    <string name="app_name">easy_invoice</string>
+    <string name="facebook_app_id">634179492235136</string>
+    <string name="fb_login_protocol_scheme">fb634179492235136</string>
+    <string name="facebook_client_token">e9a863b06ae3186b6305b7a19a53e463</string>
+
+</resources>

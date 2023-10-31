@@ -34,13 +34,13 @@ class _AddDeliveryScreenState extends State<AddDeliveryScreen> {
             } else if (state is DeliCompanyInfoSuccess) {
               showToastMessage("Successful");
               Navigator.pop(context, true);
-              return const AddDeliveryWidget(
-                isLoading: false,
+              return  AddDeliveryWidget(
+                isLoading: loading,
               );
             } else if (state is DeliCompanyInfoFail) {
               showToastMessage(state.error);
-              return const AddDeliveryWidget(
-                isLoading: false,
+              return  AddDeliveryWidget(
+                isLoading: loading,
               );
             }
             return const AddDeliveryWidget(

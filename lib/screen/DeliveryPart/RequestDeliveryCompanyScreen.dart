@@ -1,3 +1,4 @@
+import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:easy_invoice/widget/DeliveryPart/RequestDeliveryCompanyInfoWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,18 +12,14 @@ class RequestDeliveryCompanyScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: AppBar(
-        elevation: 0.0,
-        backgroundColor: Colors.white70,
-        iconTheme: const IconThemeData(
-          color: Colors.blue, // Set the color of the navigation icon to black
+        iconTheme:  IconThemeData(
+          color: AdaptiveTheme.of(context).theme.iconTheme.color, // Set the color of the navigation icon to black
         ),
-        title: const Text(
+        title:  Text(
           'Add Delivery',
           style: TextStyle(
-            color: Colors.black54,
-            fontWeight: FontWeight.bold,
+            color:AdaptiveTheme.of(context).theme.iconTheme.color,
             fontSize: 16,
           ),
         ),

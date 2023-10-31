@@ -3,7 +3,8 @@ enum Size {
   bold, //only bold text
   boldMedium, //bold with medium
   boldLarge, //bold with large
-  extraLarge //extra large
+  extraLarge,
+
 }
 
 enum Aligns {

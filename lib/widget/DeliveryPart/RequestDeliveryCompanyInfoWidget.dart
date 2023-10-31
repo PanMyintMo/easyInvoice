@@ -1,3 +1,4 @@
+import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:easy_invoice/dataRequestModel/DeliveryPart/AddDeliveryCompanyNameRequestModel.dart';
 import 'package:easy_invoice/screen/DeliveryPart/AddDeliveryScreen.dart';
@@ -62,8 +63,8 @@ class _RequestDeliveryCompanyWidgetState extends State<RequestDeliveryCompanyWid
                               ),
                             );
                           },
-                          child: const Text(
-                              "Add Delivery Info"
+                          child:  Text(
+                              "Add Delivery Info",style: TextStyle(color : AdaptiveTheme.of(context).theme.iconTheme.color),
                           ),
                         ),
                       ),
@@ -128,7 +129,7 @@ class _RequestDeliveryCompanyWidgetState extends State<RequestDeliveryCompanyWid
                                 );
                               }
                             },
-                            child: const Text('Add Delivery Info'),
+                            child:  Text('Add Delivery Info',style: TextStyle(color: AdaptiveTheme.of(context).theme.iconTheme.color),),
                           ),
                         ),
 

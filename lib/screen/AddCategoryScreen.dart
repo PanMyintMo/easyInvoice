@@ -25,28 +25,28 @@ class _CategoryScreenState extends State<CategoryScreen> {
         ),
         body: BlocBuilder<AddCategoryCubit, AddCategoryState>(
           builder: (context, state) {
+
+            final loading= state is AddCategoryLoading;
             if (state is AddCategoryLoading) {
-              return const AddCategoryFromWidget(
-                isLoading: true,
+              return  AddCategoryFromWidget(
+                isLoading: loading,
 
               );
             } else if (state is AddCategorySuccess) {
               showToastMessage(state.addCategoryResponse.message);
               Navigator.pop(context,true);
 
-              return const AddCategoryFromWidget(
-                isLoading: false,
-
-              );
+              return  AddCategoryFromWidget(
+                isLoading: loading,);
 
             } else if (state is AddCategoryFail) {
-              return const AddCategoryFromWidget(
-                isLoading: false,
+              return  AddCategoryFromWidget(
+                isLoading: loading,
 
               );
             }
-            return const AddCategoryFromWidget(
-              isLoading: false,
+            return  AddCategoryFromWidget(
+              isLoading: loading,
 
             );
           },

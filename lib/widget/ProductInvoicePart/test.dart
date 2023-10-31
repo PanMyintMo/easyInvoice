@@ -22,7 +22,7 @@ class TestPrint {
         .asUint8List(bytesData.offsetInBytes, bytesData.lengthInBytes));*/
 
     ///image from Asset
-   // ByteData bytesAsset = await rootBundle.load("assets/images/faulty.png");
+   // ByteData bytesAsset = await rootBundle.load("assets/faulty.png");
    /* Uint8List imageBytesFromAsset = bytesAsset.buffer
         .asUint8List(bytesAsset.offsetInBytes, bytesAsset.lengthInBytes);
 */

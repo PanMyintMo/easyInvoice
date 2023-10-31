@@ -2,15 +2,19 @@ import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:easy_invoice/screen/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'module/module.dart';
 import 'screen/home/Login.dart';
 import 'screen/home/Register.dart';
 import 'screen/mainScreen.dart';
 
+
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  locator();
-  final savedThemeMode = await AdaptiveTheme.getThemeMode();
+
+   locator();
+   final savedThemeMode = await AdaptiveTheme.getThemeMode();
 
   runApp(MyApp(savedThemeMode: savedThemeMode));
 }

@@ -1,16 +1,16 @@
 import 'package:adaptive_theme/adaptive_theme.dart';
-import 'package:easy_invoice/data/api/apiService.dart';
-import 'package:easy_invoice/widget/ProductInvoicePart/PdfPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:simple_barcode_scanner/enum.dart';
 import 'package:simple_barcode_scanner/simple_barcode_scanner.dart';
 import '../../common/FormValidator.dart';
 import '../../data/api/ConnectivityService.dart';
+import '../../data/api/apiService.dart';
 import '../../data/responseModel/DeliveryPart/ProductInvoiceResponse.dart';
 import '../../dataRequestModel/DeliveryPart/ProductInvoiceRequest.dart';
 import '../../bloc/post/product_invoice_cubit.dart';
-import '../../dataRequestModel/DeliveryPart/UpdateQuantityInBarcodeRequest.dart'; // Make sure to import the product_invoice_cubit
+import '../../dataRequestModel/DeliveryPart/UpdateQuantityInBarcodeRequest.dart';
+import 'PdfPage.dart';
 
 class ProductInvoiceWidget extends StatefulWidget {
   final bool isLoading;
@@ -27,17 +27,9 @@ class ProductInvoiceWidget extends StatefulWidget {
 }
 
 class _ProductInvoiceWidgetState extends State<ProductInvoiceWidget> {
-  var prouductno = TextEditingController();
-  final TextEditingController quantityController = TextEditingController();
-  bool isClick = false;
+  var productNo = TextEditingController();
+  final Map<int, int> itemQuantities = {};
   int quantity = 0;
-
-
-
-  @override
-  void initState() {
-    super.initState();
-  }
 
   Future<void> barcodeScanner() async {
     final result = await Navigator.push(
@@ -51,20 +43,19 @@ class _ProductInvoiceWidgetState extends State<ProductInvoiceWidget> {
     );
 
     if (result != null) {
-      String scannedBarcode = result.toString(); // Modify this line
+      String scannedBarcode = result.toString();
       setState(() {
-        prouductno.text = scannedBarcode;
+        productNo.text = scannedBarcode;
       });
     }
   }
 
   void _handleSearch() {
-    if (prouductno.text.isNotEmpty) {
-      isClick = true;
+    if (productNo.text.isNotEmpty) {
       context
           .read<ProductInvoiceCubit>()
-          .productInvoice(ProductInvoiceRequest(barcode: prouductno.text));
-      prouductno.clear();
+          .productInvoice(ProductInvoiceRequest(barcode: productNo.text));
+      productNo.clear();
     }
   }
 
@@ -72,12 +63,10 @@ class _ProductInvoiceWidgetState extends State<ProductInvoiceWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-
-        title:  Text(
+        title: Text(
           'Product Invoice',
           style: TextStyle(
             color: AdaptiveTheme.of(context).theme.iconTheme.color,
-
           ),
         ),
         actions: [
@@ -100,22 +89,23 @@ class _ProductInvoiceWidgetState extends State<ProductInvoiceWidget> {
                 Align(
                   alignment: Alignment.topRight,
                   child: ElevatedButton(
-                    onPressed: widget.invoiceData.isNotEmpty ? () async {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => PdfPage(),
-                        ),
-                      );
-                    } : null,
+                    onPressed: widget.invoiceData.isNotEmpty
+                        ? () async {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => PdfPage(),
+                              ),
+                            );
+                          }
+                        : null,
                     child: const Text('Print'),
-                  )
-
+                  ),
                 ),
                 const SizedBox(height: 16),
                 TextFormField(
                   keyboardType: TextInputType.number,
-                  controller: prouductno,
+                  controller: productNo,
                   validator: validateField,
                   onEditingComplete: _handleSearch,
                   decoration: InputDecoration(
@@ -137,26 +127,42 @@ class _ProductInvoiceWidgetState extends State<ProductInvoiceWidget> {
                     SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: DataTable(
-                        columns:  [
+                        columns: [
                           DataColumn(
                             label: Text('Product Name',
-                                style:
-                                    TextStyle(fontSize: 16, color:AdaptiveTheme.of(context).theme.iconTheme.color)),
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    color: AdaptiveTheme.of(context)
+                                        .theme
+                                        .iconTheme
+                                        .color)),
                           ),
                           DataColumn(
                             label: Text('QTY',
-                                style:
-                                    TextStyle(fontSize: 16, color: AdaptiveTheme.of(context).theme.iconTheme.color)),
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    color: AdaptiveTheme.of(context)
+                                        .theme
+                                        .iconTheme
+                                        .color)),
                           ),
                           DataColumn(
                             label: Text('Sale Price',
-                                style:
-                                    TextStyle(fontSize: 16, color: AdaptiveTheme.of(context).theme.iconTheme.color)),
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    color: AdaptiveTheme.of(context)
+                                        .theme
+                                        .iconTheme
+                                        .color)),
                           ),
                           DataColumn(
                             label: Text('Total',
-                                style:
-                                    TextStyle(fontSize: 16, color: AdaptiveTheme.of(context).theme.iconTheme.color)),
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    color: AdaptiveTheme.of(context)
+                                        .theme
+                                        .iconTheme
+                                        .color)),
                           ),
                         ],
                         rows: [
@@ -165,8 +171,7 @@ class _ProductInvoiceWidgetState extends State<ProductInvoiceWidget> {
                         ],
                       ),
                     ),
-
-                    if(widget.isLoading)
+                    if (widget.isLoading)
                       const Center(
                         child: CircularProgressIndicator(),
                       ),
@@ -180,8 +185,11 @@ class _ProductInvoiceWidgetState extends State<ProductInvoiceWidget> {
     );
   }
 
+  DataRow dataRowForProductInvoiceWidget({required InvoiceData item}) {
+    if (!itemQuantities.containsKey(item.id)) {
+      itemQuantities[item.id!] = itemQuantities[item.id] ?? 1; // Initialize with the value from itemQuantities or 0 if not present
+    }
 
-  dataRowForProductInvoiceWidget({required InvoiceData item}) {
     return DataRow(
       cells: [
         DataCell(Text(item.product_name!)),
@@ -202,63 +210,78 @@ class _ProductInvoiceWidgetState extends State<ProductInvoiceWidget> {
                   IconButton(
                     icon: const Icon(Icons.add),
                     onPressed: () {
-                      ApiService(ConnectivityService())
-                          .updatedQuantityItemBarcode(
-                        UpdateQuantityBarcodeRequest(
-                          quantity: (quantity + 1).toString(),
-                          invoice_id: item.id.toString(),
-                        ),
-                      )
-                          .then((response) {
-                        setState(() {
-                          quantity = quantity + 1;
-                          item.total = (quantity * double.parse(item.sale_price!))
-                              .toInt();
+                      // Increment the local quantity
+                      int updatedQuantity = (itemQuantities[item.id] ?? 0) + 1;
 
-                          // Update the controller's text property
-                          quantityController.text = quantity.toString();
+                      // Update the server with the new quantity
+                      UpdateQuantityBarcodeRequest request = UpdateQuantityBarcodeRequest(
+                        quantity: updatedQuantity.toString(),
+                        invoice_id: item.id.toString(),
+                      );
+
+                      // Perform the API call
+                      ApiService(ConnectivityService())
+                          .updatedQuantityItemBarcode(request)
+                          .then((response) {
+
+                        setState(() {
+                          itemQuantities[item.id!] = updatedQuantity;
+                          quantity = updatedQuantity;
+                          item.total = (quantity * double.parse(item.sale_price!)).toInt();
                         });
-                      }).catchError((error) {
-                        // Handle the API call error
+                      })
+                          .catchError((error) {
+
+                        setState(() {
+                          itemQuantities[item.id!] = (itemQuantities[item.id] ?? 0) - 1;
+                        });
                       });
                     },
                   ),
+
                   SizedBox(
                     width: 50,
                     height: 30,
-                    child: TextFormField(
-                      controller: quantityController,
-                      autofocus: false,
-                      keyboardType: TextInputType.number,
-                      textInputAction: TextInputAction.done,
+                    child: Text(
+                      itemQuantities[item.id].toString(),
                       textAlign: TextAlign.center,
-                      textAlignVertical: TextAlignVertical.center,
-                      decoration: const InputDecoration(),
                     ),
                   ),
                   IconButton(
                     icon: const Icon(Icons.remove),
                     onPressed: () {
-                      ApiService(ConnectivityService())
-                          .updatedQuantityItemBarcode(
-                        UpdateQuantityBarcodeRequest(
-                          quantity: (quantity - 1).toString(),
-                          invoice_id: item.id.toString(),
-                        ),
-                      )
-                          .then((response) {
-                        setState(() {
-                          quantity--;
-                          item.total = (quantity * double.parse(item.sale_price!))
-                              .toInt();
+                      // Calculate the updated local quantity
+                      int updatedQuantity = (itemQuantities[item.id] ?? 0) - 1;
 
-                          quantityController.text = quantity.toString();
+                      // Ensure the quantity does not go below 0
+                      if (updatedQuantity < 0) {
+                        updatedQuantity = 0;
+                      }
+
+                      // Update the server with the new quantity
+                      UpdateQuantityBarcodeRequest request = UpdateQuantityBarcodeRequest(
+                        quantity: updatedQuantity.toString(),
+                        invoice_id: item.id.toString(),
+                      );
+
+                      // Perform the API call
+                      ApiService(ConnectivityService())
+                          .updatedQuantityItemBarcode(request)
+                          .then((response) {
+                            setState(() {
+                          itemQuantities[item.id!] = updatedQuantity;
+                          quantity = updatedQuantity;
+                          item.total = (quantity * double.parse(item.sale_price!)).toInt();
                         });
-                      }).catchError((error) {
-                        // Handle the API call error
+                      })
+                          .catchError((error) {
+                        setState(() {
+                          itemQuantities[item.id!] = (itemQuantities[item.id] ?? 0) + 1;
+                        });
                       });
                     },
                   ),
+
                 ],
               ),
             ),
@@ -266,9 +289,7 @@ class _ProductInvoiceWidgetState extends State<ProductInvoiceWidget> {
         ),
         DataCell(Text(item.sale_price!)),
         DataCell(
-          Text(
-           item.total.toString(),
-          ),
+          Text(item.total!.toStringAsFixed(2)),
         ),
       ],
     );

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "16935814461",
+    "project_id": "easyinvoice-403103",
+    "storage_bucket": "easyinvoice-403103.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:16935814461:android:57b6731d49b6af4636b154",
+        "android_client_info": {
+          "package_name": "com.example.easy_invoice"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA-NvAYLDC2WAYaTAE2IhZjV97XMTjT3eU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

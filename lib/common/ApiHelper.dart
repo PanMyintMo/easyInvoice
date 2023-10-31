@@ -136,6 +136,7 @@ class ApiHelper {
   static Future<ShopProductListResponse?> allShopProduct() async {
     try {
       final response = await ApiService(ConnectivityService()).shopProductList();
+      print("shop product list response are ${response}");
 
         return response;
 

@@ -13,6 +13,30 @@ class AddOrderLoading extends AddOrderState {
   List<Object?> get props => [];
 }
 
+
+class ShopProductListLoading extends AddOrderState{
+  @override
+  List<Object?> get props => [];
+}
+
+
+class ShopProductListSuccess extends AddOrderState{
+  final List<ShopProductItem> shopProductItem;
+  const ShopProductListSuccess(this.shopProductItem);
+  @override
+
+  List<Object?> get props => [shopProductItem];
+
+}
+
+class ShopProductListFail extends AddOrderState{
+  final String error;
+  const ShopProductListFail(this.error);
+  @override
+  List<Object?> get props =>[error];
+}
+
+
 class AddOrderSuccess extends AddOrderState {
   final OrderResponse addOrderResponse;
   const AddOrderSuccess(this.addOrderResponse);

@@ -2,12 +2,14 @@ import 'dart:async';
 import 'package:esc_pos_utils_plus/esc_pos_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'InvoiceResponse/Invoice.dart';
 import '../../widget/ProductInvoicePart/printerenum.dart';
 
 import 'package:blue_thermal_printer/blue_thermal_printer.dart';
+
 
 class InvoiceWidget extends StatefulWidget {
   final List<IData> invoice;
@@ -119,7 +121,16 @@ class _InvoiceWidgetState extends State<InvoiceWidget> {
     }
   }
 
+
+  Future<Uint8List> imagePathToUint8List(String path) async {
+    ByteData data = await rootBundle.load(path);
+    Uint8List imageBytes =
+    data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+    return imageBytes;
+  }
+
   Future<void> printText(List<IData> invoice) async {
+   // print("invoiceList$invoice");
     try {
       await bluetoothPrint.connect(_device!);
       final profile = await CapabilityProfile.load();
@@ -127,75 +138,72 @@ class _InvoiceWidgetState extends State<InvoiceWidget> {
 
       List<int> bytes = [];
 
+      final now=DateTime.now();
+      final timestamp=DateFormat('dd/MM/yyyy h:mm:ss a').format(now);
+
+      bluetoothPrint.printLeftRight("", timestamp.toString(), Size.bold.val,
+          format:
+          "%-15s %15s %n");
+
+      bluetoothPrint.printNewLine();
+
+      //for invoice profile
+      try {
+        final imageBytes = await imagePathToUint8List("assets/dailyNeedItem.png");
+        await bluetoothPrint.printImageBytes(imageBytes);
+        bluetoothPrint.printNewLine();
+      } catch (e) {
+       // print("Error printing image: $e");
+      }
+
+      bluetoothPrint.printCustom(
+          "MMEasyInvoice", Size.boldMedium.val, Aligns.center.val);
+      bluetoothPrint.printNewLine();
+
+      bluetoothPrint.printCustom(
+          "09798217582", Size.boldMedium.val, Aligns.center.val);
+      bluetoothPrint.printNewLine();
+      bluetoothPrint.print3Column(
+          "Client Name"," ","ITVisionHub Co.ltd;", Size.bold.val,
+          format: "%-15s %10s %15s %n");
+    //  await bluetoothPrint.printNewLine();
+      bluetoothPrint.print3Column(
+          "Sayar Yan Aung"," ","ITVisionHub Co.ltd;", Size.bold.val,
+          format: "%-15s  %10s %15s %n");
+      await bluetoothPrint.printNewLine();
+
+      bluetoothPrint.print4Column(
+          "Product Name", "Price", "Quantity", "Total", Size.bold.val,
+          format: "%-10s %10s %10s %10s %n");
+      await bluetoothPrint.printNewLine();
+      bytes.addAll(generator.text('-' * 48));
       for (var data in invoice) {
-        ByteData bytesAsset = await rootBundle.load("assets/invoice.png");
-       final imageBytesFromAsset= bytesAsset.buffer.asUint8List(bytesAsset.offsetInBytes, bytesAsset.lengthInBytes);
-
-
-        // Print the image to the right of the paper
-        bluetoothPrint.printImageBytes(imageBytesFromAsset);
-
-        await bluetoothPrint.printNewLine();
-
-        bluetoothPrint.printLeftRight("LEFT", "RIGHT", Size.bold.val,
-            format:
-            "%-15s %15s %n");
-
-        await bluetoothPrint.printNewLine();
-
-        // Adding header text
-        bluetoothPrint.printCustom(
-            "MMEasyInvoice", Size.boldMedium.val, Aligns.center.val);
-        bluetoothPrint.printNewLine();
-
-        bluetoothPrint.printCustom(
-            "09798217582", Size.boldMedium.val, Aligns.center.val);
-        bluetoothPrint.printNewLine();
-        bluetoothPrint.print3Column(
-            "Client Name", "", "ITVisionHub Co.ltd;", Size.bold.val,
-            format: "%-10s %10s %10s %n");
-        await bluetoothPrint.printNewLine();
-
-        bluetoothPrint.print3Column(
-            "Sayar Yan Aung", "", "ITVisionHub Co.ltd;", Size.bold.val,
-            format: "%-10s %10s %10s %n");
-        await bluetoothPrint.printNewLine();
-
-        bluetoothPrint.print4Column(
-            "Product Name", "Price", "Quantity", "Total", Size.bold.val,
-            format: "%-10s %10s %10s %10s %n");
-        await bluetoothPrint.printNewLine();
-
-        bluetoothPrint.print4Column(
-            "${data.product_name}",
-            "${data.sale_price}",
-            "${data.quantity}",
-            "${data.total}",
-            Size.bold.val,
-            format: "%-10s %10s %10s %10s %n");
-
-        bluetoothPrint.printNewLine();
-
-        bluetoothPrint.printCustom("Thank You Choosing Our Service!", Size.bold.val, Aligns.center.val);
-
-
-
+        bytes.addAll(formatInvoiceData(data,generator));
         bytes += generator.hr();
         generator.cut();
-
-        // Writing bytes to the printer
-        await bluetoothPrint.writeBytes(Uint8List.fromList(bytes));
-
-        // Printing a new line
-        await bluetoothPrint.printNewLine();
-
-        // Disconnecting from the printer
-        await bluetoothPrint.disconnect();
       }
+      bytes.addAll(generator.text("Thank You Choosing Our Service!", styles: const PosStyles(align: PosAlign.center)));
+
+      await bluetoothPrint.printNewLine();
+      await bluetoothPrint.writeBytes(Uint8List.fromList(bytes));
+
+      // Disconnecting from the printer
+      await bluetoothPrint.disconnect();
     } catch (e) {
-      print("Printing error: $e");
+    //  print("Printing error: $e");
     }
   }
+
+
+  List<int> formatInvoiceData(IData data, Generator generator) {
+    List<int> bytes = [];
+
+    String productInfo = "${data.product_name}, ${data.sale_price}, ${data.quantity}, ${data.total}";
+    bytes.addAll(generator.text(productInfo, styles: const PosStyles(align: PosAlign.left)));
+
+    return bytes;
+  }
+
 
   Future<void> generateAndPrintPdf() async {
     try {

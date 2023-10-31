@@ -49,11 +49,6 @@ class _ProductInvoiceScreenState extends State<ProductInvoiceScreen> {
               invoiceData: state.productInvoiceResponse,
             );
           }
-
-          //   ProductInvoiceScreenWithListView(
-          //   isLoading: false,
-          //   invoiceData : state.productInvoiceResponse
-          // );
         }
         return ProductInvoiceWidget(
           isLoading: isLoading,
